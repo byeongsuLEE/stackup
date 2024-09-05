@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaGithub, FaGitlab } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
+import Logo from "../../icons/Logo";
 
 interface IconItem {
   icon: JSX.Element;
@@ -88,8 +89,9 @@ const Footer: React.FC = () => {
         {/* 로고 및 아이콘 섹션 */}
         <div className="flex flex-col w-1/3 gap-4">
           <div className="flex gap-2">
-            <img src="/logos/Logo.png" alt="footer_logo" className="w-8" />
-            <p className="font-semibold text-subGreen1">STACK UP</p>
+            {/* <img src="/logos/Logo.png" alt="footer_logo" className="w-8" /> */}
+            {/* <p className="font-semibold text-subGreen1">STACK UP</p> */}
+            <Logo/>
           </div>
           <div className="flex gap-2 text-black flex-wrap">
             {iconsTab.map(({ icon, url, name }, index) => (

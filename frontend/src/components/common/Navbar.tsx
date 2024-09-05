@@ -4,7 +4,7 @@ import Logo from "../../icons/Logo";
 const Navbar = () => {
   return (
     <>
-   <header className="flex justify-between items-center h-12">
+   <header className="container mx-auto px-4 py-4 flex justify-between items-start">
     <Link to="/">
     <Logo/>
     </Link>
@@ -16,7 +16,7 @@ const Navbar = () => {
     </div>
     <div className="flex">
     <Link to="/login" className="mr-2">로그인</Link>
-    {/* <span className="mr-2">회원가입</span> */}
+    <Link to="/signup" className="mr-2">회원가입</Link>
     <span className="mr-2">로그아웃</span>
     <Link to="/mypage" className="mr-2">마이페이지</Link>
     </div>

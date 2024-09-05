@@ -3,7 +3,8 @@ import Logo from "../../icons/Logo";
 
 const Navbar = () => {
   return (
-   <header className="flex justify-between">
+    <>
+   <header className="flex justify-between items-center h-12">
     <Link to="/">
     <Logo/>
     </Link>
@@ -20,6 +21,8 @@ const Navbar = () => {
     <Link to="/mypage" className="mr-2">마이페이지</Link>
     </div>
    </header>
+    <hr />
+   </>
   )
 }
 

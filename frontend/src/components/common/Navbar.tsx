@@ -16,7 +16,7 @@ const Navbar = () => {
     </div>
     <div className="flex">
     <Link to="/login" className="mr-2">로그인</Link>
-    <span className="mr-2">회원가입</span>
+    {/* <span className="mr-2">회원가입</span> */}
     <span className="mr-2">로그아웃</span>
     <Link to="/mypage" className="mr-2">마이페이지</Link>
     </div>

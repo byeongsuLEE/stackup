@@ -9,10 +9,10 @@ export default {
         boldTxt: "rgb(0,0,0)",
         mainGreen: "rgb(195, 233, 86)",
         bgColor: "rgb(251, 252, 248)",
-        mainGreen: "rgb(195, 233, 86)",
         subGreen1: "rgb(77, 113, 17)",
         subGreen2: "rgb(31, 75, 44)",
-        bgGreen: "rgb(234, 247, 196)",
+        bgGreen: "rgb(251, 252, 248)",
+
       },
     },
   },

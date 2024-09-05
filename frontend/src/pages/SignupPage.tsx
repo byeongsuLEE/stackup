@@ -1,6 +1,10 @@
+import Information from "../components/SignupPage/Infomation";
+
 const Signup = () => {
   return (
-    <div>Signup Page</div>
+    <div className="flex justify-center my-20">
+    <Information/>
+    </div>
   )
 }
 

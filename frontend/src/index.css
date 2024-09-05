@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import './styles/tailwind.css';
+
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
+
+.theme-background-color{
+  background-color:#C3E956
+}
+.theme-color{
+  color:#C3E956
+}
+.background-color{
+  background-color:#FBFCF8
+}
+.sub-color-1{
+  color:#4D7111
+}
+.sub-color-2{
+  color:#1F4B2C
+}
+.sub-background-color{
+  background-color:#EAF7C4
+}
+.sub-font-color{
+  color:#B9B8B8
+}
+
+body{
+  background-color: #FBFCF8;
+  font-family: "Noto Sans KR";
+  font-weight: 300;
+}

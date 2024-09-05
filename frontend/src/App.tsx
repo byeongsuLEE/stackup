@@ -9,6 +9,8 @@ import Mypage from "./pages/MyPage";
 import Project from "./pages/ProjectPage";
 import Work from "./pages/WorkPage";
 
+import Footer from "./components/common/Footer";
+
 function App() {
   return (
     <>

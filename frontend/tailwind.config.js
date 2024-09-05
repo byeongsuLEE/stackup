@@ -5,7 +5,7 @@ export default {
     extend: {
       colors: {
         mainTxt: "rgb(215, 215, 215)",
-        subTxt: "rgb(185, 184, 184)",
+        subTxt: "rgb(94, 94, 94)",
         boldTxt: "rgb(0,0,0)",
         mainGreen: "rgb(195, 233, 86)",
         bgColor: "rgb(251, 252, 248)",

@@ -11,6 +11,9 @@ import Work from "./pages/WorkPage";
 
 import Footer from "./components/common/Footer";
 import Signup from "./pages/SignupPage";
+import ClientSignup from "./pages/ClientSignupPage";
+import FreelancerSignup from "./pages/FreelancerSignupPage";
+import FreelancerSkill from "./pages/FreelancerSkillPage";
 
 function App() {
   return (
@@ -28,6 +31,9 @@ function App() {
               <Route path="/account" element={<Account />} />
               <Route path="/mypage" element={<Mypage />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/signup/client" element={<ClientSignup />} />
+              <Route path="/signup/freelancer" element={<FreelancerSignup />} />
+              <Route path="/signup/freelancer/skill" element={<FreelancerSkill />} />
             </Routes>
           </main>
           <Footer />

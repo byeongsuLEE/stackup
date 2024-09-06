@@ -1,35 +1,49 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import './styles/tailwind.css';
+@import "./styles/tailwind.css";
 
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap");
 
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap');
-
-.theme-background-color{
-  background-color:#C3E956
+.theme-background-color {
+  background-color: #c3e956;
 }
-.theme-color{
-  color:#C3E956
+.theme-color {
+  color: #c3e956;
 }
-.background-color{
-  background-color:#FBFCF8
+.background-color {
+  background-color: #fbfcf8;
 }
-.sub-color-1{
-  color:#4D7111
+.sub-color-1 {
+  color: #4d7111;
 }
-.sub-color-2{
-  color:#1F4B2C
+.sub-color-2 {
+  color: #1f4b2c;
 }
-.sub-background-color{
-  background-color:#EAF7C4
+.sub-background-color {
+  background-color: #eaf7c4;
 }
-.sub-font-color{
-  color:#B9B8B8
+.sub-font-color {
+  color: #b9b8b8;
 }
 
-body{
+body {
   /* background-color: #FBFCF8; */
   font-family: "Noto Sans KR";
   font-weight: 300;
+}
+
+.slide-up {
+  transform: translateY(-20px);
+  opacity: 1;
+}
+
+body {
+  font-family: "Termina", sans-serif;
+  transition: background-color 0.3s ease-out, color 0.3s ease-out;
+  overflow-x: hidden;
+}
+
+.container {
+  overflow: hidden; /* Locomotive Scroll을 위한 설정 */
 }

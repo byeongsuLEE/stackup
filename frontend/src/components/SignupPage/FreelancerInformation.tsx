@@ -3,9 +3,11 @@ import Button from "../common/Button";
 
 const FreelancerInfo = () => {
   const navigate = useNavigate();
+
   const toSkill = () => {
     navigate("/signup/freelancer/skill");
   }
+
     return (
       <>
       <form>
@@ -18,6 +20,7 @@ const FreelancerInfo = () => {
             서비스 이용에 필요한 정보를 입력해주세요.
           </span>
         </div>
+        
         <div className="flex flex-col ml-10">
           <label htmlFor="name">이름</label>
           <input
@@ -25,6 +28,7 @@ const FreelancerInfo = () => {
             className="border my-2 px-2  border-gray-400 w-48 h-8 rounded-md"
             type="text"
           />
+
           <label htmlFor="email">이메일</label>
           <input
             id="email"
@@ -32,6 +36,7 @@ const FreelancerInfo = () => {
             className="border my-2 px-2 border-gray-400 w-48 rounded-md h-8"
             type="text"
           />
+
           <label htmlFor="address">주소</label>
           <input
             id="address"
@@ -39,6 +44,7 @@ const FreelancerInfo = () => {
             className="border my-2 border-gray-400 px-2  w-48 rounded-md h-8"
             type="text"
           />
+
           <label htmlFor="phoneNumber">연락처</label>
           <input
             id="phoneNumber"
@@ -47,6 +53,7 @@ const FreelancerInfo = () => {
             type="text"
           />
         </div>
+
         <div onClick={toSkill} className="flex justify-end mr-10 my-5">
           <Button height={40} width={100} title="다음" />
         </div>

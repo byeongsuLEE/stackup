@@ -18,8 +18,8 @@
     "@mui/material": "^6.0.2",
     "@mui/styled-engine-sc": "^6.0.2",
     "@mui/x-date-pickers": "^7.16.0",
-    "@tanstack/react-query": "^5.54.1",
     "@react-spring/parallax": "^9.7.4",
+    "@tanstack/react-query": "^5.54.1",
     "@types/three": "^0.168.0",
     "axios": "^1.7.7",
     "daisyui": "^4.12.10",
@@ -36,6 +36,7 @@
     "react-scroll": "^1.9.0",
     "react-scroll-parallax": "^3.4.5",
     "styled-components": "^6.1.13",
+    "three": "^0.168.0",
     "web3": "^4.12.1",
     "zustand": "^4.5.5"
   },

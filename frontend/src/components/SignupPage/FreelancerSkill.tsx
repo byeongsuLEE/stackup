@@ -5,6 +5,12 @@ import Skill from "./Skill";
 
 const SkillInsert = () => {
   
+  // 언어 선택 핸들러
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    console.log(value)
+  };
+
   return (
     <div>
       <form>
@@ -19,35 +25,39 @@ const SkillInsert = () => {
           </div>
           <div className="flex flex-col ml-10">
             <span>대분류</span>
-            <div className="flex">
-              <Major major={WebIcon} title="웹" name="web" value='web'/>
-              <Major major={WebIcon} title="모바일" name="web" value='web'/>
-              <Major major={WebIcon} title="퍼블리셔" name="web" value='web'/>
-              <Major major={WebIcon} title="AI" name="web" value='web'/>
-              <Major major={WebIcon} title="DB" name="web" value='web'/>
+            <div className="flex" onChange={handleChange}>
+            <Major major={WebIcon} title="웹" name="category" value='web' />
+            <Major major={WebIcon} title="모바일" name="category" value='mobile' />
+            <Major major={WebIcon} title="퍼블리셔" name="category" value='publisher' />
+            <Major major={WebIcon} title="AI" name="category" value='ai' />
+            <Major major={WebIcon} title="DB" name="category" value='db' />
             </div>
 
             <span>사용언어(중복선택 가능)</span>
-            <div className="flex">
-              <Skill name="skill" title="Python" />
-              <Skill name="skill" title="JAVA" />
-              <Skill name="skill" title="C언어" />
-              <Skill name="skill" title="C++" />
-              <Skill name="skill" title="PHP" />
+            <div onChange={handleChange}>
+            <div className="flex" >
+            <Skill name="python" title="Python" value='python' />
+            <Skill name="java" title="JAVA" value='java' />
+            <Skill name="c" title="C언어" value='c' />
+            <Skill name="c++" title="C++" value='c++' />
+            <Skill name="php" title="PHP" value='php' />
             </div>
             <div className="flex mb-5">
-              <Skill name="skill" title="Typescript" />
-              <Skill name="skill" title="Javascript" />
-              <Skill name="skill" title="기타" />
+            <Skill name="typescript" title="Typescript" value='typescript' />
+            <Skill name="javascript" title="Javascript" value='javascript' />
+            <Skill name="etc1" title="기타" value='etc' />
             </div>
+            </div>
+
             <span>프레임워크(중복선택 가능)</span>
-            <div className="flex">
-              <Skill name="framework" title="React" />
-              <Skill name="framework" title="Vue" />
-              <Skill name="framework" title="Spring" />
-              <Skill name="framework" title="Django" />
-              <Skill name="framework" title="기타" />
+            <div className="flex" onChange={handleChange}>
+            <Skill name="react" title="React" value='react' />
+            <Skill name="vue" title="Vue" value='vue' />
+            <Skill name="spring" title="Spring" value='spring' />
+            <Skill name="django" title="Django" value='django' />
+            <Skill name="etc" title="기타" value='etc' />
             </div>
+
             <span className="mt-5">경력</span>
             <input placeholder="년" className="mt-2 text-right px-2 border border-subGreen2 w-52 h-10 rounded-xl" type="text" defaultValue="년" />
             <span className="mt-5">포트폴리오 링크</span>

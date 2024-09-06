@@ -6,13 +6,13 @@ const Navbar = () => {
     <>
       {/* 네비게이션 바를 fixed로 설정하고, 전체 너비를 유지하기 위해 container 클래스를 수정 */}
       <header className="fixed top-0 left-0 w-full bg-white z-50 shadow-md">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+        <div className="container mx-auto h-20  flex justify-between items-center">
           <Link to="/">
             <Logo />
           </Link>
           <div className="flex">
             <Link to="/work" className="mr-6">
-              일감
+              프로젝트 찾기
             </Link>
             <Link to="/project" className="mr-6">
               프로젝트

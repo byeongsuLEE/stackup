@@ -15,7 +15,6 @@ const WebIcon = ({w,h}:WebIconProps)=>{
 </clipPath>
 </defs>
 </svg>
-
   )
 }
 export default WebIcon;

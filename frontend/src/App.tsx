@@ -14,6 +14,7 @@ import Signup from "./pages/SignupPage";
 import ClientSignup from "./pages/ClientSignupPage";
 import FreelancerSignup from "./pages/FreelancerSignupPage";
 import FreelancerSkill from "./pages/FreelancerSkillPage";
+import PostWork from "./pages/PostWorkPage";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/work" element={<Work />} />
+              <Route path="/work/post" element={<PostWork />} />
               <Route path="/project" element={<Project />} />
               <Route path="/career" element={<Career />} />
               <Route path="/account" element={<Account />} />
@@ -34,6 +36,7 @@ function App() {
               <Route path="/signup/client" element={<ClientSignup />} />
               <Route path="/signup/freelancer" element={<FreelancerSignup />} />
               <Route path="/signup/freelancer/skill" element={<FreelancerSkill />} />
+              
             </Routes>
           </main>
           <Footer />

@@ -1,15 +1,11 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { clientLogin } from "../../apis/User";
-
-interface information {
-  id: string,
-  password: string
-}
+import { clientLoginInfo } from "../../apis/user.type";
 
 const Client = () => {
-  const { register, handleSubmit } = useForm<information>();
+  const { register, handleSubmit } = useForm<clientLoginInfo>();
 
-  const onSubmit: SubmitHandler<information> = (data) => {
+  const onSubmit: SubmitHandler<clientLoginInfo> = (data) => {
       clientLogin(data);
   };
 
@@ -19,7 +15,7 @@ const Client = () => {
         <img className="h-28 mb-5" src="./logos/Stackup_Logo_Round.png" alt="GithubLogo" />
         <div className="flex flex-col" >
           <input className="border my-1 h-10 w-72 border-gray-300 rounded-xl" type="text" placeholder="ID"
-            {...register("id", { required: "ID is required." })}
+            {...register("email", { required: "email is required." })}
           />
           <input className="border my-1 h-10 w-72 border-gray-300 rounded-xl" type="password" placeholder="PASSWORD"
            {...register("password", { required: "password id required." })}

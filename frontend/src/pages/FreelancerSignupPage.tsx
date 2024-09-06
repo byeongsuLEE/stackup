@@ -1,10 +1,9 @@
-import { DiGhost } from "react-icons/di"
 import FreelancerInfo from "../components/SignupPage/FreelancerInformation";
 
 const FreelancerSignup = () => {
-  return ( 
+  return (
     <div className="flex h-screen justify-center my-20">
-    <FreelancerInfo />
+      <FreelancerInfo />
     </div>
   )
 }

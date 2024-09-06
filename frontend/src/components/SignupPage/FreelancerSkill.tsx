@@ -1,5 +1,5 @@
 import WebIcon from "../../icons/WebIcon";
-import Button from "../common/Button";
+import Button from "../common/DoneButton";
 import Major from "./Major";
 import Skill from "./Skill";
 
@@ -20,11 +20,11 @@ const SkillInsert = () => {
           <div className="flex flex-col ml-10">
             <span>대분류</span>
             <div className="flex">
-              <Major major={WebIcon} title="웹" name="web" />
-              <Major major={WebIcon} title="모바일" name="web" />
-              <Major major={WebIcon} title="퍼블리셔" name="web" />
-              <Major major={WebIcon} title="AI" name="web" />
-              <Major major={WebIcon} title="DB" name="web" />
+              <Major major={WebIcon} title="웹" name="web" value='web'/>
+              <Major major={WebIcon} title="모바일" name="web" value='web'/>
+              <Major major={WebIcon} title="퍼블리셔" name="web" value='web'/>
+              <Major major={WebIcon} title="AI" name="web" value='web'/>
+              <Major major={WebIcon} title="DB" name="web" value='web'/>
             </div>
 
             <span>사용언어(중복선택 가능)</span>
@@ -42,14 +42,14 @@ const SkillInsert = () => {
             </div>
             <span>프레임워크(중복선택 가능)</span>
             <div className="flex">
-            <Skill name="framework" title="React" />
-            <Skill name="framework" title="Vue" />
-            <Skill name="framework" title="Spring" />
-            <Skill name="framework" title="Django" />
-            <Skill name="framework" title="기타" />
+              <Skill name="framework" title="React" />
+              <Skill name="framework" title="Vue" />
+              <Skill name="framework" title="Spring" />
+              <Skill name="framework" title="Django" />
+              <Skill name="framework" title="기타" />
             </div>
             <span className="mt-5">경력</span>
-            <input placeholder="년" className="mt-2 text-right px-2 border border-subGreen2 w-52 h-10 rounded-xl" type="text" defaultValue="년"/>
+            <input placeholder="년" className="mt-2 text-right px-2 border border-subGreen2 w-52 h-10 rounded-xl" type="text" defaultValue="년" />
             <span className="mt-5">포트폴리오 링크</span>
             <input type="text" className="px-2 mt-2 border border-subGreen2 w-72 h-10 rounded-xl" />
             <span className="mt-5">한 줄 자기소개</span>

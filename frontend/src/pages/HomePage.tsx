@@ -1,162 +1,185 @@
-import React, { useState, useEffect } from "react";
-import { ParallaxProvider, Parallax } from "react-scroll-parallax";
-import { Element } from "react-scroll";
+// 스크롤 -> 색상 변경 및 부드러운 스크롤 효과
+import React, { useEffect, useRef } from "react";
+import gsap from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+import LocomotiveScroll from "locomotive-scroll";
 
-interface Card {
-  title: string;
-  image: string;
-}
+gsap.registerPlugin(ScrollTrigger);
 
-const cards: Card[] = [
-  {
-    title: "Fintech Platform",
-    image:
-      "https://images.unsplash.com/photo-1560185127-6a8c1f75b22c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
-  },
-  {
-    title: "Digital Banking",
-    image:
-      "https://images.unsplash.com/photo-1573164574472-cb89e39749d3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
-  },
-  {
-    title: "AI in Finance",
-    image:
-      "https://images.unsplash.com/photo-1507679799987-c73779587ccf?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=800",
-  },
-];
-
-const HomePage: React.FC = () => {
-  const [activeCard, setActiveCard] = useState(0);
+const HomePage = () => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const scrollerRef = useRef<LocomotiveScroll | null>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      const windowHeight = window.innerHeight;
+    if (!containerRef.current) return;
 
-      // Calculate scroll thresholds for card changes
-      const cardChangePoints = Array.from(
-        { length: cards.length },
-        (_, i) => (i + 1) * windowHeight * 0.5
-      );
+    scrollerRef.current = new LocomotiveScroll({
+      el: containerRef.current,
+      smooth: true,
+      // 스크롤 속도를 증가시키기 위해 multiplier를 높게 설정합니다.
+      multiplier: 0.4, // 기본값은 1, 더 높은 값을 설정하여 스크롤 속도를 증가시킵니다.
+      // lerp 값을 낮춰 더 부드러운 스크롤 효과를 만듭니다.
+      lerp: 0.01, // 기본값은 0.1, 더 낮은 값은 더 부드러운 감쇠 효과를 제공합니다.
+      class: "is-revealed", // 섹션이 보일 때 적용할 클래스
+    });
 
-      // Determine which card should be active based on scroll position
-      const newActiveCard = cardChangePoints.findIndex(
-        (point) => scrollPosition < point
-      );
+    const locoScroll = scrollerRef.current;
 
-      if (newActiveCard !== -1 && newActiveCard !== activeCard) {
-        setActiveCard(newActiveCard);
+    locoScroll.on("scroll", ScrollTrigger.update);
+
+    ScrollTrigger.scrollerProxy(".container", {
+      scrollTop(value) {
+        if (arguments.length && locoScroll) {
+          (locoScroll as any).scrollTo(value, {
+            duration: 0,
+            disableLerp: true,
+          });
+        }
+        return locoScroll ? (locoScroll as any).scroll.instance.scroll.y : 0;
+      },
+      getBoundingClientRect() {
+        return {
+          left: 0,
+          top: 0,
+          width: window.innerWidth,
+          height: window.innerHeight,
+        };
+      },
+    });
+
+    const handleRefresh = () => {
+      if (locoScroll) {
+        locoScroll.update();
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [activeCard]);
+    ScrollTrigger.addEventListener("refresh", handleRefresh);
+    ScrollTrigger.refresh();
+
+    const scrollColorElems = document.querySelectorAll("[data-bgcolor]");
+    scrollColorElems.forEach((colorSection, i) => {
+      const prevBg =
+        i === 0 ? "" : (scrollColorElems[i - 1] as HTMLElement).dataset.bgcolor;
+      const prevText =
+        i === 0
+          ? ""
+          : (scrollColorElems[i - 1] as HTMLElement).dataset.textcolor;
+
+      ScrollTrigger.create({
+        trigger: colorSection,
+        scroller: ".container",
+        start: "top 50%",
+        onEnter: () =>
+          gsap.to("body", {
+            backgroundColor: (colorSection as HTMLElement).dataset.bgcolor,
+            color: (colorSection as HTMLElement).dataset.textcolor,
+            overwrite: "auto",
+          }),
+        onLeaveBack: () =>
+          gsap.to("body", {
+            backgroundColor: prevBg,
+            color: prevText,
+            overwrite: "auto",
+          }),
+      });
+    });
+
+    return () => {
+      if (locoScroll) {
+        ScrollTrigger.getAll().forEach((st) => st.kill());
+        locoScroll.destroy();
+      }
+      ScrollTrigger.removeEventListener("refresh", handleRefresh);
+    };
+  }, []);
 
   return (
-    <ParallaxProvider>
-      {/* Hero Section */}
-      <Element name="hero">
-        <Parallax
-          speed={-30}
-          className="h-screen flex items-center justify-center bg-gray-900"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1532614338840-ab30cf10ed22?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1600')",
-            backgroundSize: "cover",
-          }}
+    <div className="font-sans text-[var(--text-color)] bg-[var(--bg-color)] transition-all duration-300 ease-out overflow-x-hidden">
+      <div ref={containerRef} className="container">
+        <section
+          data-bgcolor="#bcb8ad"
+          data-textcolor="#032f35"
+          className="min-h-screen w-full relative grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-8 p-[50px_10vw] max-w-[1000px] mx-auto place-items-center"
         >
-          <h1 className="text-5xl md:text-7xl font-bold text-white">
-            Fintech Innovation
+          <h1
+            data-scroll
+            data-scroll-speed="3"
+            className="flex text-4xl md:text-6xl z-10 leading-tight font-bold"
+          >
+            Change background colour with GSAP ScrollTrigger
           </h1>
-        </Parallax>
-      </Element>
-
-      {/* Services Section with Parallax */}
-      <Element name="services">
-        <section className="relative min-h-screen flex items-center justify-center bg-gray-800 p-10">
-          <div className="max-w-2xl text-white">
-            <h2 className="text-4xl font-semibold mb-6">Our Services</h2>
-            <p className="text-lg leading-relaxed text-gray-300">
-              Discover our range of innovative financial solutions that help you
-              grow your business.
-            </p>
-          </div>
-
-          {/* Service Card with Parallax Effect */}
-          <div className="absolute right-10 top-1/2 transform -translate-y-1/2 w-80">
-            <Parallax
-              translateY={[0, 30]}
-              className="w-80 h-96 shadow-lg rounded-lg overflow-hidden"
-            >
-              {cards.map((card, index) => (
-                <div
-                  key={index}
-                  className={`w-full h-full bg-cover bg-center transition-opacity duration-500 ${
-                    index === activeCard ? "opacity-100" : "opacity-0"
-                  }`}
-                  style={{ backgroundImage: `url(${card.image})` }}
-                >
-                  <div className="p-10 bg-white bg-opacity-80 h-full flex items-center justify-center">
-                    <h3 className="text-xl font-bold">{card.title}</h3>
-                  </div>
-                </div>
-              ))}
-            </Parallax>
-          </div>
+          <img
+            src="https://images.pexels.com/photos/3062948/pexels-photo-3062948.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+            alt="placeholder"
+            className="max-h-[80vh] w-full object-contain absolute"
+          />
         </section>
-      </Element>
-
-      {/* Security Section with Parallax */}
-      <Element name="security">
-        <section className="relative min-h-screen flex items-center justify-center bg-gray-700 p-10">
-          <div className="max-w-2xl text-white">
-            <h2 className="text-4xl font-semibold mb-6">Security</h2>
-            <p className="text-lg leading-relaxed text-gray-300">
-              Secure your financial transactions with cutting-edge blockchain
-              technology.
-            </p>
-          </div>
-
-          {/* Security Card with Parallax Effect */}
-          <div className="absolute right-10 top-1/2 transform -translate-y-1/2 w-80">
-            <Parallax
-              translateY={[0, 30]}
-              className="w-80 h-96 shadow-lg rounded-lg overflow-hidden"
-            >
-              {cards.map((card, index) => (
-                <div
-                  key={index}
-                  className={`w-full h-full bg-cover bg-center transition-opacity duration-500 ${
-                    index === activeCard ? "opacity-100" : "opacity-0"
-                  }`}
-                  style={{ backgroundImage: `url(${card.image})` }}
-                >
-                  <div className="p-10 bg-white bg-opacity-80 h-full flex items-center justify-center">
-                    <h3 className="text-xl font-bold">{card.title}</h3>
-                  </div>
-                </div>
-              ))}
-            </Parallax>
-          </div>
+        <section
+          data-bgcolor="#eacbd1"
+          data-textcolor="#536fae"
+          className="min-h-screen w-full relative grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-8 p-[50px_10vw] max-w-[1000px] mx-auto place-items-center"
+        >
+          <img
+            src="https://images.pexels.com/photos/4467879/pexels-photo-4467879.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+            alt="placeholder"
+            className="max-h-[80vh] w-full object-contain"
+          />
+          <h2
+            data-scroll
+            data-scroll-speed="1"
+            className="text-2xl max-w-[400px]"
+          >
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </h2>
         </section>
-      </Element>
-
-      {/* FAQ Section */}
-      <Element name="faq">
-        <section className="min-h-screen flex items-center justify-center bg-gray-600 p-10">
-          <div className="max-w-2xl">
-            <h2 className="text-4xl font-semibold mb-6 text-white">
-              Get in Touch
-            </h2>
-            <p className="text-lg leading-relaxed text-gray-300">
-              Have questions or want to learn more about our services? FAQ us
-              today.
-            </p>
-          </div>
+        <section
+          data-bgcolor="#536fae"
+          data-textcolor="#eacbd1"
+          className="min-h-screen w-full relative grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-8 p-[50px_10vw] max-w-[1000px] mx-auto place-items-center"
+        >
+          <img
+            src="https://images.pexels.com/photos/5604966/pexels-photo-5604966.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+            alt="placeholder"
+            className="max-h-[80vh] w-full object-contain"
+          />
+          <h2
+            data-scroll
+            data-scroll-speed="1"
+            className="text-2xl max-w-[400px]"
+          >
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </h2>
         </section>
-      </Element>
-    </ParallaxProvider>
+        <section
+          data-bgcolor="#e3857a"
+          data-textcolor="#f1dba7"
+          className="min-h-screen w-full relative grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-8 p-[50px_10vw] max-w-[1000px] mx-auto place-items-center"
+        >
+          <img
+            src="https://images.pexels.com/photos/4791474/pexels-photo-4791474.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
+            alt="placeholder"
+            className="max-h-[80vh] w-full object-contain"
+          />
+          <h2
+            data-scroll
+            data-scroll-speed="1"
+            className="text-2xl max-w-[400px]"
+          >
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </h2>
+        </section>
+      </div>
+      <div className="fixed bottom-4 right-4">
+        <a
+          href=""
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-white"
+        >
+          Made by Advantage
+        </a>
+      </div>
+    </div>
   );
 };
 

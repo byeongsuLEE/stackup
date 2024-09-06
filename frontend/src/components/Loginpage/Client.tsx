@@ -1,6 +1,6 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { clientLogin } from "../../apis/User";
-import { clientLoginInfo } from "../../apis/user.type";
+import { clientLoginInfo } from "../../apis/User.type";
 
 const Client = () => {
   const { register, handleSubmit } = useForm<clientLoginInfo>();

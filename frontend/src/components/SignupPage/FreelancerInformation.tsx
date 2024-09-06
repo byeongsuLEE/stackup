@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { freelanceBasicStore } from "../../store/FreelanceStore";
 import Button from "../common/DoneButton";
 
 const FreelancerInfo = () => {
@@ -7,6 +8,8 @@ const FreelancerInfo = () => {
   const toSkill = () => {
     navigate("/signup/freelancer/skill");
   }
+
+  const { name, email, address, phone, setName, setEmail, setAddress, setPhone } = freelanceBasicStore();
 
     return (
       <>
@@ -27,6 +30,8 @@ const FreelancerInfo = () => {
             id="name"
             className="border my-2 px-2  border-gray-400 w-48 h-8 rounded-md"
             type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
 
           <label htmlFor="email">이메일</label>
@@ -35,6 +40,8 @@ const FreelancerInfo = () => {
             placeholder="ssafy@ssafy.com"
             className="border my-2 px-2 border-gray-400 w-48 rounded-md h-8"
             type="text"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
 
           <label htmlFor="address">주소</label>
@@ -43,6 +50,8 @@ const FreelancerInfo = () => {
             placeholder="서울시 강남구 논현동"
             className="border my-2 border-gray-400 px-2  w-48 rounded-md h-8"
             type="text"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
           />
 
           <label htmlFor="phoneNumber">연락처</label>
@@ -51,6 +60,8 @@ const FreelancerInfo = () => {
             placeholder="010-1234-5678"
             className="px-2  border my-2 h-8 border-gray-400 w-48 rounded-md"
             type="text"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
           />
         </div>
 

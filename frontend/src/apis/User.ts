@@ -1,5 +1,5 @@
 import axios from "axios"
-import { clientLoginInfo, clientSignupInfo } from "./user.type"
+import { clientLoginInfo, clientSignupInfo } from "./User.type"
 
 const BASE_URL: string = "http://localhost:8080"
 

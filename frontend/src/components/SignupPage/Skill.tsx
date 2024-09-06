@@ -5,13 +5,14 @@ interface SkillProps {
 }
 
 const Skill = ({title, name, value}:SkillProps)=>{
-  const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value); // 선택된 값 콘솔에 출력
-  };
+  // const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   console.log(e.target.value); // 선택된 값 콘솔에 출력
+  // };
+
   return (
     <div className="flex flex-col px-2 py-2 mt-5 mx-1 border w-40 h-20 rounded-2xl">
       <input
-      onChange={handleRadioChange}
+      // onChange={handleRadioChange}
       value={value}
       type="radio" name={name} className="radio radio-success radio-xs" />
       <div className="flex flex-col items-center">

@@ -4,7 +4,7 @@ import Major from "./Major";
 import Skill from "./Skill";
 
 const SkillInsert = () => {
-
+  
   return (
     <div>
       <form>

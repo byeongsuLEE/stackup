@@ -22,7 +22,8 @@ const WorkForm = () => {
           <div className='flex flex-col mr-32'>
             <label htmlFor="projectName">프로젝트명</label>
             <label className='mt-3' htmlFor="projectInfo">프로젝트 설명</label>
-            <label className='mt-40' htmlFor="budget">예상 금액</label>
+            <label className="mt-40" htmlFor="projectPeople">모집 인원</label>
+            <label className='mt-3' htmlFor="budget">예상 금액</label>
             <label className='mt-3' htmlFor="projectStart">프로젝트 시작일</label>
             <label className='mt-3' htmlFor="projectPeriod">프로젝트 기간</label>
             <label className='mt-3' htmlFor="postPeriod">공고 마감일</label>
@@ -33,12 +34,11 @@ const WorkForm = () => {
           <div className='flex flex-col'>
             <input name="projectName" className='border border-slate-300 rounded-lg w-96' type="text" />
             <textarea name='projectInfo' className='py-2 px-2 border mt-3 border-slate-300 h-40 rounded-lg' />
+            <input name="projectPeople" className='border mt-3 border-slate-300 rounded-lg w-96 text-end px-2' type="text" defaultValue="명"/>
             <input name='budget' className='border border-slate-300 rounded-lg w-96 mt-3 text-end px-2' type="text" defaultValue="원" />
-            {/* <input name='projectStart' className='border border-slate-300 rounded-lg w-96 mt-3' type="text" /> */}
             <BasicDatePicker/>
             <input name='projectPeriod' className='border border-slate-300 rounded-lg w-96 mt-3 text-end px-2' type="text" defaultValue="일" />
             <BasicDatePicker/>
-            {/* <input name='postPeriod' className='border border-slate-300 rounded-lg w-96 mt-3' type="text" /> */}
             <select name='workType' className='border border-slate-300 rounded-lg w-96 mt-3 text-end px-2'>
               <option value="home">재택</option>
               <option value="commute">기간제 상주</option>

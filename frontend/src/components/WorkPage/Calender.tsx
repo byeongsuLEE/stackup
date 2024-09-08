@@ -10,6 +10,7 @@ export default function BasicDatePicker() {
 
         <DatePicker
          slotProps={{ textField: { size: 'small' } }}
+         className='w-96'
         />
     
       </DemoContainer>

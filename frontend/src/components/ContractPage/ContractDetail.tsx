@@ -7,6 +7,7 @@ const ContractDetail = () => {
         프리랜서 고용 계약서
       </div>
       <div className="flex flex-col">
+        <br />
         <span className="font-bold text-sm">프로젝트명 :</span>
         <span className="font-bold text-sm">계약기간 :</span>
         <br />

@@ -1,6 +1,13 @@
+import Detail from "../components/WorkPage/Detail";
+import DetailSide from "../components/WorkPage/DetailSide";
+
 const WorkDetail = () => {
   return (
-    <div>work datail page</div>
+    <div className="flex justify-center">
+      <Detail />
+      {/* 프리랜서 */}
+      <DetailSide />
+    </div>
   )
 }
 

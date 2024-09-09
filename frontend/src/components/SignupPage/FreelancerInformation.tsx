@@ -8,7 +8,7 @@ const FreelancerInfo = () => {
   const toSkill = () => {
     navigate("/signup/freelancer/skill");
   }
-
+  
   const { name, email, address, phone, setName, setEmail, setAddress, setPhone } = freelanceBasicStore();
 
     return (

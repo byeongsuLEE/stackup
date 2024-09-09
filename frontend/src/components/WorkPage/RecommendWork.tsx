@@ -9,7 +9,7 @@ const ReccommnendWork = () => {
           <span className="my-1">사용언어 및 프레임워크</span>
         </div>
       </div>
-      <div className="bg-subTxt w-auto h-[1px] flex justify-center my-10"></div>
+      
     </div>
   );
 };

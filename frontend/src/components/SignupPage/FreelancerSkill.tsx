@@ -10,6 +10,7 @@ import { freelanceInformation } from "../../apis/User";
 const SkillInsert = () => {
 
   const state = freelanceLanguageStore();
+  const { register, handleSubmit } = useForm<freelanceSignupInfo>({})
 
   //== framework 추가 ==//
   const choiceFramework = (value: string) => {
@@ -28,8 +29,6 @@ const SkillInsert = () => {
       state.addLanguage(value);
     }
   }
-
-  const { register, handleSubmit } = useForm<freelanceSignupInfo>({})
 
   const onsubmit = (information: freelanceSignupInfo) => {
     state.setCareerYear(information.careerYear)

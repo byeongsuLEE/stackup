@@ -1,14 +1,20 @@
 
+import { useForm } from 'react-hook-form';
 import WebIcon from '../../icons/WebIcon';
 import Major from '../SignupPage/Major';
 import Skill from '../SignupPage/Skill';
 import Button from '../common/DoneButton';
 import BasicDatePicker from './Calender';
+import { projectBoard } from '../../apis/Project.type';
 
 const WorkForm = () => {
+  const { register, handleSubmit } = useForm<projectBoard>({});
+
+  const onSubmit = (information: projectBoard) => {
+    console.log(information)
+  }
   return (
-    <form>
-      
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="bg-bgGreen flex flex-col px-20 py-10 mt-10 w-[900px] h-auto border border-mainGreen ">
         <div className="flex items-center">
           <span className="text-sm mr-5 text-subTxt">
@@ -20,31 +26,79 @@ const WorkForm = () => {
         <span className='text-sm text-subTxt mt-10'>[ 필수 입력사항 ]</span>
         <div className='flex mt-5'>
           <div className='flex flex-col mr-32'>
-            <label htmlFor="projectName">프로젝트명</label>
-            <label className='mt-3' htmlFor="projectInfo">프로젝트 설명</label>
-            <label className="mt-40" htmlFor="projectPeople">모집 인원</label>
-            <label className='mt-3' htmlFor="budget">예상 금액</label>
+            <label htmlFor="title">프로젝트명</label>
+            <label className='mt-3' htmlFor="description">프로젝트 설명</label>
+            <label className="mt-40" htmlFor="recruits">모집 인원</label>
+            <label className='mt-3' htmlFor="deposit">예상 금액</label>
             <label className='mt-3' htmlFor="projectStart">프로젝트 시작일</label>
-            <label className='mt-3' htmlFor="projectPeriod">프로젝트 기간</label>
-            <label className='mt-3' htmlFor="postPeriod">공고 마감일</label>
+            <label className='mt-3' htmlFor="period">프로젝트 기간</label>
+            <label className='mt-3' htmlFor="deadline">공고 마감일</label>
             <label className='mt-3' htmlFor="workType">근무 형태</label>
-            <label className='mt-3' htmlFor="workAddress">실제 근무지</label>
-            <label className='mt-3' htmlFor="requirement">기타 요구사항</label>
+            <label className='mt-3' htmlFor="address">실제 근무지</label>
+            <label className='mt-3' htmlFor="requirements">기타 요구사항</label>
           </div>
           <div className='flex flex-col'>
-            <input name="projectName" className='border border-slate-300 rounded-lg w-96' type="text" />
-            <textarea name='projectInfo' className='py-2 px-2 border mt-3 border-slate-300 h-40 rounded-lg' />
-            <input name="projectPeople" className='border mt-3 border-slate-300 rounded-lg w-96 text-end px-2' type="text" defaultValue="명"/>
-            <input name='budget' className='border border-slate-300 rounded-lg w-96 mt-3 text-end px-2' type="text" defaultValue="만원" />
+            <input
+              // name="projectName"
+              className='border border-slate-300 rounded-lg w-96'
+              type="text"
+              {...register("title", { required: '제목을 입력해주세요.' })}
+            />
+
+            <textarea 
+            // name='projectInfo'
+            className='py-2 px-2 border mt-3 border-slate-300 h-40 rounded-lg'
+            {...register("description", { required: "설명을 입력해주세요." })}
+            />
+
+            <input
+            // name="projectPeople"
+            className='border mt-3 border-slate-300 rounded-lg w-96 text-end px-2'
+            type="text"
+            defaultValue="명"
+            {...register("recruits", { required: "모집 인원을 입력해주세요." })}
+            />
+
+            <input
+            // name='budget'
+            className='border border-slate-300 rounded-lg w-96 mt-3 text-end px-2'
+            type="text" defaultValue="만원"
+            {...register("deposit", { required: "예상 금액을 입력해주세요." })}
+            />
+
             <BasicDatePicker/>
-            <input name='projectPeriod' className='border border-slate-300 rounded-lg w-96 mt-3 text-end px-2' type="text" defaultValue="일" />
+
+            <input 
+            // name='projectPeriod' 
+            className='border border-slate-300 rounded-lg w-96 mt-3 text-end px-2' 
+            type="text" 
+            defaultValue="일" 
+            {...register("period", { required: "프로젝트 기간을 입력해주세요." })}
+            />
+            
             <BasicDatePicker/>
-            <select name='workType' className='border border-slate-300 rounded-lg w-96 mt-3 text-end px-2'>
-              <option value="home">재택</option>
-              <option value="commute">기간제 상주</option>
+            
+            <select 
+            // name='workType' 
+            className='border border-slate-300 rounded-lg w-96 mt-3 text-end px-2'
+            {...register("workType", { required: "근무형태를 입력해주세요." })}
+            >
+              <option value="T">재택</option>
+              <option value="F">기간제 상주</option>
             </select>
-            <input name='workAddress' className='border border-slate-300 rounded-lg w-96 mt-3' type="text" />
-            <input name='requirement' className='border border-slate-300 rounded-lg w-96 mt-3' type="text" />
+
+            <input 
+            // name='workAddress' 
+            className='border border-slate-300 rounded-lg w-96 mt-3' 
+            type="text" 
+            {...register("address", { required: "실제 근무지를 입력해주세요." })}
+            />
+            <input 
+            // name='requirement' 
+            className='border border-slate-300 rounded-lg w-96 mt-3' 
+            type="text" 
+            {...register("requirements", { required: "기타 요구사항을 입력해주세요." })}
+            />
           </div>
         </div>
 

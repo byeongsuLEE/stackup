@@ -28,7 +28,7 @@ const Work = ({ title, company, period, category, budget, deadline, candidate, r
           <div className="flex flex-col">
             <span>마감 {deadline}일전</span>
             <span>지원자 {candidate}명/{candidateTotal}명</span>
-            <div>평점 {rating}</div>
+            <div className="flex mt-2 items-center justify-center bg-mainGreen rounded-lg w-[100px] h-[30px]">평점 {rating}</div>
           </div>
         </div>
 

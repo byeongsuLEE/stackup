@@ -6,9 +6,11 @@ import Major from "./Major";
 import Skill from "./Skill";
 import { freelanceSignupInfo } from "../../apis/User.type";
 import { freelanceInformation } from "../../apis/UserApi";
+import { freelanceInformation } from "../../apis/UserApi";
 
 const SkillInsert = () => {
   const state = freelanceLanguageStore();
+  const { register, handleSubmit } = useForm<freelanceSignupInfo>({});
 
   //== framework 추가 ==//
   const choiceFramework = (value: string) => {

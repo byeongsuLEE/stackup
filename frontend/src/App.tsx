@@ -17,6 +17,7 @@ import PostWork from "./pages/PostWorkPage";
 import Signup from "./pages/SignupPage";
 import WorkDetail from "./pages/WorkDetailPage";
 import CandidateCheck from "./pages/CandidateCheckPage";
+import Contract from "./pages/ContractPage";
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
               <Route path="/work/post" element={<PostWork />} />
               <Route path="/work/detail" element={<WorkDetail />} />
               <Route path="/work/detail/candidate" element={<CandidateCheck />} />
+              <Route path="/work/detail/contract" element={<Contract />} />
               <Route path="/project" element={<Project />} />
               <Route path="/career" element={<Career />} />
               <Route path="/account" element={<Account />} />

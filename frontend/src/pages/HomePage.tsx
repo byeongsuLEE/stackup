@@ -1,186 +1,255 @@
-// 스크롤 -> 색상 변경 및 부드러운 스크롤 효과
-import React, { useEffect, useRef } from "react";
-import gsap from "gsap";
+import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
+import ScrollOut from "scroll-out";
+import Splitting from "splitting";
+import "splitting/dist/splitting.css";
+import "splitting/dist/splitting-cells.css";
+import "../components/HomePage/styles.css";
+import { gsap } from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
-import LocomotiveScroll from "locomotive-scroll";
 
+// GSAP와 ScrollTrigger 플러그인 등록
 gsap.registerPlugin(ScrollTrigger);
 
-const HomePage = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const scrollerRef = useRef<LocomotiveScroll | null>(null);
-
+const HomePage = (): JSX.Element => {
   useEffect(() => {
-    if (!containerRef.current) return;
-
-    scrollerRef.current = new LocomotiveScroll({
-      el: containerRef.current,
-      smooth: true,
-      // 스크롤 속도를 증가시키기 위해 multiplier를 높게 설정합니다.
-      multiplier: 0.4, // 기본값은 1, 더 높은 값을 설정하여 스크롤 속도를 증가시킵니다.
-      // lerp 값을 낮춰 더 부드러운 스크롤 효과를 만듭니다.
-      lerp: 0.01, // 기본값은 0.1, 더 낮은 값은 더 부드러운 감쇠 효과를 제공합니다.
-      class: "is-revealed", // 섹션이 보일 때 적용할 클래스
-    });
-
-    const locoScroll = scrollerRef.current;
-
-    locoScroll.on("scroll", ScrollTrigger.update);
-
-    ScrollTrigger.scrollerProxy(".container", {
-      scrollTop(value) {
-        if (arguments.length && locoScroll) {
-          (locoScroll as any).scrollTo(value, {
-            duration: 0,
-            disableLerp: true,
-          });
-        }
-        return locoScroll ? (locoScroll as any).scroll.instance.scroll.y : 0;
-      },
-      getBoundingClientRect() {
-        return {
-          left: 0,
-          top: 0,
-          width: window.innerWidth,
-          height: window.innerHeight,
-        };
+    // ScrollOut 초기화
+    ScrollOut({
+      cssProps: {
+        visibleY: true,
+        viewportY: true,
       },
     });
 
-    const handleRefresh = () => {
-      if (locoScroll) {
-        locoScroll.update();
-      }
+    // Splitting 초기화
+    Splitting({ target: ".heading, .intro-heading" });
+
+    // Intersection Observer 설정
+    const figures = document.querySelectorAll<HTMLElement>(".figure");
+    const options = {
+      root: null,
+      threshold: 0.1, // 뷰포트에 10% 이상 노출될 때 트리거
     };
 
-    ScrollTrigger.addEventListener("refresh", handleRefresh);
-    ScrollTrigger.refresh();
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("in-view"); // 뷰포트에 진입하면 클래스 추가
+        } else {
+          entry.target.classList.remove("in-view"); // 뷰포트를 벗어나면 클래스 제거
+        }
+      });
+    }, options);
 
-    const scrollColorElems = document.querySelectorAll("[data-bgcolor]");
-    scrollColorElems.forEach((colorSection, i) => {
-      const prevBg =
-        i === 0 ? "" : (scrollColorElems[i - 1] as HTMLElement).dataset.bgcolor;
-      const prevText =
-        i === 0
-          ? ""
-          : (scrollColorElems[i - 1] as HTMLElement).dataset.textcolor;
+    figures.forEach((figure) => {
+      observer.observe(figure); // 각 이미지에 대해 옵저버 설정
+    });
 
-      ScrollTrigger.create({
-        trigger: colorSection,
-        scroller: ".container",
-        start: "top 50%",
-        onEnter: () =>
-          gsap.to("body", {
-            backgroundColor: (colorSection as HTMLElement).dataset.bgcolor,
-            color: (colorSection as HTMLElement).dataset.textcolor,
-            overwrite: "auto",
-          }),
-        onLeaveBack: () =>
-          gsap.to("body", {
-            backgroundColor: prevBg,
-            color: prevText,
-            overwrite: "auto",
-          }),
+    // 텍스트 애니메이션 효과 설정
+    const textElements = gsap.utils.toArray<HTMLElement>(".text");
+    textElements.forEach((text) => {
+      gsap.to(text, {
+        backgroundSize: "100%",
+        ease: "none",
+        scrollTrigger: {
+          trigger: text,
+          start: "center 80%",
+          end: "center 20%",
+          scrub: true,
+        },
       });
     });
 
+    // 클린업
     return () => {
-      if (locoScroll) {
-        ScrollTrigger.getAll().forEach((st) => st.kill());
-        locoScroll.destroy();
-      }
-      ScrollTrigger.removeEventListener("refresh", handleRefresh);
+      figures.forEach((figure) => {
+        observer.unobserve(figure);
+      });
     };
   }, []);
 
   return (
-    <div className="font-sans text-[var(--text-color)] bg-[var(--bg-color)] transition-all duration-300 ease-out overflow-x-hidden">
-      <div ref={containerRef} className="container">
-        <section
-          data-bgcolor="#bcb8ad"
-          data-textcolor="#032f35"
-          className="min-h-screen w-full relative grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-8 p-[50px_10vw] max-w-[1000px] mx-auto place-items-center"
+    <div className="w-full h-full">
+      {/* 소개 섹션 */}
+      <section className="intro-section flex flex-col items-center justify-center min-h-[70vh] text-center text-mainGreen">
+        <h1
+          className="intro-heading text-5xl font-bold -translate-y-32"
+          data-splitting
         >
-          <h1
-            data-scroll
-            data-scroll-speed="3"
-            className="flex text-4xl md:text-6xl z-10 leading-tight font-bold"
-          >
-            Change background colour with GSAP ScrollTrigger
-          </h1>
-          <img
-            src="https://images.pexels.com/photos/3062948/pexels-photo-3062948.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-            alt="placeholder"
-            className="max-h-[80vh] w-full object-contain absolute"
-          />
-        </section>
-        <section
-          data-bgcolor="#eacbd1"
-          data-textcolor="#536fae"
-          className="min-h-screen w-full relative grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-8 p-[50px_10vw] max-w-[1000px] mx-auto place-items-center"
-        >
-          <img
-            src="https://images.pexels.com/photos/4467879/pexels-photo-4467879.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-            alt="placeholder"
-            className="max-h-[80vh] w-full object-contain"
-          />
-          <h2
-            data-scroll
-            data-scroll-speed="1"
-            className="text-2xl max-w-[400px]"
-          >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </h2>
-        </section>
-        <section
-          data-bgcolor="#536fae"
-          data-textcolor="#eacbd1"
-          className="min-h-screen w-full relative grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-8 p-[50px_10vw] max-w-[1000px] mx-auto place-items-center"
-        >
-          <img
-            src="https://images.pexels.com/photos/5604966/pexels-photo-5604966.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-            alt="placeholder"
-            className="max-h-[80vh] w-full object-contain"
-          />
-          <h2
-            data-scroll
-            data-scroll-speed="1"
-            className="text-2xl max-w-[400px]"
-          >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </h2>
-        </section>
-        <section
-          data-bgcolor="#e3857a"
-          data-textcolor="#f1dba7"
-          className="min-h-screen w-full relative grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-8 p-[50px_10vw] max-w-[1000px] mx-auto place-items-center"
-        >
-          <img
-            src="https://images.pexels.com/photos/4791474/pexels-photo-4791474.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"
-            alt="placeholder"
-            className="max-h-[80vh] w-full object-contain"
-          />
-          <h2
-            data-scroll
-            data-scroll-speed="1"
-            className="text-2xl max-w-[400px]"
-          >
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          </h2>
-        </section>
-      </div>
-      <div className="fixed bottom-4 right-4">
-        <a
-          href=""
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-white"
-        >
-          Made by Advantage
-        </a>
-      </div>
+          STACK UP
+        </h1>
+        <p className="text-lg font-normal -translate-y-24">
+          개발자 프리랜서를 위한 종합 금융 서비스.
+        </p>
+      </section>
+
+      {/* 콘텐츠 섹션 반복 렌더링 */}
+      {contentData.map((content, index) => (
+        <ContentSection
+          key={index}
+          imgSrc={content.imgSrc}
+          title={content.title}
+          description={content.description}
+          paragraph={content.paragraph}
+        />
+      ))}
+      {/* 추가된 텍스트 효과 섹션 */}
+      <TextEffectSection />
+      <br />
+      <br />
+      <br />
     </div>
   );
 };
+
+interface ContentSectionProps {
+  imgSrc: string;
+  title: string;
+  description: string;
+  paragraph: string;
+}
+
+const ContentSection = ({
+  imgSrc,
+  title,
+  description,
+  paragraph,
+}: ContentSectionProps): JSX.Element => {
+  return (
+    <section
+      className="content-section relative h-[150vh] w-full font-sans"
+      data-scroll
+    >
+      {/* 이미지 섹션 */}
+      <figure
+        className="figure sticky top-0 left-0 w-full h-screen overflow-hidden transition-transform duration-700 ease-out"
+        data-scroll
+      >
+        <img
+          src={imgSrc}
+          alt="content"
+          className="block w-full h-full object-cover object-center"
+        />
+      </figure>
+
+      {/* 텍스트 콘텐츠 */}
+      <div
+        className="content absolute top-0 left-0 w-full h-full max-w-[35em] grid grid-rows-2 text-white p-8 text-[2.5vmin] transition-opacity duration-500 ease-out"
+        data-scroll
+      >
+        <header className="header flex flex-col justify-end">
+          <div className="subheading text-xl font-semibold mb-2">{title}</div>
+          <h2 className="heading text-[2.75em] font-bold" data-splitting>
+            {description}
+          </h2>
+        </header>
+        <p className="paragraph row-span-2 leading-[1.5]">{paragraph}</p>
+      </div>
+    </section>
+  );
+};
+
+const TextEffectSection = () => (
+  <div className="main mt-20 py-4">
+    <h1 className="text text-element">
+      프로젝트 매칭<label>최적의 일감 찾기</label>
+    </h1>
+    <h1 className="text text-element">
+      스마트 계약<label>안전한 계약 관리</label>
+    </h1>
+    <h1 className="text text-element">
+      AI 이상 거래 감지<label>안전한 거래 보장</label>
+    </h1>
+    <h1 className="text text-element">
+      만족도 최상
+      <label>
+        <Link to="/login">로그인</Link>
+      </label>
+    </h1>
+    <h1 className="text text-element">
+      지금 시작하세요!
+      <label>
+        <Link to="/login">로그인</Link>
+      </label>
+    </h1>
+  </div>
+);
+
+// 콘텐츠 데이터 배열
+const contentData = [
+  {
+    imgSrc: "public/assets/work.webp",
+    title: "일감 매칭 및 성과 점수 제공",
+    description:
+      "프리랜서의 기술과 경험을 분석해 최적의 프로젝트를 매칭하고, 성과 기반 점수로 신뢰도를 평가합니다.",
+    paragraph:
+      "빠르고 정확한 매칭과 객관적인 성과 평가로 프리랜서에게 더 나은 기회를 제공합니다.",
+  },
+  {
+    imgSrc: "public/assets/accounts.webp",
+    title: "계좌 관리",
+    description:
+      "프리랜서의 금융 계좌를 통합 관리하고 거래 내역을 쉽게 조회할 수 있습니다.",
+    paragraph:
+      "계좌 관리, 잔액 확인, 자금 이체 기능으로 효율적인 재정 관리를 지원합니다.",
+  },
+  {
+    imgSrc: "public/assets/frauddetection.webp",
+    title: "이상 계약 감지",
+    description:
+      "AI 기반 모델로 비정상적인 거래를 실시간 감지해 사기와 부정 거래를 방지합니다.",
+    paragraph:
+      "안전한 거래 환경을 위해 비정상적인 활동을 실시간으로 감지하고 경고합니다.",
+  },
+  {
+    imgSrc: "public/assets/nft.webp",
+    title: "경력 증명서 발급",
+    description:
+      "블록체인을 통해 프리랜서의 프로젝트 이력을 신뢰할 수 있는 경력 증명서로 발급합니다.",
+    paragraph:
+      "스마트 계약으로 투명하고 안전하게 경력을 관리하고 인증받으세요.",
+  },
+  {
+    imgSrc: "public/assets/contract.webp",
+    title: "스마트 계약 관리",
+    description:
+      "블록체인 스마트 계약으로 프리랜서와 클라이언트 간의 안전한 계약을 관리합니다.",
+    paragraph:
+      "다중 서명으로 보안을 강화한 자동 계약 실행 시스템을 제공합니다.",
+  },
+  {
+    imgSrc: "public/assets/blockchain.webp",
+    title: "블록체인 + OAuth 2.0",
+    description:
+      "블록체인과 OAuth 2.0을 결합해 안전한 데이터 공유와 접근을 지원합니다.",
+    paragraph:
+      "데이터 무결성과 프라이버시를 보장하며, 안전한 인증과 권한 관리를 제공합니다.",
+  },
+
+  // {
+  //   imgSrc:
+  //     "https://images.pexels.com/photos/4491454/pexels-photo-4491454.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+  //   title: "Freelancer's Workspace",
+  //   description: "Create your perfect workspace for maximum productivity.",
+  //   paragraph:
+  //     "Design a workspace that boosts your productivity. From ergonomic furniture to efficient layouts, find the best setups that fit your style.",
+  // },
+  // {
+  //   imgSrc:
+  //     "https://images.pexels.com/photos/4386378/pexels-photo-4386378.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+  //   title: "Productivity on the Go",
+  //   description: "Stay productive wherever you are with optimized workflows.",
+  //   paragraph:
+  //     "Discover techniques and tools that help maintain high productivity levels while on the move, ensuring no moment is wasted.",
+  // },
+  // {
+  //   imgSrc:
+  //     "https://images.pexels.com/photos/669615/pexels-photo-669615.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+  //   title: "Your Financial Freedom",
+  //   description: "Achieve financial independence with smart tools and advice.",
+  //   paragraph:
+  //     "Utilize strategic financial planning and investment tools to secure your future and gain the financial freedom you've always wanted.",
+  // },
+];
 
 export default HomePage;

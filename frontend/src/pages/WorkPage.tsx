@@ -16,6 +16,7 @@ const Work = () => {
       </div>
       {/* 프리랜서 추천 일감 */}
       <ReccommnendWork/>
+      <div className="bg-subTxt w-auto h-[1px] flex justify-center mx-10 my-10"></div>
       <WorkList />
     </div>
   )

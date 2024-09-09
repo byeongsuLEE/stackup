@@ -1,23 +1,41 @@
+import { useNavigate } from "react-router-dom";
+import Work from "./Work";
+
 const WorkList = () => {
+  const navigate = useNavigate();
+  const toWorkDetail = () => {
+    navigate('/work/detail');
+  }
   return (
-    <div className="flex flex-col items-center"> 
-    <div className="flex px-10 justify-between items-center w-[1500px] h-[150px] bg-bgGreen border border-mainGreen rounded-lg">
-      <div className="flex flex-col">
-        <span>프로젝트 명</span>
-        <span>프로젝트 기간</span>
-        <span>예상 금액</span>
-        <span>대분류</span>
+    <div className="mx-10">
+      <span className="font-bold text-xl">프로젝트 찾기</span>
+
+      <div className="mt-5">
+      <select defaultValue="category" className="bg-bgGreen text-center text-sm mx-2 border border-mainGreen w-[90px] h-[30px] rounded-2xl" name="category">
+        <option value="category">대분류</option>
+        <option value="web">웹</option>
+        <option value="mobile">모바일</option>
+        <option value="publisher">퍼블리셔</option>
+        <option value="ai">AI</option>
+        <option value="db">DB</option>
+      </select>
+
+      <select defaultValue="workType" className="bg-bgGreen mx-2 text-center text-sm border border-mainGreen w-[90px] h-[30px] rounded-2xl" name="category">
+        <option value="workType">근무형태</option>
+        <option value="home">재택</option>
+        <option value="commute">기간제 상주</option>
+      </select>
+
+      <select defaultValue="budget" className="bg-bgGreen mx-2 text-center text-sm border border-mainGreen w-[90px] h-[30px] rounded-2xl" name="category">
+        <option value="budget">금액</option>
+       
+      </select>
       </div>
-      <div className="flex items-center">
-      <div className="w-[2px] h-[120px] bg-mainGreen mr-10"></div>
-      <div className="flex flex-col">
-        <span>마감 0일전</span>
-        <span>지원자 0명/0명</span>
-        <div>평점 4.8</div>
-      </div>
+
+      <div onClick={toWorkDetail} className="mb-10">
+        <Work title="프로젝트이름" company="ssafy" period="2024-09-01~2024-09-31" budget={1000000} category="웹" candidate={2} candidateTotal={5} deadline={3} rating={4.6} />
       </div>
     </div>
-     </div>
   )
 }
 export default WorkList;

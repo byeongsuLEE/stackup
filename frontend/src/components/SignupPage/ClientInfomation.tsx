@@ -1,5 +1,5 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { clientSignup } from "../../apis/User";
+import { clientSignup } from "../../apis/UserApi";
 import { clientSignupInfo } from "../../apis/User.type";
 import Button from "../common/DoneButton";
 
@@ -8,7 +8,7 @@ const ClientInfo = () => {
 
   const onSubmit: SubmitHandler<clientSignupInfo> = (data) => {
     clientSignup(data);
-  }
+  };
 
   return (
     <form>
@@ -54,7 +54,9 @@ const ClientInfo = () => {
             id="passwordCheck"
             className="border my-2 px-2  border-gray-400 w-48 rounded-md h-8"
             type="password"
-            {...register("passwordCheck", { required: "passwordCheck is required." })}
+            {...register("passwordCheck", {
+              required: "passwordCheck is required.",
+            })}
           />
 
           <label htmlFor="businessNumber">사업자 등록 번호</label>
@@ -62,7 +64,9 @@ const ClientInfo = () => {
             id="businessNumber"
             className="border my-2 px-2  border-gray-400 w-48 rounded-md h-8"
             type="text"
-            {...register("businessRegistrationNumber", { required: "businessRegistrationNumber is required." })}
+            {...register("businessRegistrationNumber", {
+              required: "businessRegistrationNumber is required.",
+            })}
           />
 
           <label htmlFor="company">기업명</label>
@@ -70,7 +74,9 @@ const ClientInfo = () => {
             id="company"
             className="border my-2 border-gray-400 px-2  w-48 rounded-md h-8"
             type="text"
-            {...register("businessName", { required: "businessName is required." })}
+            {...register("businessName", {
+              required: "businessName is required.",
+            })}
           />
 
           <label htmlFor="phoneNumber">연락처</label>
@@ -83,7 +89,10 @@ const ClientInfo = () => {
           />
         </div>
 
-        <div className="flex justify-end mr-10 my-5" onClick={handleSubmit(onSubmit)}>
+        <div
+          className="flex justify-end mr-10 my-5"
+          onClick={handleSubmit(onSubmit)}
+        >
           <Button height={40} width={100} title="회원가입" />
         </div>
       </div>

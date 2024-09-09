@@ -91,7 +91,7 @@ const Footer: React.FC = () => {
           <div className="flex gap-2">
             {/* <img src="/logos/Logo.png" alt="footer_logo" className="w-8" /> */}
             {/* <p className="font-semibold text-subGreen1">STACK UP</p> */}
-            <Logo/>
+            <Logo />
           </div>
           <div className="flex gap-2 text-black flex-wrap">
             {iconsTab.map(({ icon, url, name }, index) => (
@@ -108,7 +108,7 @@ const Footer: React.FC = () => {
               </div>
             ))}
           </div>
-          <p className="text-xs text-mainTxt">© C103 STACKUP</p>
+          <p className="text-xs text-boldTxt">© C103 STACKUP</p>
         </div>
 
         {/* 메뉴 및 팀 섹션 */}

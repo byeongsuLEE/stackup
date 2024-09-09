@@ -5,6 +5,15 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap");
 
+* {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+*::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera*/
+}
+
 .theme-background-color {
   background-color: #c3e956;
 }
@@ -36,14 +45,4 @@ body {
 .slide-up {
   transform: translateY(-20px);
   opacity: 1;
-}
-
-body {
-  font-family: "Termina", sans-serif;
-  transition: background-color 0.3s ease-out, color 0.3s ease-out;
-  overflow-x: hidden;
-}
-
-.container {
-  overflow: hidden; /* Locomotive Scroll을 위한 설정 */
 }

@@ -93,7 +93,8 @@ export const clientSignup = async (information: clientSignupInfo): Promise<void>
             console.error("Unexpected error: ", error)
         }
     }
-}
+  }
+};
 
 //== 클라이언트 로그인 ==//
 export const clientLogin = async (information: clientLoginInfo): Promise<void> => {

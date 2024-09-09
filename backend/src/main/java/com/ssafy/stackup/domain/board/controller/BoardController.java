@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/board")
@@ -25,14 +26,14 @@ public class BoardController {
     @GetMapping
     public ResponseEntity<?> findAllBoards(){
         List<?> boards = boardService.getboards();
-        return ResponseEntity.ok(boards);
+        return ResponseEntity.ok().body(ApiResponse.success(boards));
     }
 
     //모집글 상세 조회
     @GetMapping("/{boardId}")
     public ResponseEntity<?> findBoardById(@PathVariable Long boardId){
         Board board = boardService.findByBoardId(boardId);
-        return ResponseEntity.ok(new BoardFindOneResponse(board));
+        return ResponseEntity.ok().body(ApiResponse.success(new BoardFindOneResponse(board)));
     }
 
     @PostMapping
@@ -60,5 +61,18 @@ public class BoardController {
         BoardFindAllResponse result = boardService.createBoard(board, request.getFrameworks(), request.getLanguages());
 
         return ResponseEntity.ok().body(ApiResponse.success(result));
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> conditionedBoards(
+            @RequestParam(value = "worktype", required = false) Boolean worktype,
+            @RequestParam(value = "deposit", required = false) String deposit,
+            @RequestParam(value = "classification", required = false) String classification){
+//        BoardFindAllResponse result = boardService.findBoardsByConditions(worktype, deposit, classification);
+        List<?> boards = boardService.findBoardsByConditions(worktype, deposit, classification);
+//        List<BoardFindAllResponse> responseList = boards.stream()
+//                .map(BoardFindAllResponse::new)
+//                .collect(Collectors.toList());
+        return ResponseEntity.ok().body(ApiResponse.success(boards));
     }
 }

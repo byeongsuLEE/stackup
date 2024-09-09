@@ -53,8 +53,20 @@ public class BoardService {
 
     //모집글 목록 조회
     @Transactional(readOnly = true)
-    public List<?> getboards(){
-        return boardRepository.findAll();
+    public List<BoardFindAllResponse> getboards() {
+        List<Board> boards = boardRepository.findAll();
+        return boards.stream()
+                .map(BoardFindAllResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    //조건에 맞는 게시글 조회
+    @Transactional(readOnly = true)
+    public List<BoardFindAllResponse> findBoardsByConditions(Boolean worktype, String deposit, String classification) {
+        List<Board> boards = boardRepository.findByConditions(worktype, deposit, classification);
+        return boards.stream()
+                .map(BoardFindAllResponse::new)
+                .collect(Collectors.toList());
     }
 
     //모집글 상세 조회
@@ -100,8 +112,6 @@ public class BoardService {
             languages.add(boardLanguage);
         }
         board.setBoardLanguages(languages);
-        log.info("Saving board with frameworks and languages: {}", board);
-        log.info("frameworks:",frameworkRequests.toString());
 
         boardRepository.save(board);
 
@@ -114,4 +124,6 @@ public class BoardService {
                 .map(FrameworkRequest::new)
                 .collect(Collectors.toList());
     }
+
+
 }

@@ -1,6 +1,6 @@
 import axios from "axios"
-import { clientLoginInfo, clientSignupInfo } from "./User.type"
 import { freelanceBasicStore, freelanceLanguageStore } from "../store/FreelanceStore"
+import { clientLoginInfo, clientSignupInfo } from "./User.type"
 
 const BASE_URL: string = "http://localhost:8080/api/user"
 const token: string ='수정'

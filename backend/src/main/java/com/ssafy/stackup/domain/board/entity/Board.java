@@ -34,7 +34,7 @@ public class Board {
     private List<BoardLanguage> boardLanguages = new ArrayList<>();
 
     @Column(nullable = false)
-    private String deposit;
+    private Long deposit;
 
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)

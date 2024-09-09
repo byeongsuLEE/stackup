@@ -73,7 +73,15 @@ public class BoardService {
     @Transactional(readOnly = true)
     public Board findByBoardId(Long boardId){
         return  boardRepository.findById(boardId)
-                .orElseThrow(()-> new ResourceNotFoundException("Board not found"));
+                .orElseThrow(()-> new ResourceNotFoundException("게시글이 존재하지 않음"));
+    }
+
+    //모집글 삭제
+    public void deleteBoard(Long boardId){
+        Board board = boardRepository.findById(boardId)
+                .orElseThrow(()-> new ResourceNotFoundException("게시글이 존재하지 않음"));
+
+        boardRepository.delete(board);
     }
 
 

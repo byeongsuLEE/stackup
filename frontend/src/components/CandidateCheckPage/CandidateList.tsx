@@ -1,3 +1,4 @@
+import DoneButton from "../common/DoneButton";
 import Candidate from "./Candidate";
 
 const CandidateList = () => {
@@ -11,13 +12,17 @@ const CandidateList = () => {
             <th>이름</th>
             <th>평점</th>
             <th>포트폴리오</th>
-            <th></th>
+            <th>
+            </th>
           </tr>
         </thead>
         <tbody>
-          <Candidate name="이호영" ischecked={true} portfolio="github.com/hoyoung" rating={5.0} />
+          <Candidate name="이호영" portfolio="github.com/hoyoung" rating={5.0} />
         </tbody>
       </table>
+      <div className="my-5 text-end">
+      <DoneButton width={80} height={30} title="계약하기"/>
+      </div>
     </div>
   )
 }

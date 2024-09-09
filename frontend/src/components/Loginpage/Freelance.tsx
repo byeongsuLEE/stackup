@@ -1,4 +1,4 @@
-import { freelanceLogin } from "../../apis/User";
+import { freelanceLogin } from "../../apis/UserApi";
 
 const Freelance = () => {
   return (

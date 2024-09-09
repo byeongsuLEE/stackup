@@ -8,19 +8,20 @@ import Login from "./pages/LoginPage";
 import Mypage from "./pages/MyPage";
 import Project from "./pages/ProjectPage";
 import Work from "./pages/WorkPage";
-
 import Footer from "./components/common/Footer";
-import Signup from "./pages/SignupPage";
+import ChatIcon from "./icons/ChatIcon";
 import ClientSignup from "./pages/ClientSignupPage";
 import FreelancerSignup from "./pages/FreelancerSignupPage";
 import FreelancerSkill from "./pages/FreelancerSkillPage";
 import PostWork from "./pages/PostWorkPage";
+import Signup from "./pages/SignupPage";
+import WorkDetail from "./pages/WorkDetailPage";
 
 function App() {
   return (
     <>
       <BrowserRouter>
-        <div className="App flex flex-col min-h-screen">
+        <div className="App relative flex flex-col min-h-screen">
           <Navbar />
           <main className="flex-grow pt-20">
             <Routes>
@@ -28,6 +29,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/work" element={<Work />} />
               <Route path="/work/post" element={<PostWork />} />
+              <Route path="/work/detail" element={<WorkDetail />} />
               <Route path="/project" element={<Project />} />
               <Route path="/career" element={<Career />} />
               <Route path="/account" element={<Account />} />
@@ -36,10 +38,12 @@ function App() {
               <Route path="/signup/client" element={<ClientSignup />} />
               <Route path="/signup/freelancer" element={<FreelancerSignup />} />
               <Route path="/signup/freelancer/skill" element={<FreelancerSkill />} />
-              
             </Routes>
           </main>
           <Footer />
+          <div className="fixed right-10 bottom-10">
+            <ChatIcon />
+          </div>
         </div>
       </BrowserRouter>
     </>

@@ -1,12 +1,12 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { clientLogin } from "../../apis/User";
 import { clientLoginInfo } from "../../apis/User.type";
+import { clientLogin } from "../../apis/UserApi";
 
 const Client = () => {
   const { register, handleSubmit } = useForm<clientLoginInfo>();
 
   const onSubmit: SubmitHandler<clientLoginInfo> = (data) => {
-      clientLogin(data);
+    clientLogin(data);
   };
 
   return (
@@ -18,7 +18,7 @@ const Client = () => {
             {...register("email", { required: "email is required." })}
           />
           <input className="border my-1 h-10 w-72 border-gray-300 rounded-xl px-2" type="password" placeholder="PASSWORD"
-           {...register("password", { required: "password id required." })}
+            {...register("password", { required: "password id required." })}
           />
         </div>
 

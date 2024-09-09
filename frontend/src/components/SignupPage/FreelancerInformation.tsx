@@ -11,19 +11,19 @@ const FreelancerInfo = () => {
 
   const state = freelanceBasicStore();
 
-    return (
-      <>
+  return (
+
+    <div className="bg-bgGreen flex flex-col w-[800px] h-[530px] border border-mainGreen ">
+      <div className="flex flex-col items-center">
+        <span className="text-xl font-bold mt-10 mb-2 text-subGreen2">
+          프리랜서로 시작하기
+        </span>
+        <span className="text-sm mb-10 text-subTxt">
+          서비스 이용에 필요한 정보를 입력해주세요.
+        </span>
+      </div>
+
       <form>
-      <div className="bg-bgGreen flex flex-col w-[800px] h-[530px] border border-mainGreen ">
-        <div className="flex flex-col items-center">
-          <span className="text-xl font-bold mt-10 mb-2 text-subGreen2">
-            프리랜서로 시작하기
-          </span>
-          <span className="text-sm mb-10 text-subTxt">
-            서비스 이용에 필요한 정보를 입력해주세요.
-          </span>
-        </div>
-        
         <div className="flex flex-col ml-10">
           <label htmlFor="name">이름</label>
           <input
@@ -64,9 +64,8 @@ const FreelancerInfo = () => {
         <div onClick={toSkill} className="flex justify-end mr-10 my-5">
           <Button height={40} width={100} title="다음" />
         </div>
-      </div>
-    </form>
-      </>
-    )
+      </form>
+    </div>
+  )
 }
 export default FreelancerInfo;

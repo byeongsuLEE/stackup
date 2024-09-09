@@ -1,22 +1,23 @@
 import axios from "axios"
-import { clientLoginInfo, clientSignupInfo } from "./User.type"
 import { freelanceBasicStore, freelanceLanguageStore } from "../store/FreelanceStore"
+import { clientLoginInfo, clientSignupInfo } from "./User.type"
+
 
 const BASE_URL: string = "http://localhost:8080/api/user"
-const token: string ='수정'
+const token: string = '수정'
 
 //== 프리랜서 깃허브 소셜 로그인 ==//
 export const freelanceLogin = async (): Promise<void> => {
 
-    try{
+    try {
         const response = await axios({
             method: "post",
             url: `${BASE_URL}/social-auth/`
         })
-        
+
         console.log(response.data)
 
-    } catch(error) {
+    } catch (error) {
         if (axios.isAxiosError(error)) {
             console.error("Axios error: ", error.message)
 
@@ -39,16 +40,16 @@ export const freelanceInformation = async (): Promise<void> => {
                 Authorization: `Bearer ${token}`
             },
             data: {
-                "name" : basic.name,
-                "email" : basic.email,
-                "address" : basic.address,
-                "phone" : basic.phone,
-                "classification" : languageInfo.classification,
-                "framework" : languageInfo.frameworks,
-                "language" : languageInfo.languages,
-                "careerYear" : languageInfo.careerYear,
-                "portfolioURL" : languageInfo.portfolioURL,
-                "selfIntroduction" : languageInfo.selfIntroduction
+                "name": basic.name,
+                "email": basic.email,
+                "address": basic.address,
+                "phone": basic.phone,
+                "classification": languageInfo.classification,
+                "framework": languageInfo.frameworks,
+                "language": languageInfo.languages,
+                "careerYear": languageInfo.careerYear,
+                "portfolioURL": languageInfo.portfolioURL,
+                "selfIntroduction": languageInfo.selfIntroduction
             }
         })
 
@@ -93,8 +94,8 @@ export const clientSignup = async (information: clientSignupInfo): Promise<void>
             console.error("Unexpected error: ", error)
         }
     }
-  }
-};
+}
+
 
 //== 클라이언트 로그인 ==//
 export const clientLogin = async (information: clientLoginInfo): Promise<void> => {
@@ -111,7 +112,7 @@ export const clientLogin = async (information: clientLoginInfo): Promise<void> =
 
         console.log(response.data)
 
-    } catch(error) {
+    } catch (error) {
         if (axios.isAxiosError(error)) {
             console.error("Axios error: ", error.message)
 

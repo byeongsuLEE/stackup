@@ -17,7 +17,7 @@ public class BoardFindOneResponse {
     private String classification;
     private List<FrameworkRequest> frameworks; // 프레임워크 ID 목록
     private List<LanguageRequest> languages;  // 언어 ID 목록
-    private String deposit;
+    private Long deposit;
     private Date startDate;
     private String period;
     private Long recruits;

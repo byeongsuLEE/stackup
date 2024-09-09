@@ -36,6 +36,13 @@ public class BoardController {
         return ResponseEntity.ok().body(ApiResponse.success(new BoardFindOneResponse(board)));
     }
 
+    //모집글 삭제
+    @DeleteMapping("/{boardId}")
+    public ResponseEntity<?> deleteBoard(@PathVariable Long boardId){
+        boardService.deleteBoard(boardId);
+        return ResponseEntity.ok().body(ApiResponse.success("모집글 삭제 성공"));
+    }
+
     @PostMapping
     public ResponseEntity<?> createBoard(@RequestBody BoardCreateRequest request) {
 

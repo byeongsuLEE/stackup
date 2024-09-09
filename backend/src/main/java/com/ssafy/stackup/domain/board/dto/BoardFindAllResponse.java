@@ -18,7 +18,7 @@ public class BoardFindAllResponse {
     private String classification;
     private List<FrameworkRequest> frameworks;
     private List<LanguageRequest> languages;
-    private String deposit;
+    private Long deposit;
     private Date startDate;
     private String period;
     private Long recruits;

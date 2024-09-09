@@ -19,7 +19,7 @@ public class BoardCreateRequest {
 //    private List<BoardLanguageUpdateRequest> languages;
     private List<BoardFrameworkUpdateRequest> frameworks = new ArrayList<>(); // 프레임워크
     private List<BoardLanguageUpdateRequest> languages = new ArrayList<>();  // 언어
-    private String deposit;
+    private Long deposit;
     private Date startDate;
     private String period;
     private Long recruits;

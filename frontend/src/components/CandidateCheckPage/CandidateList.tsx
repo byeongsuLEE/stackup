@@ -1,7 +1,12 @@
+import { useNavigate } from "react-router-dom";
 import DoneButton from "../common/DoneButton";
 import Candidate from "./Candidate";
 
 const CandidateList = () => {
+  const navigate = useNavigate();
+  const toContract = () => {
+    navigate("/work/detail/contract");
+  }
   return (
     <div className="overflow-x-auto">
       <table className="table">
@@ -20,7 +25,7 @@ const CandidateList = () => {
           <Candidate name="이호영" portfolio="github.com/hoyoung" rating={5.0} />
         </tbody>
       </table>
-      <div className="my-5 text-end">
+      <div className="my-5 text-end" onClick={toContract}>
       <DoneButton width={80} height={30} title="계약하기"/>
       </div>
     </div>

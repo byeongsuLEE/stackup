@@ -35,7 +35,7 @@ const WorkForm = () => {
             <input name="projectName" className='border border-slate-300 rounded-lg w-96' type="text" />
             <textarea name='projectInfo' className='py-2 px-2 border mt-3 border-slate-300 h-40 rounded-lg' />
             <input name="projectPeople" className='border mt-3 border-slate-300 rounded-lg w-96 text-end px-2' type="text" defaultValue="명"/>
-            <input name='budget' className='border border-slate-300 rounded-lg w-96 mt-3 text-end px-2' type="text" defaultValue="원" />
+            <input name='budget' className='border border-slate-300 rounded-lg w-96 mt-3 text-end px-2' type="text" defaultValue="만원" />
             <BasicDatePicker/>
             <input name='projectPeriod' className='border border-slate-300 rounded-lg w-96 mt-3 text-end px-2' type="text" defaultValue="일" />
             <BasicDatePicker/>

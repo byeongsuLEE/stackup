@@ -1,5 +1,5 @@
-import Detail from "../components/WorkPage/Detail";
-import DetailSide from "../components/WorkPage/DetailSide";
+import Detail from "../components/WorkDetailPage/Detail";
+import DetailSide from "../components/WorkDetailPage/DetailSide";
 
 const WorkDetail = () => {
   return (

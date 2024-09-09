@@ -2,14 +2,15 @@
 export interface freelanceSignupInfo {
   name: string,
   email: string,
-  adress:string,
+  address:string,
   phone: string,
   classification: string,
-  framework: Array<string>,
-  language: Array<string>,
-  careerYear: number,
+  framework: string[],
+  language: string[],
+  careerYear: string,
   portfolioURL: string,
-  githubURL: string
+  githubURL: string,
+  selfIntroduction: string
 }
 
 //== 클라이언트 회원가입 ==//

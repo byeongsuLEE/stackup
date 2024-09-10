@@ -1,17 +1,46 @@
-
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import WebIcon from '../../icons/WebIcon';
 import Major from '../SignupPage/Major';
 import Skill from '../SignupPage/Skill';
 import Button from '../common/DoneButton';
 import BasicDatePicker from './Calender';
-import { projectBoard } from '../../apis/Project.type';
+import { Dayjs } from 'dayjs';
+import { projectInformationProp } from '../../apis/Project.type';
+import { createProject } from '../../apis/ProjectApi';
 
 const WorkForm = () => {
-  const { register, handleSubmit } = useForm<projectBoard>({});
-
-  const onSubmit = (information: projectBoard) => {
+  const { register, handleSubmit, control, setValue, watch } = useForm<projectInformationProp>({
+    defaultValues: { languages: [], frameworks: [] }
+  });
+  
+  //== 제출 ==//
+  const onSubmit = (information: projectInformationProp) => {
     console.log(information)
+    createProject(information)
+  }
+
+  //== 언어 선택 ==//
+  const choiceLanguage = (value: string) => {
+    const languageList = watch('languages')
+
+    if (languageList.includes(value)) {
+      setValue('languages', languageList.filter(item => item !== value));
+    } else {
+      setValue('languages', [...languageList, value]);
+    }
+
+  }
+  
+  //== 프레임워크 선택 ==//
+  const choiceFramework = (value: string) => {
+    const frameworkList = watch('frameworks')
+
+    if (frameworkList.includes(value)) {
+      setValue('frameworks', frameworkList.filter(item => item !== value));
+    } else {
+      setValue('frameworks', [...frameworkList, value]);
+    }
+    console.log(frameworkList)
   }
 
   return (
@@ -56,18 +85,29 @@ const WorkForm = () => {
             // name="projectPeople"
             className='border mt-3 border-slate-300 rounded-lg w-96 text-end px-2'
             type="text"
-            defaultValue="명"
+            placeholder="명"
             {...register("recruits", { required: "모집 인원을 입력해주세요." })}
             />
 
             <input
             // name='budget'
             className='border border-slate-300 rounded-lg w-96 mt-3 text-end px-2'
-            type="text" defaultValue="만원"
+            type="text" placeholder="만원"
             {...register("deposit", { required: "예상 금액을 입력해주세요." })}
             />
 
-            <BasicDatePicker/>
+            <Controller
+              name="startDate"
+              control={control}
+              rules={{ required: '날짜를 입력해주세요.' }}
+              render={({ field: { onChange } }) => (
+                <BasicDatePicker
+                  onChange={(date: Dayjs | null) => {
+                    onChange(date?.format('YYYY-MM-DD'));
+                  }}
+                />
+              )}
+            />
 
             <input 
             // name='projectPeriod' 
@@ -77,7 +117,18 @@ const WorkForm = () => {
             {...register("period", { required: "프로젝트 기간을 입력해주세요." })}
             />
             
-            <BasicDatePicker/>
+            <Controller
+              name="period"
+              control={control}
+              rules={{ required: '날짜를 입력해주세요.' }}
+              render={({ field: { onChange } }) => (
+                <BasicDatePicker
+                  onChange={(date: Dayjs | null) => {
+                    onChange(date?.format('YYYY-MM-DD'));
+                  }}
+                />
+              )}
+            />
             
             <select 
             // name='workType' 
@@ -107,40 +158,86 @@ const WorkForm = () => {
         <span className='text-sm text-subTxt mt-10'>[ 기타 입력사항 ]</span>
         <div className="flex flex-col mt-5">
           <span>대분류</span>
-          <div className="flex">
-            <Major major={WebIcon} title="웹" name="category" value='web' />
-            <Major major={WebIcon} title="모바일" name="category" value='mobile' />
-            <Major major={WebIcon} title="퍼블리셔" name="category" value='publisher' />
-            <Major major={WebIcon} title="AI" name="category" value='ai' />
-            <Major major={WebIcon} title="DB" name="category" value='db' />
-          </div>
+          <Controller
+            name="classification"
+            control={control}
+            render={({ field: { onChange } }) => (
+              <div className="flex" onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}>
+                <Major major={WebIcon} title="웹" name="category" value="web" />
+                <Major major={WebIcon} title="모바일" name="category" value="mobile" />
+                <Major major={WebIcon} title="퍼블리셔" name="category" value="publisher" />
+                <Major major={WebIcon} title="AI" name="category" value="ai" />
+                <Major major={WebIcon} title="DB" name="category" value="db" />
+              </div>
+            )}
+          />
 
           <span>사용언어 ( 중복선택 가능 )</span>
-          <div className="flex">
-            <Skill name="python" title="Python" value='python' />
-            <Skill name="java" title="JAVA" value='java' />
-            <Skill name="c" title="C언어" value='c' />
-            <Skill name="c++" title="C++" value='c++' />
-            <Skill name="php" title="PHP" value='php' />
-          </div>
-          <div className="flex mb-5">
-            <Skill name="typescript" title="Typescript" value='typescript' />
-            <Skill name="javascript" title="Javascript" value='javascript' />
-            <Skill name="etc1" title="기타" value='etc' />
-          </div>
+          <Controller
+            name="languages"
+            control={control}
+            render={() => (
+              <div onChange={(e: React.ChangeEvent<HTMLInputElement>) => choiceLanguage(e.target.value)}>
+                <div className="flex">
+                  <Skill name="python" title="Python" value='python' />
+                  <Skill name="java" title="JAVA" value='java' />
+                  <Skill name="c" title="C언어" value='c' />
+                  <Skill name="c++" title="C++" value='c++' />
+                  <Skill name="php" title="PHP" value='php' />
+                </div>
+                <div className="flex mb-5">
+                  <Skill name="typescript" title="Typescript" value='typescript' />
+                  <Skill name="javascript" title="Javascript" value='javascript' />
+                  <Skill name="etc1" title="기타" value='etc' />
+                </div>
+              </div>
+            )}
+          />
+
+          {/* <div onChange={(e: React.ChangeEvent<HTMLInputElement>) => choiceLanguage(e.target.value)}>
+            <div className="flex">
+              <Skill name="python" title="Python" value='python' />
+              <Skill name="java" title="JAVA" value='java' />
+              <Skill name="c" title="C언어" value='c' />
+              <Skill name="c++" title="C++" value='c++' />
+              <Skill name="php" title="PHP" value='php' />
+            </div>
+            <div className="flex mb-5">
+              <Skill name="typescript" title="Typescript" value='typescript' />
+              <Skill name="javascript" title="Javascript" value='javascript' />
+              <Skill name="etc1" title="기타" value='etc' />
+            </div>
+          </div> */}
+          
           <span>프레임워크 ( 중복선택 가능 )</span>
-          <div className="flex">
+          <Controller
+            name="frameworks"
+            control={control}
+            render={() => (
+              <div className="flex" onChange={(e: React.ChangeEvent<HTMLInputElement>) => choiceFramework(e.target.value)}>
+                <Skill name="react" title="React" value='react' />
+                <Skill name="vue" title="Vue" value='vue' />
+                <Skill name="spring" title="Spring" value='spring' />
+                <Skill name="django" title="Django" value='django' />
+                <Skill name="etc" title="기타" value='etc' />
+              </div>
+            )}
+          />
+
+          {/* <div className="flex">
             <Skill name="react" title="React" value='react' />
             <Skill name="vue" title="Vue" value='vue' />
             <Skill name="spring" title="Spring" value='spring' />
             <Skill name="django" title="Django" value='django' />
             <Skill name="etc" title="기타" value='etc' />
           </div>
-        </div>
-        <div className="flex justify-end mt-10">
-          <Button height={40} width={100} title="등록하기" />
-        </div>
+        </div> */}
 
+          <div className="flex justify-end mt-10">
+            <Button height={40} width={100} title="등록하기" />
+          </div>
+
+        </div>
       </div>
     </form >
 

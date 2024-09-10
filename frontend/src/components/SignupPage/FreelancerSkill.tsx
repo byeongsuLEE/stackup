@@ -54,33 +54,16 @@ const SkillInsert = () => {
             <span>대분류</span>
             <div
               className="flex"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                state.setClassification(e.target.value)
-              }
-            >
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => state.setClassification(e.target.value)}>
               <Major major={WebIcon} title="웹" name="category" value="web" />
-              <Major
-                major={WebIcon}
-                title="모바일"
-                name="category"
-                value="mobile"
-              />
-              <Major
-                major={WebIcon}
-                title="퍼블리셔"
-                name="category"
-                value="publisher"
-              />
+              <Major major={WebIcon} title="모바일" name="category" value="mobile" />
+              <Major major={WebIcon} title="퍼블리셔" name="category" value="publisher" />
               <Major major={WebIcon} title="AI" name="category" value="ai" />
               <Major major={WebIcon} title="DB" name="category" value="db" />
             </div>
 
             <span>사용언어(중복선택 가능)</span>
-            <div
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                choiceLanguage(e.target.value)
-              }
-            >
+            <div onChange={(e: React.ChangeEvent<HTMLInputElement>) => choiceLanguage(e.target.value)}>
               <div className="flex">
                 <Skill name="python" title="Python" value="python" />
                 <Skill name="java" title="JAVA" value="java" />
@@ -106,10 +89,7 @@ const SkillInsert = () => {
             <span>프레임워크(중복선택 가능)</span>
             <div
               className="flex"
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                choiceFramework(e.target.value)
-              }
-            >
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => choiceFramework(e.target.value)}>
               <Skill name="react" title="React" value="react" />
               <Skill name="vue" title="Vue" value="vue" />
               <Skill name="spring" title="Spring" value="spring" />

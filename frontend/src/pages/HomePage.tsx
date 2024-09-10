@@ -152,25 +152,25 @@ const ContentSection = ({
 const TextEffectSection = () => (
   <div className="main mt-20 py-4">
     <h1 className="text text-element">
-      프로젝트 매칭<label>최적의 일감 찾기</label>
+      프로젝트 매칭<article>최적의 일감 찾기</article>
     </h1>
     <h1 className="text text-element">
-      스마트 계약<label>안전한 계약 관리</label>
+      스마트 계약<article>안전한 계약 관리</article>
     </h1>
     <h1 className="text text-element">
-      AI 이상 거래 감지<label>안전한 거래 보장</label>
+      AI 이상 거래 감지<article>안전한 거래 보장</article>
     </h1>
     <h1 className="text text-element">
       만족도 최상
-      <label>
+      <article>
         <Link to="/login">로그인</Link>
-      </label>
+      </article>
     </h1>
     <h1 className="text text-element">
       지금 시작하세요!
-      <label>
+      <article>
         <Link to="/login">로그인</Link>
-      </label>
+      </article>
     </h1>
   </div>
 );

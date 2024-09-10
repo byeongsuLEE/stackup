@@ -15,7 +15,7 @@ const Work = ({ title, company, period, category, budget, deadline, candidate, r
   return (
     <div className="flex justify-center mt-10 ">
 
-      <div className="flex px-10 justify-between items-center w-screen h-[150px] bg-bgGreen border border-mainGreen rounded-lg">
+      <div className="flex px-10 justify-between items-center w-[1000px] h-[150px] bg-bgGreen border border-mainGreen rounded-lg">
 
         <div className="flex flex-col">
           <span className="font-bold text-xl">{title} _ {company}</span>

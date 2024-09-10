@@ -18,6 +18,7 @@ import Signup from "./pages/SignupPage";
 import WorkDetail from "./pages/WorkDetailPage";
 import CandidateCheck from "./pages/CandidateCheckPage";
 import Contract from "./pages/ContractPage";
+import ProjectDetail from "./pages/ProjectDetailPage";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
               <Route path="/work/detail/candidate" element={<CandidateCheck />} />
               <Route path="/work/detail/contract" element={<Contract />} />
               <Route path="/project" element={<Project />} />
+              <Route path="/project/detail" element={<ProjectDetail />} />
               <Route path="/career" element={<Career />} />
               <Route path="/account" element={<Account />} />
               <Route path="/mypage" element={<Mypage />} />

@@ -7,7 +7,7 @@ import DoneButton from "../common/DoneButton";
 const Detail = () => {
   return (
     <>
-      <div className="bg-bgGreen border border-mainGreen h-auto rounded-lg p-10 w-screen my-20 mx-10">
+      <div className="bg-bgGreen border border-mainGreen h-auto rounded-lg p-10 w-[1000px]] my-20 mx-10">
         <div className="flex flex-col">
           <span className="text-lg font-bold">프로젝트명</span>
           <span className="text-subTxt text-sm">대분류</span>

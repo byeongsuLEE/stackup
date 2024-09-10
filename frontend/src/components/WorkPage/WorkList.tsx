@@ -7,7 +7,7 @@ const WorkList = () => {
     navigate('/work/detail');
   }
   return (
-    <div className="mx-10">
+    <div>
       <span className="font-bold text-xl">프로젝트 찾기</span>
 
       <div className="mt-5">

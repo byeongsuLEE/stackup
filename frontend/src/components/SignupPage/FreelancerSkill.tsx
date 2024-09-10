@@ -1,11 +1,11 @@
-import WebIcon from "../../icons/WebIcon";
-import { freelanceLanguageStore } from "../../store/FreelanceStore";
-import { useForm } from "react-hook-form";
-import Button from "../common/DoneButton";
-import Major from "./Major";
-import Skill from "./Skill";
+import { useForm } from 'react-hook-form';
 import { freelanceSignupInfo } from "../../apis/User.type";
 import { freelanceInformation } from "../../apis/UserApi";
+import WebIcon from "../../icons/WebIcon";
+import { freelanceLanguageStore } from "../../store/FreelanceStore";
+import DoneButton from '../common/DoneButton';
+import Major from "./Major";
+import Skill from "./Skill";
 
 const SkillInsert = () => {
   const state = freelanceLanguageStore();
@@ -125,7 +125,7 @@ const SkillInsert = () => {
             />
           </div>
           <div className="flex justify-end mr-10 my-5">
-            <Button height={40} width={100} title="저장" />
+            <DoneButton height={40} width={100} title="저장" />
           </div>
         </div>
       </form>

@@ -9,8 +9,8 @@ export default function BasicDatePicker() {
       <DemoContainer components={['DatePicker']}>
 
         <DatePicker
-         slotProps={{ textField: { size: 'small' } }}
-         className='w-96'
+          slotProps={{ textField: { size: 'small' } }}
+          className='w-96'
         />
     
       </DemoContainer>

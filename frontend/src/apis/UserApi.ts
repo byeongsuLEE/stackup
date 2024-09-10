@@ -11,7 +11,7 @@ export const freelanceLogin = async (): Promise<void> => {
     try{
         const response = await axios({
             method: "post",
-            url: `${BASE_URL}/social-auth/`
+            url: `http://localhost:8080/api/oauth2/authorization/github`
         })
         
         console.log(response.data)
@@ -94,7 +94,6 @@ export const clientSignup = async (information: clientSignupInfo): Promise<void>
         }
     }
   }
-};
 
 //== 클라이언트 로그인 ==//
 export const clientLogin = async (information: clientLoginInfo): Promise<void> => {

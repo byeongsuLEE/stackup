@@ -1,59 +1,55 @@
-import { Link } from "react-router-dom";
-import WebIcon from "../../icons/WebIcon";
-import InfoBox from "../WorkPage/InfoBox";
-import DoneButton from "../common/DoneButton";
+import InfoBox from "../components/WorkPage/InfoBox";
+import DoneButton from "../components/common/DoneButton";
+import WebIcon from "../icons/WebIcon";
 
-
-const Detail = () => {
+const ProjectDetail = () => {
   return (
-    <>
-      <div className="bg-bgGreen border border-mainGreen h-auto rounded-lg p-10 w-[1000px]] my-20 mx-10">
-        <div className="flex flex-col">
+    <div className="m-20 flex items-center flex-col">
+      <div className="bg-bgGreen border border-mainGreen rounded-xl w-[1000px] mb-5 p-5 h-[120px] flex flex-col">
+        <ul className="steps">
+          <li className="step step-success">기획 및 설계</li>
+          <li className="step step-success">퍼블리셔 및 디자인</li>
+          <li className="step">개발</li>
+          <li className="step">테스트</li>
+          <li className="step">배포</li>
+        </ul>
+      </div>
+      <div className="bg-bgGreen border border-mainGreen h-auto rounded-lg p-10 w-[1000px] ">
+        <div className="flex justify-between ">
           <span className="text-lg font-bold">프로젝트명</span>
-          <span className="text-subTxt text-sm">대분류</span>
+          <button className="w-[80px] h-[25px] rounded-md bg-red-400 text-white flex items-center justify-center font-bold text-sm">신고하기</button>
         </div>
-        <div className="flex justify-end">
-          {/* 프리랜서 */}
-          <DoneButton width={100} height={25} title="지원하기" />
-          {/* 클라이언트 */}
-          <Link to="/work/detail/candidate">
-            <DoneButton width={100} height={25} title="지원자 관리" />
-          </Link>
-          <button className="bg-subGreen2 text-bgGreen font-bold text-sm px-3 rounded-lg ml-2">마감하기</button>
-        </div>
+        <span className="text-subTxt text-sm">대분류</span>
 
         <div className="bg-subTxt w-auto h-[1px] flex justify-center my-10"></div>
 
         <div className="flex justify-center mb-10">
-          <InfoBox title="예상 금액" content="1000000원" info={WebIcon} />
-          <InfoBox title="예상 기간" content="30일" info={WebIcon} />
-          <InfoBox title="지원자 수" content="3명" info={WebIcon} />
+          <InfoBox title="금액" content="1000000원" info={WebIcon} />
+          <InfoBox title="기간" content="30일" info={WebIcon} />
+          <InfoBox title="팀원" content="3명" info={WebIcon} />
         </div>
 
         <div className="flex ml-10">
           <div className="flex flex-col mr-20 text-subTxt">
-            <span>모집 마감일</span>
-            <span>모집 인원</span>
-            <span>프로젝트 시작일</span>
+            <span>프로젝트 기간</span>
             <span>근무 형태</span>
-
             <span>사용언어</span>
             <span>프레임워크</span>
             <span>기타 요구사항</span>
           </div>
           <div className="flex flex-col">
             <div className="flex items-center">
-              <span>2024년 9월 9일</span>
+              <span>2024년 9월 1일 ~ 2024년 9월 31일</span>
               <span className="text-xs ml-2 text-red-400">마감 3일전</span>
             </div>
-            <span>3명</span>
-            <span>2024년 9월 24일</span>
             <span>재택</span>
-
-            <span>java, c++</span>
-            <span>react, spring</span>
+            <span>C++, Java</span>
+            <span>Spring, React</span>
             <span>연락이 빠른 프리랜서를 원합니다.</span>
           </div>
+        </div>
+        <div className="text-end">
+          <DoneButton width={100} height={30} title="단계 완료" />
         </div>
 
         <div className="bg-subTxt w-auto h-[1px] flex justify-center my-10"></div>
@@ -96,9 +92,7 @@ const Detail = () => {
         </div>
 
       </div>
-    </>
+    </div>
   )
 }
-
-export default Detail;
-
+export default ProjectDetail;

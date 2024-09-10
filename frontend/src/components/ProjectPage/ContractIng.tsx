@@ -6,7 +6,10 @@ const ContractIng = () => {
   const toProjectDetail = () => {
     navigate('/work/detail');
   }
+
+
   return (
+
     <div onClick={toProjectDetail} className="bg-bgGreen border border-mainGreen rounded-xl w-[1000px] mb-5 p-10 h-[200px] flex items-center justify-between">
       <div className="flex flex-col">
         <span className="text-lg">프로젝트명</span>

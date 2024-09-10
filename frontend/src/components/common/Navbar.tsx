@@ -15,7 +15,7 @@ const Navbar = () => {
               프로젝트 찾기
             </Link>
             <Link to="/project" className="mr-6">
-              프로젝트
+              나의 프로젝트
             </Link>
             <Link to="/career" className="mr-6">
               경력관리

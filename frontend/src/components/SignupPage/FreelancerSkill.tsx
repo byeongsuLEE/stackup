@@ -3,12 +3,9 @@ import { freelanceSignupInfo } from "../../apis/User.type";
 import { freelanceInformation } from "../../apis/UserApi";
 import WebIcon from "../../icons/WebIcon";
 import { freelanceLanguageStore } from "../../store/FreelanceStore";
-import { useForm } from "react-hook-form";
 import Button from "../common/DoneButton";
 import Major from "./Major";
 import Skill from "./Skill";
-import { freelanceSignupInfo } from "../../apis/User.type";
-import { freelanceInformation } from "../../apis/UserApi";
 
 const SkillInsert = () => {
   const state = freelanceLanguageStore();

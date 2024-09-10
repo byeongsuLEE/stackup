@@ -152,25 +152,25 @@ const ContentSection = ({
 const TextEffectSection = () => (
   <div className="main mt-20 py-4">
     <h1 className="text text-element">
-      프로젝트 매칭<label>최적의 일감 찾기</label>
+      프로젝트 매칭<article>최적의 일감 찾기</article>
     </h1>
     <h1 className="text text-element">
-      스마트 계약<label>안전한 계약 관리</label>
+      스마트 계약<article>안전한 계약 관리</article>
     </h1>
     <h1 className="text text-element">
-      AI 이상 거래 감지<label>안전한 거래 보장</label>
+      AI 이상 거래 감지<article>안전한 거래 보장</article>
     </h1>
     <h1 className="text text-element">
       만족도 최상
-      <label>
+      <article>
         <Link to="/login">로그인</Link>
-      </label>
+      </article>
     </h1>
     <h1 className="text text-element">
       지금 시작하세요!
-      <label>
+      <article>
         <Link to="/login">로그인</Link>
-      </label>
+      </article>
     </h1>
   </div>
 );
@@ -178,7 +178,7 @@ const TextEffectSection = () => (
 // 콘텐츠 데이터 배열
 const contentData = [
   {
-    imgSrc: "public/assets/work.webp",
+    imgSrc: "assets/work.webp",
     title: "일감 매칭 및 성과 점수 제공",
     description:
       "프리랜서의 기술과 경험을 분석해 최적의 프로젝트를 매칭하고, 성과 기반 점수로 신뢰도를 평가합니다.",
@@ -186,7 +186,7 @@ const contentData = [
       "빠르고 정확한 매칭과 객관적인 성과 평가로 프리랜서에게 더 나은 기회를 제공합니다.",
   },
   {
-    imgSrc: "public/assets/accounts.webp",
+    imgSrc: "assets/accounts.webp",
     title: "계좌 관리",
     description:
       "프리랜서의 금융 계좌를 통합 관리하고 거래 내역을 쉽게 조회할 수 있습니다.",
@@ -194,7 +194,7 @@ const contentData = [
       "계좌 관리, 잔액 확인, 자금 이체 기능으로 효율적인 재정 관리를 지원합니다.",
   },
   {
-    imgSrc: "public/assets/frauddetection.webp",
+    imgSrc: "assets/frauddetection.webp",
     title: "이상 계약 감지",
     description:
       "AI 기반 모델로 비정상적인 거래를 실시간 감지해 사기와 부정 거래를 방지합니다.",
@@ -202,7 +202,7 @@ const contentData = [
       "안전한 거래 환경을 위해 비정상적인 활동을 실시간으로 감지하고 경고합니다.",
   },
   {
-    imgSrc: "public/assets/nft.webp",
+    imgSrc: "assets/nft.webp",
     title: "경력 증명서 발급",
     description:
       "블록체인을 통해 프리랜서의 프로젝트 이력을 신뢰할 수 있는 경력 증명서로 발급합니다.",
@@ -210,7 +210,7 @@ const contentData = [
       "스마트 계약으로 투명하고 안전하게 경력을 관리하고 인증받으세요.",
   },
   {
-    imgSrc: "public/assets/contract.webp",
+    imgSrc: "assets/contract.webp",
     title: "스마트 계약 관리",
     description:
       "블록체인 스마트 계약으로 프리랜서와 클라이언트 간의 안전한 계약을 관리합니다.",
@@ -218,7 +218,7 @@ const contentData = [
       "다중 서명으로 보안을 강화한 자동 계약 실행 시스템을 제공합니다.",
   },
   {
-    imgSrc: "public/assets/blockchain.webp",
+    imgSrc: "assets/blockchain.webp",
     title: "블록체인 + OAuth 2.0",
     description:
       "블록체인과 OAuth 2.0을 결합해 안전한 데이터 공유와 접근을 지원합니다.",

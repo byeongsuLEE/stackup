@@ -89,6 +89,7 @@ export const clientSignup = async (
       console.error("Unexpected error: ", error);
     }
   }
+};
 
 //== 클라이언트 로그인 ==//
 export const clientLogin = async (

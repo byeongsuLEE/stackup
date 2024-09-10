@@ -19,6 +19,7 @@ import WorkDetail from "./pages/WorkDetailPage";
 import CandidateCheck from "./pages/CandidateCheckPage";
 import Contract from "./pages/ContractPage";
 import ProjectDetail from "./pages/ProjectDetailPage";
+import CareerDetail from "./pages/CareerDetailPage";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
               <Route path="/project" element={<Project />} />
               <Route path="/project/detail" element={<ProjectDetail />} />
               <Route path="/career" element={<Career />} />
+              <Route path="/career/detail" element={<CareerDetail />} />
               <Route path="/account" element={<Account />} />
               <Route path="/mypage" element={<Mypage />} />
               <Route path="/signup" element={<Signup />} />

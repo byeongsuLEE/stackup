@@ -8,10 +8,13 @@ const NFTCareer = () => {
   const toWork = () => {
     navigate('/work')
   }
+  const toDetail = () => {
+    navigate('/career/detail')
+  }
   return (
     <div className="flex flex-wrap">
       {isNFT ? (
-        <div className="w-full sm:w-1/3 lg:w-1/4">
+        <div onClick={toDetail} className="w-full sm:w-1/3 lg:w-1/4">
           <NFT name="이호영" title="SSAPICK" period="2024-08-01 ~ 2024-08-31" />
         </div>
       ) : (

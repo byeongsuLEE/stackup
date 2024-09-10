@@ -1,38 +1,43 @@
 import WebIcon from "../../icons/WebIcon";
 import Major from "../SignupPage/Major";
 import Skill from "../SignupPage/Skill";
+import DoneButton from "../common/DoneButton";
 
 const UserInfo = () => {
   return (
     <form>
-      <div className="bg-bgGreen flex flex-col my-10 p-10 border mx-20 border-mainGreen w-auto h-auto rounded-lg">
-        <div className="flex">
-          
-          <div className="flex flex-col text-subTxt">
-            <label className="text-black" htmlFor="name">이름</label>
-            <label htmlFor="email">이메일</label>
-            <label htmlFor="phoneNumber">전화번호</label>
-          </div>
+      <div className="bg-bgGreen flex flex-col my-10 p-10 border mx-44 border-mainGreen w-auto h-auto rounded-lg">
+        <div className="flex flex-col ml-10">
+          <label htmlFor="name">이름</label>
+          <input
+            id="name"
+            className="border my-2 px-2  border-gray-400 w-48 h-8 rounded-md"
+            type="text"
+          />
 
-          <div className="flex flex-col">
-            <input
-              id="name"
-              className="border my-2 px-2 border-gray-400 w-48 rounded-md h-8"
-              type="text"
-            />
-            <input
-              id="email"
-              className="border my-2 px-2 border-gray-400 w-48 rounded-md h-8"
-              type="text"
-            />
-            <input
-              id="phoneNumber"
-              className="border my-2 px-2 border-gray-400 w-48 rounded-md h-8"
-              type="text"
-            />
-          </div>
+          <label htmlFor="email">이메일</label>
+          <input
+            id="email"
+            className="border my-2 px-2 border-gray-400 w-48 rounded-md h-8"
+            type="text"
+          />
 
+          <label htmlFor="address">주소</label>
+          <input
+            id="address"
+            className="border my-2 border-gray-400 px-2  w-48 rounded-md h-8"
+            type="text"
+          />
+
+          <label htmlFor="phoneNumber">연락처</label>
+          <input
+            id="phoneNumber"
+            className="px-2  border my-2 h-8 border-gray-400 w-48 rounded-md"
+            type="text"
+          />
         </div>
+
+
 
         <div className="flex flex-col ml-10">
           <span>대분류</span>
@@ -88,7 +93,9 @@ const UserInfo = () => {
             className="px-2 mt-2 border border-subGreen2 w-72 h-10 rounded-xl"
           />
         </div>
-
+      <div className="flex justify-end mr-10 my-5">
+        <DoneButton height={40} width={100} title="수정하기" />
+      </div>
       </div>
     </form>
   )

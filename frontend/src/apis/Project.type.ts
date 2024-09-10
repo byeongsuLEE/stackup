@@ -11,6 +11,6 @@ export interface projectInformationProp {
     address: string;
     requirements: string;
     classification: string;
-    frameworks: string[];
-    languages: string[];
+    frameworks: Array<string>;
+    languages: Array<string>;
 }

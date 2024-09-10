@@ -1,3 +1,4 @@
+//== 프로젝트 등록 ==//
 export interface projectBoard {
     title: string;
     description: string;

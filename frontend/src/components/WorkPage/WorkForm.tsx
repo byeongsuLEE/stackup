@@ -13,6 +13,7 @@ const WorkForm = () => {
   const onSubmit = (information: projectBoard) => {
     console.log(information)
   }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="bg-bgGreen flex flex-col px-20 py-10 mt-10 w-[900px] h-auto border border-mainGreen ">

@@ -8,7 +8,7 @@ const WorkList = () => {
   }
   return (
     <div>
-      <span className="font-bold text-xl">프로젝트 찾기</span>
+      <span className="font-bold text-xl text-subGreen1">프로젝트 찾기</span>
 
       <div className="mt-5">
         <select defaultValue="category" className="bg-bgGreen text-center text-sm mx-2 border border-mainGreen w-[90px] h-[30px] rounded-2xl" name="category">

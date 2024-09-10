@@ -8,23 +8,24 @@ const token: string = '수정'
 
 //== 프리랜서 깃허브 소셜 로그인 ==//
 export const freelanceLogin = async (): Promise<void> => {
+    window.location.href = "http://localhost:8080/api/oauth2/authorization/github";
+    
+    // try {
+    //     const response = await axios({
+    //         method: "post",
+    //         url: `${BASE_URL}/social-auth/`
+    //     })
 
-    try {
-        const response = await axios({
-            method: "post",
-            url: `${BASE_URL}/social-auth/`
-        })
+    //     console.log(response.data)
 
-        console.log(response.data)
+    // } catch (error) {
+    //     if (axios.isAxiosError(error)) {
+    //         console.error("Axios error: ", error.message)
 
-    } catch (error) {
-        if (axios.isAxiosError(error)) {
-            console.error("Axios error: ", error.message)
-
-        } else {
-            console.error("Unexpected error: ", error)
-        }
-    }
+    //     } else {
+    //         console.error("Unexpected error: ", error)
+    //     }
+    // }
 }
 
 //== 프리랜서 정보 등록 ==//

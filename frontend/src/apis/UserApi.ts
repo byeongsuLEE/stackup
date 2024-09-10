@@ -67,24 +67,7 @@ export const freelanceInformation = async (): Promise<void> => {
 }
 
 //== 클라이언트 회원가입 ==//
-export const clientSignup = async (
-  information: clientSignupInfo
-): Promise<void> => {
-  try {
-    const response = await axios({
-      method: "post",
-      url: `${BASE_URL}/client/signup`,
-      data: {
-        name: information.name,
-        email: information.email,
-        password: information.password,
-        passwordCheck: information.passwordCheck,
-        businessRegistrationNumber: information.businessRegistrationNumber,
-        businessName: information.businessName,
-        phone: information.phone,
-      },
-    });
-  
+export const clientSignup = async (information: clientSignupInfo): Promise<void> => {
 
     try {
         const response = await axios({

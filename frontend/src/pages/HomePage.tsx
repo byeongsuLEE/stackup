@@ -1,12 +1,12 @@
-import React, { useEffect } from "react";
+import { gsap } from "gsap";
+import ScrollTrigger from "gsap/ScrollTrigger";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import ScrollOut from "scroll-out";
 import Splitting from "splitting";
-import "splitting/dist/splitting.css";
 import "splitting/dist/splitting-cells.css";
+import "splitting/dist/splitting.css";
 import "../components/HomePage/styles.css";
-import { gsap } from "gsap";
-import ScrollTrigger from "gsap/ScrollTrigger";
 
 // GSAP와 ScrollTrigger 플러그인 등록
 gsap.registerPlugin(ScrollTrigger);
@@ -87,7 +87,7 @@ const HomePage = (): JSX.Element => {
       {contentData.map((content, index) => (
         <ContentSection
           key={index}
-          imgSrc={content.imgSrc}
+          // imgSrc={content.imgSrc}
           title={content.title}
           description={content.description}
           paragraph={content.paragraph}
@@ -103,14 +103,14 @@ const HomePage = (): JSX.Element => {
 };
 
 interface ContentSectionProps {
-  imgSrc: string;
+  imgSrc?: string;
   title: string;
   description: string;
   paragraph: string;
 }
 
 const ContentSection = ({
-  imgSrc,
+  // imgSrc,
   title,
   description,
   paragraph,
@@ -125,11 +125,14 @@ const ContentSection = ({
         className="figure sticky top-0 left-0 w-full h-screen overflow-hidden transition-transform duration-700 ease-out"
         data-scroll
       >
-        <img
+        <div className="block w-full h-full object-cover object-center">
+
+        </div>
+        {/* <img
           src={imgSrc}
           alt="content"
           className="block w-full h-full object-cover object-center"
-        />
+        /> */}
       </figure>
 
       {/* 텍스트 콘텐츠 */}
@@ -178,7 +181,7 @@ const TextEffectSection = () => (
 // 콘텐츠 데이터 배열
 const contentData = [
   {
-    imgSrc: "assets/work.webp",
+    // imgSrc: "assets/work.webp",
     title: "일감 매칭 및 성과 점수 제공",
     description:
       "프리랜서의 기술과 경험을 분석해 최적의 프로젝트를 매칭하고, 성과 기반 점수로 신뢰도를 평가합니다.",
@@ -226,30 +229,6 @@ const contentData = [
       "데이터 무결성과 프라이버시를 보장하며, 안전한 인증과 권한 관리를 제공합니다.",
   },
 
-  // {
-  //   imgSrc:
-  //     "https://images.pexels.com/photos/4491454/pexels-photo-4491454.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-  //   title: "Freelancer's Workspace",
-  //   description: "Create your perfect workspace for maximum productivity.",
-  //   paragraph:
-  //     "Design a workspace that boosts your productivity. From ergonomic furniture to efficient layouts, find the best setups that fit your style.",
-  // },
-  // {
-  //   imgSrc:
-  //     "https://images.pexels.com/photos/4386378/pexels-photo-4386378.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-  //   title: "Productivity on the Go",
-  //   description: "Stay productive wherever you are with optimized workflows.",
-  //   paragraph:
-  //     "Discover techniques and tools that help maintain high productivity levels while on the move, ensuring no moment is wasted.",
-  // },
-  // {
-  //   imgSrc:
-  //     "https://images.pexels.com/photos/669615/pexels-photo-669615.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
-  //   title: "Your Financial Freedom",
-  //   description: "Achieve financial independence with smart tools and advice.",
-  //   paragraph:
-  //     "Utilize strategic financial planning and investment tools to secure your future and gain the financial freedom you've always wanted.",
-  // },
 ];
 
 export default HomePage;

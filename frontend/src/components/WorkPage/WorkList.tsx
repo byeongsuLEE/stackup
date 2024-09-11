@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import Work from "./Work";
 import { allProject, projectFilter } from "../../apis/ProjectApi";
-import { projectFilterStore, projectListStore } from "../../store/projectStore";
+import { projectFilterStore, projectListStore } from "../../store/ProjectStore";
 import { useEffect } from "react";
 
 const WorkList = () => {

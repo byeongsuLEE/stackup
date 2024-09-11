@@ -1,6 +1,6 @@
 import axios from "axios";
 import { projectInformationProp } from "./Project.type";
-import { projectFilterStore, projectListStore } from "../store/projectStore";
+import { projectFilterStore, projectListStore } from "../store/ProjectStore";
 
 const BASE_URL: string = "http://localhost:8080";
 // const token: string = "수정";

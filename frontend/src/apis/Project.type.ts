@@ -14,3 +14,10 @@ export interface projectInformationProp {
     frameworks: Array<string>;
     languages: Array<string>;
 }
+
+//== 프로젝트 filter ==//
+export interface projectFilterProp {
+    classification: string | null;
+    worktype: string | null;
+    deposit: string | null;
+}

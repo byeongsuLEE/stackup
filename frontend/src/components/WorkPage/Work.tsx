@@ -1,17 +1,40 @@
+import { format, addDays, differenceInDays } from 'date-fns';
+
 interface WorkProps {
   title: string;
   company: string;
+  startDate: Date;
   period: string;
-  category: string;
-  budget: number;
-  deadline: number;
-  candidate: number;
-  candidateTotal: number;
-  rating: number;
+  classification: string;
+  deposit: string;
+  deadline: Date;
+  recruits: number;
+  applicants: number;
+  rate: number;
 
 }
 
-const Work = ({ title, company, period, category, budget, deadline, candidate, rating, candidateTotal }: WorkProps) => {
+const Work = ({ title, company, startDate, period, classification, deposit, deadline, recruits, rate, applicants }: WorkProps) => {
+  const projectPeriod = startDate + ' ~ ' + format(addDays(startDate, parseInt(period, 10)), 'yyyy-MM-dd');
+  const budget = new Intl.NumberFormat().format(parseInt(deposit, 10));
+  const remainDay = differenceInDays(deadline, format(Date(), 'yyyy-MM-dd'));
+
+  if (classification === 'web') {
+    classification = '웹'
+  } else if (classification === 'mobile') {
+    classification = '모바일'
+  } else if (classification === 'publisher') {
+    classification = '퍼블리셔'
+  } else if (classification === 'ai') {
+    classification = 'AI'
+  } else {
+    classification = 'DB'
+  }
+
+  if (applicants === null) {
+    applicants = 0
+  }
+
   return (
     <div className="flex justify-center mt-10 ">
 
@@ -19,16 +42,16 @@ const Work = ({ title, company, period, category, budget, deadline, candidate, r
 
         <div className="flex flex-col">
           <span className="font-bold text-xl">{title} _ {company}</span>
-          <span className="text-subTxt text-sm mr-5">{period} _ {budget}원</span>
-          <span className="font-bold text-subTxt">{category}</span>
+          <span className="text-subTxt text-sm mr-5">{projectPeriod} _ {budget}만원</span>
+          <span className="font-bold text-subTxt">{classification}</span>
         </div>
 
         <div className="flex items-center">
           <div className="w-[2px] h-[120px] bg-mainGreen mr-10"></div>
           <div className="flex flex-col">
-            <span>마감 {deadline}일전</span>
-            <span>지원자 {candidate}명/{candidateTotal}명</span>
-            <div className="flex mt-2 items-center justify-center bg-mainGreen rounded-lg w-[100px] h-[30px]">평점 {rating}</div>
+            <span>마감 {remainDay}일전</span>
+            <span>지원자 {applicants}명/{recruits}명</span>
+            <div className="flex mt-2 items-center justify-center bg-mainGreen rounded-lg w-[100px] h-[30px]">평점 {rate}</div>
           </div>
         </div>
 

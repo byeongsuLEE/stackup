@@ -1,27 +1,29 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import Navbar from "./components/common/Navbar";
-import Account from "./pages/AccountPage";
-import Career from "./pages/CareerPage";
-import Home from "./pages/HomePage";
-import Login from "./pages/LoginPage";
-import Mypage from "./pages/MyPage";
-import Project from "./pages/ProjectPage";
-import Work from "./pages/WorkPage";
 import Footer from "./components/common/Footer";
+import Navbar from "./components/common/Navbar";
 import ChatIcon from "./icons/ChatIcon";
+import AccountDetail from "./pages/AccountDetailPage";
+import Account from "./pages/AccountPage";
+import CandidateCheck from "./pages/CandidateCheckPage";
+import CareerDetail from "./pages/CareerDetailPage";
+import Career from "./pages/CareerPage";
+import CareerRegister from "./pages/CareerRegisterPage";
 import ClientSignup from "./pages/ClientSignupPage";
+import Contract from "./pages/ContractPage";
+import FinalEvaluate from "./pages/FinalEvaluatePage";
 import FreelancerSignup from "./pages/FreelancerSignupPage";
 import FreelancerSkill from "./pages/FreelancerSkillPage";
+import Home from "./pages/HomePage";
+import Login from "./pages/LoginPage";
+import MitermEvaluate from "./pages/MitermEvaluatePage";
+import Mypage from "./pages/MyPage";
 import PostWork from "./pages/PostWorkPage";
+import ProjectDetail from "./pages/ProjectDetailPage";
+import Project from "./pages/ProjectPage";
 import Signup from "./pages/SignupPage";
 import WorkDetail from "./pages/WorkDetailPage";
-import CandidateCheck from "./pages/CandidateCheckPage";
-import Contract from "./pages/ContractPage";
-import ProjectDetail from "./pages/ProjectDetailPage";
-import CareerDetail from "./pages/CareerDetailPage";
-import AccountDetail from "./pages/AccountDetailPage";
-import CareerRegister from "./pages/CareerRegisterPage";
+import Work from "./pages/WorkPage";
 
 function App() {
   return (
@@ -50,6 +52,8 @@ function App() {
               <Route path="/signup/client" element={<ClientSignup />} />
               <Route path="/signup/freelancer" element={<FreelancerSignup />} />
               <Route path="/signup/freelancer/skill" element={<FreelancerSkill />} />
+              <Route path="/evaluate/miterm" element={<MitermEvaluate />} />
+              <Route path="/evaluate/final" element={<FinalEvaluate />} />
             </Routes>
           </main>
           <Footer />

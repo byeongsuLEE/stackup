@@ -43,7 +43,7 @@ const WorkForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="bg-bgGreen flex flex-col px-20 py-10 mt-10 w-[900px] h-auto border border-mainGreen ">
+      <div className="bg-bgGreen flex flex-col px-20 py-10 mt-10 w-[900px] h-auto border rounded-lg border-mainGreen ">
         <div className="flex items-center">
           <span className="text-sm mr-5 text-subTxt">
             프로젝트 등록에 어려움이 있다면?

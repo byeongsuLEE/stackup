@@ -8,7 +8,7 @@ interface RadiosProps {
   title: string;
   option1: string;
   option2: string;
-  option3: string;
+  option3?: string;
 }
 
 const Radios = ({ title, option1, option2, option3 }: RadiosProps) => {

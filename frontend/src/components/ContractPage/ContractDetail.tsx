@@ -1,6 +1,7 @@
 import DoneButton from "../common/DoneButton";
 
 const ContractDetail = () => {
+  const today = new Date();
   return (
     <div className="bg-bgGreen border border-mainGreen h-auto w-auto p-5 mx-20">
       <div className="text-center text-lg font-bold">
@@ -61,7 +62,7 @@ const ContractDetail = () => {
       </textarea>
       </div>
       <div className="text-center my-10 font-bold">
-        계약일자 : 
+        계약일자 : {today.getFullYear()}년 {today.getMonth() + 1}월 {today.getDate()}일
       </div>
       <div className="text-end">
       <DoneButton width={100} height={30} title="제출"/>

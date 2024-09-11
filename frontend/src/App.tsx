@@ -24,6 +24,7 @@ import Project from "./pages/ProjectPage";
 import Signup from "./pages/SignupPage";
 import WorkDetail from "./pages/WorkDetailPage";
 import Work from "./pages/WorkPage";
+import Transfer from "./pages/TransferPage";
 
 function App() {
   return (
@@ -54,6 +55,7 @@ function App() {
               <Route path="/signup/freelancer/skill" element={<FreelancerSkill />} />
               <Route path="/evaluate/miterm" element={<MitermEvaluate />} />
               <Route path="/evaluate/final" element={<FinalEvaluate />} />
+              <Route path="/transfer" element={<Transfer />} />
             </Routes>
           </main>
           <Footer />

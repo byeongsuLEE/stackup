@@ -1,8 +1,9 @@
+import { Link } from "react-router-dom";
 import WebIcon from "../../icons/WebIcon";
 import DoneButton from "../common/DoneButton";
 
 const RegisteredCareer = () => {
-  const isList = true;
+  const isList = false;
 
   return (
     <div>
@@ -17,7 +18,9 @@ const RegisteredCareer = () => {
           </div>
         </div>
       ) : (
+        <Link to="/career/register">
         <DoneButton width={150} height={40} title="경력 등록하기" />
+        </Link>
       )}
     </div>
   )

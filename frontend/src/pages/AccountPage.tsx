@@ -13,7 +13,7 @@ const Account = () => {
       <span className="text-lg font-bold ml-20 text-subGreen1">
         계좌 조회
       </span>
-      <div className="bg-subTxt w-auto h-[1px] flex justify-center mx-10 my-10"></div>
+      <div className="bg-subTxt w-auto h-[1px] flex justify-center mx-10 my-5"></div>
       {isAccount ? (
         <div>
           <div className="flex items-center justify-end mr-20 mb-5">

@@ -21,6 +21,7 @@ import Contract from "./pages/ContractPage";
 import ProjectDetail from "./pages/ProjectDetailPage";
 import CareerDetail from "./pages/CareerDetailPage";
 import AccountDetail from "./pages/AccountDetailPage";
+import CareerRegister from "./pages/CareerRegisterPage";
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
               <Route path="/project/detail" element={<ProjectDetail />} />
               <Route path="/career" element={<Career />} />
               <Route path="/career/detail" element={<CareerDetail />} />
+              <Route path="/career/register" element={<CareerRegister />} />
               <Route path="/account" element={<Account />} />
               <Route path="/account/detail" element={<AccountDetail />} />
               <Route path="/mypage" element={<Mypage />} />

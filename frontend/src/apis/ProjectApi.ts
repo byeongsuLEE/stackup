@@ -1,8 +1,34 @@
 import axios from "axios";
-import { projectFilterProp, projectInformationProp } from "./Project.type";
+import { projectInformationProp } from "./Project.type";
+import { projectFilterStore, projectListStore } from "../store/ProjectStore";
 
 const BASE_URL: string = "http://localhost:8080";
 // const token: string = "수정";
+
+//== 프로젝트 목록 조회 ==//
+export const allProject = async (): Promise<any> => {
+    const setProjects = projectListStore.getState().setProjects;
+
+    try {
+        const response = await axios ({
+            method: 'get',
+            url: `${BASE_URL}/board`
+        })
+        
+        setProjects(response.data.data)
+        return response.data.data
+
+    } catch (error) {
+
+        if (axios.isAxiosError(error)) {
+            console.error("Axios error: ", error.message);
+
+          } else {
+            console.error("Unexpected error: ", error);
+          }
+
+    }
+}
 
 //== 프로젝트 등록 ==//
 export const createProject = async (data: projectInformationProp): Promise<void> => {
@@ -28,37 +54,47 @@ export const createProject = async (data: projectInformationProp): Promise<void>
             }
         })
 
-        console.log(response.data)
+        console.log(response.data);
 
     } catch (error) {
+
         if (axios.isAxiosError(error)) {
             console.error("Axios error: ", error.message);
+
           } else {
             console.error("Unexpected error: ", error);
           }
+
     }
 }
 
 //== 프로젝트 filter ==//
-export const projectFilter = async (data: projectFilterProp): Promise<void> => {
+export const projectFilter = async (): Promise<void> => {
+
+    const { classification, deposit, worktype } = projectFilterStore.getState();
+    const setProjects = projectListStore.getState().setProjects;
+
     try {
         const response = await axios ({
             method: 'get',
             url: `${BASE_URL}/board/search`,
             params: {
-                worktype: data.worktype,
-                deposit: data.deposit,
-                classification: data.classification
+                "worktype": worktype,
+                "deposit": deposit,
+                "classification": classification
             }
         })
 
-        console.log(response.data)
+        setProjects(response.data.data);
 
     } catch (error) {
+
         if (axios.isAxiosError(error)) {
             console.error("Axios error: ", error.message);
+
           } else {
             console.error("Unexpected error: ", error);
           }
+
     }
 }

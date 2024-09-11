@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import Work from "./Work";
-import { projectFilterProp } from "../../apis/Project.type";
-import { projectFilter } from "../../apis/ProjectApi";
+import { allProject, projectFilter } from "../../apis/ProjectApi";
+import { projectFilterStore, projectListStore } from "../../store/ProjectStore";
+import { useEffect } from "react";
 
 const WorkList = () => {
   const navigate = useNavigate();
@@ -9,29 +10,38 @@ const WorkList = () => {
     navigate('/work/detail');
   }
 
-  //== data 초기화 ==//
-  const data: projectFilterProp = {
-    classification: null,
-    worktype: null,
-    deposit: null
-  }
+  //== projectList 반환 ==//
+  const state = projectFilterStore();
+  const store = projectListStore();
+  const projectList = store.projects
+  
+  //== onMounted 비동기 처리 ==//
+  useEffect(() => {
+    const updateList = async () => {
+      await allProject();
+    }
+    updateList();
+  }, [])
 
   //== 값 변경 후 api 요청 ==//
-  const choice = (value: string, category: string) => {
-
-    if (category === "classification") {
-      data.classification = value
-
-    } else if (category === "workType") {
-      data.worktype = value
-
-    } else {
-      data.deposit = value
+  const choice = (value: string | null, category: string) => {
+    if (value === "null") {
+      value = null
     }
 
-    projectFilter(data)
+    if (category === "classification") {
+      state.setClassification(value)
+
+    } else if (category === "workType") {
+      state.setWorktype(value)
+
+    } else {
+      state.setDeposit(value)
+    }
+
+    projectFilter()
   }
-  
+
   return (
     <div>
       <span className="font-bold text-xl text-subGreen1">프로젝트 찾기</span>
@@ -77,9 +87,11 @@ const WorkList = () => {
         </select>
       </div>
 
-      <div onClick={toWorkDetail} className="mb-10">
-        <Work title="프로젝트이름" company="ssafy" period="2024-09-01~2024-09-31" budget={1000000} category="웹" candidate={2} candidateTotal={5} deadline={3} rating={4.6} />
+      {projectList.map((project, index) => (
+        <div onClick={toWorkDetail} className="mb-10" key={index}>
+        <Work {...project}/>
       </div>
+      ))}
     </div>
   )
 }

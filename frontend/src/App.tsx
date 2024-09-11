@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
+import SimplePopup from "./components/common/ChatPopup";
 import Footer from "./components/common/Footer";
 import Navbar from "./components/common/Navbar";
-import ChatIcon from "./icons/ChatIcon";
 import AccountDetail from "./pages/AccountDetailPage";
 import Account from "./pages/AccountPage";
 import CandidateCheck from "./pages/CandidateCheckPage";
@@ -22,9 +22,9 @@ import PostWork from "./pages/PostWorkPage";
 import ProjectDetail from "./pages/ProjectDetailPage";
 import Project from "./pages/ProjectPage";
 import Signup from "./pages/SignupPage";
+import Transfer from "./pages/TransferPage";
 import WorkDetail from "./pages/WorkDetailPage";
 import Work from "./pages/WorkPage";
-import Transfer from "./pages/TransferPage";
 
 function App() {
   return (
@@ -59,8 +59,8 @@ function App() {
             </Routes>
           </main>
           <Footer />
-          <div className="fixed right-10 bottom-10">
-            <ChatIcon />
+          <div className="fixed right-7 bottom-7">
+            <SimplePopup />
           </div>
         </div>
       </BrowserRouter>

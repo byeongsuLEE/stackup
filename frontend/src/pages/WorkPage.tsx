@@ -8,6 +8,7 @@ const Work = () => {
   const toPostWork = () => {
     navigate('/work/post');
   }
+
   return (
     <div className='flex flex-col mx-40'>
       {/* 클라이언트 일감 페이지 */}

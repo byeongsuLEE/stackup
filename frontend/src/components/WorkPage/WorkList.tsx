@@ -1,27 +1,29 @@
 import { useNavigate } from "react-router-dom";
-import Work from "./Work";
 import { allProject, projectFilter } from "../../apis/ProjectApi";
-import { projectFilterStore, projectListStore } from "../../store/ProjectStore";
-import { useEffect } from "react";
+import { projectFilterStore } from "../../store/ProjectStore";
+import { project } from "../../apis/Project.type";
+import { useEffect, useState } from "react";
+import Work from "./Work";
+
 
 const WorkList = () => {
   const navigate = useNavigate();
-  const toWorkDetail = () => {
-    navigate('/work/detail');
+  const toWorkDetail = (id: string) => {
+    navigate(`/work/detail/${id}`);
   }
+
+  const [projectList, setProjectList] = useState<project[]>([]);
+  
+  useEffect(() => {
+    const update = async () => {
+      const data = await allProject();
+      setProjectList(data)
+    }
+    update();
+  }, [])
 
   //== projectList 반환 ==//
   const state = projectFilterStore();
-  const store = projectListStore();
-  const projectList = store.projects
-  
-  //== onMounted 비동기 처리 ==//
-  useEffect(() => {
-    const updateList = async () => {
-      await allProject();
-    }
-    updateList();
-  }, [])
 
   //== 값 변경 후 api 요청 ==//
   const choice = (value: string | null, category: string) => {
@@ -39,7 +41,12 @@ const WorkList = () => {
       state.setDeposit(value)
     }
 
-    projectFilter()
+    const filter = async () => {
+      const filterList = await projectFilter();
+      setProjectList(filterList);
+    }
+
+    filter();
   }
 
   return (
@@ -87,8 +94,8 @@ const WorkList = () => {
         </select>
       </div>
 
-      {projectList.map((project, index) => (
-        <div onClick={toWorkDetail} className="mb-10" key={index}>
+      {projectList?.map((project: project, index: number) => (
+        <div onClick={() => toWorkDetail(project.boardId)} className="mb-10" key={index}>
         <Work {...project}/>
       </div>
       ))}

@@ -38,7 +38,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/work" element={<Work />} />
               <Route path="/work/post" element={<PostWork />} />
-              <Route path="/work/detail" element={<WorkDetail />} />
+              <Route path="/work/detail/:boardId" element={<WorkDetail />} />
               <Route path="/work/detail/candidate" element={<CandidateCheck />} />
               <Route path="/work/detail/contract" element={<Contract />} />
               <Route path="/project" element={<Project />} />

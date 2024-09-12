@@ -8,6 +8,7 @@ const Work = () => {
   const toPostWork = () => {
     navigate('/work/post');
   }
+
   return (
     <div className='flex flex-col mx-40'>
       {/* 클라이언트 일감 페이지 */}
@@ -17,7 +18,7 @@ const Work = () => {
       {/* 프리랜서 추천 일감 */}
       <ReccommnendWork/>
       <div className="bg-subTxt w-auto h-[1px] flex justify-center mx-10 my-10"></div>
-      <WorkList />
+      <WorkList/>
     </div>
   )
 }

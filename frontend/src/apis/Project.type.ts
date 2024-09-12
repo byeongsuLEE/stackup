@@ -1,5 +1,5 @@
 //== 프로젝트 등록 ==//
-export interface projectInformationProp {
+export interface createProjectProp {
     title: string;
     description: string;
     recruits: string;
@@ -13,6 +13,29 @@ export interface projectInformationProp {
     classification: string;
     frameworks: Array<string>;
     languages: Array<string>;
+}
+
+//== project ==//
+export interface project {
+    boardId: string,
+    title: string,
+    description: string,
+    classification: string,
+    framework: string[],
+    language: string[],
+    deposit: string,
+    startDate: Date,
+    period: string,
+    recruits: number,
+    applicants: number,
+    worktype: boolean,
+    company: string,
+    requirements: string,
+    rate: number,
+    is_charged: boolean,
+    address: string,
+    deadline: Date,
+    upload: Date
 }
 
 //== 프로젝트 filter ==//

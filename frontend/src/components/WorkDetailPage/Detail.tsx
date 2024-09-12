@@ -2,9 +2,15 @@ import { Link } from "react-router-dom";
 import WebIcon from "../../icons/WebIcon";
 import InfoBox from "../WorkPage/InfoBox";
 import DoneButton from "../common/DoneButton";
-
+import { useEffect } from "react";
 
 const Detail = () => {
+  
+  //== onMounted 비동기 처리 ==//
+  useEffect(() => {
+    
+  }, [])
+
   return (
     <>
       <div className="bg-bgGreen border border-mainGreen h-auto rounded-lg p-10 w-[1000px]] my-20 mx-10">

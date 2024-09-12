@@ -30,9 +30,9 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <div className="App relative flex flex-col min-h-screen">
+        <div className=" relative flex flex-col min-h-screen">
           <Navbar />
-          <main className="flex-grow pt-20">
+          <main className="flex-grow pt-10 mx-20">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />

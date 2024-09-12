@@ -10,7 +10,7 @@ const Work = () => {
   }
 
   return (
-    <div className='flex flex-col mx-40'>
+    <div className='flex flex-col mx-40 mt-10'>
       {/* 클라이언트 일감 페이지 */}
       <div onClick={toPostWork} className='my-10 flex justify-center'>
       <DoneButton width={200} height={32} title="프로젝트 등록하기" />

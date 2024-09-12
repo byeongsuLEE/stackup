@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createProjectProp, project, projectFilterProp } from "./Project.type";
+import { createProjectProp, project, projectBasic, projectFilterProp } from "./Project.type";
 import { projectFilterStore } from "../store/ProjectStore";
 
 const BASE_URL: string = "http://localhost:8080";
@@ -96,14 +96,15 @@ export const projectFilter = async (): Promise<any> => {
 }
 
 //== 특정 프로젝트 조회 ==//
-export const projectDetail = async (boardId: string): Promise<void> => {
+export const projectDetail = async (boardId?: string): Promise<project> => {
     try {
         const response = await axios ({
             method: 'get',
             url: `${BASE_URL}/board/${boardId}`
         })
 
-        console.log(response.data)
+        return response.data.data
+
     } catch (error) {
 
         if (axios.isAxiosError(error)) {
@@ -113,5 +114,6 @@ export const projectDetail = async (boardId: string): Promise<void> => {
             console.error("Unexpected error: ", error);
           }
 
+          return projectBasic;
     }
 }

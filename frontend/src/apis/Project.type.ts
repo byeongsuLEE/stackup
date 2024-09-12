@@ -38,6 +38,29 @@ export interface project {
     upload: Date
 }
 
+//== project 기본 값 ==//
+export const projectBasic = {
+    boardId: '',
+    title: '',
+    description: '',
+    classification: '',
+    framework: [],
+    language: [],
+    deposit: '',
+    startDate: new Date(),
+    period: '',
+    recruits: 0,
+    applicants: 0,
+    worktype: false,
+    company: '',
+    requirements: '',
+    rate: 0,
+    is_charged: false,
+    address: '',
+    deadline: new Date(),
+    upload: new Date()
+}
+
 //== 프로젝트 filter ==//
 export interface projectFilterProp {
     classification: string | null;

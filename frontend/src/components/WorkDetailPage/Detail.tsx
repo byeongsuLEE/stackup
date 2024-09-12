@@ -1,22 +1,44 @@
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import WebIcon from "../../icons/WebIcon";
 import InfoBox from "../WorkPage/InfoBox";
 import DoneButton from "../common/DoneButton";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { project, projectBasic } from "../../apis/Project.type";
+import { projectDetail } from "../../apis/ProjectApi";
+import { differenceInDays, format } from "date-fns";
 
 const Detail = () => {
-  
-  //== onMounted 비동기 처리 ==//
+  const [ project, setProject ] = useState<project>(projectBasic);
+  const { boardId } = useParams();
+  const remainDay = differenceInDays(project.deadline, format(Date(), 'yyyy-MM-dd'));
+  const workType = project.worktype? "재택" : "기간제 상주";
+
   useEffect(() => {
-    
+    const detail = async () => {
+      const data = await projectDetail(boardId);
+      setProject(data)
+    }
+    detail();
   }, [])
+
+  if (project.classification === 'web') {
+    project.classification = '웹'
+  } else if (project.classification === 'mobile') {
+    project.classification = '모바일'
+  } else if (project.classification === 'publisher') {
+    project.classification = '퍼블리셔'
+  } else if (project.classification === 'ai') {
+    project.classification = 'AI'
+  } else if (project.classification === 'db') {
+    project.classification = 'DB'
+  }
 
   return (
     <>
       <div className="bg-bgGreen border border-mainGreen h-auto rounded-lg p-10 w-[1000px]] my-20 mx-10">
         <div className="flex flex-col">
-          <span className="text-lg font-bold">프로젝트명</span>
-          <span className="text-subTxt text-sm">대분류</span>
+          <span className="text-lg font-bold">{project?.title}</span>
+          <span className="text-subTxt text-sm">{project?.classification}</span>
         </div>
         <div className="flex justify-end">
           {/* 프리랜서 */}
@@ -31,9 +53,9 @@ const Detail = () => {
         <div className="bg-subTxt w-auto h-[1px] flex justify-center my-10"></div>
 
         <div className="flex justify-center mb-10">
-          <InfoBox title="예상 금액" content="1000000원" info={WebIcon} />
-          <InfoBox title="예상 기간" content="30일" info={WebIcon} />
-          <InfoBox title="지원자 수" content="3명" info={WebIcon} />
+          <InfoBox title="예상 금액" category="deposit" content={project.deposit} info={WebIcon} />
+          <InfoBox title="예상 기간" category="period" content={project.period} info={WebIcon} />
+          <InfoBox title="지원자 수" category="applicants" content={project.applicants} info={WebIcon} />
         </div>
 
         <div className="flex ml-10">
@@ -49,16 +71,18 @@ const Detail = () => {
           </div>
           <div className="flex flex-col">
             <div className="flex items-center">
-              <span>2024년 9월 9일</span>
-              <span className="text-xs ml-2 text-red-400">마감 3일전</span>
+              <span>{project.deadline.toString()}</span>
+              <span className="text-xs ml-2 text-red-400">마감 {remainDay}일 전</span>
             </div>
-            <span>3명</span>
-            <span>2024년 9월 24일</span>
-            <span>재택</span>
+            <span>{project.recruits} 명</span>
+            <span>{project.startDate.toString()}</span>
+            <span>{workType}</span>
 
+            {/* <span>{project.language}</span> */}
             <span>java, c++</span>
-            <span>react, spring</span>
-            <span>연락이 빠른 프리랜서를 원합니다.</span>
+            {/* <span>{project.framework}</span> */}
+            <span>spring, vue</span>
+            <span>{project.requirements}</span>
           </div>
         </div>
 
@@ -67,7 +91,8 @@ const Detail = () => {
         <div>
           <div className="font-bold text-lg mb-2">업무 내용</div>
           <br />
-          <span>
+          <span><pre>{project.description}</pre></span>
+          {/* <span>
             프로젝트 개요 : <br />
             - 운용 중인 서비스에 “취약점 점검 스캐너”기능 추가 <br />
             - 취약점 점검 스크립트 목록을 DB로 관리/운용하는 (입력/프로젝트 단위의 실행 관리/결제/스케줄링) Rest API 개발<br />
@@ -98,7 +123,7 @@ const Detail = () => {
             코드 리뷰용 문서요구사항 :<br />
             - 주 5일 상근 (9:00 - 5:00) → 기획자 및 내부 개발자와 소통<br />
             - 주 1회 코드 리뷰 → 개발 세부사항 협의 <br />
-          </span>
+          </span> */}
         </div>
 
       </div>

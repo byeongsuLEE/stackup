@@ -1,5 +1,5 @@
 import axios from "axios";
-import { createProjectProp, project, projectBasic, projectFilterProp } from "./Project.type";
+import { createProjectProp, project, projectBasic } from "./Project.type";
 import { projectFilterStore } from "../store/ProjectStore";
 
 const BASE_URL: string = "http://localhost:8080";
@@ -52,8 +52,7 @@ export const createProject = async (data: createProjectProp): Promise<void> => {
             }
         })
 
-        console.log(response.data);
-
+        alert("프로젝트 등록 성공!")
     } catch (error) {
 
         if (axios.isAxiosError(error)) {

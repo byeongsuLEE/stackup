@@ -1,5 +1,5 @@
 import axios from "axios"
-import { freelanceBasicStore, freelanceLanguageStore } from "../store/FreelanceStore"
+import { freelanceStore } from "../store/FreelanceStore"
 import { clientLoginInfo, clientSignupInfo } from "./User.type"
 
 
@@ -30,8 +30,7 @@ export const freelanceLogin = async (): Promise<void> => {
 
 //== 프리랜서 정보 등록 ==//
 export const freelanceInformation = async (): Promise<void> => {
-    const basic = freelanceBasicStore.getState();
-    const languageInfo = freelanceLanguageStore.getState();
+    const state = freelanceStore.getState();
 
     try {
         const response = await axios({
@@ -41,16 +40,16 @@ export const freelanceInformation = async (): Promise<void> => {
                 Authorization: `Bearer ${token}`
             },
             data: {
-                "name": basic.name,
-                "email": basic.email,
-                "address": basic.address,
-                "phone": basic.phone,
-                "classification": languageInfo.classification,
-                "framework": languageInfo.frameworks,
-                "language": languageInfo.languages,
-                "careerYear": languageInfo.careerYear,
-                "portfolioURL": languageInfo.portfolioURL,
-                "selfIntroduction": languageInfo.selfIntroduction
+                "name": state.name,
+                "email": state.email,
+                "address": state.address,
+                "phone": state.phone,
+                "classification": state.classification,
+                "framework": state.frameworks,
+                "language": state.languages,
+                "careerYear": state.careerYear,
+                "portfolioURL": state.portfolioURL,
+                "selfIntroduction": state.selfIntroduction
             }
         })
 
@@ -58,6 +57,34 @@ export const freelanceInformation = async (): Promise<void> => {
 
     } catch (error) {
 
+        if (axios.isAxiosError(error)) {
+            console.error("Axios error: ", error.message)
+
+        } else {
+            console.error("Unexpected error: ", error)
+        }
+    }
+}
+
+//== 마이페이지 정보 ==//
+export const freelanceMypage = async (): Promise<void> => {
+    const state = freelanceStore();
+
+    try {
+        const response = await axios ({
+            method: 'get',
+            url: `${BASE_URL}/mypage/info`,
+            // headers: {
+            //     Authorization: `Bearer ${token}`
+            // }
+        })
+
+        console.log(response.data.data)
+        // const data = response.data.data
+
+        // state.updateState([...data])
+        
+    } catch (error) {
         if (axios.isAxiosError(error)) {
             console.error("Axios error: ", error.message)
 
@@ -75,13 +102,13 @@ export const clientSignup = async (information: clientSignupInfo): Promise<void>
             method: "post",
             url: `${BASE_URL}/client/signup`,
             data: {
-                name: information.name,
-                email: information.email,
-                password: information.password,
-                passwordCheck: information.passwordCheck,
-                businessRegistrationNumber: information.businessRegistrationNumber,
-                businessName: information.businessName,
-                phone: information.phone
+                "name": information.name,
+                "email": information.email,
+                "password": information.password,
+                "passwordCheck": information.passwordCheck,
+                "businessRegistrationNumber": information.businessRegistrationNumber,
+                "businessName": information.businessName,
+                "phone": information.phone
             }
         })
 

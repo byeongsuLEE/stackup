@@ -17,35 +17,3 @@ export const projectFilterStore = create<projectFilterProp>((set) => ({
     setDeposit: (deposit) => set({ deposit }),
     setWorktype: (worktype) => set({ worktype })
 }))
-
-interface project {
-    id: string,
-    title: string,
-    description: string,
-    classification: string,
-    framework: string[],
-    language: string[],
-    deposit: string,
-    startDate: Date,
-    period: string,
-    recruits: number,
-    applicants: number,
-    worktype: boolean,
-    company: string,
-    requirements: string,
-    rate: number,
-    is_charged: boolean,
-    address: string,
-    deadline: Date,
-    upload: Date
-}
-
-interface projectList {
-    projects: project[];
-    setProjects: (projects: project[]) => void;
-}
-
-export const projectListStore = create<projectList>((set) => ({
-    projects: [],
-    setProjects: (projects) => set({ projects })
-}))

@@ -4,7 +4,8 @@ const contentData = [
     title: "프로젝트 추천",
     description:
       "기술과 경험을 분석한 최적의 프로젝트 추천",
-    color: "rgb(251, 252, 248)"
+    color: "rgb(251, 252, 248)",
+    DescriptionIcon: "RecommendIcon",
   },
   {
     title: "성과 기반 점수",

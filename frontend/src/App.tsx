@@ -59,7 +59,7 @@ function App() {
             </Routes>
           </main>
           <Footer />
-          <div className="fixed right-7 bottom-7">
+          <div className="fixed right-7 bottom-3">
             <SimplePopup />
           </div>
         </div>

@@ -31,7 +31,7 @@ export const freelanceLogin = async (): Promise<void> => {
 //== 프리랜서 정보 등록 ==//
 export const freelanceInformation = async (): Promise<void> => {
     const state = freelanceStore.getState();
-
+    console.log(state)
     try {
         const response = await axios({
             method: "post",
@@ -73,7 +73,7 @@ export const freelanceMypage = async (): Promise<void> => {
     try {
         const response = await axios ({
             method: 'get',
-            url: `${BASE_URL}/mypage/info`,
+            url: `${BASE_URL}/mypage/info`
             // headers: {
             //     Authorization: `Bearer ${token}`
             // }

@@ -9,8 +9,8 @@ const Mypage = () => {
   return (
     <div className="flex flex-col">
     <div className="mx-10 mt-20 flex justify-center">
-      <MyRating/>
-      <Introduce/>
+      <MyRating {...state}/>
+      <Introduce {...state}/>
     </div>
       <UserInfo {...state}/>
     </div>

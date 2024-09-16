@@ -10,22 +10,6 @@ const token: string = '수정'
 export const freelanceLogin = async (): Promise<void> => {
     window.location.href = "http://localhost:8080/api/oauth2/authorization/github";
     
-    // try {
-    //     const response = await axios({
-    //         method: "post",
-    //         url: `${BASE_URL}/social-auth/`
-    //     })
-
-    //     console.log(response.data)
-
-    // } catch (error) {
-    //     if (axios.isAxiosError(error)) {
-    //         console.error("Axios error: ", error.message)
-
-    //     } else {
-    //         console.error("Unexpected error: ", error)
-    //     }
-    // }
 }
 
 //== 프리랜서 정보 등록 ==//

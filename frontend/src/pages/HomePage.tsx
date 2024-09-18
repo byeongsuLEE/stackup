@@ -71,7 +71,7 @@ const HomePage = (): JSX.Element => {
   return (
     <div className="w-full h-full">
       {/* 소개 섹션 */}
-      <section className="intro-section flex flex-col items-center justify-center min-h-[70vh] text-center text-mainGreen">
+      {/* <section className="intro-section flex flex-col items-center justify-center min-h-[70vh] text-center text-mainGreen">
         <h1
           className="intro-heading text-5xl font-bold -translate-y-32"
           data-splitting
@@ -81,7 +81,7 @@ const HomePage = (): JSX.Element => {
         <p className="text-lg font-normal -translate-y-24">
           개발자 프리랜서를 위한 종합 금융 서비스.
         </p>
-      </section>
+      </section> */}
 
       {/* 콘텐츠 섹션 반복 렌더링 */}
       {contentData.map((content, index) => (

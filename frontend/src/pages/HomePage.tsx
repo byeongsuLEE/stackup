@@ -86,7 +86,6 @@ const HomePage = (): JSX.Element => {
         color="rgb(251, 252, 248)"
         DescriptionIcon={WorkExample}
         WorkButton={DoneButton}
-
       />
       <ContentSection
         title="성과 기반 점수"

@@ -10,28 +10,12 @@ const token: string = '수정'
 export const freelanceLogin = async (): Promise<void> => {
     window.location.href = "http://localhost:8080/api/oauth2/authorization/github";
     
-    // try {
-    //     const response = await axios({
-    //         method: "post",
-    //         url: `${BASE_URL}/social-auth/`
-    //     })
-
-    //     console.log(response.data)
-
-    // } catch (error) {
-    //     if (axios.isAxiosError(error)) {
-    //         console.error("Axios error: ", error.message)
-
-    //     } else {
-    //         console.error("Unexpected error: ", error)
-    //     }
-    // }
 }
 
 //== 프리랜서 정보 등록 ==//
 export const freelanceInformation = async (): Promise<void> => {
     const state = freelanceStore.getState();
-
+    console.log(state)
     try {
         const response = await axios({
             method: "post",
@@ -73,7 +57,7 @@ export const freelanceMypage = async (): Promise<void> => {
     try {
         const response = await axios ({
             method: 'get',
-            url: `${BASE_URL}/mypage/info`,
+            url: `${BASE_URL}/mypage/info`
             // headers: {
             //     Authorization: `Bearer ${token}`
             // }

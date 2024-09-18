@@ -51,7 +51,7 @@ const Work = ({ title, company, startDate, period, classification, deposit, dead
           <div className="flex flex-col">
             <span className='text-red-400'>마감 {remainDay}일전</span>
             <span>지원자 {applicants}명/{recruits}명</span>
-            <div className="flex mt-2 items-center justify-center bg-mainGreen rounded-lg w-[100px] h-[30px]">평점 {rate}</div>
+            <div className="flex mt-2 items-center justify-center bg-mainGreen rounded-lg w-[100px] h-[30px]">평점 {rate} 점</div>
           </div>
         </div>
 

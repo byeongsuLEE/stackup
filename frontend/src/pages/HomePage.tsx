@@ -13,9 +13,7 @@ import DoneButton from "../components/common/DoneButton";
 import WorkExample from "../icons/WorkExample";
 import EvaluationIcon from "../icons/EvaluationIcon";
 import DetectionIcon from "../icons/DetectionIcon";
-import Contract from "./ContractPage";
 import ContractIcon from "../icons/ContractIcon";
-
 // GSAP와 ScrollTrigger 플러그인 등록
 gsap.registerPlugin(ScrollTrigger);
 

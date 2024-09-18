@@ -1,10 +1,7 @@
-interface RecommendIconProps {
-  w: number;
-  h: number;
-}
-const RecommendIcon = ({w,h}:RecommendIconProps) =>{
+
+const RecommendIcon = () =>{
   return (
-    <img style={{width:w, height:h}} src="./logos/Recommend.png" alt="" />
+    <img className="w-[300px] h-[300px]" src="./logos/Recommend.png" alt="" />
   )
 }
 export default RecommendIcon;

@@ -4,7 +4,7 @@ interface ContentSectionProps {
   color?: string;
   title: string;
   description: string;
-  DescriptionIcon: React.ComponentType<{ w: number; h: number; }>;
+  DescriptionIcon: React.ComponentType;
   WorkButton?: React.ComponentType<{ width: number; height: number; title: string; }>;
 }
 
@@ -44,7 +44,7 @@ const ContentSection = ({
               {WorkButton && <WorkButton width={250} height={50} title="프로젝트 추천 받기" />} {/* 조건부 렌더링 */}
             </Link>
           </header>
-          <DescriptionIcon w={200} h={200} />
+          <DescriptionIcon/>
         </div>
       </div>
     </section>

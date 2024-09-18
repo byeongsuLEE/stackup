@@ -11,6 +11,10 @@ import "../components/HomePage/styles.css";
 import RecommendIcon from "../icons/Recommend";
 import DoneButton from "../components/common/DoneButton";
 import WorkExample from "../icons/WorkExample";
+import EvaluationIcon from "../icons/EvaluationIcon";
+import DetectionIcon from "../icons/DetectionIcon";
+import Contract from "./ContractPage";
+import ContractIcon from "../icons/ContractIcon";
 
 // GSAP와 ScrollTrigger 플러그인 등록
 gsap.registerPlugin(ScrollTrigger);
@@ -87,13 +91,13 @@ const HomePage = (): JSX.Element => {
       <ContentSection
         title="성과 기반 점수"
         description="성과 기반 점수로 서로의 신뢰도를 평가"
-        DescriptionIcon={RecommendIcon}
+        DescriptionIcon={EvaluationIcon}
       />
       <ContentSection
         title="이상 계약 감지"
         description="AI 기반 모델로 비정상적인 거래 감지"
         color="rgb(251, 252, 248)"
-        DescriptionIcon={RecommendIcon}
+        DescriptionIcon={DetectionIcon}
       />
       <ContentSection
         title="경력 증명서 발급"
@@ -104,7 +108,7 @@ const HomePage = (): JSX.Element => {
         title="스마트 계약 관리"
         description="스마트 계약으로 프리랜서와 클라이언트의 안전한 계약 관리"
         color="rgb(251, 252, 248)"
-        DescriptionIcon={RecommendIcon}
+        DescriptionIcon={ContractIcon}
       />
 
       {/* 추가된 텍스트 효과 섹션 */}

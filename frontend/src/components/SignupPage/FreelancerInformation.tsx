@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { freelanceBasicStore } from "../../store/FreelanceStore";
+import { freelanceStore } from "../../store/FreelanceStore";
 import Button from "../common/DoneButton";
 
 const FreelancerInfo = () => {
@@ -9,7 +9,7 @@ const FreelancerInfo = () => {
     navigate("/signup/freelancer/skill");
   }
 
-  const state = freelanceBasicStore();
+  const state = freelanceStore();
 
   return (
 

@@ -30,15 +30,15 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <div className="App relative flex flex-col min-h-screen">
+        <div className=" relative flex flex-col min-h-screen">
           <Navbar />
-          <main className="flex-grow pt-20">
+          <main className="flex-grow pt-10 mx-20">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/work" element={<Work />} />
               <Route path="/work/post" element={<PostWork />} />
-              <Route path="/work/detail" element={<WorkDetail />} />
+              <Route path="/work/detail/:boardId" element={<WorkDetail />} />
               <Route path="/work/detail/candidate" element={<CandidateCheck />} />
               <Route path="/work/detail/contract" element={<Contract />} />
               <Route path="/project" element={<Project />} />
@@ -59,7 +59,7 @@ function App() {
             </Routes>
           </main>
           <Footer />
-          <div className="fixed right-7 bottom-7">
+          <div className="fixed right-7 bottom-3">
             <SimplePopup />
           </div>
         </div>

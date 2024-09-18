@@ -5,17 +5,23 @@ import Skill from '../SignupPage/Skill';
 import Button from '../common/DoneButton';
 import BasicDatePicker from './Calender';
 import { Dayjs } from 'dayjs';
-import { projectInformationProp } from '../../apis/Project.type';
 import { createProject } from '../../apis/ProjectApi';
+import { createProjectProp } from '../../apis/Project.type';
+import { useNavigate } from 'react-router-dom';
 
 const WorkForm = () => {
-  const { register, handleSubmit, control, setValue, watch } = useForm<projectInformationProp>({
+  const { register, handleSubmit, control, setValue, watch } = useForm<createProjectProp>({
     defaultValues: { languages: [], frameworks: [] }
   });
   
+  const navigate = useNavigate();
+
   //== 제출 ==//
-  const onSubmit = (information: projectInformationProp) => {
+  const onSubmit = (information: createProjectProp) => {
     createProject(information)
+
+    //== 나중에 수정하기 ==//
+    navigate("/work");
   }
 
   //== 언어 선택 ==//

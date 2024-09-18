@@ -1,4 +1,5 @@
 import React from "react";
+import { freelanceStore } from "../../store/FreelanceStore";
 interface MajorProps {
   major: React.ComponentType<{ w: number; h: number; }>;
   title: string;
@@ -7,6 +8,8 @@ interface MajorProps {
 }
 
 const Major: React.FC<MajorProps> = ({ major: MajorIcon, title, name, value }) => {
+
+  const state = freelanceStore();
 
   // 라디오 버튼이 변경될 때 호출되는 함수
   // const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,6 +24,8 @@ const Major: React.FC<MajorProps> = ({ major: MajorIcon, title, name, value }) =
         value={value}
         name={name}
         className="radio radio-success radio-xs"
+        checked={state.classification === value}
+        onChange={() => state.setClassification(value)}
         />
       <div className="flex flex-col items-center">
         <MajorIcon w={50} h={50} /> {/* major prop을 MajorIcon으로 받아서 사용 */}

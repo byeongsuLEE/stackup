@@ -1,20 +1,22 @@
 import axios from "axios"
+import { accountBasic, accountDetailInfo, accountInfo, transactionInfo } from "./Account.type"
 
 const BASE_URL: string = "http://localhost:8080/api/account"
 const token: string = "수정"
 
 //== 계좌 목록 조회 ==//
-export const getAccount = async (): Promise<void> => {
+export const getAccount = async (): Promise<accountInfo[]> => {
     try {
         const response = await axios({
             method: "get",
             url: `${BASE_URL}`,
-            // headers: {
-            //     Authorization: `Bearer ${token}`
-            // }
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
         })
 
         console.log(response.data)
+        return response.data;
 
     } catch (error) {
 
@@ -24,11 +26,13 @@ export const getAccount = async (): Promise<void> => {
         } else {
             console.error("Unexpected error: ", error)
         }
+
+        return [];
     }
 }
 
 //== 계좌 상세 조회 ==//
-export const accountDetail  = async (accountId: string): Promise<void> => {
+export const accountDetail  = async (accountId?: string): Promise<accountDetailInfo> => {
     try {
         const response = await axios({
             method: 'get',
@@ -39,6 +43,7 @@ export const accountDetail  = async (accountId: string): Promise<void> => {
         })
 
         console.log(response.data)
+        return response.data;
 
     } catch (error) {
 
@@ -48,11 +53,13 @@ export const accountDetail  = async (accountId: string): Promise<void> => {
         } else {
             console.error("Unexpected error: ", error)
         }
+
+        return accountBasic;
     }
 }
 
 //== 계좌 거래내역 조회 ==//
-export const accountTransaction = async (accountId: string): Promise<void> => {
+export const accountTransaction = async (accountId?: string): Promise<transactionInfo[]> => {
     try {
         const response = await axios({
             method: 'get',
@@ -63,6 +70,7 @@ export const accountTransaction = async (accountId: string): Promise<void> => {
         })
         
         console.log(response.data)
+        return response.data;
 
     } catch (error) {
 
@@ -72,6 +80,8 @@ export const accountTransaction = async (accountId: string): Promise<void> => {
         } else {
             console.error("Unexpected error: ", error)
         }
+
+        return [];
     }
 }
 

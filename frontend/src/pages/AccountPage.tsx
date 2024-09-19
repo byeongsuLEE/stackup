@@ -3,10 +3,23 @@ import AccountList from "../components/AccountPage/AccountList";
 import MainAccount from "../components/AccountPage/MainAccount";
 import DoneButton from "../components/common/DoneButton";
 import PlusIcon from "../icons/PlusIcon";
+import { useEffect, useState } from "react";
+import { accountInfo } from "../apis/Account.type";
+import { getAccount } from "../apis/AccountsApi";
 
 const Account = () => {
   const isAccount = true;
   const isMainAccount = true;
+
+  const [ accountList, setAccountList ] = useState<accountInfo[]>([]);
+
+  useEffect(() => {
+    const update = async () => {
+      const data = await getAccount();
+      setAccountList(data);
+    }
+    update()
+  }, [])
 
   return (
     <div className="m-20">
@@ -28,7 +41,8 @@ const Account = () => {
             <MainAccount />
             }
             </Link>
-            <AccountList />
+
+            <AccountList accountList={accountList}/>
           </div>
         </div>
       ) : (

@@ -21,6 +21,8 @@ import Mypage from "./pages/MyPage";
 import PostWork from "./pages/PostWorkPage";
 import ProjectDetail from "./pages/ProjectDetailPage";
 import Project from "./pages/ProjectPage";
+import SignatureDetail from "./pages/SignatureDetailPage";
+import Signature from "./pages/SignaturePage";
 import Signup from "./pages/SignupPage";
 import Transfer from "./pages/TransferPage";
 import WorkDetail from "./pages/WorkDetailPage";
@@ -32,9 +34,11 @@ function App() {
       <BrowserRouter>
         <div className=" relative flex flex-col min-h-screen">
           <Navbar />
-          <main className="flex-grow pt-10 mx-20">
+          <main className="flex-grow mt-28 mx-20">
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/signature" element={<Signature />} />
+              <Route path="/signature/detail" element={<SignatureDetail />} />
               <Route path="/login" element={<Login />} />
               <Route path="/work" element={<Work />} />
               <Route path="/work/post" element={<PostWork />} />

@@ -10,7 +10,7 @@ const UserInfo = (data: freelanceInformation) => {
 
   useEffect(() => {
     setLocal(data)
-  }, [data])
+  }, [])
   
   const changeValue = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setLocal((value) => ({
@@ -23,7 +23,6 @@ const UserInfo = (data: freelanceInformation) => {
     e.preventDefault();
 
     data.updateState(local)
-    console.log(local)
   }
   
   return (

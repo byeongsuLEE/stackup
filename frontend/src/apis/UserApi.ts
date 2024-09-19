@@ -2,20 +2,18 @@ import axios from "axios"
 import { freelanceStore } from "../store/FreelanceStore"
 import { clientLoginInfo, clientSignupInfo } from "./User.type"
 
-
 const BASE_URL: string = "http://localhost:8080/api/user"
-const token: string = '수정'
+let token: string = '수정'
 
 //== 프리랜서 깃허브 소셜 로그인 ==//
 export const freelanceLogin = async (): Promise<void> => {
     window.location.href = "http://localhost:8080/api/oauth2/authorization/github";
-    
 }
 
 //== 프리랜서 정보 등록 ==//
 export const freelanceInformation = async (): Promise<void> => {
     const state = freelanceStore.getState();
-    console.log(state)
+
     try {
         const response = await axios({
             method: "post",
@@ -37,8 +35,6 @@ export const freelanceInformation = async (): Promise<void> => {
             }
         })
 
-        console.log(response.data)
-
     } catch (error) {
 
         if (axios.isAxiosError(error)) {
@@ -57,15 +53,14 @@ export const freelanceMypage = async (): Promise<void> => {
     try {
         const response = await axios ({
             method: 'get',
-            url: `${BASE_URL}/mypage/info`
-            // headers: {
-            //     Authorization: `Bearer ${token}`
-            // }
+            url: `${BASE_URL}/mypage/info`,
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
         })
 
         console.log(response.data.data)
         // const data = response.data.data
-
         // state.updateState([...data])
         
     } catch (error) {
@@ -109,9 +104,7 @@ export const clientSignup = async (information: clientSignupInfo): Promise<void>
 }
 
 //== 클라이언트 로그인 ==//
-export const clientLogin = async (
-    information: clientLoginInfo
-): Promise<void> => {
+export const clientLogin = async (information: clientLoginInfo): Promise<void> => {
     try {
         const response = await axios({
             method: "post",

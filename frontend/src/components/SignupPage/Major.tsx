@@ -11,15 +11,9 @@ const Major: React.FC<MajorProps> = ({ major: MajorIcon, title, name, value }) =
 
   const state = freelanceStore();
 
-  // 라디오 버튼이 변경될 때 호출되는 함수
-  // const handleRadioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   console.log(e.target.value); // 선택된 값 콘솔에 출력
-  // };
-
   return (
     <div className="flex flex-col px-2 py-2 my-5 mx-1 border w-40 h-32 rounded-2xl">
       <input
-        // onChange={handleRadioChange}
         type="radio"
         value={value}
         name={name}

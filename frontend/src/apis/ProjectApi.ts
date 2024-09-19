@@ -2,7 +2,7 @@ import axios from "axios";
 import { createProjectProp, project, projectBasic } from "./Project.type";
 import { projectFilterStore } from "../store/ProjectStore";
 
-const BASE_URL: string = "http://localhost:8080";
+const BASE_URL: string = "http://localhost:8080/api";
 // const token: string = "수정";
 
 //== 프로젝트 목록 조회 ==//

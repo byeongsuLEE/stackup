@@ -8,19 +8,16 @@ const Callback = () => {
     useEffect(() => {
         const update = async() => {
             const data = await getToken();
-            console.log(data)
 
-            window.sessionStorage.setItem("token", data)
+            if (data === "로그인") {
+                navigate("/mypage")
+            } else {
+                alert("다시 로그인 해주세요.")
+                navigate("/login")
+            }
         }
 
         update();
-
-        if (window.sessionStorage.getItem("token") != null) {
-            navigate("/mypage")
-        } else {
-            alert("다시 로그인 해주세요.")
-            navigate("/login")
-        }
     }, [])
 
     return null;

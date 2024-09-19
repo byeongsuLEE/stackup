@@ -18,7 +18,7 @@ const TransactionList = ({transactionList}: transactionListProp) => {
           <th>잔액</th>
         </tr>
       </thead>
-      
+
       {transactionList.map((transaction: transactionInfo) => (
         <Transaction {...transaction} />
       ))}

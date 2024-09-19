@@ -7,18 +7,7 @@ let token: string = '수정'
 
 //== 프리랜서 깃허브 소셜 로그인 ==//
 export const freelanceLogin = async (): Promise<void> => {
-    window.location.href = "http://localhost:8080/api/freelancer/login";
-
-    // axios({
-    //     method: 'post',
-    //     url: 'http://localhost:8080/api/freelancer/login'
-    // })
-    // .then((response) => {
-    //     console.log(response.data)
-    // })
-    // .catch((error) => {
-    //     console.log(error)
-    // })
+    window.location.href = "http://localhost:8080/api/oauth2/authorization/github";
 }
 
 //== 프리랜서 정보 등록 ==//

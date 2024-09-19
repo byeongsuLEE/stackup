@@ -23,7 +23,6 @@ import ProjectDetail from "./pages/ProjectDetailPage";
 import Project from "./pages/ProjectPage";
 import SignatureDetail from "./pages/SignatureDetailPage";
 import Signature from "./pages/SignaturePage";
-import Signup from "./pages/SignupPage";
 import Transfer from "./pages/TransferPage";
 import WorkDetail from "./pages/WorkDetailPage";
 import Work from "./pages/WorkPage";
@@ -53,7 +52,6 @@ function App() {
               <Route path="/account" element={<Account />} />
               <Route path="/account/detail" element={<AccountDetail />} />
               <Route path="/mypage" element={<Mypage />} />
-              <Route path="/signup" element={<Signup />} />
               <Route path="/signup/client" element={<ClientSignup />} />
               <Route path="/signup/freelancer" element={<FreelancerSignup />} />
               <Route path="/signup/freelancer/skill" element={<FreelancerSkill />} />

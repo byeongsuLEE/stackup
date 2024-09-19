@@ -1,6 +1,8 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { clientLoginInfo } from "../../apis/User.type";
 import { clientLogin } from "../../apis/UserApi";
+import DoneButton from "../common/DoneButton";
+import { Link } from "react-router-dom";
 
 const Client = () => {
   const { register, handleSubmit } = useForm<clientLoginInfo>();
@@ -30,13 +32,23 @@ const Client = () => {
           />
         </div>
 
-        <button
+        {/* <button
           onClick={handleSubmit(onSubmit)}
           type="button"
           className="mt-10 theme-background-color font-bold rounded-2xl h-10 w-48 text-sm text-white "
         >
           로그인
-        </button>
+        </button> */}
+        <div
+        onClick={handleSubmit(onSubmit)}
+        className="mt-5 mb-3"
+        >
+        <DoneButton width={200} height={40} title="로그인" />
+        </div>
+          <Link to="/signup/client">
+        <DoneButton width={200} height={40} title="회원가입" />
+          </Link>
+
       </div>
     </form>
   );

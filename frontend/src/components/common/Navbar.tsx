@@ -26,9 +26,9 @@ const Navbar = () => {
           <Link to="/login" className="mr-6">
             로그인
           </Link>
-          <Link to="/signup" className="mr-6">
+          {/* <Link to="/signup" className="mr-6">
             회원가입
-          </Link>
+          </Link> */}
           <span className="mr-6">로그아웃</span>
           <Link to="/mypage">
             마이페이지

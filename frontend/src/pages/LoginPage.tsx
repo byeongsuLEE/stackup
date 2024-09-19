@@ -1,16 +1,24 @@
+import { useState } from "react";
 import Client from "../components/Loginpage/Client";
 import Freelance from "../components/Loginpage/Freelance";
 
 const Login = () => {
+  const [isChecked, setIsChecked] = useState(true);
+
+  console.log()
   return (
     <div className="flex flex-col items-center mt-10">
-      <div className="flex items-center my-5">
-        <span className="">클라이언트</span>
-        <input type="checkbox" className="toggle toggle-success" defaultChecked />
-        <span>프리랜서</span>
+      <div className="flex items-center mt-5 mb-10">
+        <span className="text-sm mx-2">클라이언트</span>
+        <input type="checkbox" className="toggle toggle-success"
+        defaultChecked={isChecked}
+        onClick={()=>(
+          isChecked ? setIsChecked(false) : setIsChecked(true)
+        )} />
+        {/* {input.checked ? <Freelance /> : <Client />} */}
+        <span className="text-sm mx-2">프리랜서</span>
       </div>
-      <Freelance />
-      <Client/>
+      {isChecked? <Freelance /> : <Client />}
     </div>
   )
 }

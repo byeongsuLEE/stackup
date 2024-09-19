@@ -1,19 +1,16 @@
-interface TransactionProps {
-  date: string;
-  deposit?: number;
-  withdraw?: number;
-  balance: number;
-  use: string;
-}
-const Transaction = ({date,deposit, withdraw, balance, use}:TransactionProps) => {
+import { transactionInfo } from "../../apis/Account.type";
+
+const Transaction = ({transactionDate, transactionTime, transactionType, transactionBalance, transcationAfterBalance, transcationSummary}: transactionInfo) => {
   return (
     <tbody>
         <tr>
-          <th>{date}</th>
-          <td>{deposit}</td>
-          <td>{withdraw}</td>
-          <td>{use}</td>
-          <th>{balance}</th>
+          <th>{transactionDate}</th>
+          {/* 수정 필요 */}
+          <td>{transactionType}</td>
+          <td>{transactionBalance}</td>
+          {/* 수정 */}
+          <td>{transcationSummary}</td>
+          <th>{transcationAfterBalance}</th>
         </tr>
       
       </tbody>

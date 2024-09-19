@@ -35,6 +35,11 @@ const Work = ({ title, company, startDate, period, classification, deposit, dead
     applicants = 0
   }
 
+  //== remainDay가 0이하이면 출력X ==//
+  if (remainDay < 0) {
+    return null;
+  }
+
   return (
     <div className="flex justify-center mt-10 ">
 

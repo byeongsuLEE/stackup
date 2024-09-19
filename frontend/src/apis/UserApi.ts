@@ -19,7 +19,8 @@ export const getToken = async (): Promise<string> => {
         })
 
         console.log(response.data)
-        return response.data
+        window.sessionStorage.setItem("token", response.data)
+        return "로그인";
 
     } catch (error) {
         if (axios.isAxiosError(error)) {
@@ -29,7 +30,7 @@ export const getToken = async (): Promise<string> => {
             console.error("Unexpected error: ", error)
         }
 
-        return "토큰 오류";
+        return "오류";
     }
 }
 

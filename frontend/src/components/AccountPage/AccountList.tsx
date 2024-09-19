@@ -1,14 +1,22 @@
 import { Link } from "react-router-dom";
 import Account from "./Account";
+import { accountInfo } from "../../apis/Account.type";
 
-const AccountList = () => {
+interface accountListProp {
+  accountList: accountInfo[];
+}
+
+const AccountList = ({accountList}: accountListProp) => {
 
   return (
     <div className="flex flex-wrap">
       <div className="flex justify-center">
-        <Link to="/account/detail">
-        <Account />
-        </Link>
+        {accountList.map((account: accountInfo) => (
+          <Link to="/account/detail">
+          <Account {...account}/>
+          </Link>
+        ))}
+        
       </div>
 
     </div>

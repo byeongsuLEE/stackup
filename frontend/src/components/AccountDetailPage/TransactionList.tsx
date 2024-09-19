@@ -18,8 +18,7 @@ const TransactionList = ({transactionList}: transactionListProp) => {
           <th>잔액</th>
         </tr>
       </thead>
-      {/* <Transaction date="2024-09-04" withdraw={10000} balance={300000} use="엔제리너스" /> */}
-
+      
       {transactionList.map((transaction: transactionInfo) => (
         <Transaction {...transaction} />
       ))}

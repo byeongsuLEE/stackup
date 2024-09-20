@@ -3,11 +3,35 @@ import { freelanceStore } from "../store/FreelanceStore"
 import { clientLoginInfo, clientSignupInfo } from "./User.type"
 
 const BASE_URL: string = "http://localhost:8080/api/user"
-let token: string = '수정'
+let token: string | null = window.sessionStorage.getItem("token")
 
 //== 프리랜서 깃허브 소셜 로그인 ==//
 export const freelanceLogin = async (): Promise<void> => {
     window.location.href = "http://localhost:8080/api/oauth2/authorization/github";
+}
+
+//== 토큰 정보 ==//
+export const getToken = async (): Promise<string> => {
+    try {
+        const response = await axios({
+            method: 'get',
+            url: `${BASE_URL}/api/user/token`
+        })
+
+        console.log(response.data)
+        window.sessionStorage.setItem("token", response.data)
+        return "로그인";
+
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            console.error("Axios error: ", error.message)
+
+        } else {
+            console.error("Unexpected error: ", error)
+        }
+
+        return "오류";
+    }
 }
 
 //== 프리랜서 정보 등록 ==//

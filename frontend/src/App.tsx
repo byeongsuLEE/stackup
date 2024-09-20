@@ -26,6 +26,7 @@ import Signature from "./pages/SignaturePage";
 import Transfer from "./pages/TransferPage";
 import WorkDetail from "./pages/WorkDetailPage";
 import Work from "./pages/WorkPage";
+import Callback from "./pages/Callback";
 
 function App() {
   return (
@@ -58,6 +59,7 @@ function App() {
               <Route path="/evaluate/miterm" element={<MitermEvaluate />} />
               <Route path="/evaluate/final" element={<FinalEvaluate />} />
               <Route path="/transfer" element={<Transfer />} />
+              <Route path="/callback" element={<Callback/>}/>
             </Routes>
           </main>
           <Footer />

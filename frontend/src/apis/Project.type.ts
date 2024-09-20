@@ -7,12 +7,13 @@ export interface createProjectProp {
     startDate: Date;
     period: string;
     deadline: Date;
-    workType: Boolean;
+    workType: boolean;
     address: string;
     requirements: string;
     classification: string;
     frameworks: Array<string>;
     languages: Array<string>;
+    levels: Array<string>;
 }
 
 //== project ==//

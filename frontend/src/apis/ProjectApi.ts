@@ -1,6 +1,6 @@
 import axios from "axios";
-import { createProjectProp, project, projectBasic } from "./Project.type";
 import { projectFilterStore } from "../store/ProjectStore";
+import { createProjectProp, project, projectBasic } from "./Project.type";
 
 const BASE_URL: string = "http://localhost:8080/api";
 // const token: string = "수정";
@@ -8,7 +8,7 @@ const BASE_URL: string = "http://localhost:8080/api";
 //== 프로젝트 목록 조회 ==//
 export const allProject = async (): Promise<project[]> => {
     try {
-        const response = await axios ({
+        const response = await axios({
             method: 'get',
             url: `${BASE_URL}/board`
         })
@@ -20,9 +20,9 @@ export const allProject = async (): Promise<project[]> => {
         if (axios.isAxiosError(error)) {
             console.error("Axios error: ", error.message);
 
-          } else {
+        } else {
             console.error("Unexpected error: ", error);
-          }
+        }
 
         return [];
     }
@@ -32,7 +32,7 @@ export const allProject = async (): Promise<project[]> => {
 export const createProject = async (data: createProjectProp): Promise<void> => {
 
     try {
-        const response = await axios ({
+        const response = await axios({
             method: 'post',
             url: `${BASE_URL}/board`,
             data: {
@@ -58,9 +58,9 @@ export const createProject = async (data: createProjectProp): Promise<void> => {
         if (axios.isAxiosError(error)) {
             console.error("Axios error: ", error.message);
 
-          } else {
+        } else {
             console.error("Unexpected error: ", error);
-          }
+        }
 
     }
 }
@@ -70,7 +70,7 @@ export const projectFilter = async (): Promise<any> => {
 
     const { classification, deposit, worktype } = projectFilterStore.getState();
     try {
-        const response = await axios ({
+        const response = await axios({
             method: 'get',
             url: `${BASE_URL}/board/search`,
             params: {
@@ -87,9 +87,9 @@ export const projectFilter = async (): Promise<any> => {
         if (axios.isAxiosError(error)) {
             console.error("Axios error: ", error.message);
 
-          } else {
+        } else {
             console.error("Unexpected error: ", error);
-          }
+        }
 
     }
 }
@@ -97,7 +97,7 @@ export const projectFilter = async (): Promise<any> => {
 //== 특정 프로젝트 조회 ==//
 export const projectDetail = async (boardId?: string): Promise<project> => {
     try {
-        const response = await axios ({
+        const response = await axios({
             method: 'get',
             url: `${BASE_URL}/board/${boardId}`
         })
@@ -109,10 +109,10 @@ export const projectDetail = async (boardId?: string): Promise<project> => {
         if (axios.isAxiosError(error)) {
             console.error("Axios error: ", error.message);
 
-          } else {
+        } else {
             console.error("Unexpected error: ", error);
-          }
+        }
 
-          return projectBasic;
+        return projectBasic;
     }
 }

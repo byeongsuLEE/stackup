@@ -1,19 +1,19 @@
+import { Dayjs } from 'dayjs';
 import { Controller, useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { createProjectProp } from '../../apis/Project.type';
+import { createProject } from '../../apis/ProjectApi';
 import WebIcon from '../../icons/WebIcon';
 import Major from '../SignupPage/Major';
 import Skill from '../SignupPage/Skill';
 import Button from '../common/DoneButton';
 import BasicDatePicker from './Calender';
-import { Dayjs } from 'dayjs';
-import { createProject } from '../../apis/ProjectApi';
-import { createProjectProp } from '../../apis/Project.type';
-import { useNavigate } from 'react-router-dom';
 
 const WorkForm = () => {
   const { register, handleSubmit, control, setValue, watch } = useForm<createProjectProp>({
     defaultValues: { languages: [], frameworks: [] }
   });
-  
+
   const navigate = useNavigate();
 
   //== 제출 ==//
@@ -35,7 +35,7 @@ const WorkForm = () => {
     }
 
   }
-  
+
   //== 프레임워크 선택 ==//
   const choiceFramework = (value: string) => {
     const frameworkList = watch('frameworks')
@@ -79,25 +79,25 @@ const WorkForm = () => {
               {...register("title", { required: '제목을 입력해주세요.' })}
             />
 
-            <textarea 
-            // name='projectInfo'
-            className='py-2 px-2 border mt-3 border-slate-300 h-40 rounded-lg'
-            {...register("description", { required: "설명을 입력해주세요." })}
+            <textarea
+              // name='projectInfo'
+              className='py-2 px-2 border mt-3 border-slate-300 h-40 rounded-lg'
+              {...register("description", { required: "설명을 입력해주세요." })}
             />
 
             <input
-            // name="projectPeople"
-            className='border mt-3 border-slate-300 rounded-lg w-96 text-end px-2'
-            type="text"
-            placeholder="명"
-            {...register("recruits", { required: "모집 인원을 입력해주세요." })}
+              // name="projectPeople"
+              className='border mt-3 border-slate-300 rounded-lg w-96 text-end px-2'
+              type="text"
+              placeholder="명"
+              {...register("recruits", { required: "모집 인원을 입력해주세요." })}
             />
 
             <input
-            // name='budget'
-            className='border border-slate-300 rounded-lg w-96 mt-3 text-end px-2'
-            type="text" placeholder="만원"
-            {...register("deposit", { required: "예상 금액을 입력해주세요." })}
+              // name='budget'
+              className='border border-slate-300 rounded-lg w-96 mt-3 text-end px-2'
+              type="text" placeholder="만원"
+              {...register("deposit", { required: "예상 금액을 입력해주세요." })}
             />
 
             <Controller
@@ -113,14 +113,14 @@ const WorkForm = () => {
               )}
             />
 
-            <input 
-            // name='projectPeriod' 
-            className='border border-slate-300 rounded-lg w-96 mt-3 text-end px-2' 
-            type="text" 
-            defaultValue="일" 
-            {...register("period", { required: "프로젝트 기간을 입력해주세요." })}
+            <input
+              // name='projectPeriod' 
+              className='border border-slate-300 rounded-lg w-96 mt-3 text-end px-2'
+              type="text"
+              defaultValue="일"
+              {...register("period", { required: "프로젝트 기간을 입력해주세요." })}
             />
-            
+
             <Controller
               name="deadline"
               control={control}
@@ -133,27 +133,27 @@ const WorkForm = () => {
                 />
               )}
             />
-            
-            <select 
-            // name='workType' 
-            className='border border-slate-300 rounded-lg w-96 mt-3 text-end px-2'
-            {...register("workType", { required: "근무형태를 입력해주세요." })}
+
+            <select
+              // name='workType' 
+              className='border border-slate-300 rounded-lg w-96 mt-3 text-end px-2'
+              {...register("workType", { required: "근무형태를 입력해주세요." })}
             >
               <option value="true">재택</option>
               <option value="false">기간제 상주</option>
             </select>
 
-            <input 
-            // name='workAddress' 
-            className='border border-slate-300 rounded-lg w-96 mt-3' 
-            type="text" 
-            {...register("address", { required: "실제 근무지를 입력해주세요." })}
+            <input
+              // name='workAddress' 
+              className='border border-slate-300 rounded-lg w-96 mt-3'
+              type="text"
+              {...register("address", { required: "실제 근무지를 입력해주세요." })}
             />
-            <input 
-            // name='requirement' 
-            className='border border-slate-300 rounded-lg w-96 mt-3' 
-            type="text" 
-            {...register("requirements", { required: "기타 요구사항을 입력해주세요." })}
+            <input
+              // name='requirement' 
+              className='border border-slate-300 rounded-lg w-96 mt-3'
+              type="text"
+              {...register("requirements", { required: "기타 요구사항을 입력해주세요." })}
             />
           </div>
         </div>
@@ -172,6 +172,18 @@ const WorkForm = () => {
                 <Major major={WebIcon} title="퍼블리셔" name="category" value="publisher" />
                 <Major major={WebIcon} title="AI" name="category" value="ai" />
                 <Major major={WebIcon} title="DB" name="category" value="db" />
+              </div>
+            )}
+          />
+          <span>프로젝트 레벨</span>
+          <Controller
+            name="levels"
+            control={control}
+            render={({ field: { onChange } }) => (
+              <div className="flex" onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}>
+                <Major major={WebIcon} title="주니어" name="levels" value="junior" />
+                <Major major={WebIcon} title="미드" name="levels" value="mid" />
+                <Major major={WebIcon} title="시니어" name="levels" value="senior" />
               </div>
             )}
           />
@@ -197,7 +209,7 @@ const WorkForm = () => {
               </div>
             )}
           />
-          
+
           <span>프레임워크 ( 중복선택 가능 )</span>
           <Controller
             name="frameworks"

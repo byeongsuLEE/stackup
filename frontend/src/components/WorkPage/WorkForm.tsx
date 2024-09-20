@@ -3,11 +3,18 @@ import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { createProjectProp } from '../../apis/Project.type';
 import { createProject } from '../../apis/ProjectApi';
+import AIIcon from '../../icons/AIIcon';
+import DBIcon from '../../icons/DBIcon';
+import MobileIcon from '../../icons/MobileIcon';
+import PublisherIcon from '../../icons/PublisherIcon';
 import WebIcon from '../../icons/WebIcon';
 import Major from '../SignupPage/Major';
 import Skill from '../SignupPage/Skill';
 import Button from '../common/DoneButton';
 import BasicDatePicker from './Calender';
+import JuniorIcon from '../../icons/JuniorIcon';
+import MidIcon from '../../icons/MidIcon';
+import SeniorIcon from '../../icons/Senior';
 
 const WorkForm = () => {
   const { register, handleSubmit, control, setValue, watch } = useForm<createProjectProp>({
@@ -168,10 +175,10 @@ const WorkForm = () => {
             render={({ field: { onChange } }) => (
               <div className="flex" onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}>
                 <Major major={WebIcon} title="웹" name="category" value="web" />
-                <Major major={WebIcon} title="모바일" name="category" value="mobile" />
-                <Major major={WebIcon} title="퍼블리셔" name="category" value="publisher" />
-                <Major major={WebIcon} title="AI" name="category" value="ai" />
-                <Major major={WebIcon} title="DB" name="category" value="db" />
+                <Major major={MobileIcon} title="모바일" name="category" value="mobile" />
+                <Major major={PublisherIcon} title="퍼블리셔" name="category" value="publisher" />
+                <Major major={AIIcon} title="AI" name="category" value="ai" />
+                <Major major={DBIcon} title="DB" name="category" value="db" />
               </div>
             )}
           />
@@ -181,9 +188,9 @@ const WorkForm = () => {
             control={control}
             render={({ field: { onChange } }) => (
               <div className="flex" onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}>
-                <Major major={WebIcon} title="주니어" name="levels" value="junior" />
-                <Major major={WebIcon} title="미드" name="levels" value="mid" />
-                <Major major={WebIcon} title="시니어" name="levels" value="senior" />
+                <Major major={JuniorIcon} title="주니어" name="levels" value="junior" />
+                <Major major={MidIcon} title="미드" name="levels" value="mid" />
+                <Major major={SeniorIcon} title="시니어" name="levels" value="senior" />
               </div>
             )}
           />

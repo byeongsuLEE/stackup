@@ -1,7 +1,7 @@
 import React from "react";
 import { freelanceStore } from "../../store/FreelanceStore";
 interface MajorProps {
-  major: React.ComponentType<{ w: number; h: number; }>;
+  major: React.ComponentType;
   title: string;
   name: string;
   value: string;
@@ -20,9 +20,9 @@ const Major: React.FC<MajorProps> = ({ major: MajorIcon, title, name, value }) =
         className="radio radio-success radio-xs"
         checked={state.classification === value}
         onChange={() => state.setClassification(value)}
-        />
+      />
       <div className="flex flex-col items-center">
-        <MajorIcon w={50} h={50} /> {/* major prop을 MajorIcon으로 받아서 사용 */}
+        <MajorIcon /> {/* major prop을 MajorIcon으로 받아서 사용 */}
         <span className="my-5">{title}</span>
       </div>
     </div>

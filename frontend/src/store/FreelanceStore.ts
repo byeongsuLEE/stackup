@@ -15,6 +15,7 @@ export interface freelanceInformation {
     reportedCount: number;
     
     updateState: (newState: Partial<freelanceInformation>) => void;
+    
     setName: (name: string) => void;
     setEmail: (email: string) => void;
     setAddress: (address: string) => void;

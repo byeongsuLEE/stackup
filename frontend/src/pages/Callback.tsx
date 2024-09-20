@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { getToken } from "../apis/UserApi";
+import { freelanceMypage, getToken } from "../apis/UserApi";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Callback = () => {
@@ -9,14 +9,18 @@ const Callback = () => {
 
     useEffect(() => {
         const update = async() => {
-            const data = await getToken(userId);
+            const tokenData = await getToken(userId);
+            const infoData = await freelanceMypage();
+            
 
-            if (data === "로그인") {
-                navigate("/mypage")
-            } else {
-                alert("다시 로그인 해주세요.")
+            if (tokenData !== "로그인") {
                 navigate("/login")
+            } else if (infoData == null) {
+                navigate("/signup/freelancer")
+            } else {
+                navigate("/")
             }
+            
         }
 
         update();

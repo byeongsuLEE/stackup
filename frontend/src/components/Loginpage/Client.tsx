@@ -2,14 +2,16 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { clientLoginInfo } from "../../apis/User.type";
 import { clientLogin } from "../../apis/UserApi";
 import DoneButton from "../common/DoneButton";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Client = () => {
+  const navigate = useNavigate();
+
   const { register, handleSubmit } = useForm<clientLoginInfo>();
 
   const onSubmit: SubmitHandler<clientLoginInfo> = (data) => {
     clientLogin(data);
-    clientLogin(data);
+    navigate('/');
   };
 
   return (

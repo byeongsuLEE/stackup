@@ -1,13 +1,16 @@
 import { useForm } from 'react-hook-form';
 import { freelanceSignupInfo } from "../../apis/User.type";
-import { freelanceInformation } from "../../apis/UserApi";
 import WebIcon from "../../icons/WebIcon";
 import { freelanceStore } from '../../store/FreelanceStore';
 import DoneButton from '../common/DoneButton';
 import Major from "./Major";
 import Skill from "./Skill";
+import { useNavigate } from 'react-router-dom';
+import { registerFreelancerInfo } from '../../apis/UserApi';
 
 const SkillInsert = () => {
+  const navigate = useNavigate();
+
   const state = freelanceStore();
   const { register, handleSubmit } = useForm<freelanceSignupInfo>({});
 
@@ -16,28 +19,9 @@ const SkillInsert = () => {
     state.setPortfolioURL(information.portfolioURL);
     state.setSelfIntroduction(information.selfIntroduction);
 
-    freelanceInformation();
+    registerFreelancerInfo();
+    navigate('/mypage');
   };
-
-  const choiceFramework = (value: string) => {
-    const state = freelanceStore();
-
-    if (state.frameworks.includes(value)) {
-        state.removeFramework(value);
-    } else {
-        state.addFramework(value);
-    }
-  }
-
-const choiceLanguage = (value: string) => {
-    const state = freelanceStore();
-
-    if (state.languages.includes(value)) {
-        state.removeLanguage(value);
-    } else {
-        state.addLanguage(value);
-    }
-  }
 
   return (
     <div>
@@ -96,14 +80,14 @@ const choiceLanguage = (value: string) => {
               {...register("careerYear", { required: "경력을 입력해주세요." })}
             />
 
-            <span className="mt-5">포트폴리오 링크</span>
+            {/* <span className="mt-5">포트폴리오 링크</span>
             <input
               type="text"
               className="px-2 mt-2 border border-subGreen2 w-72 h-10 rounded-xl"
               {...register("portfolioURL", {
                 required: "포트폴리오 URL을 입력해주세요.",
               })}
-            />
+            /> */}
 
             <span className="mt-5">한 줄 자기소개</span>
             <input

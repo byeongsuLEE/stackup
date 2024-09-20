@@ -23,6 +23,7 @@
     "daisyui": "^4.12.10",
     "date-fns": "^3.6.0",
     "dayjs": "^1.11.13",
+    "ethers": "^6.13.2",
     "gsap": "^3.12.5",
     "install": "^0.13.0",
     "react": "^18.3.1",
@@ -35,7 +36,8 @@
     "scroll-out": "^2.2.12",
     "splitting": "^1.1.0",
     "styled-components": "^6.1.13",
-    "web3": "^4.12.1",
+    "web3": "^4.13.0",
+    "web3-eth-abi": "^4.2.4",
     "zustand": "^4.5.5"
   },
   "devDependencies": {

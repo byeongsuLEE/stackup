@@ -217,7 +217,7 @@ const WorkForm = () => {
             )}
           />
 
-          <span>프레임워크 ( 중복선택 가능 )</span>
+          <span>프레임워크 및 라이브러리 ( 중복선택 가능 )</span>
           <Controller
             name="frameworks"
             control={control}

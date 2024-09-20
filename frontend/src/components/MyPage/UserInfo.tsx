@@ -4,13 +4,15 @@ import { freelanceInformation } from "../../store/FreelanceStore";
 import Major from "../SignupPage/Major";
 import Skill from "../SignupPage/Skill";
 import DoneButton from "../common/DoneButton";
+import { registerFreelancerInfo } from "../../apis/UserApi";
 
 const UserInfo = (data: freelanceInformation) => {
   const [local, setLocal] = useState(data);
 
   useEffect(() => {
     setLocal(data)
-  }, [])
+
+  }, [data])
   
   const changeValue = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
     setLocal((value) => ({
@@ -21,8 +23,9 @@ const UserInfo = (data: freelanceInformation) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
     data.updateState(local)
+
+    registerFreelancerInfo();
   }
   
   return (

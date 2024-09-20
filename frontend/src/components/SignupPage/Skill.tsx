@@ -17,7 +17,6 @@ const Skill = ({category, title, name, value}:SkillProps)=>{
     removeLanguage: state.removeLanguage,
   }));
 
-
   const choiceFramework = (value: string) => {
     if (frameworks.includes(value)) {
       removeFramework(value);

@@ -9,17 +9,15 @@ const Mypage = () => {
   const state = freelanceStore();
   const navigate = useNavigate();
 
-  //== 토큰 완료시 주석해제 ==//
-  // useEffect(() => {
-  //   if (window.sessionStorage.getItem("token") == null) {
-  //     alert("로그인 해주세요.")
-  //     navigate("/login")
+  // == 토큰 완료시 주석해제 ==//
+  useEffect(() => {
+    if (window.sessionStorage.getItem("token") == null) {
+      navigate("/login")
       
-  //   } else if (state.email == "") {
-  //     alert("정보를 등록해 주세요.")
-  //     navigate("/signup/freelancer")
-  //   }
-  // })
+    } else if (state.email == "") {
+      navigate("/signup/freelancer")
+    }
+  }, [])
   
   return (
     <div className="flex flex-col">

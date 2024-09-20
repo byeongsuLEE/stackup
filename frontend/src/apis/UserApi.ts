@@ -3,7 +3,6 @@ import { freelanceStore } from "../store/FreelanceStore"
 import { clientLoginInfo, clientSignupInfo } from "./User.type"
 
 const BASE_URL: string = "http://localhost:8080/api/user"
-let token: string | null = window.sessionStorage.getItem("token")
 
 //== 프리랜서 깃허브 소셜 로그인 ==//
 export const freelanceLogin = async (): Promise<void> => {
@@ -11,23 +10,25 @@ export const freelanceLogin = async (): Promise<void> => {
 }
 
 //== 토큰 정보 ==//
-export const getToken = async (): Promise<string> => {
+export const getToken = async (userId?: string): Promise<string> => {
+
     try {
         const response = await axios({
             method: 'get',
-            url: `${BASE_URL}/api/user/token`
+            url: `${BASE_URL}/token`,
+            params: {
+                'userId': userId
+            }
         })
-
-        console.log(response.data)
-        window.sessionStorage.setItem("token", response.data)
+        window.sessionStorage.setItem("token", response.data.data.accessToken);
         return "로그인";
 
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            console.error("Axios error: ", error.message)
+            console.error("Axios error: ", error.message);
 
         } else {
-            console.error("Unexpected error: ", error)
+            console.error("Unexpected error: ", error);
         }
 
         return "오류";
@@ -40,10 +41,10 @@ export const freelanceInformation = async (): Promise<void> => {
 
     try {
         const response = await axios({
-            method: "post",
+            method: 'post',
             url: `${BASE_URL}/info`,
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${window.sessionStorage.getItem('token')}`
             },
             data: {
                 "name": state.name,
@@ -59,27 +60,28 @@ export const freelanceInformation = async (): Promise<void> => {
             }
         })
 
+        console.log(response.data)
     } catch (error) {
 
         if (axios.isAxiosError(error)) {
-            console.error("Axios error: ", error.message)
+            console.error("Axios error: ", error.message);
 
         } else {
-            console.error("Unexpected error: ", error)
+            console.error("Unexpected error: ", error);
         }
     }
 }
 
 //== 마이페이지 정보 ==//
 export const freelanceMypage = async (): Promise<void> => {
-    const state = freelanceStore();
+    // const state = freelanceStore();
 
     try {
         const response = await axios ({
             method: 'get',
             url: `${BASE_URL}/mypage/info`,
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${window.sessionStorage.getItem('token')}`
             }
         })
 
@@ -89,10 +91,10 @@ export const freelanceMypage = async (): Promise<void> => {
         
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            console.error("Axios error: ", error.message)
+            console.error("Axios error: ", error.message);
 
         } else {
-            console.error("Unexpected error: ", error)
+            console.error("Unexpected error: ", error);
         }
     }
 }
@@ -119,27 +121,29 @@ export const clientSignup = async (information: clientSignupInfo): Promise<void>
 
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            console.error("Axios error: ", error.message)
+            console.error("Axios error: ", error.message);
 
         } else {
-            console.error("Unexpected error: ", error)
+            console.error("Unexpected error: ", error);
         }
     }
 }
 
 //== 클라이언트 로그인 ==//
 export const clientLogin = async (information: clientLoginInfo): Promise<void> => {
+    
     try {
         const response = await axios({
-            method: "post",
+            method: 'post',
             url: `${BASE_URL}/client/login`,
             data: {
-                email: information.email,
-                password: information.password,
-            },
+                'email': information.email,
+                'password': information.password
+            }
         });
 
         console.log(response.data);
+
     } catch (error) {
         if (axios.isAxiosError(error)) {
             console.error("Axios error: ", error.message);

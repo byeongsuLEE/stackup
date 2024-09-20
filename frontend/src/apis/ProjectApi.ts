@@ -2,17 +2,15 @@ import axios from "axios";
 import { projectFilterStore } from "../store/ProjectStore";
 import { createProjectProp, project, projectBasic } from "./Project.type";
 
-const BASE_URL: string = "http://localhost:8080/api";
-// const token: string = "수정";
+const BASE_URL: string = "http://localhost:8080/api/board";
 
 //== 프로젝트 목록 조회 ==//
 export const allProject = async (): Promise<project[]> => {
     try {
         const response = await axios({
             method: 'get',
-            url: `${BASE_URL}/board`
+            url: BASE_URL
         })
-
         return response.data.data
 
     } catch (error) {
@@ -34,7 +32,10 @@ export const createProject = async (data: createProjectProp): Promise<void> => {
     try {
         const response = await axios({
             method: 'post',
-            url: `${BASE_URL}/board`,
+            url: BASE_URL,
+            headers: {
+                Authorization: `Bearer ${window.sessionStorage.getItem('token')}`
+            },
             data: {
                 "title": data.title,
                 "description": data.description,
@@ -51,8 +52,8 @@ export const createProject = async (data: createProjectProp): Promise<void> => {
                 "deadline": data.deadline
             }
         })
+        console.log(response.data)
 
-        alert("프로젝트 등록 성공!")
     } catch (error) {
 
         if (axios.isAxiosError(error)) {

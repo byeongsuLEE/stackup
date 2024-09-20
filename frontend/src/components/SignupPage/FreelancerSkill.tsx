@@ -93,7 +93,6 @@ const choiceLanguage = (value: string) => {
               placeholder="년"
               className="mt-2 text-right px-2 border border-subGreen2 w-52 h-10 rounded-xl"
               type="text"
-              defaultValue="년"
               {...register("careerYear", { required: "경력을 입력해주세요." })}
             />
 

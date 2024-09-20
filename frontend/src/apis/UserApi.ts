@@ -131,17 +131,19 @@ export const clientSignup = async (information: clientSignupInfo): Promise<void>
 
 //== 클라이언트 로그인 ==//
 export const clientLogin = async (information: clientLoginInfo): Promise<void> => {
+    
     try {
         const response = await axios({
-            method: "post",
+            method: 'post',
             url: `${BASE_URL}/client/login`,
             data: {
-                email: information.email,
-                password: information.password,
-            },
+                'email': information.email,
+                'password': information.password
+            }
         });
 
         console.log(response.data);
+
     } catch (error) {
         if (axios.isAxiosError(error)) {
             console.error("Axios error: ", error.message);

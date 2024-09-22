@@ -5,6 +5,7 @@ import Footer from "./components/common/Footer";
 import Navbar from "./components/common/Navbar";
 import AccountDetail from "./pages/AccountDetailPage";
 import Account from "./pages/AccountPage";
+import Callback from "./pages/Callback";
 import CandidateCheck from "./pages/CandidateCheckPage";
 import CareerDetail from "./pages/CareerDetailPage";
 import Career from "./pages/CareerPage";
@@ -26,9 +27,11 @@ import Signature from "./pages/SignaturePage";
 import Transfer from "./pages/TransferPage";
 import WorkDetail from "./pages/WorkDetailPage";
 import Work from "./pages/WorkPage";
-import Callback from "./pages/Callback";
+import { useWeb3 } from "./hooks/useWeb3";
 
 function App() {
+  const metamask = useWeb3()
+
   return (
     <>
       <BrowserRouter>
@@ -59,7 +62,7 @@ function App() {
               <Route path="/evaluate/miterm" element={<MitermEvaluate />} />
               <Route path="/evaluate/final" element={<FinalEvaluate />} />
               <Route path="/transfer" element={<Transfer />} />
-              <Route path="/callback" element={<Callback/>}/>
+              <Route path="/callback" element={<Callback />} />
             </Routes>
           </main>
           <Footer />

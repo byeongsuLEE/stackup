@@ -1,17 +1,17 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { accountInfo } from "../apis/Account.type";
+import { getAccount } from "../apis/AccountsApi";
 import AccountList from "../components/AccountPage/AccountList";
 import MainAccount from "../components/AccountPage/MainAccount";
 import DoneButton from "../components/common/DoneButton";
 import PlusIcon from "../icons/PlusIcon";
-import { useEffect, useState } from "react";
-import { accountInfo } from "../apis/Account.type";
-import { getAccount } from "../apis/AccountsApi";
 
 const Account = () => {
   const isAccount = true;
   const isMainAccount = true;
 
-  const [ accountList, setAccountList ] = useState<accountInfo[]>([]);
+  const [accountList, setAccountList] = useState<accountInfo[]>([]);
 
   useEffect(() => {
     const update = async () => {
@@ -20,6 +20,8 @@ const Account = () => {
     }
     update()
   }, [])
+
+
 
   return (
     <div className="m-20">
@@ -34,21 +36,24 @@ const Account = () => {
               계좌 추가
             </span>
             <PlusIcon />
+            <button
+              // onClick={connectWallet}
+              className="w-[100px]">지갑 연결</button>
           </div>
           <div className="flex flex-col items-center">
             <Link to="/account/detail">
-            {isMainAccount &&
-            <MainAccount />
-            }
+              {isMainAccount &&
+                <MainAccount />
+              }
             </Link>
 
-            <AccountList accountList={accountList}/>
+            <AccountList accountList={accountList} />
           </div>
         </div>
       ) : (
         <div className="flex flex-col items-center">
           <span className="my-10">등록된 계좌가 없습니다.</span>
-          <DoneButton width={150} height={40} title="계좌 등록"/>
+          <DoneButton width={150} height={40} title="계좌 등록" />
         </div>
       )}
 

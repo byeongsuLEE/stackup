@@ -64,7 +64,7 @@ export const registerFreelancerInfo = async (): Promise<void> => {
                 "selfIntroduction": state.selfIntroduction
             }
         })
-
+        
         freelanceMypage();
 
     } catch (error) {

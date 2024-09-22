@@ -1,36 +1,26 @@
-import { Link, useParams } from "react-router-dom";
+import { differenceInDays, format } from "date-fns";
+import { Link } from "react-router-dom";
+import { project } from "../../apis/Project.type";
 import WebIcon from "../../icons/WebIcon";
 import InfoBox from "../WorkPage/InfoBox";
 import DoneButton from "../common/DoneButton";
-import { useEffect, useState } from "react";
-import { project, projectBasic } from "../../apis/Project.type";
-import { projectDetail } from "../../apis/ProjectApi";
-import { differenceInDays, format } from "date-fns";
 
-const Detail = () => {
-  const [ project, setProject ] = useState<project>(projectBasic);
-  const { boardId } = useParams();
+const Detail = (project: project) => {
+
   const remainDay = differenceInDays(project.deadline, format(Date(), 'yyyy-MM-dd'));
   const workType = project.worktype? "재택" : "기간제 상주";
-
-  useEffect(() => {
-    const detail = async () => {
-      const data = await projectDetail(boardId);
-      setProject(data)
-    }
-    detail();
-  }, [])
+  let classification = null
 
   if (project.classification === 'web') {
-    project.classification = '웹'
+    classification = '웹'
   } else if (project.classification === 'mobile') {
-    project.classification = '모바일'
+    classification = '모바일'
   } else if (project.classification === 'publisher') {
-    project.classification = '퍼블리셔'
+    classification = '퍼블리셔'
   } else if (project.classification === 'ai') {
-    project.classification = 'AI'
+    classification = 'AI'
   } else if (project.classification === 'db') {
-    project.classification = 'DB'
+    classification = 'DB'
   }
 
   return (
@@ -41,13 +31,18 @@ const Detail = () => {
           <span className="text-subTxt text-sm">{project?.classification}</span>
         </div>
         <div className="flex justify-end">
-          {/* 프리랜서 */}
-          <DoneButton width={100} height={25} title="지원하기" />
-          {/* 클라이언트 */}
-          <Link to="/work/detail/candidate">
-            <DoneButton width={100} height={25} title="지원자 관리" />
-          </Link>
-          <button className="bg-subGreen2 text-bgGreen font-bold text-sm px-3 rounded-lg ml-2">마감하기</button>
+
+          {window.sessionStorage.getItem("userType") === 'freelancer'? (
+            <DoneButton width={100} height={25} title="지원하기" />
+          ) : (
+            <div>
+              <Link to="/work/detail/candidate">
+              <DoneButton width={100} height={25} title="지원자 관리" />
+              </Link>
+
+              <button className="bg-subGreen2 text-bgGreen font-bold text-sm px-3 rounded-lg ml-2">마감하기</button>
+            </div>
+          )}
         </div>
 
         <div className="bg-subTxt w-auto h-[1px] flex justify-center my-10"></div>

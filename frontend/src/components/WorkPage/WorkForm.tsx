@@ -188,9 +188,9 @@ const WorkForm = () => {
             control={control}
             render={({ field: { onChange } }) => (
               <div className="flex" onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}>
-                <Major major={JuniorIcon} title="주니어" name="levels" value="junior" />
-                <Major major={MidIcon} title="미드" name="levels" value="mid" />
-                <Major major={SeniorIcon} title="시니어" name="levels" value="senior" />
+                <Major major={JuniorIcon} title="주니어" name="levels" value="1" />
+                <Major major={MidIcon} title="미드" name="levels" value="2" />
+                <Major major={SeniorIcon} title="시니어" name="levels" value="3" />
               </div>
             )}
           />

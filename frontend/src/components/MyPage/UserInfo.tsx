@@ -108,7 +108,7 @@ const UserInfo = (data: freelanceInformation) => {
             placeholder="년"
             className="mt-2 text-right px-2 border border-subGreen2 w-52 h-10 rounded-xl"
             type="text"
-            value={ local.careerYear }
+            value={ local.careerYear + "년" }
             onChange={changeValue('careerYear')}
             />
 

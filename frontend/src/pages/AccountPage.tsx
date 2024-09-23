@@ -11,6 +11,7 @@ const Account = () => {
   const isAccount = true;
   const isMainAccount = true;
 
+
   const [accountList, setAccountList] = useState<accountInfo[]>([]);
 
   useEffect(() => {
@@ -36,9 +37,6 @@ const Account = () => {
               계좌 추가
             </span>
             <PlusIcon />
-            <button
-              // onClick={connectWallet}
-              className="w-[100px]">지갑 연결</button>
           </div>
           <div className="flex flex-col items-center">
             <Link to="/account/detail">

@@ -5,6 +5,7 @@ import { Box, Tab } from "@mui/material";
 import React from "react";
 import NFTCareer from "../components/CareerPage/NFTCareer";
 import RegisteredCareer from "../components/CareerPage/RegisteredCareer";
+import Wallet from "../components/CareerPage/Wallet";
 
 const Career = () => {
   const [value, setValue] = React.useState('1');
@@ -14,6 +15,7 @@ const Career = () => {
   };
   return (
     <div className='mt-10'>
+      <Wallet />
       <Box sx={{ width: '100%', typography: 'body1' }}>
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>

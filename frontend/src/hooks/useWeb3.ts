@@ -1,60 +1,123 @@
 // import { MetaMaskInpageProvider } from '@metamask/providers';
-
 // import { useEffect, useState } from 'react';
+// import Web3 from 'web3';
 
 // export const useWeb3 = () => {
-//   const [account, setAccount] = useState(false);
+//   const [account, setAccount] = useState<string | null>(null);
+//   const [isRequestPending, setIsRequestPending] = useState(false);
+//   const [web3, setWeb3] = useState<Web3 | null>(null);
 
-//   const getCurChainId = async () => {
+//   const getCurChainId = async (): Promise<string | null> => {
 //     const eth = window.ethereum as MetaMaskInpageProvider;
-//     const curChainId = await eth.request({
-//       method: 'eth_chainId',
-//     });
-
-//     return curChainId;
+//     try {
+//       const curChainId = await eth.request({
+//         method: 'eth_chainId',
+//       });
+//       return curChainId as string;
+//     } catch (error) {
+//       console.error('Error fetching chain ID:', error);
+//       return null;
+//     }
 //   };
 
 //   const addAndConnNetwork = async (chainId: string) => {
 //     const eth = window.ethereum as MetaMaskInpageProvider;
-
 //     const network = {
 //       chainId,
 //       chainName: 'SSAFY',
 //       rpcUrls: ['https://rpc.ssafy-blockchain.com'],
 //       nativeCurrency: {
 //         name: 'SSF Token',
-//         symbol: 'SSF',
+//         symbol: 'ETH',
 //         decimals: 18,
 //       },
 //     };
 
-//     await eth.request({
-//       method: 'wallet_addEthereumChain',
-//       params: [network],
-//     });
+//     try {
+//       if (!isRequestPending) {
+//         setIsRequestPending(true);
+//         const response = await eth.request({
+//           method: 'wallet_addEthereumChain',
+//           params: [network],
+//         });
+//         console.log(response)
+//         console.log('Network added and connected successfully.');
+//       } else {
+//         console.log('Network addition request is already in progress.');
+//       }
+//     } catch (error) {
+//       console.error('Error adding and connecting network:', error);
+//     } finally {
+//       setIsRequestPending(false);
+//     }
+//   };
+
+//   const getAccount = async () => {
+//     const eth = window.ethereum as MetaMaskInpageProvider;
+//     try {
+//       const accounts = await eth.request({
+//         method: 'eth_requestAccounts',
+//       });
+//       return accounts;
+//     } catch (error) {
+//       console.error('Error fetching account:', error);
+//       return [];
+//     }
 //   };
 
 //   useEffect(() => {
-//     (async function () {
-//       if (window.ethereum !== undefined) {
+//     const connectToNetwork = async () => {
+//       if (window.ethereum) {
 //         const curChainId = await getCurChainId();
-//         const targetChainId = '0x1e2a';
+//         const targetChainId = '0x79f5';
 
 //         if (curChainId !== targetChainId) {
 //           await addAndConnNetwork(targetChainId);
+//         } else {
+//           console.log('Already connected to SSAFY network.');
 //         }
+
+//         const [userAccount] = (await getAccount()) as string[];
+//         setAccount(userAccount);
+
+//         const web3Instance = new Web3(window.ethereum);
+//         setWeb3(web3Instance);
 //       }
-//     })();
-//   });
+//     };
+
+//     connectToNetwork();
+//   }, []);
+
+//   return { account, web3, isRequestPending };
 // };
-
-
 import { MetaMaskInpageProvider } from '@metamask/providers';
 import { useEffect, useState } from 'react';
+import Web3 from 'web3';
+
+const ERC20_ABI = [
+  {
+    constant: true,
+    inputs: [{ name: '_owner', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ name: 'balance', type: 'uint256' }],
+    type: 'function',
+  },
+  {
+    constant: true,
+    inputs: [],
+    name: 'decimals',
+    outputs: [{ name: '', type: 'uint8' }],
+    type: 'function',
+  },
+];
+
+const SSF_TOKEN_CONTRACT_ADDRESS = '0x066b74Fc73bfaf0C266b0269F91dDeeB5aAB6998';
 
 export const useWeb3 = () => {
   const [account, setAccount] = useState<string | null>(null);
-  const [isRequestPending, setIsRequestPending] = useState(false); // 요청 상태 관리
+  const [isRequestPending, setIsRequestPending] = useState(false);
+  const [web3, setWeb3] = useState<Web3 | null>(null);
+  const [ssfBalance, setSsfBalance] = useState<number | null>(null); // SSF 토큰 잔액 상태 추가
 
   const getCurChainId = async (): Promise<string | null> => {
     const eth = window.ethereum as MetaMaskInpageProvider;
@@ -62,68 +125,99 @@ export const useWeb3 = () => {
       const curChainId = await eth.request({
         method: 'eth_chainId',
       });
-      console.log(curChainId)
       return curChainId as string;
     } catch (error) {
-      console.error('체인 ID 조회 중 에러:', error);
+      console.error('Error fetching chain ID:', error);
       return null;
     }
   };
 
   const addAndConnNetwork = async (chainId: string) => {
     const eth = window.ethereum as MetaMaskInpageProvider;
-
     const network = {
       chainId,
-      chainName: 'SSAFY Blockchain Network',
+      chainName: 'SSAFY',
       rpcUrls: ['https://rpc.ssafy-blockchain.com'],
       nativeCurrency: {
         name: 'SSF Token',
-        symbol: 'SSF',
+        symbol: 'ETH',
         decimals: 18,
       },
     };
 
     try {
-      if (!isRequestPending) { // 요청 중이 아닐 때만 실행
-        setIsRequestPending(true); // 요청 진행 상태로 설정
-        await eth.request({
+      if (!isRequestPending) {
+        setIsRequestPending(true);
+        const response = await eth.request({
           method: 'wallet_addEthereumChain',
           params: [network],
         });
-        console.log('네트워크 추가 및 연결 성공');
+        console.log(response);
+        console.log('Network added and connected successfully.');
       } else {
-        console.log('네트워크 추가 요청이 이미 진행 중입니다.');
+        console.log('Network addition request is already in progress.');
       }
     } catch (error) {
-      console.error('네트워크 추가 및 연결 중 에러:', error);
+      console.error('Error adding and connecting network:', error);
     } finally {
-      setIsRequestPending(false); // 요청이 끝나면 상태를 false로 변경
+      setIsRequestPending(false);
+    }
+  };
+
+  const getAccount = async () => {
+    const eth = window.ethereum as MetaMaskInpageProvider;
+    try {
+      const accounts = await eth.request({
+        method: 'eth_requestAccounts',
+      });
+      return accounts;
+    } catch (error) {
+      console.error('Error fetching account:', error);
+      return [];
+    }
+  };
+
+  const fetchSsfBalance = async (web3Instance: Web3, userAccount: string) => {
+    if (!web3Instance || !userAccount) return;
+
+    const ssfContract = new web3Instance.eth.Contract(ERC20_ABI as any, SSF_TOKEN_CONTRACT_ADDRESS);
+    
+    try {
+      const balance = await ssfContract.methods.balanceOf(userAccount).call();
+      const decimals = await ssfContract.methods.decimals().call();
+
+      const adjustedBalance = Number(balance) / 10 ** Number(decimals);
+      setSsfBalance(adjustedBalance);
+    } catch (error) {
+      console.error('Error fetching SSF token balance:', error);
     }
   };
 
   useEffect(() => {
     const connectToNetwork = async () => {
-      if (window.ethereum !== undefined) {
+      if (window.ethereum) {
         const curChainId = await getCurChainId();
-        const targetChainId = '0x79f5'; // SSAFY Blockchain의 Chain ID (31221의 16진수)
+        const targetChainId = '0x79f5';
 
         if (curChainId !== targetChainId) {
           await addAndConnNetwork(targetChainId);
         } else {
-          console.log('이미 SSAFY 네트워크에 연결되어 있습니다.');
+          console.log('Already connected to SSAFY network.');
         }
 
-        // 계정 가져오기
-        // const eth = window.ethereum as MetaMaskInpageProvider;
-        // const accounts = await eth.request({ method: 'eth_requestAccounts' });
-        // setAccount(accounts ? accounts[0] : null); // 첫 번째 계정을 설정
+        const [userAccount] = (await getAccount()) as string[];
+        setAccount(userAccount);
+
+        const web3Instance = new Web3(window.ethereum);
+        setWeb3(web3Instance);
+
+        // SSF 토큰 잔액 조회 호출
+        await fetchSsfBalance(web3Instance, userAccount);
       }
     };
 
     connectToNetwork();
-  }, []); // 의존성 배열 추가하여 한 번만 실행되도록 설정
+  }, []);
 
-  return account;
+  return { account, web3, ssfBalance, isRequestPending };
 };
-

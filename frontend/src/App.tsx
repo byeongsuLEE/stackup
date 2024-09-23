@@ -27,10 +27,8 @@ import Signature from "./pages/SignaturePage";
 import Transfer from "./pages/TransferPage";
 import WorkDetail from "./pages/WorkDetailPage";
 import Work from "./pages/WorkPage";
-import { useWeb3 } from "./hooks/useWeb3";
 
 function App() {
-  const metamask = useWeb3()
 
   return (
     <>

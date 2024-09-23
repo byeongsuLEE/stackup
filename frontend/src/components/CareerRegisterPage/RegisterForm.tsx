@@ -6,7 +6,6 @@ import { pinata } from "../../apis/NftApi";
 const RegisterForm = () => {
   const [ file, setFile ] = useState<File | null>(null);
   
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const selectedFile = e.target.files?.[0] || null;
     setFile(selectedFile);

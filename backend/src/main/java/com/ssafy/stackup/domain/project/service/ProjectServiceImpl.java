@@ -2,6 +2,7 @@ package com.ssafy.stackup.domain.project.service;
 
 
 import com.ssafy.stackup.common.exception.CustomException;
+import com.ssafy.stackup.common.response.ApiResponse;
 import com.ssafy.stackup.common.response.ErrorCode;
 import com.ssafy.stackup.common.s3.service.S3ImageUpLoadService;
 import com.ssafy.stackup.common.util.UserUtil;
@@ -11,6 +12,7 @@ import com.ssafy.stackup.domain.board.entity.BoardFramework;
 import com.ssafy.stackup.domain.board.entity.BoardLanguage;
 import com.ssafy.stackup.domain.board.repository.BoardApplicantRepository;
 import com.ssafy.stackup.domain.board.repository.BoardRepository;
+import com.ssafy.stackup.domain.project.dto.request.SignRequest;
 import com.ssafy.stackup.domain.project.dto.response.ProjectInfoResponseDto;
 import com.ssafy.stackup.domain.project.dto.request.ProjectStartRequestDto;
 import com.ssafy.stackup.domain.project.entity.Project;
@@ -22,8 +24,12 @@ import com.ssafy.stackup.domain.user.entity.User;
 import com.ssafy.stackup.domain.user.entity.FreelancerProject;
 import com.ssafy.stackup.domain.user.repository.FreelancerProjectRepository;
 import com.ssafy.stackup.domain.user.repository.FreelancerRepository;
+import com.ssafy.stackup.domain.user.repository.UserRepository;
+import com.ssafy.stackup.domain.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -44,6 +50,8 @@ public class ProjectServiceImpl implements ProjectService {
     private final BoardApplicantRepository boardApplicantRepository;
     private final BoardRepository boardRepository;
     private final FreelancerProjectRepository freelancerProjectRepository;
+    private final SignatureService signatureService;
+    private final UserServiceImpl userService;
 
     @Override
     public void registerPreviousProject(MultipartFile certificateFile, String title, Long period) {
@@ -154,6 +162,91 @@ public class ProjectServiceImpl implements ProjectService {
                 .build();
 
         return projectInfoResponseDto;
+    }
+
+
+
+    @Override
+    public ResponseEntity<ApiResponse<Boolean>> verifySignature(Long projectId, SignRequest signRequest, User user) {
+        Project project = projectRepository.findById(projectId).orElse(null);
+        Long userId = user.getId();
+        try{
+            String loggedInUserAddress = userService.getUserAddress(userId);
+
+            // 요청에서 서명한 지갑 주소와 로그인한 사용자의 지갑 주소 비교
+            if (!user.getUserAddress().equalsIgnoreCase(loggedInUserAddress)) {
+                return ResponseEntity.badRequest().body(ApiResponse.error(HttpStatus.BAD_REQUEST,false,"지갑 주소가 일치하지 않습니다."));
+            }
+            // 서명 검증
+            boolean isValid = signatureService.verifySignature(
+                    signRequest.getMessage(),
+                    signRequest.getSignature(),
+                    user.getUserAddress()
+            );
+            if (isValid) {
+                // 프로젝트 ID를 가져와서 해당 프로젝트의 서명 상태를 업데이트
+                boolean isAllSigned = updateProjectSignatureStatus(projectId, user);
+
+                //모두 서명이 완료 되었으면 true 보내주기
+                if(isAllSigned) return ResponseEntity.ok(ApiResponse.success(true,"서명이 유효하고 모든 서명이 완료 되었습니다."));
+                return ResponseEntity.ok(ApiResponse.success(false,"서명이 유효합니다."));
+            } else {
+                return ResponseEntity.badRequest().body(ApiResponse.error(HttpStatus.BAD_REQUEST,false,"유효하지 않은 서명입니다."));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR,"Error verifying signature: " + e.getMessage()));
+
+        }
+    }
+
+
+    /**
+     *
+     * @ 작성자   : 이병수
+     * @ 작성일   : 2024-09-24
+     * @ 설명     : 서명 여부 업데이트 및 프로젝트 상태 변경
+
+     * @param projectId
+     * @param user
+     * @return true : 모두 서명완료 , false 모두 서명 x
+     */
+    private boolean updateProjectSignatureStatus(Long projectId, User user) {
+        // 프로젝트 리포지토리 가져오기 (주입 필요)
+        FreelancerProject project = freelancerProjectRepository.findById(projectId)
+                .orElseThrow(() -> new RuntimeException("프로젝트를 찾을 수 없습니다."));
+        if(user.getRoles().contains("ROLE_FREELANCER")) {
+            project.setFreelancerSigned(true);
+
+        }else{
+            project.setClientSigned(true);
+        }
+
+
+        // 변경 사항 저장
+        freelancerProjectRepository.save(project);
+
+        // 모든 프로젝트_프리랜서 각각 두명의 모두 서명이 완료되면 project pending -> progress로 변경
+        List<FreelancerProject> allFreelancerProjects = freelancerProjectRepository.findAllByProjectId(projectId);
+
+        boolean isAllSigned = true;
+        for( FreelancerProject freelancerProject : allFreelancerProjects) {
+            if(!(freelancerProject.isFreelancerSigned() && freelancerProject.isClientSigned())) {
+                isAllSigned = false;
+                break;
+            }
+
+        }
+
+        //모두 전자서명이 완료될 경우에 프로젝트 상태 업데이트
+        if(isAllSigned){
+            Project currentProject = projectRepository.findById(projectId)
+                    .orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
+
+            currentProject.updateStatus(ProjectStatus.PROGRESS); // 상태 변경
+            return true;
+        }
+        return false;
     }
 
     /**

@@ -80,90 +80,13 @@ public class ProjectController {
 
     @PostMapping("/{projectId}/contract/sign")
     public ResponseEntity<ApiResponse<Boolean>> verifySignature(@PathVariable Long projectId, @RequestBody SignRequest signRequest, @AuthUser User user){
-        Long userId = user.getId();
-        Project project = projectRepository.findById(projectId).orElse(null);
 
-        try{
-            String loggedInUserAddress = userService.getUserAddress(userId);
+        return projectService.verifySignature(projectId,signRequest,user);
 
-            // 요청에서 서명한 지갑 주소와 로그인한 사용자의 지갑 주소 비교
-            if (!user.getUserAddress().equalsIgnoreCase(loggedInUserAddress)) {
-                return ResponseEntity.badRequest().body(ApiResponse.error(HttpStatus.BAD_REQUEST,false,"지갑 주소가 일치하지 않습니다."));
-            }
-            // 서명 검증
-            boolean isValid = signatureService.verifySignature(
-                    signRequest.getMessage(),
-                    signRequest.getSignature(),
-                    user.getUserAddress()
-            );
-            if (isValid) {
-                // 프로젝트 ID를 가져와서 해당 프로젝트의 서명 상태를 업데이트
-                boolean isAllSigned = updateProjectSignatureStatus(projectId, user);
 
-                //모두 서명이 완료 되었으면 true 보내주기
-                if(isAllSigned) return ResponseEntity.ok(ApiResponse.success(true,"서명이 유효하고 모든 서명이 완료 되었습니다."));
-                return ResponseEntity.ok(ApiResponse.success(false,"서명이 유효합니다."));
-            } else {
-                return ResponseEntity.badRequest().body(ApiResponse.error(HttpStatus.BAD_REQUEST,false,"유효하지 않은 서명입니다."));
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR,"Error verifying signature: " + e.getMessage()));
 
-        }
     }
 
-    private FreelancerProjectRepository freelancerProjectRepository;
-
-    // 프로젝트 서명 상태 업데이트 메서드
-
-    /**
-     *
-     * @ 작성자   : 이병수
-     * @ 작성일   : 2024-09-24
-     * @ 설명     : 서명 여부 업데이트 및 프로젝트 상태 변경
-
-     * @param projectId
-     * @param user
-     * @return true : 모두 서명완료 , false 모두 서명 x
-     */
-    private boolean updateProjectSignatureStatus(Long projectId, User user) {
-        // 프로젝트 리포지토리 가져오기 (주입 필요)
-        FreelancerProject project = freelancerProjectRepository.findById(projectId)
-                .orElseThrow(() -> new RuntimeException("프로젝트를 찾을 수 없습니다."));
-        if(user.getRoles().contains("ROLE_FREELANCER")) {
-            project.setFreelancerSigned(true);
-
-        }else{
-            project.setClientSigned(true);
-        }
-
-
-        // 변경 사항 저장
-        freelancerProjectRepository.save(project);
-
-        // 모든 프로젝트_프리랜서 각각 두명의 모두 서명이 완료되면 project pending -> progress로 변경
-        List<FreelancerProject> allFreelancerProjects = freelancerProjectRepository.findAllByProjectId(projectId);
-
-        boolean isAllSigned = true;
-        for( FreelancerProject freelancerProject : allFreelancerProjects) {
-            if(!(freelancerProject.isFreelancerSigned() && freelancerProject.isClientSigned())) {
-                isAllSigned = false;
-                break;
-            }
-
-        }
-
-        //모두 전자서명이 완료될 경우에 프로젝트 상태 업데이트
-        if(isAllSigned){
-            Project currentProject = projectRepository.findById(projectId)
-                    .orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
-
-            currentProject.updateStatus(ProjectStatus.PROGRESS); // 상태 변경
-            return true;
-        }
-        return false;
-    }
 
 
 

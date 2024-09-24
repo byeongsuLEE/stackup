@@ -20,7 +20,7 @@ public class BoardLanguage {
     @JoinColumn(name = "language_id")
     private Language language;
 
-    @ManyToOne
-    @JoinColumn(name = "board_id")
-    private Board board;
+//    @ManyToOne
+//    @JoinColumn(name = "board_id")
+//    private Board board;
 }

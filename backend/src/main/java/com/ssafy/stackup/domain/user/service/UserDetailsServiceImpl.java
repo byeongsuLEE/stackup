@@ -41,19 +41,15 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
 
-        User user = userRepository.findById(Long.parseLong(identifier)).orElseThrow(() ->
-           new CustomException(ErrorCode.USER_NOT_FOUND));;
-
-
-
-//        if(identifier.contains("@")){
-//            user = clientRepository.findByEmail(identifier).orElseThrow(() ->
-//            new CustomException(ErrorCode.USER_NOT_FOUND));
-//        }
-//        else{
-//             user = userRepository.findById(Long.parseLong(identifier)).orElseThrow(() ->
-//                    new CustomException(ErrorCode.USER_NOT_FOUND));
-//        }
+        User user = null;
+        if(identifier.contains("@")){
+            user = clientRepository.findByEmail(identifier).orElseThrow(() ->
+            new CustomException(ErrorCode.USER_NOT_FOUND));
+        }
+        else{
+             user = userRepository.findById(Long.parseLong(identifier)).orElseThrow(() ->
+                    new CustomException(ErrorCode.USER_NOT_FOUND));
+        }
 
 
         return new UserAdapter(user);

@@ -22,14 +22,22 @@ spring:
     multipart:
       max-file-size: 10MB
       max-request-size: 20MB
+  main:
+    allow-bean-definition-overriding: true
 
   data:
     redis:
       host: ${REDIS_IP}
       port: 6379
       password: ${REDIS_PASSWORD}
-#    elasticsearch:
-#      uris: http://localhost:9200
+    elasticsearch:
+      repositories:
+        enabled: true
+  elasticsearch:
+    uris: http://localhost:9200
+    connection-timeout: 3000
+    socket-timeout: 3000
+
 
   security:
     oauth2:

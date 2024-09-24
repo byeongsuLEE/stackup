@@ -28,9 +28,9 @@ public class Language {
 
     private String name;
 
-    @OneToMany(mappedBy = "language", cascade = CascadeType.ALL, orphanRemoval = true)
-    List <BoardLanguage> boardLanguages = new ArrayList<>();
-
-    @OneToMany(mappedBy = "language", cascade = CascadeType.ALL, orphanRemoval = true)
-    List <FreelancerLanguage> freelancerLanguages = new ArrayList<>();
+//    @OneToMany(mappedBy = "language", cascade = CascadeType.ALL, orphanRemoval = true)
+//    List <BoardLanguage> boardLanguages = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "language", cascade = CascadeType.ALL, orphanRemoval = true)
+//    List <FreelancerLanguage> freelancerLanguages = new ArrayList<>();
 }

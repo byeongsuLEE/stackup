@@ -128,7 +128,6 @@ public class UserServiceImpl implements UserService {
                 .businessRegistrationNumber(requestDto.getBusinessRegistrationNumber())
                 .totalScore(0.0)
                 .reportedCount(0)
-                .evaluatedCount(0)
                 .build();
 
 
@@ -147,15 +146,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    /**
-     * 클라이언트 로그인 인증 후 토큰 발행
-     * @ 작성자   : 이병수
-     * @ 작성일   : 2024-09-23
-     * @ 설명     :
-     * @param requestDto
-     * @param response
-     * @return
-     */
+
     @Override
     @Transactional
     public LoginResponseDto login(ClientLoginRequestDto requestDto, HttpServletResponse response) {
@@ -165,8 +156,10 @@ public class UserServiceImpl implements UserService {
         );
 
         UsernamePasswordAuthenticationToken authenticationToken = new
-                UsernamePasswordAuthenticationToken(String.valueOf(user.getId()), requestDto.getPassword());
+                UsernamePasswordAuthenticationToken(requestDto.getEmail(), requestDto.getPassword());
 
+        boolean matches = bCryptPasswordEncoder.matches(requestDto.getPassword(),user.getPassword());
+        System.out.println(matches);
         Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
 
         TokenDto tokenDto = tokenProvider.generateToken(authentication,userType);

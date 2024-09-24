@@ -1,5 +1,6 @@
 package com.ssafy.stackup.domain.board.dto;
 
+import com.ssafy.stackup.domain.board.entity.Level;
 import com.ssafy.stackup.domain.framework.dto.BoardFrameworkUpdateRequest;
 import com.ssafy.stackup.domain.language.dto.BoardLanguageUpdateRequest;
 import lombok.Data;
@@ -28,7 +29,7 @@ public class BoardCreateRequest {
     private String requirements;
     private Boolean isCharged;
     private String address;
-    private String level;
+    private Level level;
     private Date deadline;
     private Date upload;
     private List<Long> applicantIds;

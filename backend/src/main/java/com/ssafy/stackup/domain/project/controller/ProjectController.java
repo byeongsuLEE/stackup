@@ -7,8 +7,10 @@ import com.ssafy.stackup.domain.project.dto.response.ProjectInfoResponseDto;
 import com.ssafy.stackup.domain.project.dto.request.ProjectStartRequestDto;
 import com.ssafy.stackup.domain.project.dto.request.SignRequest;
 import com.ssafy.stackup.domain.project.dto.response.ProjectSignResponseDto;
+import com.ssafy.stackup.domain.project.dto.response.ProjectStepCheckResponseDto;
 import com.ssafy.stackup.domain.project.entity.Project;
 import com.ssafy.stackup.domain.project.entity.ProjectStatus;
+import com.ssafy.stackup.domain.project.entity.ProjectStep;
 import com.ssafy.stackup.domain.project.repository.ProjectRepository;
 import com.ssafy.stackup.domain.project.service.ProjectService;
 import com.ssafy.stackup.domain.project.service.SignatureService;
@@ -78,15 +80,33 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(project));
     }
 
+
+    /**
+     * 계약서 전자 서명하기
+     * @ 작성자   : 이병수
+     * @ 작성일   : 2024-09-24
+     * @ 설명     : 계약서 전자 서명하기
+     * @param projectId
+     * @param signRequest
+     * @param user
+     * @return
+     */
     @PostMapping("/{projectId}/contract/sign")
     public ResponseEntity<ApiResponse<Boolean>> verifySignature(@PathVariable Long projectId, @RequestBody SignRequest signRequest, @AuthUser User user){
 
         return projectService.verifySignature(projectId,signRequest,user);
-
-
-
     }
 
+
+    @PatchMapping("/{projectId}/step/check")
+    public ResponseEntity<ApiResponse<ProjectStepCheckResponseDto>> projectStepCheck(@PathVariable Long projectId ,@AuthUser User user){
+        ProjectStepCheckResponseDto projectStepCheckResponseDto = projectService.projectStepCheck(projectId, user);
+        String message = "프로젝트 확인이 완료 되었습니다.";
+        if(projectStepCheckResponseDto.isChangeProjectStep()){
+            message = "프로젝트 확인 완료 및 프로젝트 단계가 변경되었습니다.";
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(projectStepCheckResponseDto,message));
+    }
 
 
 

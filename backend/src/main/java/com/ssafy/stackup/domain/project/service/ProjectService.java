@@ -4,6 +4,8 @@ import com.ssafy.stackup.common.response.ApiResponse;
 import com.ssafy.stackup.domain.project.dto.request.SignRequest;
 import com.ssafy.stackup.domain.project.dto.response.ProjectInfoResponseDto;
 import com.ssafy.stackup.domain.project.dto.request.ProjectStartRequestDto;
+import com.ssafy.stackup.domain.project.dto.response.ProjectStepCheckResponseDto;
+import com.ssafy.stackup.domain.project.entity.ProjectStep;
 import com.ssafy.stackup.domain.user.entity.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,4 +22,6 @@ public interface ProjectService {
     ProjectInfoResponseDto getProjectInfo(Long projectId);
 
     ResponseEntity<ApiResponse<Boolean>> verifySignature(Long projectId, SignRequest signRequest, User user);
+
+    ProjectStepCheckResponseDto projectStepCheck(Long projectId, User user);
 }

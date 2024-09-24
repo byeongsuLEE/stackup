@@ -23,6 +23,8 @@ public class Project{
     @JoinColumn(name = "client_id")
     private Client client;
 
+
+    @Enumerated(EnumType.STRING)
     @Column(name = "step")
     private ProjectStep step; // 프로젝트 단계
 
@@ -41,11 +43,13 @@ public class Project{
     @Column(name = "certificate_url")
     private String certificateUrl;
 
+    @Builder.Default
     @Column(name ="client_step_confirmed")
-    private boolean clientStepConfirmed;
+    private boolean clientStepConfirmed = false;
 
+    @Builder.Default
     @Column(name = "freelancer_step_confirmed")
-    private boolean freelancerStepConfirmed;
+    private boolean freelancerStepConfirmed = false;
 
     @OneToMany (mappedBy = "project" , cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<FreelancerProject> freelancerProjectList;
@@ -54,8 +58,9 @@ public class Project{
     @JoinColumn(name = "board_id")
     private Board board; // 프로젝트 모집 게시글 (1대다 관계)
 
-    public void nextProjectStep(){
+    public ProjectStep nextProjectStep(){
        this.step =  this.step.next();
+       return  this.step;
     }
 
     public void finishProjectStep(){
@@ -89,5 +94,11 @@ public class Project{
 
     public void updateStatus(ProjectStatus projectStatus) {
         this.status = projectStatus;
+    }
+    public void updateIsFreelancerConfirmed() {
+        this.freelancerStepConfirmed = true;
+    }
+    public void updateIsClientStepConfirmed() {
+        this.clientStepConfirmed = true;
     }
 }

@@ -1,26 +1,7 @@
-import { useState } from "react";
 import DoneButton from "../common/DoneButton";
 import CalenderRange from "./CalenderRange";
-import { pinata } from "../../apis/NftApi";
 
 const RegisterForm = () => {
-  const [ file, setFile ] = useState<File | null>(null);
-  
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const selectedFile = e.target.files?.[0] || null;
-    setFile(selectedFile);
-  };
-
-  const handleUpload = () => {
-    if (!file) {
-      console.error('파일이 선택되지 않았습니다.');
-      return;
-    }
-    
-    const formData = new FormData();
-    formData.append('file', file);
-    pinata(formData);
-  }
 
   return (
     <div className="bg-bgGreen border flex flex-col border-mainGreen w-auto h-auto p-10 rounded-lg">
@@ -38,9 +19,9 @@ const RegisterForm = () => {
       </div>
 
       <label htmlFor="projectFile" className="text-sm mt-10">3. 프로젝트 증명서</label>
-      <input type="file" className="file-input file-input-bordered ml-5 w-[400px] mt-3 h-[30px] max-w-xs" onChange={handleFileChange}/>
+      <input type="file" className="file-input file-input-bordered ml-5 w-[400px] mt-3 h-[30px] max-w-xs" />
 
-      <div className="text-right mt-3" onClick={handleUpload}>
+      <div className="text-right mt-3" >
       <DoneButton width={100} height={30} title="등록하기"/>
       </div>
     </div>

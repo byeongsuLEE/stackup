@@ -13,7 +13,7 @@ export interface freelanceSignupInfo {
   selfIntroduction: string
 }
 
-//== 클라이언트 회원가입 ==//
+//== 클라이언트회원가입 ==//
 export interface clientSignupInfo {
     name: string,
     email: string,
@@ -24,7 +24,7 @@ export interface clientSignupInfo {
     phone: string
   }
 
-//== 클라이언트 로그인 ==//
+//== 클라이언트로그인 ==//
 export interface clientLoginInfo {
     email: string,
     password: string

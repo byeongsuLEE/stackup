@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
@@ -14,6 +15,9 @@ public class RedisConfiguration {
     private String redisHost;
     @Value("${spring.data.redis.port}")
     private int redisPort;
+    @Value("${spring.data.redis.password}")
+    private String redisPassword;
+
 
 
     /*
@@ -22,7 +26,14 @@ public class RedisConfiguration {
    */
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory(redisHost,redisPort);
+        RedisConnectionFactory factory = new LettuceConnectionFactory();
+        // RedisStandaloneConfiguration을 사용하여 호스트, 포트, 패스워드를 설정
+        RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration();
+        redisConfig.setHostName(redisHost);
+        redisConfig.setPort(redisPort);
+        redisConfig.setPassword(redisPassword); // 패스워드 설정
+
+        return new LettuceConnectionFactory(redisConfig);
 
     }
 

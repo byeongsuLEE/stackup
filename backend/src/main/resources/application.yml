@@ -1,0 +1,90 @@
+server:
+  servlet:
+    context-path: /api
+
+spring:
+  datasource:
+    url: ${DB_URL} # 데이터베이스 URL (환경 변수 사용)
+    username: ${DB_USERNAME} # 데이터베이스 사용자 이름 (환경 변수 사용)
+    password: ${DB_PASSWORD} # 데이터베이스 비밀번호 (환경 변수 사용)
+    driver-class-name: com.mysql.cj.jdbc.Driver # 데이터베이스 드라이버 클래스 이름 설정
+
+  jpa:
+    #    show-sql: true # JPA SQL 출력 설정
+    database-platform: org.hibernate.dialect.MySQL8Dialect # JPA 데이터베이스 플랫폼 설정
+    hibernate:
+      ddl-auto: update # Hibernate DDL 자동 설정
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.MySQL8Dialect # Hibernate 방언 설정
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+
+  data:
+    redis:
+      host: ${SERVER_URL}
+      port: 6379
+#    elasticsearch:
+#      uris: http://localhost:9200
+
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-secret: ${GITHUB_SECRET}
+            client-id: ${GITHUB_ID}
+            scope: read:user, user:email
+            redirect-uri: "http://localhost:8080/api/login/oauth2/code/github"
+        provider:
+          github:
+            authorization-uri: https://github.com/login/oauth/authorize
+            token-uri: https://github.com/login/oauth/access_token
+            user-info-uri: https://api.github.com/user
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: my-group
+      auto-offset-reset: earliest
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+
+
+jwt:
+  access_expiration_time: 360000000 # 1시간 액세스 토큰 만료 시간 설정
+  refresh_expiration_time: 604800016 # 1주일 리프레시 토큰 만료 시간 설정
+  secret: ${SECRET} # JWT 시크릿 키 설정 (환경 변수 사용)
+
+logging:
+  level:
+    root: info # 루트 로깅 레벨 설정
+    com.ssafy: debug # com.wava 패키지 로깅 레벨 설정
+
+cloud:
+  aws:
+    s3:
+      bucket: ${S3_BUCKET} # S3 버킷 이름 설정 (환경 변수 사용)
+    credentials:
+      access-key: ${AWS_ACCESS_KEY_ID} # AWS 액세스 키 (환경 변수 사용)
+      secret-key: ${AWS_SECRET_ACCESS_KEY} # AWS 시크릿 키 (환경 변수 사용)
+    region:
+      static: ap-northeast-2 # AWS 리전 설정 (환경 변수 사용)
+    stack:
+      auto: false # cloud formation 기능을 사용하지 않기 위함
+
+redirect:
+  url:
+    callback: "http://localhost:5173/callback"
+    main: "http://localhost:5173"
+
+portone:
+  api-key: 2266227468060441
+  api-secret: QuEDNv6I2IkSg2hqbpqAr31vy0fQK2DoqFYbMtE0GnG5eEdB9MSR6gHqkdhVx8xXoe8JqXSFN5pFR3Uv
+
+default:
+  image: https://raw.githubusercontent.com/tailwindlabs/heroicons/56c073c2c9a66d2e51adb93d8e87e2e941d5b6db/src/20/solid/user-circle.svg

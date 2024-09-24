@@ -67,6 +67,7 @@ export const pinata = async (formData: FormData): Promise<string> => {
         });
 
         return response.data.IpfsHash;
+        
     } catch (error) {
         console.error('업로드 중 오류가 발생했습니다:', error);
         throw new Error('파일 업로드 실패');

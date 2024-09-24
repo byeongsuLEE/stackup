@@ -1,6 +1,6 @@
 import axios from "axios"
 import { freelanceStore } from "../store/FreelanceStore"
-import { clientLoginInfo, clientSignupInfo, freelanceSignupInfo } from "./User.type"
+import { clientLoginInfo, clientSignupInfo, freelanceSignupInfo } from "./User.type";
 
 const BASE_URL: string = "http://localhost:8080/api/user"
 
@@ -26,6 +26,9 @@ export const getToken = async (userId: string | null): Promise<string> => {
         
         //== userType 저장 ==//
         window.sessionStorage.setItem("userType", response.data.data.userType);
+
+        //== id 저장 ==//
+        window.sessionStorage.setItem("userId", response.data.data.userId);
 
         return "로그인";
 

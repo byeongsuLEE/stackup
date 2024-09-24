@@ -1,6 +1,6 @@
 package com.ssafy.stackup.domain.project.service;
 
-import com.ssafy.stackup.domain.project.dto.ProjectInfoResponseDto;
+import com.ssafy.stackup.domain.project.dto.response.ProjectInfoResponseDto;
 import com.ssafy.stackup.domain.project.dto.request.ProjectStartRequestDto;
 import com.ssafy.stackup.domain.user.entity.User;
 import org.springframework.web.multipart.MultipartFile;

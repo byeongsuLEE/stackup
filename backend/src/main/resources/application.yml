@@ -25,8 +25,9 @@ spring:
 
   data:
     redis:
-      host: ${SERVER_URL}
+      host: ${REDIS_IP}
       port: 6379
+      password: ${REDIS_PASSWORD}
 #    elasticsearch:
 #      uris: http://localhost:9200
 

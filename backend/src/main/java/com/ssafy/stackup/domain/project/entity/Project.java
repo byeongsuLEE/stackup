@@ -54,11 +54,11 @@ public class Project{
     @JoinColumn(name = "board_id")
     private Board board; // 프로젝트 모집 게시글 (1대다 관계)
 
-    void nextProjectStep(){
+    public void nextProjectStep(){
        this.step =  this.step.next();
     }
 
-    void finishProjectStep(){
+    public void finishProjectStep(){
         this.status =  ProjectStatus.FINISH;
     }
 
@@ -70,7 +70,7 @@ public class Project{
      * @ 설명     :단계 확인 체크 메서드
      * @return
      */
-    boolean checkUsersConfirm(){
+    public  boolean checkUsersConfirm(){
         return this.clientStepConfirmed && this.freelancerStepConfirmed;
     }
 
@@ -81,10 +81,13 @@ public class Project{
      * @ 설명     :
 
      */
-    void resetUserStepConfirmed(){
+    public void resetUserStepConfirmed(){
         this.clientStepConfirmed = false;
         this.freelancerStepConfirmed = false;
 
     }
 
+    public void updateStatus(ProjectStatus projectStatus) {
+        this.status = projectStatus;
+    }
 }

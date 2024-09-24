@@ -2,7 +2,6 @@ package com.ssafy.stackup.domain.project.service;
 
 
 import com.ssafy.stackup.common.exception.CustomException;
-import com.ssafy.stackup.common.exception.ResourceNotFoundException;
 import com.ssafy.stackup.common.response.ErrorCode;
 import com.ssafy.stackup.common.s3.service.S3ImageUpLoadService;
 import com.ssafy.stackup.common.util.UserUtil;
@@ -12,10 +11,7 @@ import com.ssafy.stackup.domain.board.entity.BoardFramework;
 import com.ssafy.stackup.domain.board.entity.BoardLanguage;
 import com.ssafy.stackup.domain.board.repository.BoardApplicantRepository;
 import com.ssafy.stackup.domain.board.repository.BoardRepository;
-import com.ssafy.stackup.domain.framework.dto.BoardFrameworkUpdateRequest;
-import com.ssafy.stackup.domain.framework.entity.Framework;
-import com.ssafy.stackup.domain.language.dto.BoardLanguageUpdateRequest;
-import com.ssafy.stackup.domain.project.dto.ProjectInfoResponseDto;
+import com.ssafy.stackup.domain.project.dto.response.ProjectInfoResponseDto;
 import com.ssafy.stackup.domain.project.dto.request.ProjectStartRequestDto;
 import com.ssafy.stackup.domain.project.entity.Project;
 import com.ssafy.stackup.domain.project.entity.ProjectStatus;
@@ -26,7 +22,6 @@ import com.ssafy.stackup.domain.user.entity.User;
 import com.ssafy.stackup.domain.user.entity.FreelancerProject;
 import com.ssafy.stackup.domain.user.repository.FreelancerProjectRepository;
 import com.ssafy.stackup.domain.user.repository.FreelancerRepository;
-import com.ssafy.stackup.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,7 +31,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 
 @Service

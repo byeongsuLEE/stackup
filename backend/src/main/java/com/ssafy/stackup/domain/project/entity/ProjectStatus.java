@@ -9,7 +9,7 @@ import jakarta.persistence.Enumerated;
  */
 
 public enum ProjectStatus {
-    pending,
-    progress,
-    finish
+    PENDING,
+    PROGRESS,
+    FINISH;
 }

@@ -94,7 +94,7 @@ public class ProjectServiceImpl implements ProjectService {
                 .board(board)
                 .title(board.getTitle())
                 .period(board.getPeriod())
-                .status(ProjectStatus.pending)
+                .status(ProjectStatus.PENDING)
                 .build();
 
         project= projectRepository.save(project);

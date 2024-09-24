@@ -1,5 +1,6 @@
 package com.ssafy.stackup.domain.recommend.dto;
 
+import com.ssafy.stackup.domain.board.entity.Level;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,7 +12,7 @@ public class BoardRecommendationResponse {
     private Long boardId;
     private String title;
     private String description;
-    private String level;
+    private Level level;
     private String requirements;
     private String worktype;
 }

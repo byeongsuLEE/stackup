@@ -88,7 +88,7 @@ export const useWeb3 = () => {
   const fetchSsfBalance = async (web3Instance: Web3, userAccount: string) => {
     if (!web3Instance || !userAccount) return;
 
-    const ssfContract = new web3Instance.eth.Contract(ERC20_ABI as any, SSF_TOKEN_CONTRACT_ADDRESS);
+    const ssfContract = new web3Instance.eth.Contract(ERC20_ABI, SSF_TOKEN_CONTRACT_ADDRESS);
 
     try {
       const balance = await ssfContract.methods.balanceOf(userAccount).call();

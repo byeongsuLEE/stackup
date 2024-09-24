@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { callNft } from "../../hooks/mintNft";
 import { useWeb3 } from "../../hooks/useWeb3";
 
 const Wallet = () => {
+  const { mintNFT } = callNft();
   const { account, ssfBalance } = useWeb3();
   const [isLogin, setIsLogin] = useState<boolean>();
 
@@ -13,6 +15,18 @@ const Wallet = () => {
     }
   }, [account]);
 
+  // 버튼 클릭 시 호출될 핸들러 함수
+  const handleMintNFT = async () => {
+    try {
+      // NFT 발행
+      await mintNFT()
+      alert("NFT 발행 호출");
+    } catch (error) {
+      console.error("NFT 발행 오류:", error);
+      alert("NFT 발행에 실패했습니다.");
+    }
+  };
+
   return (
     <>
       {isLogin ? (
@@ -20,6 +34,7 @@ const Wallet = () => {
           <span className="font-bold text-subGreen1 mb-2">나의 지갑 정보</span>
           <span>계정 : {account}</span>
           <span>잔액 : {ssfBalance} SSF</span>
+          <button onClick={handleMintNFT}>nft</button>
         </div>
       ) : (
         <div className="text-center mb-5">

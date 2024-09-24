@@ -6,7 +6,6 @@ interface CandidateProps {
   portfolio: string;
 }
 const Candidate = ({ name, rating, portfolio }: CandidateProps) => {
-
   return (
     <tr>
       <td>
@@ -21,10 +20,11 @@ const Candidate = ({ name, rating, portfolio }: CandidateProps) => {
       <td>
         <a href={portfolio}>{portfolio}</a>
       </td>
-      <td>
+      <td className="flex justify-between">
         <DoneButton width={60} height={30} title="프로필" />
+        <DoneButton width={80} height={30} title="채팅하기" />
       </td>
     </tr>
-  )
-}
+  );
+};
 export default Candidate;

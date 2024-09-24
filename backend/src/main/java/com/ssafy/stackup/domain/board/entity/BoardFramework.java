@@ -21,7 +21,7 @@ public class BoardFramework {
     @JoinColumn(name = "framework_id")
     private Framework framework;
 
-    @ManyToOne
-    @JoinColumn(name = "board_id")
-    private Board board;
+//    @ManyToOne
+//    @JoinColumn(name = "board_id")
+//    private Board board;
 }

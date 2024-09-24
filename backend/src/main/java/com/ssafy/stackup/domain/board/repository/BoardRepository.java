@@ -1,8 +1,9 @@
 package com.ssafy.stackup.domain.board.repository;
 
 import com.ssafy.stackup.domain.board.entity.Board;
+import com.ssafy.stackup.domain.framework.entity.Framework;
+import com.ssafy.stackup.domain.language.entity.Language;
 import com.ssafy.stackup.domain.user.entity.Freelancer;
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
+@Repository("BoardJpaRepo")
 public interface BoardRepository extends JpaRepository<Board, Long>{
 //    @Query("SELECT b FROM Board b WHERE (:worktype IS NULL OR b.worktype = :worktype) " +
 //            "AND (:deposit IS NULL OR b.deposit = :deposit) " +
@@ -32,11 +33,14 @@ public interface BoardRepository extends JpaRepository<Board, Long>{
             @Param("deposit") String deposit,
             @Param("classification") String classification);
 
+    @Query("select b from Board b " +
+            "left join fetch b.boardLanguages " +
+            "left join fetch b.boardFrameworks " +
+            "where b.boardId = :id")
+    Optional<Board> findById(@Param("id") Long id);
 
-    @EntityGraph(attributePaths = {"boardFrameworks", "boardLanguages", "boardApplicants"})
-    Optional<Board> findById(Long id);
-
-
+    List<Framework> findFrameworksByBoardId(Long boardId);
+    List<Language> findLanguagesByBoardId(Long boardId);
 
 //    List<Board> findByBoardLanguagesInAndBoardFrameworksInAndLevel(List<String> languages, List<String> frameworks, String level);
 }

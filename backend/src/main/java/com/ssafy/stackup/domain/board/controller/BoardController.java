@@ -6,6 +6,8 @@ import com.ssafy.stackup.common.response.ErrorCode;
 import com.ssafy.stackup.domain.board.dto.*;
 import com.ssafy.stackup.domain.board.entity.Board;
 import com.ssafy.stackup.domain.board.service.BoardService;
+import com.ssafy.stackup.domain.recommend.entity.Recommend;
+import com.ssafy.stackup.domain.recommend.service.RecommendationService;
 import com.ssafy.stackup.domain.user.entity.AuthUser;
 import com.ssafy.stackup.domain.user.entity.Client;
 import com.ssafy.stackup.domain.user.entity.Freelancer;
@@ -31,10 +33,21 @@ public class BoardController {
     @Autowired
     private ClientRepository clientRepository;
 
+    @Autowired
+    private RecommendationService recommendationService;
+
+
     @GetMapping
     public ResponseEntity<?> findAllBoards(){
         List<?> boards = boardService.getboards();
         return ResponseEntity.ok().body(ApiResponse.success(boards));
+    }
+
+    @GetMapping("/recommend-list")
+    public List<Recommend> findAllRecommendations(){
+//        List<?> recommends = recommendationService.findRecommend();
+//        return ResponseEntity.ok().body(ApiResponse.success(recommends));
+        return recommendationService.findRecommend();
     }
 
     //모집글 상세 조회
@@ -129,6 +142,13 @@ public class BoardController {
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("success", false, "error", e.getMessage()));
         }
+    }
+
+
+    @GetMapping("/recommend")
+    public List<Recommend> recommendBoards(@AuthUser User user) {
+        Long freelancerId = user.getId();
+        return recommendationService.recommendBoardsForFreelancer(freelancerId);
     }
 
 }

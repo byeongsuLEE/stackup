@@ -17,6 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LanguageService {
     private final LanguageRepository languageRepository;
+    private final BoardRepository boardRepository;
 
     @Transactional(readOnly = true)
     public List<Language> findAllLanguages() {
@@ -31,7 +32,7 @@ public class LanguageService {
 
     @Transactional(readOnly = true)
     public List<Language> findLanguagesByBoardId(Long boardId) {
-        return languageRepository.findLanguagesByBoardId(boardId);
+        return boardRepository.findLanguagesByBoardId(boardId);
     }
 
     public LanguageResponse createLanguage(LanguageRequest languageRequest) {

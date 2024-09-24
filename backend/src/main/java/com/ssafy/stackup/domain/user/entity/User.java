@@ -1,7 +1,6 @@
 package com.ssafy.stackup.domain.user.entity;
 
 
-import com.ssafy.stackup.domain.evaluation.entity.Evaluation;
 import com.ssafy.stackup.domain.project.entity.Project;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -34,7 +33,9 @@ public abstract class User {
 
     private String phone;
 
+    @Column (name = "user_address")
     private String userAddress;
+    @Column (name = "public_key")
     private String publicKey;
 
     @Column (name = "second_password")
@@ -49,20 +50,14 @@ public abstract class User {
     @Column(name = "reported_count")
     private Integer reportedCount;
 
-    @Column(name = " main_account")
+    @Column(name = "main_account")
     private String mainAccount;
-
-    @Column(name= "evaluated_count")
-    private Integer evaluatedCount;
 
 
     @ElementCollection
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
     protected List<String> roles;
-
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    protected Set<Evaluation> evaluations;
 
     public void updateEmail(String email) {
         this.email = email;
@@ -82,23 +77,10 @@ public abstract class User {
 
     public void updateTotalScore(Double totalScore) {
         this.totalScore = totalScore;
-        this.evaluatedCount++;
     }
 
     public void updateReportedCount(Integer reportedCount) {
         this.reportedCount = reportedCount;
     }
 
-    // 특정 역할이 있는지 확인하는 메서드
-    public boolean hasRole(String role) {
-        return roles != null && roles.contains(role);
-    }
-
-    public boolean isFreelancer() {
-        return hasRole("ROLE_FREELANCER");
-    }
-
-    public boolean isClient() {
-        return hasRole("ROLE_CLIENT");
-    }
 }

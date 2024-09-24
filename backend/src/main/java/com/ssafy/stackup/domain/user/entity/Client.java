@@ -46,7 +46,7 @@ public class Client extends User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return String.valueOf(this.getId());
+        return this.email;
     }
 
 

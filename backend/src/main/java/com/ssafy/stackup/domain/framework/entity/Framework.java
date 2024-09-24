@@ -26,9 +26,9 @@ public class Framework {
 
     private String name;
 
-    @OneToMany(mappedBy = "framework", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<BoardFramework> boardFrameworks = new ArrayList<>();
-
-    @OneToMany(mappedBy = "framework", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<FreelancerFramework> freelancerFrameworkList = new ArrayList<>();
+//    @OneToMany(mappedBy = "framework", cascade = CascadeType.ALL, orphanRemoval = true)
+//    List<BoardFramework> boardFrameworks = new ArrayList<>();
+//
+//    @OneToMany(mappedBy = "framework", cascade = CascadeType.ALL, orphanRemoval = true)
+//    List<FreelancerFramework> freelancerFrameworkList = new ArrayList<>();
 }

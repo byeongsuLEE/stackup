@@ -92,7 +92,7 @@ public class ProjectServiceImpl implements ProjectService {
                 .board(board)
                 .title(board.getTitle())
                 .period(board.getPeriod())
-                .status(ProjectStatus.PENDING)
+                .status(ProjectStatus.pending)
                 .build();
 
         project= projectRepository.save(project);

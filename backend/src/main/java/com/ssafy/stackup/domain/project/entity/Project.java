@@ -38,14 +38,9 @@ public class Project{
     private String period;
 
 
+
     @Column(name = "certificate_url")
     private String certificateUrl;
-
-    @Column(name ="client_step_confirmed")
-    private boolean clientStepConfirmed;
-
-    @Column(name = "freelancer_step_confirmed")
-    private boolean freelancerStepConfirmed;
 
     @OneToMany (mappedBy = "project" , cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<FreelancerProject> freelancerProjectList;
@@ -53,38 +48,5 @@ public class Project{
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
     private Board board; // 프로젝트 모집 게시글 (1대다 관계)
-
-    void nextProjectStep(){
-       this.step =  this.step.next();
-    }
-
-    void finishProjectStep(){
-        this.status =  ProjectStatus.FINISH;
-    }
-
-
-    /**
-     *
-     * @ 작성자   : 이병수
-     * @ 작성일   : 2024-09-24
-     * @ 설명     :단계 확인 체크 메서드
-     * @return
-     */
-    boolean checkUsersConfirm(){
-        return this.clientStepConfirmed && this.freelancerStepConfirmed;
-    }
-
-    /**
-     * 다음 단계 시 상태초기화
-     * @ 작성자   : 이병수
-     * @ 작성일   : 2024-09-24
-     * @ 설명     :
-
-     */
-    void resetUserStepConfirmed(){
-        this.clientStepConfirmed = false;
-        this.freelancerStepConfirmed = false;
-
-    }
 
 }

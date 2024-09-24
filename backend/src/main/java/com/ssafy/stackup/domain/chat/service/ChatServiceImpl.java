@@ -6,6 +6,7 @@ import com.ssafy.stackup.common.jwt.TokenProvider;
 import com.ssafy.stackup.common.response.ErrorCode;
 import com.ssafy.stackup.domain.chat.dto.reqeust.ChatDto;
 import com.ssafy.stackup.domain.chat.dto.response.ChatResponseDto;
+import com.ssafy.stackup.domain.chat.dto.response.ChatRoomInfoResponseDto;
 import com.ssafy.stackup.domain.chat.entity.Chat;
 import com.ssafy.stackup.domain.chat.entity.ChatRoom;
 import com.ssafy.stackup.domain.chat.repository.ChatRepository;
@@ -18,25 +19,27 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class ChatServiceImpl implements ChatService{
+public class ChatServiceImpl implements ChatService {
     private final ChatRepository chatRepository;
     private final UserRepository userRepository;
     private final TokenProvider tokenProvider;
     private final ChatRoomRepository chatRoomRepository;
 
     /**
+     * @param chatDto 채팅 데이터
+     * @param token   헤더에 들어있는 액세스 토큰 (유저 정보)
+     * @return
      * @ 작성자   : 이병수
      * @ 작성일   : 2024-09-15
      * @ 설명     : 전송한 채팅 저장
-     * @param chatDto 채팅 데이터
-     * @param token 헤더에 들어있는 액세스 토큰 (유저 정보)
-     * @return
      * @status 성공 : 201 , 실패 : 401, 404
      */
     @Override
@@ -46,7 +49,7 @@ public class ChatServiceImpl implements ChatService{
         User userOpt = userRepository.findById(Long.parseLong(authentication.getName())).orElseThrow(
                 () -> new CustomException(ErrorCode.USER_NOT_FOUND)
         );
-        ChatRoom chatRoom = channelValidate(chatDto.getChannelId());
+        ChatRoom chatRoom = channelValidate(chatDto.getChatroomId());
 
         Chat chat = Chat.builder()
                 .user(userOpt)
@@ -60,11 +63,11 @@ public class ChatServiceImpl implements ChatService{
     }
 
     /**
+     * @param channelId 채널 식별 아이디
+     * @return 채팅 로그 리스트
      * @ 작성자   : 이병수
      * @ 작성일   : 2024-09-15
      * @ 설명     : 채팅방에 해당되는 이전 채팅 로그 가져오기
-     * @param channelId 채널 식별 아이디
-     * @return 채팅 로그 리스트
      * @status 성공 : 200, 실패 : 404
      */
     @Override
@@ -85,17 +88,53 @@ public class ChatServiceImpl implements ChatService{
         return chatResponseDtoList;
     }
 
+    @Override
+    public ChatRoomInfoResponseDto startChatRoom(Long clientId, Long freelancerId) {
+
+        ChatRoom chatRoom = null;
+        Optional<ChatRoom> optionalChatRoom = chatRoomRepository.findByClientIdAndFreelancerId(clientId, freelancerId);
+        if (optionalChatRoom.isPresent()) {
+            chatRoom = optionalChatRoom.get();
+
+            return ChatRoomInfoResponseDto.builder()
+                    .chatRoomId(chatRoom.getId())
+                    .clientId(clientId)
+                    .freelancerId(freelancerId)
+                    .chats(chatRoom.getChats())
+                    .build();
+        }
+
+        User client = userRepository.findById(clientId).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
+        User freelancer = userRepository.findById(freelancerId).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        chatRoom= chatRoom.builder()
+                .chats(new ArrayList<>())
+                .client(client)
+                .freelancer(freelancer)
+                .build();
+
+        chatRoomRepository.save(chatRoom);
+
+
+        return ChatRoomInfoResponseDto.builder()
+                .chatRoomId(chatRoom.getId())
+                .clientId(clientId)
+                .freelancerId(freelancerId)
+                .chats(chatRoom.getChats())
+                .build();
+    }
+
     /**
+     * @param channelId 채널 식별 아이디
+     * @return 채팅 로그 리스트
      * @ 작성자   : 이병수
      * @ 작성일   : 2024-09-15
      * @ 설명     : 데이터베이스에 존재하는 채널인지 검증
-     * @param channelId 채널 식별 아이디
-     * @return 채팅 로그 리스트
      * @status 실패 : 404
      */
     private ChatRoom channelValidate(Long channelId) {
         ChatRoom chatRoom = chatRoomRepository.findById(channelId).orElseGet(null);
-        if(chatRoom == null) {
+        if (chatRoom == null) {
             throw new CustomException(ErrorCode.CHANNEL_NOT_FOUND);
         }
         return chatRoom;

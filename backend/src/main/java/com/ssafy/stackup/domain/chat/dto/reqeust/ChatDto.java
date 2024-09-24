@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ChatDto {
-    private Long channelId;
+    private Long chatroomId;
     private String name;
     private String registTime;
     private String message;

@@ -10,6 +10,7 @@ const metadataURI = `ipfs://${cid}`; // IPFS CID를 URI로 사용
 const NFT_ABI = MyNFT.abi;
 
 export const callNft = () => {
+
   const mintNFT = async () => {
     try {
       // MetaMask의 window.ethereum 객체가 존재하는지 확인

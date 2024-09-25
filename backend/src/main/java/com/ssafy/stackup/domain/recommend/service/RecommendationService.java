@@ -2,6 +2,7 @@ package com.ssafy.stackup.domain.recommend.service;
 
 import com.ssafy.stackup.domain.board.entity.Board;
 import com.ssafy.stackup.domain.board.entity.Level;
+import com.ssafy.stackup.domain.board.repository.BoardRepository;
 import com.ssafy.stackup.domain.recommend.entity.Recommend;
 import com.ssafy.stackup.domain.recommend.repository.BoardElasticsearchRepository;
 import com.ssafy.stackup.domain.user.entity.Freelancer;
@@ -24,6 +25,8 @@ public class RecommendationService {
     private final FreelancerRepository freelancerRepository;
     @Autowired
     private final BoardElasticsearchRepository boardElasticsearchRepo;
+    @Autowired
+    private final BoardRepository boardRepository;
 
     public List<Recommend> findRecommend () {
         // Elasticsearch에 있는 모든 Board를 가져와 출력
@@ -35,7 +38,7 @@ public class RecommendationService {
         return boardElasticsearchRepo.findById(id).orElse(null);
     }
 
-    public List<Recommend> recommendBoardsForFreelancer(Long freelancerId) {
+    public Set<Long> recommendBoardsForFreelancer(Long freelancerId) {
         // 1. 프리랜서 정보 가져오기
         Freelancer freelancer = freelancerRepository.findById(freelancerId)
                 .orElseThrow(() -> new IllegalArgumentException("프리랜서를 찾을 수 없습니다."));
@@ -44,36 +47,63 @@ public class RecommendationService {
         List<Recommend> recommendListByClassification = boardElasticsearchRepo.findByClassification(freelancer.getClassification()).stream().toList();
 //        System.out.println(recommendListByClassification.size());
         //
-//        // 2. 프리랜서가 사용하는 언어에 맞는 보드 추천
-//        Set<String> languages = freelancer.getLanguages().stream()
-//                .map(language -> language.getLanguage().getName())
-//                .collect(Collectors.toSet());
-//        List<Board> recommendedBoardsByLanguage = boardElasticsearchRepo.findByBoardLanguages_Language_NameIn(languages);
-//        System.out.println(recommendedBoardsByLanguage);
-//        System.out.println(languages);
-//
+//         2. 프리랜서가 사용하는 언어에 맞는 보드 추천
+        Set<String> languages = freelancer.getLanguages().stream()
+                .map(language -> language.getLanguage().getName())
+                .collect(Collectors.toSet());
+        System.out.println(languages);
+        // 각 언어별로 추천 검색
+        Set<Recommend> recommendedBoardsByLanguage = new HashSet<>();
+        for (String language : languages) {
+            List<Recommend> recommendsByLanguage = boardElasticsearchRepo.findByLanguages(language);
+            System.out.println(recommendsByLanguage.size()+ "언어" + language);
+            recommendedBoardsByLanguage.addAll(recommendsByLanguage);
+        }
+
 //        // 3. 프리랜서가 사용하는 프레임워크에 맞는 보드 추천
-//        Set<String> frameworks = freelancer.getFrameworks().stream()
-//                .map(framework -> framework.getFramework().getName())
-//                .collect(Collectors.toSet());
-//        List<Board> recommendedBoardsByFramework = boardElasticsearchRepo.findByBoardFrameworks_Framework_NameIn(frameworks);
+        Set<String> frameworks = freelancer.getFrameworks().stream()
+                .map(framework -> framework.getFramework().getName())
+                .collect(Collectors.toSet());
+        // 각 프레임워크별로 추천 검색
+        Set<Recommend> recommendedBoardsByFramework = new HashSet<>();
+        for (String framework : frameworks) {
+            List<Recommend> recommendsByFramework = boardElasticsearchRepo.findByFrameworks(framework);
+            recommendedBoardsByFramework.addAll(recommendsByFramework);
+        }
 //
-//        // 4. 프리랜서의 경력 연수에 맞는 레벨을 계산하여 보드 추천
-//        Integer careerYear = freelancer.getCareerYear();
-//        Level freelancerLevel = getLevelByCareerYear(careerYear);
-//
-//        // 프리랜서 경력에 맞는 보드 추천
-//        List<Board> recommendedBoardsByLevel = boardElasticsearchRepo.findByLevel(freelancerLevel);
-//
-//
-//        // 추천된 모든 보드들을 하나의 리스트로 합침
-//        Set<Board> recommendedBoards = new HashSet<>(recommendedBoardsByLanguage);
+        // 4. 프리랜서의 경력 연수에 맞는 레벨을 계산하여 보드 추천
+        Integer careerYear = freelancer.getCareerYear();
+        Level freelancerLevel = getLevelByCareerYear(careerYear);
+        System.out.println(freelancerLevel);
+
+        // 프리랜서 경력에 맞는 보드 추천
+        List<Recommend> recommendedBoardsByLevel = boardElasticsearchRepo.findByLevel(freelancerLevel);
+
+
+        // 추천된 모든 보드들을 하나의 리스트로 합침
+        Set<Recommend> recommendedBoards = new HashSet<>(recommendedBoardsByLanguage);
+//        recommendedBoards.addAll(recommendListByClassification);
 //        recommendedBoards.addAll(recommendedBoardsByFramework);
 //        recommendedBoards.addAll(recommendedBoardsByLevel);
-        Set<Recommend> recommendedBoards = new HashSet<>(recommendListByClassification);
-        recommendedBoards.addAll(recommendListByClassification);
+//        recommendedBoards.addAll(recommendedBoardsByLanguage);
 
-        return new ArrayList<>(recommendedBoards);
+        List<Board> boards = new ArrayList<>();
+
+        Set<Long> boardIds = recommendedBoards.stream()
+                .map(Recommend::getBoardId) // Recommend 객체에서 boardId를 추출
+                .collect(Collectors.toSet());
+        System.out.println(boardIds);
+//        for (Long boardId : boardIds) {
+//            boards.add(boardRepository.findById(boardId).orElse(null));
+//        }
+
+        // 2. boardId로 BoardRepository를 통해 Board 리스트 조회
+//        List<Board> boards = boardRepository.findAllById(boardIds);
+
+        // 3. 조회된 Board 리스트 반환
+        return boardIds;
+
+//        return new ArrayList<>(recommendedBoards);
     }
 
     private Level getLevelByCareerYear(int careerYear) {

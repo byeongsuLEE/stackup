@@ -3,6 +3,8 @@ package com.ssafy.stackup.domain.board.entity;
 import com.ssafy.stackup.domain.language.entity.Language;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 @Entity
 @Table(name = "board_language")
@@ -18,6 +20,7 @@ public class BoardLanguage {
 
     @ManyToOne
     @JoinColumn(name = "language_id")
+    @Field(type= FieldType.Object)
     private Language language;
 
 //    @ManyToOne

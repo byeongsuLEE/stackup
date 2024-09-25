@@ -17,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -146,9 +143,10 @@ public class BoardController {
 
 
     @GetMapping("/recommend")
-    public List<Recommend> recommendBoards(@AuthUser User user) {
+    public List<BoardFindAllResponse> recommendBoards(@AuthUser User user) {
         Long freelancerId = user.getId();
-        return recommendationService.recommendBoardsForFreelancer(freelancerId);
+        Set<Long> boardIds = recommendationService.recommendBoardsForFreelancer(freelancerId);
+        return boardService.findBoardsByIds(boardIds);
     }
 
     @GetMapping("/recommend/{recommendId}")

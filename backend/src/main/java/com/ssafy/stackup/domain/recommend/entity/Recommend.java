@@ -1,6 +1,8 @@
 package com.ssafy.stackup.domain.recommend.entity;
 
 import com.ssafy.stackup.domain.board.entity.BoardFramework;
+import com.ssafy.stackup.domain.board.entity.BoardLanguage;
+import com.ssafy.stackup.domain.board.entity.Level;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -21,11 +23,20 @@ public class Recommend {
     @Column(name = "recommend_id")
     private String recommendId;
 
-    @Column(nullable = false)
     @Field(type = FieldType.Keyword)
     private String classification;
 
-    @Column(nullable = false)
     @Field(type = FieldType.Nested, includeInParent = true)
     private List<BoardFramework> frameworks;
+
+//    @Field(type = FieldType.Nested, includeInParent = true)
+//    private List<BoardLanguage> languages;
+    @Field(type = FieldType.Nested, includeInParent = true)
+    private List<String> languages;
+
+    @Field(type = FieldType.Keyword)
+//    @Field(type= FieldType.Nested)
+    private Level level;
+
+    private Long boardId;
 }

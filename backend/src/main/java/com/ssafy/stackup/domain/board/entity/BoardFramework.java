@@ -4,6 +4,8 @@ package com.ssafy.stackup.domain.board.entity;
 import com.ssafy.stackup.domain.framework.entity.Framework;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 @Entity
 @Table(name = "board_framework")
@@ -19,7 +21,9 @@ public class BoardFramework {
 
     @ManyToOne
     @JoinColumn(name = "framework_id")
+    @Field(type= FieldType.Object)
     private Framework framework;
+
 
 //    @ManyToOne
 //    @JoinColumn(name = "board_id")

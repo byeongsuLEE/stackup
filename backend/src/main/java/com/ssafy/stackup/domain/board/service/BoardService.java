@@ -104,6 +104,19 @@ public class BoardService {
         boardRepository.delete(board);
     }
 
+    @Transactional(readOnly = true)
+    public List<BoardFindAllResponse> findBoardsByIds(Set<Long> boardIds) {
+        // boardIds 리스트를 사용하여 각 boardId에 해당하는 Board를 찾기
+        List<Board> boards = boardIds.stream()
+                .map(boardId -> boardRepository.findById(boardId)
+                        .orElseThrow(() -> new ResourceNotFoundException("게시글이 존재하지 않음: " + boardId)))
+                .collect(Collectors.toList());
+
+        return boards.stream()
+                .map(BoardFindAllResponse::new)
+                .collect(Collectors.toList());
+    }
+
 
 
     //모집글 작성
@@ -131,6 +144,8 @@ public class BoardService {
         }
        board.setBoardFrameworks(frameworks);
 
+        List<String> languageNames = new ArrayList<>();
+
         for(Long languageId : uniqueLanguageIds) {
             Language language = languageRepository.findById(languageId)
                     .orElseThrow(() -> new ResourceNotFoundException("언어가 존재하지 않음"));
@@ -139,17 +154,22 @@ public class BoardService {
 //                    .board(board)
                     .build();
             languages.add(boardLanguage);
+            languageNames.add(language.getName());
         }
         board.setBoardLanguages(languages);
 
         Recommend recommend = new Recommend();
         recommend.setClassification(board.getClassification());
-//        recommend.setDescription(board.getDescription());
-//        recommend.setTitle(board.getTitle());
         recommend.setFrameworks(board.getBoardFrameworks());
-        boardElasticsearchRepository.save(recommend);
+//        recommend.setLanguages(board.getBoardLanguages());
+        recommend.setLanguages(languageNames);
+        recommend.setLevel(board.getLevel());
 
-        boardRepository.save(board);
+
+        Board result = boardRepository.save(board);
+
+        recommend.setBoardId(result.getBoardId());
+        boardElasticsearchRepository.save(recommend);
 
         return new BoardFindAllResponse(board);
     }

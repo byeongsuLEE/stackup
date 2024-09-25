@@ -27,9 +27,9 @@ spring:
 
   data:
     redis:
-      host: ${REDIS_IP}
+      host: localhost
       port: 6379
-      password: ${REDIS_PASSWORD}
+#      password: ${REDIS_PASSWORD}
     elasticsearch:
       repositories:
         enabled: true
@@ -71,9 +71,17 @@ jwt:
 
 logging:
   level:
-    root: info # 루트 로깅 레벨 설정
-    com.ssafy: debug # com.wava 패키지 로깅 레벨 설정
-
+#    root: info # 루트 로깅 레벨 설정
+#    com.ssafy: debug # com.wava 패키지 로깅 레벨 설정
+    org:
+      springframework:
+        data:
+          elasticsearch:
+            core: DEBUG
+    elasticsearch:
+      client: TRACE
+    apache:
+      http: TRACE
 cloud:
   aws:
     s3:
@@ -94,6 +102,9 @@ redirect:
 portone:
   api-key: 2266227468060441
   api-secret: QuEDNv6I2IkSg2hqbpqAr31vy0fQK2DoqFYbMtE0GnG5eEdB9MSR6gHqkdhVx8xXoe8JqXSFN5pFR3Uv
+
+
+
 
 default:
   image: https://raw.githubusercontent.com/tailwindlabs/heroicons/56c073c2c9a66d2e51adb93d8e87e2e941d5b6db/src/20/solid/user-circle.svg

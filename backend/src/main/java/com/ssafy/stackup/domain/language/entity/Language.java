@@ -9,6 +9,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +28,7 @@ public class Language {
     @Column(name="language_id")
     private Long id;
 
+    @Field(type = FieldType.Keyword)
     private String name;
 
 //    @OneToMany(mappedBy = "language", cascade = CascadeType.ALL, orphanRemoval = true)

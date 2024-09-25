@@ -138,7 +138,7 @@ export const useChatStore = create<ChatState>((set) => ({
           name: "클라이언트 4",
           messagePreview: "test test test test",
           timestamp: "오후 3:53",
-          chatId: "1",
+          chatId: "4",
           unreadCount: 300,
           messages: [
             { senderId: "1", content: "Hi there!", date: "2024-09-25" },
@@ -149,7 +149,7 @@ export const useChatStore = create<ChatState>((set) => ({
           name: "클라이언트 5",
           messagePreview: "test test test test",
           timestamp: "오후 3:53",
-          chatId: "1",
+          chatId: "5",
           unreadCount: 300,
           messages: [
             { senderId: "1", content: "Hi there!", date: "2024-09-25" },
@@ -160,7 +160,7 @@ export const useChatStore = create<ChatState>((set) => ({
           name: "클라이언트 6",
           messagePreview: "test test test test",
           timestamp: "오후 3:53",
-          chatId: "1",
+          chatId: "6",
           unreadCount: 300,
           messages: [
             { senderId: "1", content: "Hi there!", date: "2024-09-25" },
@@ -171,7 +171,7 @@ export const useChatStore = create<ChatState>((set) => ({
           name: "클라이언트 7",
           messagePreview: "test test test test",
           timestamp: "오후 3:53",
-          chatId: "1",
+          chatId: "7",
           unreadCount: 300,
           messages: [
             { senderId: "1", content: "Hi there!", date: "2024-09-25" },
@@ -182,7 +182,7 @@ export const useChatStore = create<ChatState>((set) => ({
           name: "클라이언트 8",
           messagePreview: "test test test test",
           timestamp: "오후 3:53",
-          chatId: "1",
+          chatId: "8",
           unreadCount: 300,
           messages: [
             { senderId: "1", content: "Hi there!", date: "2024-09-25" },
@@ -193,7 +193,7 @@ export const useChatStore = create<ChatState>((set) => ({
           name: "클라이언트 9",
           messagePreview: "test test test test",
           timestamp: "오후 3:53",
-          chatId: "1",
+          chatId: "9",
           unreadCount: 300,
           messages: [
             { senderId: "1", content: "Hi there!", date: "2024-09-25" },
@@ -204,7 +204,7 @@ export const useChatStore = create<ChatState>((set) => ({
           name: "클라이언트 10",
           messagePreview: "test test test test",
           timestamp: "오후 3:53",
-          chatId: "1",
+          chatId: "10",
           unreadCount: 300,
           messages: [
             { senderId: "1", content: "Hi there!", date: "2024-09-25" },
@@ -215,7 +215,7 @@ export const useChatStore = create<ChatState>((set) => ({
           name: "클라이언트 11",
           messagePreview: "test test test test",
           timestamp: "오후 3:53",
-          chatId: "1",
+          chatId: "11",
           unreadCount: 300,
           messages: [
             { senderId: "1", content: "Hi there!", date: "2024-09-25" },
@@ -226,7 +226,7 @@ export const useChatStore = create<ChatState>((set) => ({
           name: "클라이언트 12",
           messagePreview: "test test test test",
           timestamp: "오후 3:53",
-          chatId: "1",
+          chatId: "12",
           unreadCount: 300,
           messages: [
             { senderId: "1", content: "Hi there!", date: "2024-09-25" },
@@ -237,7 +237,7 @@ export const useChatStore = create<ChatState>((set) => ({
           name: "클라이언트 13",
           messagePreview: "test test test test",
           timestamp: "오후 3:53",
-          chatId: "1",
+          chatId: "13",
           unreadCount: 300,
           messages: [
             { senderId: "1", content: "Hi there!", date: "2024-09-25" },
@@ -248,7 +248,7 @@ export const useChatStore = create<ChatState>((set) => ({
           name: "클라이언트 14",
           messagePreview: "test test test test",
           timestamp: "오후 3:53",
-          chatId: "1",
+          chatId: "14",
           unreadCount: 300,
           messages: [
             { senderId: "1", content: "Hi there!", date: "2024-09-25" },
@@ -259,7 +259,7 @@ export const useChatStore = create<ChatState>((set) => ({
           name: "클라이언트 15",
           messagePreview: "test test test test",
           timestamp: "오후 3:53",
-          chatId: "1",
+          chatId: "15",
           unreadCount: 300,
           messages: [
             { senderId: "1", content: "Hi there!", date: "2024-09-25" },
@@ -270,7 +270,7 @@ export const useChatStore = create<ChatState>((set) => ({
           name: "클라이언트 16",
           messagePreview: "test test test test",
           timestamp: "오후 3:53",
-          chatId: "1",
+          chatId: "16",
           unreadCount: 300,
           messages: [
             { senderId: "1", content: "Hi there!", date: "2024-09-25" },

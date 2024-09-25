@@ -5,6 +5,7 @@ import ChatIcon from "../../icons/ChatIcon";
 import ChatListItem from "../chat/ChatListItem";
 import { useChatStore } from "../../store/ChatStore";
 import { FaArrowLeft } from "react-icons/fa";
+import { useUserStore } from "../../store/UserStore"; // 로그인한 유저 정보 불러오기
 
 import MyMessageComponent from "../chat/MyMessageComponent"; // 내가 보낸 메시지 컴포넌트
 import OtherMessageComponent from "../chat/OtherMessageComponent"; // 상대방이 보낸 메시지 컴포넌트
@@ -18,6 +19,11 @@ export default function SimplePopup() {
 
   const loadChats = useChatStore((state) => state.loadChats);
   const chats = useChatStore((state) => state.chats);
+
+  const { clientId, freelancerId } = useUserStore((state) => ({
+    clientId: state.clientId,
+    freelancerId: state.freelancerId,
+  })); // 로그인한 유저 정보 가져오기
 
   React.useEffect(() => {
     // 컴포넌트가 마운트될 때 채팅 데이터를 불러옴
@@ -38,6 +44,7 @@ export default function SimplePopup() {
   const handleChatClick = (chatId: string) => {
     // 채팅방을 클릭했을 때 해당 채팅방의 내용을 활성화
     setActiveChatId(chatId);
+    console.log(`ClientId: ${clientId}, FreelancerId: ${freelancerId}`);
   };
 
   const activeChat = chats.find((chat) => chat.chatId === activeChatId);
@@ -67,7 +74,7 @@ export default function SimplePopup() {
             style={{
               position: "absolute",
               top: "-5px",
-              right: "-5px",
+              right: "-1px",
               padding: "4px 8px",
               borderRadius: "100%",
               backgroundColor: "red",

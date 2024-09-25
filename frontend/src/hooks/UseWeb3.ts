@@ -19,6 +19,7 @@ const ERC20_ABI = [
   },
 ];
 
+// 토큰 컨트랙트 주소
 const SSF_TOKEN_CONTRACT_ADDRESS = '0x066b74Fc73bfaf0C266b0269F91dDeeB5aAB6998';
 
 export const useWeb3 = () => {
@@ -26,6 +27,7 @@ export const useWeb3 = () => {
   const [isRequestPending, setIsRequestPending] = useState(false);
   const [web3, setWeb3] = useState<Web3 | null>(null);
   const [ssfBalance, setSsfBalance] = useState<number | null>(null); // SSF 토큰 잔액 상태 추가
+
 
   const getCurChainId = async (): Promise<string | null> => {
     const eth = window.ethereum as MetaMaskInpageProvider;
@@ -85,6 +87,7 @@ export const useWeb3 = () => {
     }
   };
 
+  // SSF 토큰 잔액 조회 함수
   const fetchSsfBalance = async (web3Instance: Web3, userAccount: string) => {
     if (!web3Instance || !userAccount) return;
 
@@ -127,5 +130,5 @@ export const useWeb3 = () => {
     connectToNetwork();
   }, []);
 
-  return { account, web3, ssfBalance, isRequestPending };
+  return { account, web3, ssfBalance, isRequestPending, getAccount };
 };

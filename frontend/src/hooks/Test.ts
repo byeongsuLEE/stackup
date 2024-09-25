@@ -1,35 +1,30 @@
 import { ethers } from 'ethers';
-import MyNFT from '../../../blockchain/NFT/build/contracts/MyNFT.json'; // JSON 파일 임포트
+// import MyNFT from '../../../blockchain/NFT/build/contracts/MyNFT.json'; // JSON 파일 임포트
 
 // NFT 스마트 컨트랙트 주소
 const NFT_CONTRACT_ADDRESS = '0x066b74Fc73bfaf0C266b0269F91dDeeB5aAB6998';
 const metadataURI = "https://ipfs.io/ipfs/Qmbp8Ugq5gabMBQ7QAP18TPPF9FAENDsy34pM2RiuUzNKR";
 // NFT ABI 정의
-const NFT_ABI = MyNFT.abi;
+const NFT_ABI = [
+    {
+      inputs: [
+        { internalType: "address", name: "to", type: "address" },
+        { internalType: "string", name: "tokenURI", type: "string" }
+      ],
+      name: "mint",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function",
+    }
+  ];
 
-// [
-//   {
-//     inputs: [
-//       { internalType: "address", name: "to", type: "address" },
-//       { internalType: "string", name: "tokenURI", type: "string" }
-//     ],
-//     name: "mintNFT",
-//     outputs: [],
-//     stateMutability: "nonpayable",
-//     type: "function",
-//   }
-// ];
+export const CallTest = () => {
 
-
-// NFT 발행 함수
-export const callNft = () => {
-
-  const mintNFT = async () => {
+  const Minting = async () => {
     try {
       const { ethereum } = window;
       if (!ethereum) throw new Error("MetaMask가 설치되어 있지 않습니다.");
 
-      
       const provider = new ethers.BrowserProvider(ethereum);
       const signer = await provider.getSigner();
 
@@ -37,7 +32,7 @@ export const callNft = () => {
       const address = await signer.getAddress();
 
       // NFT 발행 (mintNFT 함수 호출)
-      const tx = await nftContract.mintNFT(address, metadataURI, {
+      const tx = await nftContract.mint(address, metadataURI, {
         gasLimit: 1000000
       });
       console.log("트랜잭션 전송:", tx.hash);
@@ -57,6 +52,5 @@ export const callNft = () => {
       }
     }
   };
-
-  return { mintNFT };
-};
+  return { Minting }
+}

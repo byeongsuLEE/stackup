@@ -35,6 +35,7 @@
     "react-router-dom": "^6.26.1",
     "react-scroll": "^1.9.0",
     "scroll-out": "^2.2.12",
+    "socket.io-client": "^4.8.0",
     "splitting": "^1.1.0",
     "styled-components": "^6.1.13",
     "web3": "^4.13.0",

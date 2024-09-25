@@ -26,24 +26,20 @@ export default function SimplePopup() {
   })); // 로그인한 유저 정보 가져오기
 
   React.useEffect(() => {
-    // 컴포넌트가 마운트될 때 채팅 데이터를 불러옴
-    loadChats();
-    // 새로운 메시지 감지 (여기서는 테스트용으로 true로 설정, 실제로는 메시지 수신 로직 추가)
-    setNewMessages(true);
+    loadChats(); // 컴포넌트가 마운트될 때 채팅 데이터를 불러옴
+    setNewMessages(true); // 새로운 메시지 감지 (여기서는 테스트용으로 true로 설정, 실제로는 메시지 수신 로직 추가)
   }, [loadChats]);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchor(anchor ? null : event.currentTarget);
-    // 메시지 창이 열리면 새 메시지 배지를 숨김
-    setNewMessages(false);
+    setNewMessages(false); // 메시지 창이 열리면 새 메시지 배지를 숨김
   };
 
   const open = Boolean(anchor);
   const id = open ? "simple-popup" : undefined;
 
   const handleChatClick = (chatId: string) => {
-    // 채팅방을 클릭했을 때 해당 채팅방의 내용을 활성화
-    setActiveChatId(chatId);
+    setActiveChatId(chatId); // 채팅방을 클릭했을 때 해당 채팅방의 내용을 활성화
     console.log(`ClientId: ${clientId}, FreelancerId: ${freelancerId}`);
   };
 

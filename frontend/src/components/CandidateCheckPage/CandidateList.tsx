@@ -6,7 +6,7 @@ const CandidateList = () => {
   const navigate = useNavigate();
   const toContract = () => {
     navigate("/work/detail/contract");
-  }
+  };
   return (
     <div className="overflow-x-auto">
       <table className="table">
@@ -17,18 +17,22 @@ const CandidateList = () => {
             <th>이름</th>
             <th>평점</th>
             <th>포트폴리오</th>
-            <th>
-            </th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
-          <Candidate name="이호영" portfolio="github.com/hoyoung" rating={5.0} />
+          <Candidate
+            name="이호영"
+            portfolio="github.com/hoyoung"
+            rating={5.0}
+            freelancerId="freelancer123"
+          />
         </tbody>
       </table>
       <div className="my-5 text-end" onClick={toContract}>
-      <DoneButton width={80} height={30} title="계약하기"/>
+        <DoneButton width={80} height={30} title="계약하기" />
       </div>
     </div>
-  )
-}
+  );
+};
 export default CandidateList;

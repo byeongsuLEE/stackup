@@ -105,7 +105,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(freelancerLoginDto, "로그인에 성공하셨습니다"));
     }
 
-    @GetMapping("/check/{businessNum}")
+    @GetMapping("/check/businessNum/{businessNum}")
     public ResponseEntity<ApiResponse<Boolean>> checkBusinessNum(@PathVariable String businessNum){
          boolean isValidBusinessNum =  userService.checkBusinessNum(businessNum);
          if(isValidBusinessNum){

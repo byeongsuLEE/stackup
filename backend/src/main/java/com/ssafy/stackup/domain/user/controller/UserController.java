@@ -101,10 +101,12 @@ public class UserController {
 
     @GetMapping("/token")
     public ResponseEntity<ApiResponse<FreelancerLoginResponseDto>> successLogin(@RequestParam("userId") Long userId){
-
         FreelancerLoginResponseDto freelancerLoginDto= userService.token(userId);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(freelancerLoginDto, "로그인에 성공하셨습니다"));
     }
+
+
+
 
 
 }

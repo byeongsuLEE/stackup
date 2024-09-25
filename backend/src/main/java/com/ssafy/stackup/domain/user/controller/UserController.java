@@ -105,6 +105,21 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(freelancerLoginDto, "로그인에 성공하셨습니다"));
     }
 
+    @GetMapping("/check/{businessNum}")
+    public ResponseEntity<ApiResponse<Boolean>> checkBusinessNum(@PathVariable String businessNum){
+         boolean isValidBusinessNum =  userService.checkBusinessNum(businessNum);
+         if(isValidBusinessNum){
+             return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(isValidBusinessNum));
+         }
+         else {
+             return ResponseEntity.badRequest().body(ApiResponse.error(HttpStatus.BAD_REQUEST,isValidBusinessNum,"등록되지않은 사업자번호입니다."));
+         }
+
+    }
+
+
+
+
 
 
 

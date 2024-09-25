@@ -1,6 +1,8 @@
 package com.ssafy.stackup.domain.user.service;
 
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.stackup.common.exception.CustomException;
 import com.ssafy.stackup.common.exception.ResourceNotFoundException;
 import com.ssafy.stackup.common.jwt.TokenProvider;
@@ -24,12 +26,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
@@ -39,6 +43,18 @@ import java.util.*;
 public class UserServiceImpl implements UserService {
     @Value("${default.image}")
     private String defaultImage;
+
+
+
+    @Value("${publicDataPortal.api.url}")
+    private String publicDataPortalApiUrl;
+
+    @Value("${publicDataPortal.api.key}")
+    private String publicDataPortalApiKey;
+
+
+    private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
 
     private final UserRepository userRepository;
     private final ClientRepository clientRepository;
@@ -353,4 +369,47 @@ public class UserServiceImpl implements UserService {
         String address = user.getUserAddress();
         return address;
     }
+
+
+
+    public boolean checkBusinessNum(String businessNum) {
+
+        String requestBody = "{ \"b_no\": [\"" + businessNum + "\"] }";
+
+        // 헤더 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+
+        HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
+
+        try {
+            // API 요청 보내기
+            String requestUrl = publicDataPortalApiUrl + "?serviceKey=" + publicDataPortalApiKey;
+            ResponseEntity<String> response = restTemplate.exchange(requestUrl, HttpMethod.POST, entity, String.class);
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                // JSON 파싱
+                JsonNode root = objectMapper.readTree(response.getBody());
+
+                // "data" 필드에서 사업자 상태 확인
+                JsonNode dataNode = root.path("data").get(0);
+                String statusMessage = dataNode.path("tax_type").asText();
+
+                // "국세청에 등록되지 않은 사업자등록번호입니다." 라는 메시지가 있다면 false 반환
+                if (statusMessage.contains("국세청에 등록되지 않은 사업자등록번호")) {
+                    return false;
+                }
+
+                // 유효한 사업자등록번호인 경우 true 반환
+                return true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // 기본적으로 false 반환
+        return false;
+    }
+
 }

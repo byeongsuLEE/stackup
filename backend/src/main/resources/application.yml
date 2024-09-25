@@ -31,6 +31,7 @@ spring:
 #    elasticsearch:
 #      uris: http://localhost:9200
 
+
   security:
     oauth2:
       client:
@@ -82,6 +83,13 @@ redirect:
   url:
     callback: "http://localhost:5173/callback"
     main: "http://localhost:5173"
+
+publicDataPortal:
+  api:
+    url: ${PUBLIC_DATA_PORTAL_API_URL}
+    key: ${PUBLIC_DATA_PORTAL_API_KEY}
+
+
 
 portone:
   api-key: 2266227468060441

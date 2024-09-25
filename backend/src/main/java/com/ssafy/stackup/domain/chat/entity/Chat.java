@@ -24,8 +24,8 @@ public class Chat {
     @JoinColumn(name = "user_id" , nullable = false)
     private User user ;
 
-    @Column(name="chat_content")
-    private String content;
+    @Column(name="message")
+    private String message;
 
     @CreatedDate
     @Column(name="chat_regist_time", updatable = false)

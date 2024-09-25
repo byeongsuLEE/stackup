@@ -5,6 +5,7 @@ import com.ssafy.stackup.common.exception.CustomException;
 import com.ssafy.stackup.common.jwt.TokenProvider;
 import com.ssafy.stackup.common.response.ErrorCode;
 import com.ssafy.stackup.domain.chat.dto.reqeust.ChatDto;
+import com.ssafy.stackup.domain.chat.dto.reqeust.ChatRoomStartRequestDto;
 import com.ssafy.stackup.domain.chat.dto.response.ChatResponseDto;
 import com.ssafy.stackup.domain.chat.dto.response.ChatRoomInfoResponseDto;
 import com.ssafy.stackup.domain.chat.entity.Chat;
@@ -54,7 +55,7 @@ public class ChatServiceImpl implements ChatService {
         Chat chat = Chat.builder()
                 .user(userOpt)
                 .chatRoom(chatRoom)
-                .content(chatDto.getMessage())
+                .message(chatDto.getMessage())
                 .build();
 
         chatRepository.save(chat);
@@ -63,7 +64,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     /**
-     * @param channelId 채널 식별 아이디
+     * @param chatroomId 채널 식별 아이디
      * @return 채팅 로그 리스트
      * @ 작성자   : 이병수
      * @ 작성일   : 2024-09-15
@@ -72,15 +73,15 @@ public class ChatServiceImpl implements ChatService {
      */
     @Override
     @Transactional(readOnly = true)
-    public List<ChatResponseDto> chatLogs(final Long channelId) {
-        ChatRoom chatRoom = channelValidate(channelId);
+    public List<ChatResponseDto> chatLogs(final Long chatroomId) {
+        ChatRoom chatRoom = channelValidate(chatroomId);
         List<Chat> chatLogs = chatRepository.findByChatRoomId(chatRoom.getId());
 
         List<ChatResponseDto> chatResponseDtoList = chatLogs.stream()
                 .map(chatLog -> ChatResponseDto.builder()
                         .userId(chatLog.getUser().getId())
                         .name(chatLog.getUser().getName())
-                        .message(chatLog.getContent())
+                        .message(chatLog.getMessage())
                         .registTime(chatLog.getRegistTime())
                         .build())
                 .collect(Collectors.toList());
@@ -89,40 +90,79 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public ChatRoomInfoResponseDto startChatRoom(Long clientId, Long freelancerId) {
+    public ChatRoomInfoResponseDto startChatRoom(ChatRoomStartRequestDto chatRoomStartRequestDto) {
 
-        ChatRoom chatRoom = null;
-        Optional<ChatRoom> optionalChatRoom = chatRoomRepository.findByClientIdAndFreelancerId(clientId, freelancerId);
-        if (optionalChatRoom.isPresent()) {
-            chatRoom = optionalChatRoom.get();
+            Long clientId = chatRoomStartRequestDto.getClientId();
+            Long freelancerId = chatRoomStartRequestDto.getFreelancerId();
+
+            ChatRoom chatRoom = null;
+            Optional<ChatRoom> optionalChatRoom = chatRoomRepository.findByClientIdAndFreelancerId(clientId, freelancerId);
+            if (optionalChatRoom.isPresent()) {
+                chatRoom = optionalChatRoom.get();
+
+                ChatRoomInfoResponseDto response = ChatRoomInfoResponseDto.builder()
+                        .chatRoomId(chatRoom.getId())
+                        .clientId(clientId)
+                        .freelancerId(freelancerId)
+                        .chats(chatRoom.getChats())
+                        .previewChat("")
+                        .build();
+            }
+
+            User client = userRepository.findById(clientId).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
+            User freelancer = userRepository.findById(freelancerId).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
+
+            chatRoom= chatRoom.builder()
+                    .chats(new ArrayList<>())
+                    .client(client)
+                    .freelancer(freelancer)
+                    .build();
+
+            chatRoom = chatRoomRepository.save(chatRoom);
+
 
             return ChatRoomInfoResponseDto.builder()
                     .chatRoomId(chatRoom.getId())
                     .clientId(clientId)
                     .freelancerId(freelancerId)
                     .chats(chatRoom.getChats())
+                    .previewChat("")
                     .build();
         }
 
-        User client = userRepository.findById(clientId).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
-        User freelancer = userRepository.findById(freelancerId).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        chatRoom= chatRoom.builder()
-                .chats(new ArrayList<>())
-                .client(client)
-                .freelancer(freelancer)
-                .build();
+    /**
+     * 해당 유저의 모든 채팅방 가져오기
+     * @ 작성자   : 이병수
+     * @ 작성일   : 2024-09-25
+     * @ 설명     :모든 채팅방 가져오기
+     * @param userId
+     * @return\
+     */
+    @Override
+    public List<ChatRoomInfoResponseDto> getChatRooms(Long userId) {
 
-        chatRoomRepository.save(chatRoom);
+        List<ChatRoomInfoResponseDto> chatRoomListResponse = new ArrayList<>();
+        List<ChatRoom> chatRoomList = chatRoomRepository.findAllByFreelancerIdOrClientId(userId, userId).orElse(null);
 
 
-        return ChatRoomInfoResponseDto.builder()
-                .chatRoomId(chatRoom.getId())
-                .clientId(clientId)
-                .freelancerId(freelancerId)
-                .chats(chatRoom.getChats())
-                .build();
+        for(ChatRoom chatRoom : chatRoomList) {
+            ChatRoomInfoResponseDto chatRoomInfoResponseDto = ChatRoomInfoResponseDto.builder()
+                    .chatRoomId(chatRoom.getId())
+                    .chats(chatRoom.getChats())
+                    .clientId(chatRoom.getClient().getId())
+                    .freelancerId(chatRoom.getFreelancer().getId())
+                    .build();
+            chatRoomInfoResponseDto.setPreviewChat();
+            chatRoomListResponse.add(chatRoomInfoResponseDto);
+        }
+
+
+
+
+        return chatRoomListResponse;
     }
+
 
     /**
      * @param channelId 채널 식별 아이디

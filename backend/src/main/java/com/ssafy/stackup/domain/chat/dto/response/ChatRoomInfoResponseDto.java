@@ -25,11 +25,15 @@ import java.util.List;
 @Getter
 public class ChatRoomInfoResponseDto {
     private Long chatRoomId;
-
     private Long clientId;
-
     private Long freelancerId;
     private List<Chat> chats ;
+    private String previewChat;
+
+    public String setPreviewChat() {
+       return this.previewChat = (this.chats != null && !this.chats.isEmpty())? chats.get(chats.size()-1).getMessage():" 채팅이 없습니다" ;
+    }
+
 
 
 }

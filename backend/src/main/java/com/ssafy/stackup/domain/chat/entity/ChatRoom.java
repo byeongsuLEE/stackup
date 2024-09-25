@@ -35,6 +35,7 @@ public class ChatRoom {
     private User freelancer;
 
     @OneToMany(mappedBy = "chatRoom" , cascade = CascadeType.ALL ,orphanRemoval = true)
+    @OrderBy("registTime ASC")
     private List<Chat> chats = new ArrayList<>();
 }
 

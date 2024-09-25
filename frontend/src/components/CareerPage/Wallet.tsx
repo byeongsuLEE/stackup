@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { callNft } from "../../hooks/mintNft";
-import { useWeb3 } from "../../hooks/useWeb3";
+import { callNft } from "../../hooks/MintNft";
+import { useWeb3 } from "../../hooks/UseWeb3";
 
 const Wallet = () => {
   const { mintNFT } = callNft();

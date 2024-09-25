@@ -2,6 +2,7 @@ package com.ssafy.stackup.domain.project.dto.response;
 
 import com.ssafy.stackup.domain.project.entity.ProjectStatus;
 import com.ssafy.stackup.domain.project.entity.ProjectStep;
+import jakarta.persistence.Column;
 import lombok.*;
 
 import java.util.Date;
@@ -34,5 +35,7 @@ public class ProjectInfoResponseDto {
     private Date deadline;
     private Date upload;
     private String level;
+    private boolean clientStepConfirmed;
+    private boolean freelancerStepConfirmed;
 
 }

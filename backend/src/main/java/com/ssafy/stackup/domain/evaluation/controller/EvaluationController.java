@@ -41,7 +41,7 @@ public class EvaluationController {
     @PostMapping("/project-user")
     public ResponseEntity<ApiResponse<String>> addEvaluation(@RequestBody EvaluationRequestDto evaluationRequestDto, @AuthUser User evaluator) {
         evaluationService.addEvaluation(evaluationRequestDto,evaluator);
-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("성공"));
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("평가 완료 되었습니다."));
     }
 
 

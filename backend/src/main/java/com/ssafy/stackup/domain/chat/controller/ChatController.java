@@ -2,6 +2,7 @@ package com.ssafy.stackup.domain.chat.controller;
 
 
 import com.ssafy.stackup.common.response.ApiResponse;
+import com.ssafy.stackup.domain.chat.dto.response.ChatRoomInfoResponseDto;
 import com.ssafy.stackup.domain.chat.dto.reqeust.ChatDto;
 import com.ssafy.stackup.domain.chat.dto.response.ChatResponseDto;
 import com.ssafy.stackup.domain.chat.service.ChatService;
@@ -13,9 +14,7 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,7 +27,7 @@ public class ChatController {
 
     @MessageMapping("/message")
     public ResponseEntity<ApiResponse<ChatDto>> sendChat(@Payload ChatDto chatDto, @Header(name = "Authorization") String token) {
-        template.convertAndSend("/sub/chatroom/" + chatDto.getChannelId(), chatDto);
+        template.convertAndSend("/sub/chatroom/" + chatDto.getChatroomId(), chatDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(chatService.saveChat(chatDto,token.substring(7))));
     }
@@ -37,5 +36,13 @@ public class ChatController {
     public ResponseEntity<ApiResponse<List<ChatResponseDto>>> getChatLogs(@PathVariable(name = "channelId") Long channelId) {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(chatService.chatLogs(channelId)));
+    }
+
+    // 채팅시작하기 채팅방이 없으면 만들기
+    @PostMapping("/chatroom/start")
+    public ResponseEntity<ApiResponse<ChatRoomInfoResponseDto>> startChatRoom(@RequestParam Long clientId, @RequestParam Long freelancerId ) {
+        ChatRoomInfoResponseDto chatRoomInfoResponseDto =  chatService.startChatRoom(clientId,freelancerId);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(chatRoomInfoResponseDto));
     }
 }

@@ -15,6 +15,7 @@ import com.ssafy.stackup.domain.board.repository.BoardRepository;
 import com.ssafy.stackup.domain.project.dto.request.SignRequest;
 import com.ssafy.stackup.domain.project.dto.response.ProjectInfoResponseDto;
 import com.ssafy.stackup.domain.project.dto.request.ProjectStartRequestDto;
+import com.ssafy.stackup.domain.project.dto.response.ProjectStepCheckResponseDto;
 import com.ssafy.stackup.domain.project.entity.Project;
 import com.ssafy.stackup.domain.project.entity.ProjectStatus;
 import com.ssafy.stackup.domain.project.entity.ProjectStep;
@@ -24,7 +25,6 @@ import com.ssafy.stackup.domain.user.entity.User;
 import com.ssafy.stackup.domain.user.entity.FreelancerProject;
 import com.ssafy.stackup.domain.user.repository.FreelancerProjectRepository;
 import com.ssafy.stackup.domain.user.repository.FreelancerRepository;
-import com.ssafy.stackup.domain.user.repository.UserRepository;
 import com.ssafy.stackup.domain.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -159,6 +159,8 @@ public class ProjectServiceImpl implements ProjectService {
                 .worktype(board.getWorktype())
                 .applicants(board.getApplicants())
                 .upload(board.getUpload())
+                .freelancerStepConfirmed(project.isFreelancerStepConfirmed())
+                .clientStepConfirmed(project.isClientStepConfirmed())
                 .build();
 
         return projectInfoResponseDto;
@@ -198,6 +200,27 @@ public class ProjectServiceImpl implements ProjectService {
                     .body(ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR,"Error verifying signature: " + e.getMessage()));
 
         }
+    }
+
+    /**
+     * 프로젝트 단계 확인
+     * @ 작성자   : 이병수
+     * @ 작성일   : 2024-09-24
+     * @ 설명  :
+     * 1. 프리랜서와 클라이언트가 프로젝트의 진행 사항을 확인
+     * 2. 유저가 클라이언트 일 경우 프로젝트의 단계 다음으로 변경
+     * 3. 프로젝트의 상태에 따라 상호평가를 진행
+     * @param projectId
+     * @param user
+     */
+    @Override
+    public ProjectStepCheckResponseDto projectStepCheck(Long projectId, User user) {
+
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(()-> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
+
+        boolean isUserAllStepChecked = isUserAllStepChecked(projectId,user,project);
+        return changeProjectStep(project.getStep(), isUserAllStepChecked, project);
     }
 
 
@@ -282,5 +305,28 @@ public class ProjectServiceImpl implements ProjectService {
             //sdfdsfsdfsfdsfdsdsasdadsadsaddsafdsa
         }
         return projectInfoResponseDtos;
+    }
+
+    private ProjectStepCheckResponseDto changeProjectStep(ProjectStep currentStep, boolean isUserAllStepChecked, Project project) {
+        if(isUserAllStepChecked){
+            currentStep = project.nextProjectStep();
+            project.resetUserStepConfirmed();
+        }
+        projectRepository.save(project);
+
+        return ProjectStepCheckResponseDto.builder()
+                .isChangeProjectStep(isUserAllStepChecked)
+                .currentStep(currentStep)
+                .build();
+    }
+
+
+    private boolean isUserAllStepChecked(Long projectId, User user, Project project) {
+        if(user.isClient()){
+            project.updateIsClientStepConfirmed();
+        }else{
+            project.updateIsFreelancerConfirmed();
+        }
+        return project.checkUsersConfirm();
     }
 }

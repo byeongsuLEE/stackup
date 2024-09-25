@@ -173,7 +173,6 @@ public class UserServiceImpl implements UserService {
         tokenToHeader(tokenDto, response);
 
         redisUtil.setData(String.valueOf(user.getId()), tokenDto.refreshToken(), tokenDto.refreshTokenExpiresIn());
-
         LoginResponseDto responseDto = LoginResponseDto.builder()
                 .id(user.getId())
                 .userType(userType)

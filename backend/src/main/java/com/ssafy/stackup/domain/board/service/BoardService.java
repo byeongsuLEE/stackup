@@ -22,6 +22,7 @@ import com.ssafy.stackup.domain.language.repository.BoardLanguageRepository;
 import com.ssafy.stackup.domain.language.repository.LanguageRepository;
 import com.ssafy.stackup.domain.recommend.entity.Recommend;
 import com.ssafy.stackup.domain.recommend.repository.BoardElasticsearchRepository;
+import com.ssafy.stackup.domain.recommend.service.RecommendationService;
 import com.ssafy.stackup.domain.user.entity.Client;
 import com.ssafy.stackup.domain.user.entity.Freelancer;
 import com.ssafy.stackup.domain.user.repository.FreelancerRepository;
@@ -67,6 +68,8 @@ public class BoardService {
 
     @Autowired
     private BoardElasticsearchRepository boardElasticsearchRepository;
+    @Autowired
+    private RecommendationService recommendationService;
 
     //모집글 목록 조회
     @Transactional(readOnly = true)
@@ -126,7 +129,7 @@ public class BoardService {
                     .build();
             frameworks.add(boardFramework);
         }
-       //board.setBoardFrameworks(frameworks);
+       board.setBoardFrameworks(frameworks);
 
         for(Long languageId : uniqueLanguageIds) {
             Language language = languageRepository.findById(languageId)
@@ -137,14 +140,16 @@ public class BoardService {
                     .build();
             languages.add(boardLanguage);
         }
-        //board.setBoardLanguages(languages);
+        board.setBoardLanguages(languages);
 
-        boardRepository.save(board);
         Recommend recommend = new Recommend();
         recommend.setClassification(board.getClassification());
-        recommend.setDescription(board.getDescription());
-        recommend.setTitle(board.getTitle());
+//        recommend.setDescription(board.getDescription());
+//        recommend.setTitle(board.getTitle());
+        recommend.setFrameworks(board.getBoardFrameworks());
         boardElasticsearchRepository.save(recommend);
+
+        boardRepository.save(board);
 
         return new BoardFindAllResponse(board);
     }

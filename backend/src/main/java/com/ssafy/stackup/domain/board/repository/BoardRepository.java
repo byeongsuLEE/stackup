@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-@Repository("BoardJpaRepo")
+//@Repository("BoardJpaRepo")
 public interface BoardRepository extends JpaRepository<Board, Long>{
 //    @Query("SELECT b FROM Board b WHERE (:worktype IS NULL OR b.worktype = :worktype) " +
 //            "AND (:deposit IS NULL OR b.deposit = :deposit) " +

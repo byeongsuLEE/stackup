@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Repository("boardElasticsearchRepo")
 //@Component
-public interface BoardElasticsearchRepository extends ElasticsearchRepository<Recommend, Long> {
+public interface BoardElasticsearchRepository extends ElasticsearchRepository<Recommend, String> {
     List<Recommend> findByClassification(String classification);
     // 언어에 따른 검색
 //    List<Board> findByBoardLanguages_Language_NameIn(Set<String> languages);

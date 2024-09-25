@@ -151,4 +151,9 @@ public class BoardController {
         return recommendationService.recommendBoardsForFreelancer(freelancerId);
     }
 
+    @GetMapping("/recommend/{recommendId}")
+    public Recommend recommend(@PathVariable String recommendId) {
+//        Long freelancerId = user.getId();
+        return recommendationService.findById(recommendId);
+    }
 }

@@ -8,6 +8,8 @@ import com.ssafy.stackup.domain.user.entity.Freelancer;
 import com.ssafy.stackup.domain.user.repository.FreelancerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.IndexOperations;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -23,32 +25,17 @@ public class RecommendationService {
     @Autowired
     private final BoardElasticsearchRepository boardElasticsearchRepo;
 
-    @Autowired
-    public RecommendationService(BoardElasticsearchRepository boardElasticsearchRepo, FreelancerRepository freelancerRepository) {
-        this.boardElasticsearchRepo = boardElasticsearchRepo;
-        this.freelancerRepository = freelancerRepository;
-    }
-
     public List<Recommend> findRecommend () {
         // Elasticsearch에 있는 모든 Board를 가져와 출력
-//        List<Recommend> boards = boardElasticsearchRepo.findAll();
-//        Iterable<Recommend> allBoards = boardElasticsearchRepo.findAll();
-//        List<Recommend> boardList = StreamSupport.stream(allBoards.spliterator(), false)
-//                .collect(Collectors.toList());
-//        System.out.println(allBoards);
-//        allBoards.forEach(board -> System.out.println(board.getBoardId()));
-        // StreamSupport를 사용하여 Iterable을 Stream으로 변환 후 갯수를 확인
-//        long count = StreamSupport.stream(allBoards.spliterator(), false).count();
-//
-//        // 총 갯수를 출력
-//        System.out.println("총 보드 개수: " + boardList.size());
-//        return boardList;
         return StreamSupport.stream(boardElasticsearchRepo.findAll().spliterator(), false)
                 .collect(Collectors.toList());
     }
 
+    public Recommend findById (String id) {
+        return boardElasticsearchRepo.findById(id).orElse(null);
+    }
+
     public List<Recommend> recommendBoardsForFreelancer(Long freelancerId) {
-//        printAllBoards();
         // 1. 프리랜서 정보 가져오기
         Freelancer freelancer = freelancerRepository.findById(freelancerId)
                 .orElseThrow(() -> new IllegalArgumentException("프리랜서를 찾을 수 없습니다."));

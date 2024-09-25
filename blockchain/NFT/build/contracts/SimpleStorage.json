@@ -25,8 +25,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.8.7+commit.e28d00a7\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"name\":\"get\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"x\",\"type\":\"uint256\"}],\"name\":\"set\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{},\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"project:/contracts/Sample.sol\":\"SimpleStorage\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/Sample.sol\":{\"keccak256\":\"0x176909fcec50d290d1a5d5abf11dd5847583a5e42e8c4ee096bf2b70f42840a3\",\"urls\":[\"bzz-raw://ea8ce01c3b4c834d32b3bc86c33b24cf792433c6a7632268ade3b4742e1474bb\",\"dweb:/ipfs/QmWiwKBiEHS28T1oVtH2rfELKX4S2n5FViZMW54MqfWE3K\"]}},\"version\":1}",
@@ -743,7 +742,7 @@
   "sourceMap": "25:163:0:-:0;;;;;;;;;;;;;;;;;;;",
   "deployedSourceMap": "25:163:0:-:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;68:48;;;;;;;;;;;;;:::i;:::-;;:::i;:::-;;122:63;;;:::i;:::-;;;;;;;:::i;:::-;;;;;;;;68:48;109:1;103:3;:7;;;;68:48;:::o;122:63::-;158:4;178:3;;171:10;;122:63;:::o;7:139:1:-;53:5;91:6;78:20;69:29;;107:33;134:5;107:33;:::i;:::-;7:139;;;;:::o;152:329::-;211:6;260:2;248:9;239:7;235:23;231:32;228:119;;;266:79;;:::i;:::-;228:119;386:1;411:53;456:7;447:6;436:9;432:22;411:53;:::i;:::-;401:63;;357:117;152:329;;;;:::o;487:118::-;574:24;592:5;574:24;:::i;:::-;569:3;562:37;487:118;;:::o;611:222::-;704:4;742:2;731:9;727:18;719:26;;755:71;823:1;812:9;808:17;799:6;755:71;:::i;:::-;611:222;;;;:::o;920:77::-;957:7;986:5;975:16;;920:77;;;:::o;1126:117::-;1235:1;1232;1225:12;1249:122;1322:24;1340:5;1322:24;:::i;:::-;1315:5;1312:35;1302:63;;1361:1;1358;1351:12;1302:63;1249:122;:::o",
   "source": "pragma solidity ^0.8.7;\r\ncontract SimpleStorage {\r\n  uint val;\r\n\r\n  function set(uint x) public {\r\n    val = x;\r\n  }\r\n\r\n  function get() public view returns (uint) {\r\n    return val;\r\n}\r\n}",
-  "sourcePath": "C:\\Users\\SSAFY\\Desktop\\C103_backup\\S11P21C103\\blockchain\\NFT\\contracts\\Sample.sol",
+  "sourcePath": "C:\\Users\\SSAFY\\Desktop\\새 폴더\\S11P21C103\\blockchain\\NFT\\contracts\\Sample.sol",
   "ast": {
     "absolutePath": "project:/contracts/Sample.sol",
     "exportedSymbols": {
@@ -1012,8 +1011,7 @@
     }
   },
   "schemaVersion": "3.4.16",
-  "updatedAt": "2024-09-24T07:51:19.129Z",
-  "networkType": "ethereum",
+  "updatedAt": "2024-09-25T01:25:00.959Z",
   "devdoc": {
     "kind": "dev",
     "methods": {},

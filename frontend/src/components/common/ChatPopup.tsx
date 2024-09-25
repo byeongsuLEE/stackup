@@ -14,6 +14,7 @@ import ChatInputComponent from "../chat/ChatInputComponent"; // 채팅 입력창
 export default function SimplePopup() {
   const [anchor, setAnchor] = React.useState<null | HTMLElement>(null);
   const [activeChatId, setActiveChatId] = React.useState<string | null>(null); // 활성화된 채팅방 ID 상태
+  const [newMessages, setNewMessages] = React.useState<boolean>(true); // 새 메시지 여부
 
   const loadChats = useChatStore((state) => state.loadChats);
   const chats = useChatStore((state) => state.chats);
@@ -21,10 +22,14 @@ export default function SimplePopup() {
   React.useEffect(() => {
     // 컴포넌트가 마운트될 때 채팅 데이터를 불러옴
     loadChats();
+    // 새로운 메시지 감지 (여기서는 테스트용으로 true로 설정, 실제로는 메시지 수신 로직 추가)
+    setNewMessages(true);
   }, [loadChats]);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchor(anchor ? null : event.currentTarget);
+    // 메시지 창이 열리면 새 메시지 배지를 숨김
+    setNewMessages(false);
   };
 
   const open = Boolean(anchor);
@@ -49,9 +54,32 @@ export default function SimplePopup() {
   };
 
   return (
-    <div>
-      <button aria-describedby={id} type="button" onClick={handleClick}>
+    <div style={{ position: "relative" }}>
+      <button
+        aria-describedby={id}
+        type="button"
+        onClick={handleClick}
+        style={{ position: "relative" }}
+      >
         <ChatIcon />
+        {newMessages && (
+          <span
+            style={{
+              position: "absolute",
+              top: "-5px",
+              right: "-5px",
+              padding: "4px 8px",
+              borderRadius: "100%",
+              backgroundColor: "red",
+              color: "white",
+              fontSize: "10px",
+              zIndex: 2,
+            }}
+          >
+            New
+          </span>
+        )}{" "}
+        {/* 새 메시지 배지 */}
       </button>
       <BasePopup id={id} open={open} anchor={anchor}>
         <PopupBody>

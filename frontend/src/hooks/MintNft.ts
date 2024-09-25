@@ -1,5 +1,4 @@
 import { ethers } from 'ethers';
-
 // NFT 스마트 컨트랙트 주소
 const NFT_CONTRACT_ADDRESS = '0x066b74Fc73bfaf0C266b0269F91dDeeB5aAB6998';
 const metadataURI = "ipfs://Qmbp8Ugq5gabMBQ7QAP18TPPF9FAENDsy34pM2RiuUzNKR";

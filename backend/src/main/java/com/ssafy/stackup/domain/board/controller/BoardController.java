@@ -141,17 +141,27 @@ public class BoardController {
         }
     }
 
-
+    /**
+     *
+     *
+     * @ 작성자   : 김연지
+     * @ 작성일   : 2024-09-26
+     * @ 설명     : 프리랜서 스킬셋(대분류, 언어, 프레임워크, 경력) 기반으로 일감(board)추천
+     * @param user
+     * @return
+     */
     @GetMapping("/recommend")
-    public List<BoardFindAllResponse> recommendBoards(@AuthUser User user) {
+    public Set<Recommend> recommendBoards(@AuthUser User user) {
         Long freelancerId = user.getId();
-        Set<Long> boardIds = recommendationService.recommendBoardsForFreelancer(freelancerId);
-        return boardService.findBoardsByIds(boardIds);
+        Set<Recommend> recommendBoards = recommendationService.recommendBoardsForFreelancer(freelancerId);
+        return recommendBoards;
     }
 
-    @GetMapping("/recommend/{recommendId}")
-    public Recommend recommend(@PathVariable String recommendId) {
+//    @GetMapping("/recommend/all")
+//    public Set<Recommend> recommendAll(@AuthUser User user) {
 //        Long freelancerId = user.getId();
-        return recommendationService.findById(recommendId);
-    }
+//        Set<Recommend> results = recommendationService.recommends(freelancerId);
+//        return results;
+//    }
+
 }

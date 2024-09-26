@@ -20,7 +20,7 @@ public class BoardLanguage {
 
     @ManyToOne
     @JoinColumn(name = "language_id")
-    @Field(type= FieldType.Object)
+//    @Field(type= FieldType.Object)
     private Language language;
 
 //    @ManyToOne

@@ -16,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(indexName = "recommend")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true) // 명시적으로 포함한 필드만 사용
 public class Recommend {
     @Id
     @Field(type = FieldType.Keyword)
@@ -23,20 +24,24 @@ public class Recommend {
     @Column(name = "recommend_id")
     private String recommendId;
 
+    private String title;
+
+    private Long deposit;
+
     @Field(type = FieldType.Keyword)
     private String classification;
 
     @Field(type = FieldType.Nested, includeInParent = true)
     private List<BoardFramework> frameworks;
 
-//    @Field(type = FieldType.Nested, includeInParent = true)
-//    private List<BoardLanguage> languages;
     @Field(type = FieldType.Nested, includeInParent = true)
-    private List<String> languages;
+    private List<BoardLanguage> languages;
+//    @Field(type = FieldType.Nested, includeInParent = true)
+//    private List<String> languages;
 
     @Field(type = FieldType.Keyword)
-//    @Field(type= FieldType.Nested)
     private Level level;
 
+    @EqualsAndHashCode.Include // boardId만으로 equals와 hashCode 계산
     private Long boardId;
 }

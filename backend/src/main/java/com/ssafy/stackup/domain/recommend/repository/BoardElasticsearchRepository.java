@@ -15,10 +15,8 @@ import java.util.Set;
 public interface BoardElasticsearchRepository extends ElasticsearchRepository<Recommend, String> {
     List<Recommend> findByClassification(String classification);
 
-
     //언어에 따른 검색
 //    @Query("{\"nested\": {\"path\": \"languages.language\", \"query\": {\"terms\": {\"languages.language.name\": ?0}}}}")
-//    List<Recommend> findByLanguages_Language_NameIn(Set<String> languages);
     List<Recommend> findByLanguages(String language);
 
     //프레임워크에 따른 검색
@@ -27,11 +25,38 @@ public interface BoardElasticsearchRepository extends ElasticsearchRepository<Re
     // 검색 조건으로 경력 연수 (careerYear)을 기준으로 프리랜서에게 적합한 board 목록을 찾는 메서드
     List<Recommend> findByLevel(Level level);
 
-    // 경력 연수로 보드 추천 (경력 범위에 맞는 게시물 추천)
-//    List<Board> findByCareerYearBetween(Integer minCareerYear, Integer maxCareerYear);
-//    // 프레임워크에 따른 검색
-//    List<Board> findByBoardFrameworks_Framework_NameIn(Set<String> frameworks);
-//
-//    // 경력 연수와 레벨에 따른 검색
-//    List<Board> findByLevelAndCareerYearBetween(String level, Integer minCareerYear, Integer maxCareerYear);
+    @Query("""
+    {
+      "bool": {
+        "must": [
+                          { "match": { "classification": "?0" } },
+                          { "nested": {
+                              "path": "languages",
+                              "query": {
+                                "bool": {
+                                  "should": [
+                                    { "match": { "languages.language.name": "?1" } }
+                                  ]
+                                }
+                              }
+                            }
+                          },
+                          { "nested": {
+                              "path": "frameworks",
+                              "query": {
+                                "bool": {
+                                  "should": [
+                                    { "match": { "frameworks.framework.name": "?2" } }
+                                  ]
+                                }
+                              }
+                            }
+                          },
+          { "match": { "level": "?3" } }
+        ]
+      }
+    }
+    """)
+    List<Recommend> findByMultipleCriteria(String classification, Set<String> languages, Set<String> frameworks, Level level);
+
 }

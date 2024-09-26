@@ -38,15 +38,14 @@ public class RecommendationService {
         return boardElasticsearchRepo.findById(id).orElse(null);
     }
 
-    public Set<Long> recommendBoardsForFreelancer(Long freelancerId) {
+    public Set<Recommend> recommendBoardsForFreelancer(Long freelancerId) {
         // 1. 프리랜서 정보 가져오기
         Freelancer freelancer = freelancerRepository.findById(freelancerId)
                 .orElseThrow(() -> new IllegalArgumentException("프리랜서를 찾을 수 없습니다."));
         System.out.println(freelancer.getClassification());
 
         List<Recommend> recommendListByClassification = boardElasticsearchRepo.findByClassification(freelancer.getClassification()).stream().toList();
-//        System.out.println(recommendListByClassification.size());
-        //
+
 //         2. 프리랜서가 사용하는 언어에 맞는 보드 추천
         Set<String> languages = freelancer.getLanguages().stream()
                 .map(language -> language.getLanguage().getName())
@@ -68,6 +67,7 @@ public class RecommendationService {
         Set<Recommend> recommendedBoardsByFramework = new HashSet<>();
         for (String framework : frameworks) {
             List<Recommend> recommendsByFramework = boardElasticsearchRepo.findByFrameworks(framework);
+            System.out.println(recommendsByFramework.size()+"프레임워크"+framework);
             recommendedBoardsByFramework.addAll(recommendsByFramework);
         }
 //
@@ -81,11 +81,11 @@ public class RecommendationService {
 
 
         // 추천된 모든 보드들을 하나의 리스트로 합침
-        Set<Recommend> recommendedBoards = new HashSet<>(recommendedBoardsByLanguage);
-//        recommendedBoards.addAll(recommendListByClassification);
-//        recommendedBoards.addAll(recommendedBoardsByFramework);
-//        recommendedBoards.addAll(recommendedBoardsByLevel);
-//        recommendedBoards.addAll(recommendedBoardsByLanguage);
+        Set<Recommend> recommendedBoards = new HashSet<>();
+        recommendedBoards.addAll(recommendListByClassification);
+        recommendedBoards.addAll(recommendedBoardsByFramework);
+        recommendedBoards.addAll(recommendedBoardsByLevel);
+        recommendedBoards.addAll(recommendedBoardsByLanguage);
 
         List<Board> boards = new ArrayList<>();
 
@@ -93,17 +93,48 @@ public class RecommendationService {
                 .map(Recommend::getBoardId) // Recommend 객체에서 boardId를 추출
                 .collect(Collectors.toSet());
         System.out.println(boardIds);
-//        for (Long boardId : boardIds) {
-//            boards.add(boardRepository.findById(boardId).orElse(null));
-//        }
 
-        // 2. boardId로 BoardRepository를 통해 Board 리스트 조회
-//        List<Board> boards = boardRepository.findAllById(boardIds);
+        // 5. 각 Recommend가 몇 개의 조건을 만족하는지 확인하고, 3개 이상 맞는 보드만 필터링
+        Set<Recommend> result = recommendedBoards.stream()
+                .filter(recommend -> {
+                    int matchCount = 0;
 
-        // 3. 조회된 Board 리스트 반환
-        return boardIds;
+                    // classification 일치 여부 확인
+                    if (recommend.getClassification().equals(freelancer.getClassification())) {
+                        matchCount++;
+                    }
 
-//        return new ArrayList<>(recommendedBoards);
+                    // language 일치 여부 확인
+//                    if (recommend.getLanguages().stream().anyMatch(languages::contains)) {
+//                        matchCount++;
+//                    }
+                    if (!recommend.getLanguages().isEmpty() && recommend.getLanguages().stream()
+                            .map(language -> language.getLanguage().getName())
+                            .anyMatch(languages::contains)) {
+                        matchCount++;
+                    }
+
+                    // framework 일치 여부 확인
+                    if (!recommend.getFrameworks().isEmpty() && recommend.getFrameworks().stream()
+                            .map(framework -> framework.getFramework().getName())
+                            .anyMatch(frameworks::contains)) {
+                        matchCount++;
+                    }
+//                    if (recommend.getFrameworks().stream().anyMatch(frameworks::contains)) {
+//                        matchCount++;
+//                    }
+
+                    // level 일치 여부 확인
+                    if (recommend.getLevel() == freelancerLevel) {
+                        matchCount++;
+                    }
+                    System.out.println(matchCount);
+                    // 3개 이상의 조건이 일치하는 경우만 포함
+                    return matchCount >= 3;
+                })
+                .collect(Collectors.toSet());
+
+        return result;
     }
 
     private Level getLevelByCareerYear(int careerYear) {
@@ -114,6 +145,46 @@ public class RecommendationService {
         }
         throw new IllegalArgumentException("적절한 레벨을 찾을 수 없습니다.");
     }
+
+    public Set<Recommend> recommends(Long freelancerId) {
+        Freelancer freelancer = freelancerRepository.findById(freelancerId)
+                .orElseThrow(() -> new IllegalArgumentException("프리랜서를 찾을 수 없습니다."));
+
+        Set<String> languages = freelancer.getLanguages().stream()
+                .map(language -> language.getLanguage().getName())
+                .collect(Collectors.toSet());
+
+//        // 3. 프리랜서가 사용하는 프레임워크에 맞는 보드 추천
+        Set<String> frameworks = freelancer.getFrameworks().stream()
+                .map(framework -> framework.getFramework().getName())
+                .collect(Collectors.toSet());
+
+        Integer careerYear = freelancer.getCareerYear();
+        Level freelancerLevel = getLevelByCareerYear(careerYear);
+
+        List<Recommend> recommendList = boardElasticsearchRepo.findByMultipleCriteria(freelancer.getClassification(),languages,frameworks,freelancerLevel);
+        Set<Recommend> results = new HashSet<>(recommendList);
+
+        return results;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //    @Qualifier("freelancerElasticsearchRepo")
 //    private final FreelancerElasticsearchRepository freelancerRepository;
 //    private final BoardElasticsearchRepository boardRepository;

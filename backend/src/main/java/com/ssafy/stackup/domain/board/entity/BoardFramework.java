@@ -21,7 +21,7 @@ public class BoardFramework {
 
     @ManyToOne
     @JoinColumn(name = "framework_id")
-    @Field(type= FieldType.Object)
+//    @Field(type= FieldType.Object)
     private Framework framework;
 
 

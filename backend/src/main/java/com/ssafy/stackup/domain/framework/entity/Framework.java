@@ -13,7 +13,6 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Entity
 @Table(name = "framework")
 @NoArgsConstructor

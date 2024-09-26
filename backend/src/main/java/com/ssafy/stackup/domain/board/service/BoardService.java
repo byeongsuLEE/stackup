@@ -133,6 +133,7 @@ public class BoardService {
                 .map(BoardLanguageUpdateRequest::getLanguageId)
                 .collect(Collectors.toSet());
 
+
         for(Long frameworkId : uniqueFrameworkIds) {
             Framework framework = frameworkRepository.findById(frameworkId)
                     .orElseThrow(() -> new ResourceNotFoundException("프레임워크가 존재하지 않음"));
@@ -144,7 +145,7 @@ public class BoardService {
         }
        board.setBoardFrameworks(frameworks);
 
-        List<String> languageNames = new ArrayList<>();
+//        List<String> languageNames = new ArrayList<>();
 
         for(Long languageId : uniqueLanguageIds) {
             Language language = languageRepository.findById(languageId)
@@ -154,16 +155,19 @@ public class BoardService {
 //                    .board(board)
                     .build();
             languages.add(boardLanguage);
-            languageNames.add(language.getName());
+//            languageNames.add(language.getName());
         }
         board.setBoardLanguages(languages);
 
         Recommend recommend = new Recommend();
         recommend.setClassification(board.getClassification());
         recommend.setFrameworks(board.getBoardFrameworks());
-//        recommend.setLanguages(board.getBoardLanguages());
-        recommend.setLanguages(languageNames);
+        recommend.setLanguages(board.getBoardLanguages());
+//        recommend.setLanguages(languageNames);
+//        recommend.setFrameworks(frameworkNames);
         recommend.setLevel(board.getLevel());
+        recommend.setTitle(board.getTitle());
+        recommend.setDeposit(board.getDeposit());
 
 
         Board result = boardRepository.save(board);

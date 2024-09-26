@@ -1,24 +1,16 @@
 package com.ssafy.stackup.domain.project.controller;
 
-import com.ssafy.stackup.common.exception.CustomException;
 import com.ssafy.stackup.common.response.ApiResponse;
-import com.ssafy.stackup.common.response.ErrorCode;
 import com.ssafy.stackup.domain.project.dto.response.ProjectInfoResponseDto;
 import com.ssafy.stackup.domain.project.dto.request.ProjectStartRequestDto;
 import com.ssafy.stackup.domain.project.dto.request.SignRequest;
-import com.ssafy.stackup.domain.project.dto.response.ProjectSignResponseDto;
 import com.ssafy.stackup.domain.project.dto.response.ProjectStepCheckResponseDto;
-import com.ssafy.stackup.domain.project.entity.Project;
-import com.ssafy.stackup.domain.project.entity.ProjectStatus;
-import com.ssafy.stackup.domain.project.entity.ProjectStep;
 import com.ssafy.stackup.domain.project.repository.ProjectRepository;
 import com.ssafy.stackup.domain.project.service.ProjectService;
 import com.ssafy.stackup.domain.project.service.SignatureService;
 import com.ssafy.stackup.domain.user.entity.*;
-import com.ssafy.stackup.domain.user.repository.FreelancerProjectRepository;
 import com.ssafy.stackup.domain.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

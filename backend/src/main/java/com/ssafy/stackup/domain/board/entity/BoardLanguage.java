@@ -3,8 +3,6 @@ package com.ssafy.stackup.domain.board.entity;
 import com.ssafy.stackup.domain.language.entity.Language;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
 
 @Entity
 @Table(name = "board_language")

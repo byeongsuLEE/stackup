@@ -1,8 +1,7 @@
 package com.ssafy.stackup.domain.project.dto.response;
 
 import com.ssafy.stackup.domain.board.entity.Level;
-import com.ssafy.stackup.domain.framework.dto.FrameworkRequest;
-import com.ssafy.stackup.domain.language.dto.LanguageRequest;
+
 import com.ssafy.stackup.domain.project.entity.ProjectStatus;
 import com.ssafy.stackup.domain.project.entity.ProjectStep;
 import lombok.*;

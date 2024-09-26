@@ -1,30 +1,21 @@
 package com.ssafy.stackup.common.oauth2.service;
 
 import com.ssafy.stackup.common.exception.CustomOAuth2Exception;
-import com.ssafy.stackup.common.jwt.TokenProvider;
 import com.ssafy.stackup.common.oauth2.dto.GitHubResponse;
-import com.ssafy.stackup.common.oauth2.dto.Oauth2Response;
 import com.ssafy.stackup.common.response.ErrorCode;
-import com.ssafy.stackup.domain.framework.entity.Framework;
-import com.ssafy.stackup.domain.framework.repository.FrameworkRepository;
-import com.ssafy.stackup.domain.language.repository.LanguageRepository;
+
 import com.ssafy.stackup.domain.user.entity.Freelancer;
 import com.ssafy.stackup.domain.user.entity.UserAdapter;
 import com.ssafy.stackup.domain.user.repository.FreelancerRepository;
 import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
-import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
-import javax.naming.ldap.LdapName;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;

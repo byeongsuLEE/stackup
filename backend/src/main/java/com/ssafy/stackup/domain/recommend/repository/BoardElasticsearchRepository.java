@@ -1,6 +1,5 @@
 package com.ssafy.stackup.domain.recommend.repository;
 
-import com.ssafy.stackup.domain.board.entity.Board;
 import com.ssafy.stackup.domain.board.entity.Level;
 import com.ssafy.stackup.domain.recommend.entity.Recommend;
 import org.springframework.data.elasticsearch.annotations.Query;

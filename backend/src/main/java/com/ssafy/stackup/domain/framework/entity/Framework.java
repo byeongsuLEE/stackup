@@ -1,7 +1,4 @@
 package com.ssafy.stackup.domain.framework.entity;
-
-import com.ssafy.stackup.domain.board.entity.BoardFramework;
-import com.ssafy.stackup.domain.user.entity.FreelancerFramework;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,8 +7,6 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "framework")

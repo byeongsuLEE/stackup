@@ -2,16 +2,16 @@ package com.ssafy.stackup.domain.evaluation.controller;
 
 import com.ssafy.stackup.common.response.ApiResponse;
 import com.ssafy.stackup.domain.evaluation.dto.EvaluationRequestDto;
-import com.ssafy.stackup.domain.evaluation.entity.Evaluation;
-import com.ssafy.stackup.domain.evaluation.service.EvaluationService;
 import com.ssafy.stackup.domain.evaluation.service.EvaluationServiceImpl;
 import com.ssafy.stackup.domain.user.entity.AuthUser;
 import com.ssafy.stackup.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 작성자   : user

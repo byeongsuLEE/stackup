@@ -1,10 +1,7 @@
 package com.ssafy.stackup.domain.evaluation.dto;
 
-import com.ssafy.stackup.domain.project.entity.Project;
 import com.ssafy.stackup.domain.user.entity.EvaluationType;
-import com.ssafy.stackup.domain.user.entity.User;
 import com.ssafy.stackup.domain.user.entity.UserType;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -6,6 +6,8 @@ import com.ssafy.stackup.common.response.ErrorCode;
 import com.ssafy.stackup.domain.board.dto.*;
 import com.ssafy.stackup.domain.board.entity.Board;
 import com.ssafy.stackup.domain.board.service.BoardService;
+import com.ssafy.stackup.domain.recommend.entity.Recommend;
+import com.ssafy.stackup.domain.recommend.service.RecommendationService;
 import com.ssafy.stackup.domain.user.entity.AuthUser;
 import com.ssafy.stackup.domain.user.entity.Client;
 import com.ssafy.stackup.domain.user.entity.Freelancer;
@@ -15,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -31,10 +30,21 @@ public class BoardController {
     @Autowired
     private ClientRepository clientRepository;
 
+    @Autowired
+    private RecommendationService recommendationService;
+
+
     @GetMapping
     public ResponseEntity<?> findAllBoards(){
         List<?> boards = boardService.getboards();
         return ResponseEntity.ok().body(ApiResponse.success(boards));
+    }
+
+    @GetMapping("/recommend-list")
+    public List<Recommend> findAllRecommendations(){
+//        List<?> recommends = recommendationService.findRecommend();
+//        return ResponseEntity.ok().body(ApiResponse.success(recommends));
+        return recommendationService.findRecommend();
     }
 
     //모집글 상세 조회
@@ -130,5 +140,28 @@ public class BoardController {
             return ResponseEntity.status(500).body(Map.of("success", false, "error", e.getMessage()));
         }
     }
+
+    /**
+     *
+     *
+     * @ 작성자   : 김연지
+     * @ 작성일   : 2024-09-26
+     * @ 설명     : 프리랜서 스킬셋(대분류, 언어, 프레임워크, 경력) 기반으로 일감(board)추천
+     * @param user
+     * @return
+     */
+    @GetMapping("/recommend")
+    public Set<Recommend> recommendBoards(@AuthUser User user) {
+        Long freelancerId = user.getId();
+        Set<Recommend> recommendBoards = recommendationService.recommendBoardsForFreelancer(freelancerId);
+        return recommendBoards;
+    }
+
+//    @GetMapping("/recommend/all")
+//    public Set<Recommend> recommendAll(@AuthUser User user) {
+//        Long freelancerId = user.getId();
+//        Set<Recommend> results = recommendationService.recommends(freelancerId);
+//        return results;
+//    }
 
 }

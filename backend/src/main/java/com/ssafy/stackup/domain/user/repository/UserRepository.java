@@ -1,6 +1,5 @@
 package com.ssafy.stackup.domain.user.repository;
 
-import com.ssafy.stackup.domain.user.entity.Client;
 import com.ssafy.stackup.domain.user.entity.User;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;

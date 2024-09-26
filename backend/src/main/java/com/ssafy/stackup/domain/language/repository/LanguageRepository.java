@@ -13,8 +13,8 @@ public interface LanguageRepository extends JpaRepository<Language, Long> {
 
     List<Language> findAllByOrderByIdDesc();
 
-    @Query("SELECT l FROM Language l JOIN FETCH BoardLanguage bl ON l.id = bl.language.id WHERE bl.board.boardId = :boardId")
-    List<Language> findLanguagesByBoardId(@Param("boardId") Long boardId);
+//    @Query("SELECT l FROM Language l JOIN FETCH BoardLanguage bl ON l.id = bl.language.id WHERE bl.board.boardId = :boardId")
+//    List<Language> findLanguagesByBoardId(@Param("boardId") Long boardId);
 
     Optional<Language> findByName(String name);
 }

@@ -20,6 +20,9 @@ import com.ssafy.stackup.domain.language.dto.BoardLanguageUpdateRequest;
 import com.ssafy.stackup.domain.language.entity.Language;
 import com.ssafy.stackup.domain.language.repository.BoardLanguageRepository;
 import com.ssafy.stackup.domain.language.repository.LanguageRepository;
+import com.ssafy.stackup.domain.recommend.entity.Recommend;
+import com.ssafy.stackup.domain.recommend.repository.BoardElasticsearchRepository;
+import com.ssafy.stackup.domain.recommend.service.RecommendationService;
 import com.ssafy.stackup.domain.user.entity.Client;
 import com.ssafy.stackup.domain.user.entity.Freelancer;
 import com.ssafy.stackup.domain.user.repository.FreelancerRepository;
@@ -63,6 +66,11 @@ public class BoardService {
     @Autowired
     private BoardApplicantRepository boardApplicantRepository;
 
+    @Autowired
+    private BoardElasticsearchRepository boardElasticsearchRepository;
+    @Autowired
+    private RecommendationService recommendationService;
+
     //모집글 목록 조회
     @Transactional(readOnly = true)
     public List<BoardFindAllResponse> getboards() {
@@ -96,6 +104,20 @@ public class BoardService {
         boardRepository.delete(board);
     }
 
+    @Transactional(readOnly = true)
+    public List<BoardFindAllResponse> findBoardsByIds(Set<Long> boardIds) {
+        // boardIds 리스트를 사용하여 각 boardId에 해당하는 Board를 찾기
+        List<Board> boards = boardIds.stream()
+                .map(boardId -> boardRepository.findById(boardId)
+                        .orElseThrow(() -> new ResourceNotFoundException("게시글이 존재하지 않음: " + boardId)))
+                .collect(Collectors.toList());
+
+        return boards.stream()
+                .map(BoardFindAllResponse::new)
+                .collect(Collectors.toList());
+    }
+
+
 
     //모집글 작성
     public BoardFindAllResponse createBoard(Board board, List<BoardFrameworkUpdateRequest> frameworkRequests, List<BoardLanguageUpdateRequest> languageRequests, Client client) {
@@ -111,29 +133,47 @@ public class BoardService {
                 .map(BoardLanguageUpdateRequest::getLanguageId)
                 .collect(Collectors.toSet());
 
+
         for(Long frameworkId : uniqueFrameworkIds) {
             Framework framework = frameworkRepository.findById(frameworkId)
                     .orElseThrow(() -> new ResourceNotFoundException("프레임워크가 존재하지 않음"));
             BoardFramework boardFramework = BoardFramework.builder()
                     .framework(framework)
-                    .board(board)
+//                    .board(board)
                     .build();
             frameworks.add(boardFramework);
         }
-        board.setBoardFrameworks(frameworks);
+       board.setBoardFrameworks(frameworks);
+
+//        List<String> languageNames = new ArrayList<>();
 
         for(Long languageId : uniqueLanguageIds) {
             Language language = languageRepository.findById(languageId)
                     .orElseThrow(() -> new ResourceNotFoundException("언어가 존재하지 않음"));
             BoardLanguage boardLanguage = BoardLanguage.builder()
                     .language(language)
-                    .board(board)
+//                    .board(board)
                     .build();
             languages.add(boardLanguage);
+//            languageNames.add(language.getName());
         }
         board.setBoardLanguages(languages);
 
-        boardRepository.save(board);
+        Recommend recommend = new Recommend();
+        recommend.setClassification(board.getClassification());
+        recommend.setFrameworks(board.getBoardFrameworks());
+        recommend.setLanguages(board.getBoardLanguages());
+//        recommend.setLanguages(languageNames);
+//        recommend.setFrameworks(frameworkNames);
+        recommend.setLevel(board.getLevel());
+        recommend.setTitle(board.getTitle());
+        recommend.setDeposit(board.getDeposit());
+
+
+        Board result = boardRepository.save(board);
+
+        recommend.setBoardId(result.getBoardId());
+        boardElasticsearchRepository.save(recommend);
 
         return new BoardFindAllResponse(board);
     }
@@ -153,7 +193,7 @@ public class BoardService {
                 .orElseThrow(() -> new RuntimeException("Freelancer not found"));
 
         BoardApplicant boardApplicant = new BoardApplicant();
-        boardApplicant.setBoard(board);
+//        boardApplicant.setBoard(board);
         boardApplicant.setFreelancer(freelancer);
 
         // Add boardApplicant to the board's list

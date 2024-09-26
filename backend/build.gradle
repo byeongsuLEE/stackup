@@ -41,7 +41,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
-//	 implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch' // 주석 처리
+	 implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch' // 주석 처리
 	// implementation 'org.springframework.boot:spring-boot-starter-data-mongodb' // 주석 처리
 //	 implementation 'org.springframework.kafka:spring-kafka' // 주석 처리
 	compileOnly 'org.projectlombok:lombok'

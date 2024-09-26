@@ -54,8 +54,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         System.out.println("OauthUserService");
 
-
-        //github 로그인 경우
         if (registrationId.equals("github")) {
 
             GitHubResponse gitHubResponse = new GitHubResponse(attributes);
@@ -74,7 +72,6 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                         .reportedCount(0)
                         .totalScore(0.0)
                         .careerYear(0)
-                        .evaluatedCount(0)
                         .build();
 
 
@@ -87,7 +84,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
             }
 
-            freelancer = freelancerRepository.save(freelancer);
+            freelancerRepository.save(freelancer);
             return new UserAdapter(freelancer);
         }
 

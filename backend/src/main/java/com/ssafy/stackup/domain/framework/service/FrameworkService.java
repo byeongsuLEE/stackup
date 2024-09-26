@@ -32,7 +32,7 @@ public class FrameworkService {
 
     @Transactional(readOnly = true)
     public List<Framework> findFrameworkByBoardId(Long boardId) {
-        return frameworkRepository.findFrameworksByBoardId(boardId);
+        return boardRepository.findFrameworksByBoardId(boardId);
     }
 
     public FrameworkResponse createFramework(FrameworkRequest frameworkRequest) {

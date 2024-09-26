@@ -1,7 +1,6 @@
 package com.ssafy.stackup.domain.user.dto.response;
 
 import lombok.Builder;
-import lombok.Getter;
 
 /**
  * 작성자 : jingu

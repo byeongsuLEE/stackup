@@ -28,6 +28,7 @@ import com.ssafy.stackup.domain.user.repository.FreelancerRepository;
 import com.ssafy.stackup.domain.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -47,11 +48,13 @@ public class ProjectServiceImpl implements ProjectService {
     private final ProjectRepository projectRepository;
     private final S3ImageUpLoadService s3ImageUpLoadService;
     private final FreelancerRepository freelancerRepository;
-    private final BoardApplicantRepository boardApplicantRepository;
-    private final BoardRepository boardRepository;
+
     private final FreelancerProjectRepository freelancerProjectRepository;
     private final SignatureService signatureService;
     private final UserServiceImpl userService;
+
+    private final BoardRepository boardRepository;
+    private final BoardApplicantRepository boardApplicantRepository;
 
     @Override
     public void registerPreviousProject(MultipartFile certificateFile, String title, Long period) {

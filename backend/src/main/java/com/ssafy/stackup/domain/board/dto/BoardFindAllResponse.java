@@ -1,6 +1,7 @@
 package com.ssafy.stackup.domain.board.dto;
 
 import com.ssafy.stackup.domain.board.entity.Board;
+import com.ssafy.stackup.domain.board.entity.Level;
 import com.ssafy.stackup.domain.framework.dto.FrameworkRequest;
 import com.ssafy.stackup.domain.language.dto.LanguageRequest;
 import lombok.Data;
@@ -27,7 +28,7 @@ public class BoardFindAllResponse {
     private Boolean worktype;
     private Date deadline;
     private Date upload;
-    private String level;
+    private Level level;
     public BoardFindAllResponse() {}
 
     public BoardFindAllResponse(Board board) {
@@ -50,19 +51,5 @@ public class BoardFindAllResponse {
         this.deadline = board.getDeadline();
         this.upload = board.getUpload();
         this.level = board.getLevel();
-//        if(board.getBoardFrameworks() != null) {
-//            this.frameworks = board.getBoardFrameworks().stream()
-//                    .map(framework -> new FrameworkRequest(framework.getFramework()))
-//                    .collect(Collectors.toList());
-//        } else {
-//            this.frameworks = new ArrayList<>();
-//        }
-//        if (board.getBoardLanguages() != null) {
-//            this.languages = board.getBoardLanguages().stream()
-//                    .map(language -> new LanguageRequest(language.getLanguage()))
-//                    .collect(Collectors.toList());
-//        } else {
-//            this.languages = new ArrayList<>();
-//        }
     }
 }

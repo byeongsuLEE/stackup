@@ -2,12 +2,12 @@ package com.ssafy.stackup.domain.user.entity;
 
 
 import com.ssafy.stackup.domain.evaluation.entity.Evaluation;
-import com.ssafy.stackup.domain.project.entity.Project;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.ColumnDefault;
 
 import java.util.List;
 import java.util.Set;

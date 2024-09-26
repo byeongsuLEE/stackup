@@ -27,6 +27,7 @@ import Signature from "./pages/SignaturePage";
 import Transfer from "./pages/TransferPage";
 import WorkDetail from "./pages/WorkDetailPage";
 import Work from "./pages/WorkPage";
+import Test from "./pages/TestPage";
 
 function App() {
 
@@ -37,6 +38,7 @@ function App() {
           <Navbar />
           <main className="flex-grow mt-28 mx-20">
             <Routes>
+              <Route path="/test" element={<Test />} />
               <Route path="/" element={<Home />} />
               <Route path="/signature" element={<Signature />} />
               <Route path="/signature/detail" element={<SignatureDetail />} />

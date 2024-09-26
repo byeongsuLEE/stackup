@@ -1,17 +1,18 @@
+
 import { ethers } from 'ethers';
 import MyNFT from '../../../blockchain/NFT/build/contracts/MyNFT.json'; // JSON 파일 임포트
 
 // NFT 스마트 계약 주소
-const NFT_CONTRACT_ADDRESS = '0xcB892B05AE99DEB27A380C129191719477628F1C';
+const NFT_CONTRACT_ADDRESS = '0xE762dB96b859424d7908cDe06F1927361d217633';
 const cid = 'Qmbp8Ugq5gabMBQ7QAP18TPPF9FAENDsy34pM2RiuUzNKR'; // Pinata에서 받은 CID
 const metadataURI = `ipfs://${cid}`; // IPFS CID를 URI로 사용
 
 // NFT ABI 정의
 const NFT_ABI = MyNFT.abi;
 
-export const callNft = () => {
+export const CallTest = () => {
 
-  const mintNFT = async () => {
+  const Minting = async () => {
     try {
       // MetaMask의 window.ethereum 객체가 존재하는지 확인
       if (typeof window.ethereum === "undefined") {
@@ -19,7 +20,7 @@ export const callNft = () => {
       }
 
       // ethers.js v6: BrowserProvider 사용
-      const provider = new ethers.BrowserProvider(window.ethereum as any);
+      const provider = new ethers.BrowserProvider(window.ethereum);
 
       // ethers.js v5: Web3Provider 사용
       // const provider = new ethers.providers.Web3Provider(window.ethereum as any);
@@ -45,5 +46,5 @@ export const callNft = () => {
     }
   };
 
-  return { mintNFT };
+  return { Minting };
 };

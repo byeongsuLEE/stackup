@@ -34,7 +34,7 @@ public class ProjectInfoResponseDto {
     private Boolean worktype;
     private Date deadline;
     private Date upload;
-    private String level;
+    private Level level;
     private boolean clientStepConfirmed;
     private boolean freelancerStepConfirmed;
 

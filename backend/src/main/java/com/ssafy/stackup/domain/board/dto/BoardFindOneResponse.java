@@ -1,6 +1,7 @@
 package com.ssafy.stackup.domain.board.dto;
 
 import com.ssafy.stackup.domain.board.entity.Board;
+import com.ssafy.stackup.domain.board.entity.Level;
 import com.ssafy.stackup.domain.framework.dto.FrameworkRequest;
 import com.ssafy.stackup.domain.language.dto.LanguageRequest;
 import com.ssafy.stackup.domain.user.dto.request.FreelancerInfoRequestDto;
@@ -32,7 +33,7 @@ public class BoardFindOneResponse {
     private String requirements;
     private Boolean isCharged;
     private String address; // 실제 근무지
-    private String level;
+    private Level level;
     private Date deadline;
     private Date upload;
     private List<BoardApplicantRequest> applicantList;
@@ -45,12 +46,12 @@ public class BoardFindOneResponse {
         this.title = board.getTitle();
         this.description = board.getDescription();
         this.classification = board.getClassification();
-        this.frameworks = board.getBoardFrameworks().stream()
-                .map(framework -> new FrameworkRequest(framework.getFramework()))
-                .collect(Collectors.toList());
-        this.languages = board.getBoardLanguages().stream()
-                .map(language -> new LanguageRequest(language.getLanguage()))
-                .collect(Collectors.toList());
+//        this.frameworks = board.getBoardFrameworks().stream()
+//                .map(framework -> new FrameworkRequest(framework.getFramework()))
+//                .collect(Collectors.toList());
+//        this.languages = board.getBoardLanguages().stream()
+//                .map(language -> new LanguageRequest(language.getLanguage()))
+//                .collect(Collectors.toList());
         this.deposit = board.getDeposit();
         this.startDate = board.getStartDate();
         this.period = board.getPeriod();

@@ -15,8 +15,8 @@ public class RedisConfiguration {
     private String redisHost;
     @Value("${spring.data.redis.port}")
     private int redisPort;
-    @Value("${spring.data.redis.password}")
-    private String redisPassword;
+//    @Value("${spring.data.redis.password}")
+//    private String redisPassword;
 
 
 
@@ -31,7 +31,7 @@ public class RedisConfiguration {
         RedisStandaloneConfiguration redisConfig = new RedisStandaloneConfiguration();
         redisConfig.setHostName(redisHost);
         redisConfig.setPort(redisPort);
-        redisConfig.setPassword(redisPassword); // 패스워드 설정
+//        redisConfig.setPassword(redisPassword); // 패스워드 설정
 
         return new LettuceConnectionFactory(redisConfig);
 

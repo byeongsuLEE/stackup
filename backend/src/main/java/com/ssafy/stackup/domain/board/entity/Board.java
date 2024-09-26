@@ -5,6 +5,10 @@ import com.ssafy.stackup.domain.user.entity.Client;
 import com.ssafy.stackup.domain.user.entity.Freelancer;
 import jakarta.persistence.*;
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
+import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,9 +20,11 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+//@Document(indexName = "board")
 public class Board {
 
     @Id
+    @org.springframework.data.annotation.Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "board_id")
     private Long boardId;
@@ -30,16 +36,22 @@ public class Board {
     private String description;
     private String classification;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "client_id",nullable = false)
     private Client client;
 
-    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name="board_id")
     private List<BoardFramework> boardFrameworks = new ArrayList<>();
 
-    @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name="board_id")
     private List<BoardLanguage> boardLanguages = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BoardApplicant> boardApplicants = new ArrayList<>();
 
@@ -47,7 +59,7 @@ public class Board {
     private Long deposit;
 
     @Temporal(TemporalType.DATE)
-    @Column(nullable = false)
+    @Column(nullable = false, name="start_date")
     private Date startDate;
 
     @Column(nullable = false)
@@ -64,7 +76,7 @@ public class Board {
     @Column(nullable = false)
     private String requirements;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name ="is_charged")
     private Boolean isCharged = false;
 
     private String address; // 실제 근무지
@@ -76,10 +88,14 @@ public class Board {
     @Temporal(TemporalType.DATE)
     private Date upload;
 
-    private String level;
+    @Enumerated(EnumType.STRING)
+    private Level level;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Project project;
+
+
 
 
     @PrePersist
@@ -91,7 +107,7 @@ public class Board {
             isCharged = false; // 기본값 설정
         }
     }
-
+//    @JsonIgnore
 //    @ManyToMany
 //    @JoinTable(
 //            name = "board_applicant",
@@ -123,10 +139,12 @@ public class Board {
         this.isCharged = isCharged;
     }
 
-//    public void setBoardApplicants(BoardApplicant boardApplicant) {
-//        this.boardApplicants.clear();
-//        this.boardApplicants.add(boardApplicant);
-//        boardApplicant.setBoard(this);
-//    }
+    public void setBoardApplicants(BoardApplicant boardApplicant) {
+        this.boardApplicants.clear();
+        this.boardApplicants.add(boardApplicant);
+        boardApplicant.setBoard(this);
+    }
+
+
 
 }

@@ -52,27 +52,4 @@ public class FreelancerProject {
         this.clientSigned = clientSigned;
     }
 
-
-    void updateFreelancerSigned(boolean freelancerSigned) {
-        this.freelancerSigned = true;
-    }
-
-    void updateClientSigned(boolean clientSigned) {
-        this.clientSigned = true;
-    }
-
-    /**
-     * 서명 여부 확인 메서드
-     * @ 작성자   : 이병수
-     * @ 작성일   : 2024-09-24
-     * @ 설명     :
-     * @return
-     */
-    boolean checkUsersSignConfirm(){
-        return this.freelancerSigned && this.clientSigned;
-    }
-
-
-
-
 }

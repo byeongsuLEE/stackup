@@ -6,19 +6,46 @@ from tensorflow.keras.layers import Input, Dense
 from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
 import json
+import joblib
 
 # 데이터 불러오기
 data = pd.read_json('../res/result.json')
 
+# 결측값 처리 함수 (중간값 또는 평균값으로 대체)
+def handle_missing_values(data):
+    data['totalPrice'].fillna(data['totalPrice'].median(), inplace=True)
+    data['period'].fillna(data['period'].median(), inplace=True)
+    # 'level' 필드에서 숫자가 아닌 값 제거 후 평균값으로 대체
+    data['level'] = pd.to_numeric(data['level'], errors='coerce')  # 문자열을 NaN으로 변환
+    data['level'] = data['level'].fillna(data['level'].mean())  # 결측값을 평균값으로 대체
+    return data
+
+# 레벨 전처리 함수
+def preprocess_level(data):
+    # 주니어, 미드 레벨, 시니어만 추출
+    level_map = {
+        "주니어": 1,
+        "미드 레벨": 2,
+        "시니어": 3
+    }
+    data['level'] = data['level'].map(level_map)
+    data['level'].fillna(0, inplace=True)  # 매핑되지 않은 값은 0으로 대체
+    return data
+
+# 레벨 전처리
+data = handle_missing_values(data)
+data = preprocess_level(data)
+
 # 거래 금액과 거래 기간 데이터 추출 및 전처리
 total_price = data['totalPrice'].values.reshape(-1, 1)  # totalPrice 열을 사용
 period = data['period'].values.reshape(-1, 1)  # period 열을 사용하여 기간 데이터 추출
+level = data['level'].values.reshape(-1, 1)  # level 열 추가
 
 # 거래 금액을 거래 기간으로 나누어 일일 거래 금액(price_per_day) 계산
 price_per_day = total_price / period
 
 # 거래 금액과 일일 거래 금액을 결합한 새로운 특징 데이터
-features = np.hstack((total_price, price_per_day))
+features = np.hstack((total_price, price_per_day, level))
 
 # 데이터 정규화
 scaler = MinMaxScaler()
@@ -32,7 +59,7 @@ test_data = scaled_features[train_size:]
 print(f"Train shape: {train_data.shape}, Test shape: {test_data.shape}")
 
 # Autoencoder 모델 정의
-input_dim = train_data.shape[1]  # 입력 차원 (2차원: totalPrice와 price_per_day)
+input_dim = train_data.shape[1]  # 입력 차원 (3차원: totalPrice, price_per_day, level)
 encoding_dim = 16  # 임베딩 차원 (압축 차원)
 
 # 인코더 정의
@@ -49,11 +76,15 @@ autoencoder.compile(optimizer='adam', loss='mean_squared_error')
 # 모델 학습
 history = autoencoder.fit(
     train_data, train_data,
-    epochs=50,
+    epochs=100,
     batch_size=32,
     validation_data=(test_data, test_data),
     verbose=1
 )
+
+# 학습된 scaler 저장
+scaler_path = '../trained_model/scaler_model.pkl'
+joblib.dump(scaler, scaler_path)
 
 # 학습된 모델 저장
 autoencoder.save('../trained_model/autoencoder_model.h5')
@@ -95,7 +126,8 @@ result = {
 }
 
 # 결과를 JSON 파일로 저장
-with open('..res/autoencoder/anomaly_detection_result.json', 'w', encoding='utf-8') as f:
+with open('../res/autoencoder/anomaly_detection_result.json', 'w', encoding='utf-8') as f:
     json.dump(result, f, ensure_ascii=False, indent=4)
 
 print("분석이 완료되었습니다. 결과는 anomaly_detection_result.json 파일에서 확인할 수 있습니다.")
+

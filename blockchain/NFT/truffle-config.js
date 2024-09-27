@@ -45,6 +45,7 @@
 // const { MNEMONIC, PROJECT_ID } = process.env;
 
 // const HDWalletProvider = require('@truffle/hdwallet-provider');
+const HDWalletProvider = require('@truffle/hdwallet-provider');
 
 module.exports = {
   /**
@@ -65,9 +66,23 @@ module.exports = {
     // options below to some value.
     //
     development: {
-     host: "127.0.0.1",     // Localhost (default: none)
-     port: 8545,            // Standard Ethereum port (default: none)
-     network_id: "*",       // Any network (default: none)
+      host: "127.0.0.1",     // Localhost (default: none)
+      port: 8545,            // Standard Ethereum port (default: none)
+      network_id: "*",       // Any network (default: none)
+    },
+    ssafy: {
+      provider: () => new HDWalletProvider('wink wrist gate myself chicken marble lyrics able daring moment exhaust razor second squeeze priority skull bunker hobby kitchen face aerobic hint reform auto', `https://rpc.ssafy-blockchain.com`),
+      network_id: '31221',
+      gas: 0
+
+      // provider: () => new HDWalletProvider(
+      //   'wink wrist gate myself chicken marble lyrics able daring moment exhaust razor second squeeze priority skull bunker hobby kitchen face aerobic hint reform auto', // 메타마스크의 시드 문구 또는 개인 키
+      //   'https://rpc.ssafy-blockchain.com' // SSAFY 블록체인 노드 URL
+      // ),
+      // network_id: 31221,       // SSAFY 체인 ID
+      // gas: 50000000000000,         // 가스 한도 (적절하게 설정)
+      // gasPrice: 10e9,       // 가스 가격 (10 Gwei)
+      // websockets: true         // 웹소켓 사용 여부
     },
     //
     // An additional network, but with some advanced options…
@@ -91,11 +106,11 @@ module.exports = {
     // },
     //
     // Useful for private networks
-    // private: {
-    //   provider: () => new HDWalletProvider(MNEMONIC, `https://network.io`),
-    //   network_id: 2111,   // This network is yours, in the cloud.
-    //   production: true    // Treats this network as if it was a public net. (default: false)
-    // }
+    //   private: {
+    //     provider: () => new HDWalletProvider('wink wrist gate myself chicken marble lyrics able daring moment exhaust razor second squeeze priority skull bunker hobby kitchen face aerobic hint reform auto', `https://rpc.ssafy-blockchain.com`),
+    //     network_id: 31221,   // This network is yours, in the cloud.
+    //     production: false    // Treats this network as if it was a public net. (default: false)
+    //   }
   },
 
   // Set default mocha options here, use special reporters, etc.
@@ -106,7 +121,7 @@ module.exports = {
   // Configure your compilers
   compilers: {
     solc: {
-      version: "0.8.21",      // Fetch exact version from solc-bin (default: truffle's version)
+      version: "0.8.1",      // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
       // settings: {          // See the solidity docs for advice about optimization and evmVersion
       //  optimizer: {

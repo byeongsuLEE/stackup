@@ -3,7 +3,7 @@ import { ethers } from 'ethers';
 import MyNFT from '../../../blockchain/NFT/build/contracts/MyNFT.json'; // JSON 파일 임포트
 
 // NFT 스마트 계약 주소
-const NFT_CONTRACT_ADDRESS = '0xE762dB96b859424d7908cDe06F1927361d217633';
+const NFT_CONTRACT_ADDRESS = '0xAd2c287896a4c220F634549F736cEC3466B992D6';
 const cid = 'Qmbp8Ugq5gabMBQ7QAP18TPPF9FAENDsy34pM2RiuUzNKR'; // Pinata에서 받은 CID
 const metadataURI = `ipfs://${cid}`; // IPFS CID를 URI로 사용
 
@@ -26,12 +26,14 @@ export const CallTest = () => {
       // const provider = new ethers.providers.Web3Provider(window.ethereum as any);
 
       const signer = await provider.getSigner(); // 사용자의 서명 계정 가져오기
-
+      // const web3 = new Web3(/* 프로바이더 설정 */);
       const nftContract = new ethers.Contract(NFT_CONTRACT_ADDRESS, NFT_ABI, signer);
+      // const token = new web3.eth.Contract(NFT_ABI, NFT_CONTRACT_ADDRESS);
 
       // 민팅 트랜잭션 발생 (IPFS 메타데이터 URI를 함께 전달)
       const tx = await nftContract.mint(await signer.getAddress(), metadataURI, {
-        gasLimit: 1000000
+        gas: 0,
+        // data: token.methods.approve("", 10).encodeABI(), 
       });
 
       console.log(tx)

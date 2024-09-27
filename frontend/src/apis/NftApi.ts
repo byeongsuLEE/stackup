@@ -1,75 +1,71 @@
 import axios, { AxiosResponse } from 'axios';
+import { nftInfoProp } from '../hooks/MakeImage';
 
-interface nftInfo {
-    projectName: string,
-    companyName: string,
-    period: string,
-    name: string
-}
-
-export const makeNFT = async (data: nftInfo): Promise<Blob> => {
-    return new Promise((resolve, reject) => {
-        const canvas = document.createElement('canvas');
-        const context = canvas.getContext('2d');
-
-        if (!context) {
-            return reject(new Error('Canvas context 생성 실패'));
-        }
-
-        canvas.width = 200;
-        canvas.height = 300;
-
-        //== 배경 ==//
-        context.fillStyle = '#000000';
-        context.fillRect(0, 0, canvas.width, canvas.height);
-
-        //== 입력 값으로 text 바꿀수 있게 수정하기 ==//
-        context.fillStyle = '#ffffff';
-        context.font = '30px Arial';
-        context.fillText(data.projectName, 30, 80);
-
-        context.fillStyle = '#ffffff';
-        context.font = '20px Arial';
-        context.fillText(data.companyName, 30, 110);
-
-        context.fillStyle = '#ffffff';
-        context.font = '10px Arial';
-        context.fillText(data.period, 30, 130);
-
-        context.fillStyle = '#ffffff';
-        context.font = '20px Arial';
-        context.fillText(data.name, 30, 160);
-
-        //== Blob으로 변환 ==//
-        canvas.toBlob((blob) => {
-            if (blob) {
-                resolve(blob);
-            } else {
-                reject(new Error('Blob 생성 실패'));
-            }
-        }, 'image/png')
-    })    
-}
-
+// FormData를 Pinata에 업로드하는 함수
 export const pinata = async (formData: FormData): Promise<string> => {
-    try {
-        const response: AxiosResponse = await axios({
-            method: 'post',
-            url: 'https://api.pinata.cloud/pinning/pinFileToIPFS',
-            headers: {
-                // 'pinata_api_key': process.env.REACT_APP_PINATA_API_KEY || '',
-                // 'pinata_secret_api_key': process.env.REACT_APP_PINATA_SECRET_API_KEY || '',
-                'pinata_api_key': '',
-                'pinata_secret_api_key': '',
-                'Content-Type': 'multipart/form-data'
-            },
-            data: formData
-        });
+  try {
+    const response: AxiosResponse = await axios({
+      method: 'post',
+      url: 'https://api.pinata.cloud/pinning/pinFileToIPFS',
+      headers: {
+        // 'pinata_api_key': process.env.REACT_APP_PINATA_API_KEY || '',
+        // 'pinata_secret_api_key': process.env.REACT_APP_PINATA_SECRET_API_KEY || '',
+        'pinata_api_key': '',
+        'pinata_secret_api_key': '',
+      },
+      data: formData,
+    });
 
-        return response.data.IpfsHash;
-        
-    } catch (error) {
-        console.error('업로드 중 오류가 발생했습니다:', error);
-        throw new Error('파일 업로드 실패');
-    }
+    return response.data.IpfsHash; // 성공 시 IPFS 해시 반환
+  } catch (error) {
+    console.error('업로드 중 오류가 발생했습니다:', error);
+    return ''; // 오류 발생 시 빈 문자열 반환
+  }
+};
+
+// 이미지 CID를 사용하여 JSON 메타데이터 생성 및 Pinata에 업로드
+export const uploadMetadataToPinata = async (imageCID: string, data: nftInfoProp): Promise<string> => {
+  const metadata = {
+    name: "My NFT",
+    description: "This NFT was generated from user input",
+    image: `https://gateway.pinata.cloud/ipfs/${imageCID}`, // 이미지 CID를 참조
+    attributes: [
+      {
+        trait_type: "projectName",
+        value: data.projectName,
+      },
+      {
+        trait_type: "companyName",
+        value: data.companyName,
+      },
+      {
+        trait_type: "period",
+        value: data.period,
+      },
+      {
+        trait_type: "name",
+        value: data.name,
+      },
+    ],
+  };
+
+  try {
+    const response = await axios({
+      method: 'post',
+      url: 'https://api.pinata.cloud/pinning/pinJSONToIPFS',
+      headers: {
+        // 'pinata_api_key': process.env.REACT_APP_PINATA_API_KEY || '',
+        // 'pinata_secret_api_key': process.env.REACT_APP_PINATA_SECRET_API_KEY || '',
+        'pinata_api_key': '',
+        'pinata_secret_api_key': '',
+      },
+      data: metadata,
+    });
+
+    const jsonHash = response.data.IpfsHash;
+    return jsonHash; // 성공 시 해시값 반환
+  } catch (error) {
+    console.error('Pinata에 메타데이터 업로드 중 오류가 발생했습니다:', error);
+    return ''; // 실패 시 null 반환
+  }
 };

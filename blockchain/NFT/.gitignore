@@ -14,9 +14,6 @@ logs/
 # dotenv environment variables file
 .env
 
-# Truffle artifact files
-*.json
-
 # Truffle configuration backup files
 *.bak
 

@@ -87,13 +87,6 @@ public class RecommendationService {
         recommendedBoards.addAll(recommendedBoardsByLevel);
         recommendedBoards.addAll(recommendedBoardsByLanguage);
 
-        List<Board> boards = new ArrayList<>();
-
-        Set<Long> boardIds = recommendedBoards.stream()
-                .map(Recommend::getBoardId) // Recommend 객체에서 boardId를 추출
-                .collect(Collectors.toSet());
-        System.out.println(boardIds);
-
         // 5. 각 Recommend가 몇 개의 조건을 만족하는지 확인하고, 3개 이상 맞는 보드만 필터링
         Set<Recommend> result = recommendedBoards.stream()
                 .filter(recommend -> {
@@ -104,10 +97,6 @@ public class RecommendationService {
                         matchCount++;
                     }
 
-                    // language 일치 여부 확인
-//                    if (recommend.getLanguages().stream().anyMatch(languages::contains)) {
-//                        matchCount++;
-//                    }
                     if (!recommend.getLanguages().isEmpty() && recommend.getLanguages().stream()
                             .map(language -> language.getLanguage().getName())
                             .anyMatch(languages::contains)) {
@@ -120,15 +109,11 @@ public class RecommendationService {
                             .anyMatch(frameworks::contains)) {
                         matchCount++;
                     }
-//                    if (recommend.getFrameworks().stream().anyMatch(frameworks::contains)) {
-//                        matchCount++;
-//                    }
 
                     // level 일치 여부 확인
                     if (recommend.getLevel() == freelancerLevel) {
                         matchCount++;
                     }
-                    System.out.println(matchCount);
                     // 3개 이상의 조건이 일치하는 경우만 포함
                     return matchCount >= 3;
                 })
@@ -168,102 +153,5 @@ public class RecommendationService {
         return results;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//    @Qualifier("freelancerElasticsearchRepo")
-//    private final FreelancerElasticsearchRepository freelancerRepository;
-//    private final BoardElasticsearchRepository boardRepository;
-//
-//    public List<Board> recommendBoardsForFreelancer(Long freelancerId) {
-//        Freelancer freelancer = freelancerRepository.findById(freelancerId).orElse(null);
-//        if (freelancer == null) {
-//            return List.of(); // 프리랜서가 없으면 빈 리스트 반환
-//        }
-//
-//        // 프리랜서 속성 가져오기
-//        String classification = freelancer.getClassification();
-//        Set<String> languages = freelancer.getLanguages().stream()
-//                .map(lang -> lang.getLanguage().getName())
-//                .collect(Collectors.toSet());
-//        Set<String> frameworks = freelancer.getFrameworks().stream()
-//                .map(framework -> framework.getFramework().getName())
-//                .collect(Collectors.toSet());
-//        Integer careerYear = freelancer.getCareerYear();
-////        Level level = freelancer.getLevel(); // 프리랜서의 레벨 추가
-//
-////        return boardRepository.findAll().stream()
-////                .filter(board -> matchesBoardCriteria(board, classification, languages, frameworks, careerYear))
-////                .collect(Collectors.toList());
-//        // findAll() 호출 후 Iterable을 Stream으로 변환
-//        return StreamSupport.stream(boardRepository.findAll().spliterator(), false)
-//                .filter(board -> matchesBoardCriteria(board, classification, languages, frameworks, careerYear))
-//                .collect(Collectors.toList());
-//    }
-//
-//    private boolean matchesBoardCriteria(Board board, String classification, Set<String> languages, Set<String> frameworks, Integer careerYear) {
-//        int matchCount = 0; // 일치하는 조건 수 카운트
-//
-//        // 분류가 일치하는지 확인
-//        if (classification != null && classification.equals(board.getClassification())) {
-//            matchCount++;
-//        }
-//
-//        // 요구 스킬셋 확인
-//        boolean languagesMatch = languages.stream().anyMatch(lang -> board.getBoardLanguages().stream()
-//                .map(boardLanguage -> boardLanguage.getLanguage().getName())
-//                .collect(Collectors.toSet())
-//                .contains(lang));
-//
-//        boolean frameworksMatch = frameworks.stream().anyMatch(framework -> board.getBoardFrameworks().stream()
-//                .map(boardFramework -> boardFramework.getFramework().getName())
-//                .collect(Collectors.toSet())
-//                .contains(framework));
-//
-//        if (languagesMatch) {
-//            matchCount++;
-//        }
-//        if (frameworksMatch) {
-//            matchCount++;
-//        }
-//
-//        Level level = board.getLevel();
-//
-//        // 레벨에 따른 요구 경력 확인
-//        if (level != null && isCareerYearMatching(careerYear, level)) {
-//            matchCount++;
-//        }
-//
-//        // 3개 이상의 조건이 일치하는지 확인
-//        return matchCount >= 3;
-//    }
-//
-//    // 레벨과 경력 연수를 비교하는 메서드
-//    private boolean isCareerYearMatching(Integer careerYear, Level level) {
-//        switch (level) {
-//            case JUNIOR:
-//                return careerYear < 3; // 3년 미만
-//            case MID:
-//                return careerYear >= 3 && careerYear < 7; // 3년 이상 7년 미만
-//            case SENIOR:
-//                return careerYear >= 7; // 7년 이상
-//            default:
-//                return false;
-//        }
-//    }
 
 }

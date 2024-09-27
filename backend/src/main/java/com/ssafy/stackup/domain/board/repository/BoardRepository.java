@@ -1,5 +1,6 @@
 package com.ssafy.stackup.domain.board.repository;
 
+import com.ssafy.stackup.domain.board.dto.BoardSummaryDTO;
 import com.ssafy.stackup.domain.board.entity.Board;
 import com.ssafy.stackup.domain.framework.entity.Framework;
 import com.ssafy.stackup.domain.language.entity.Language;
@@ -41,6 +42,13 @@ public interface BoardRepository extends JpaRepository<Board, Long>{
 
     List<Framework> findFrameworksByBoardId(Long boardId);
     List<Language> findLanguagesByBoardId(Long boardId);
+
+    @Query("SELECT new com.ssafy.stackup.domain.board.dto.BoardSummaryDTO(b.boardId, b.period, b.deposit, b.level) " +
+            "FROM Board b WHERE b.boardId = :id")
+    BoardSummaryDTO findBoardFieldsById(@Param("id") Long id);
+
+//    @Query("SELECT b.period, b.deposit, b.level FROM Board b WHERE b.boardId = :id")
+//    Object[] findBoardFieldsById(@Param("id") Long id);
 
 //    List<Board> findByBoardLanguagesInAndBoardFrameworksInAndLevel(List<String> languages, List<String> frameworks, String level);
 }

@@ -36,8 +36,6 @@ public class Recommend {
 
     @Field(type = FieldType.Nested, includeInParent = true)
     private List<BoardLanguage> languages;
-//    @Field(type = FieldType.Nested, includeInParent = true)
-//    private List<String> languages;
 
     @Field(type = FieldType.Keyword)
     private Level level;

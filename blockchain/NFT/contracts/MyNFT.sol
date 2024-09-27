@@ -6,6 +6,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract MyNFT is ERC721URIStorage, Ownable {
     uint256 public nextTokenId;
+    address public admin;
 
     // NFT 민팅 시 이벤트
     event Minted(address recipient, uint256 tokenId, string tokenURI);

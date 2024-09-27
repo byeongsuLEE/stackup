@@ -10,8 +10,8 @@ export const pinata = async (formData: FormData): Promise<string> => {
       headers: {
         // 'pinata_api_key': process.env.REACT_APP_PINATA_API_KEY || '',
         // 'pinata_secret_api_key': process.env.REACT_APP_PINATA_SECRET_API_KEY || '',
-        'pinata_api_key': 'b5b407ab7ab7c6796960',
-        'pinata_secret_api_key': '9dc26d5cfbb80fcb9a16de5161353fe88179d96c69e3e3a0d92cff6c57a75a8d',
+        'pinata_api_key': '',
+        'pinata_secret_api_key': ''
       },
       data: formData,
     });
@@ -56,8 +56,8 @@ export const uploadMetadataToPinata = async (imageCID: string, data: nftInfoProp
       headers: {
         // 'pinata_api_key': process.env.REACT_APP_PINATA_API_KEY || '',
         // 'pinata_secret_api_key': process.env.REACT_APP_PINATA_SECRET_API_KEY || '',
-        'pinata_api_key': 'b5b407ab7ab7c6796960',
-        'pinata_secret_api_key': '9dc26d5cfbb80fcb9a16de5161353fe88179d96c69e3e3a0d92cff6c57a75a8d',
+        'pinata_api_key': '',
+        'pinata_secret_api_key': ''
       },
       data: metadata,
     });

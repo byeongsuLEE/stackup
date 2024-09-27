@@ -2293,7 +2293,11 @@
   },
   "networks": {},
   "schemaVersion": "3.4.16",
+<<<<<<< HEAD
   "updatedAt": "2024-09-27T03:03:57.723Z",
+=======
+  "updatedAt": "2024-09-27T04:46:59.568Z",
+>>>>>>> fe/metadata
   "devdoc": {
     "details": "ERC721 token with storage based token URI management.",
     "kind": "dev",

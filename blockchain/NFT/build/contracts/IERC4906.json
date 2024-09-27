@@ -562,7 +562,11 @@
   },
   "networks": {},
   "schemaVersion": "3.4.16",
+<<<<<<< HEAD
   "updatedAt": "2024-09-27T03:03:57.717Z",
+=======
+  "updatedAt": "2024-09-27T04:46:59.557Z",
+>>>>>>> fe/metadata
   "devdoc": {
     "events": {
       "BatchMetadataUpdate(uint256,uint256)": {

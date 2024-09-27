@@ -71,7 +71,7 @@ module.exports = {
       network_id: "*",       // Any network (default: none)
     },
     ssafy: {
-      provider: () => new HDWalletProvider('wink wrist gate myself chicken marble lyrics able daring moment exhaust razor second squeeze priority skull bunker hobby kitchen face aerobic hint reform auto', `https://rpc.ssafy-blockchain.com`),
+      provider: () => new HDWalletProvider('', `https://rpc.ssafy-blockchain.com`),
       network_id: '31221',
       gas: 0
 

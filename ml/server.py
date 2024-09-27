@@ -54,16 +54,16 @@ def check_missing_values(data):
     return data
 
 # 레벨 전처리 함수
-def preprocess_level(data):
-    level_map = {
-        "JUNIOR": 1,
-        "MID": 2,
-        "SENIOR": 3,
-        "NULL": 0
-    }
-    data['level'] = data['level'].map(level_map)
-    data['level'].fillna(0, inplace=True)
-    return data
+# def preprocess_level(data):
+#     level_map = {
+#         "주니어": 1,
+#         "미드 레벨": 2,
+#         "시니어": 3,
+#         "레벨 미선택": 0
+#     }
+#     data['level'] = data['level'].map(level_map)
+#     data['level'].fillna(0, inplace=True)
+#     return data
 
 # 동적 임계값 설정 함수 (백분위수 + 평균/표준편차 기반)
 def dynamic_threshold(mse):
@@ -82,7 +82,7 @@ def preprocess_data(data, scaler):
     data = {key: data[key] for key in required_fields}
 
     # 레벨 전처리
-    data = preprocess_level(data)
+    # data = preprocess_level(data)
 
     # 거래 금액과 거래 기간 데이터 추출 및 전처리
     total_price = np.array(data['deposit']).reshape(-1, 1)  # deposit 열을 사용

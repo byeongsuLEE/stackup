@@ -21,13 +21,13 @@ logging.basicConfig(filename='error.log', level=logging.ERROR)
 
 # 머신러닝 모델 로딩
 MODEL_PATH = './trained_model/autoencoder_model.h5'
-scaler_path = './scaler/scaler.pkl'  # 기존 학습에 사용된 스케일러 파일 경로
+scaler_path = './trained_model/scaler_model.pkl'  # 기존 학습에 사용된 스케일러 파일 경로
 
 # 재학습에 필요한 데이터 설정
 RETRAIN_THRESHOLD = 1000  # 재학습할 때 필요한 데이터 수
 normal_data_cache = []  # 정상 데이터를 캐시할 리스트
 
-PERCENTILE_THRESHOLD = 95
+PERCENTILE_THRESHOLD = 85
 
 def load_model():
     try:
@@ -56,10 +56,10 @@ def check_missing_values(data):
 # 레벨 전처리 함수
 def preprocess_level(data):
     level_map = {
-        "주니어": 1,
-        "미드 레벨": 2,
-        "시니어": 3,
-        "레벨 미선택": 0
+        "JUNIOR": 1,
+        "MID": 2,
+        "SENIOR": 3,
+        "NULL": 0
     }
     data['level'] = data['level'].map(level_map)
     data['level'].fillna(0, inplace=True)

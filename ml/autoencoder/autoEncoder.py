@@ -4,6 +4,7 @@ import tensorflow as tf
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, Dense
 from sklearn.preprocessing import MinMaxScaler
+from sklearn.metrics import precision_score, recall_score, f1_score
 import matplotlib.pyplot as plt
 import json
 import joblib
@@ -76,7 +77,7 @@ autoencoder.compile(optimizer='adam', loss='mean_squared_error')
 # 모델 학습
 history = autoencoder.fit(
     train_data, train_data,
-    epochs=100,
+    epochs=150,
     batch_size=32,
     validation_data=(test_data, test_data),
     verbose=1
@@ -99,12 +100,24 @@ test_pred = autoencoder.predict(test_data)
 mse = compute_reconstruction_error(test_data, test_pred)
 
 # 임계값 설정 (예: 재구성 오차의 95% 분위수)
-threshold = np.percentile(mse, 95)
+threshold = np.percentile(mse, 85)
 print(f"Threshold for anomaly detection: {threshold}")
 
 # 이상 거래 감지
 anomalies = mse > threshold
 anomaly_indices = np.where(anomalies)[0]
+
+# True Labels 설정 (정상 데이터는 0, 이상치는 1로 설정)
+true_labels = np.concatenate([np.zeros(len(test_data) - len(anomaly_indices)), np.ones(len(anomaly_indices))])
+
+# 예측된 라벨 설정 (임계값을 넘으면 1, 그렇지 않으면 0)
+pred_labels = (mse > threshold).astype(int)
+
+# Precision, Recall, F1 Score 계산
+precision = precision_score(true_labels, pred_labels)
+recall = recall_score(true_labels, pred_labels)
+f1 = f1_score(true_labels, pred_labels)
+
 
 print(f"Detected anomalies at indices: {anomaly_indices}")
 
@@ -122,7 +135,10 @@ plt.show()
 result = {
     'Detected Anomalies Indices': anomaly_indices.tolist(),
     'Threshold for Anomaly Detection': threshold,
-    'Reconstruction Error Distribution': mse.tolist()
+    'Reconstruction Error Distribution': mse.tolist(),
+    'Precision': precision,
+    'Recall': recall,
+    'F1 Score': f1
 }
 
 # 결과를 JSON 파일로 저장

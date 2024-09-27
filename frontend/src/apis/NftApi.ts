@@ -3,15 +3,14 @@ import { nftInfoProp } from '../hooks/MakeImage';
 
 // FormData를 Pinata에 업로드하는 함수
 export const pinata = async (formData: FormData): Promise<string> => {
+
   try {
     const response: AxiosResponse = await axios({
       method: 'post',
       url: 'https://api.pinata.cloud/pinning/pinFileToIPFS',
       headers: {
-        // 'pinata_api_key': process.env.REACT_APP_PINATA_API_KEY || '',
-        // 'pinata_secret_api_key': process.env.REACT_APP_PINATA_SECRET_API_KEY || '',
-        'pinata_api_key': '',
-        'pinata_secret_api_key': ''
+        'pinata_api_key': import.meta.env.VITE_PINATA_API_KEY,
+        'pinata_secret_api_key': import.meta.env.VITE_PINATA_SECRET_API_KEY,
       },
       data: formData,
     });
@@ -54,10 +53,8 @@ export const uploadMetadataToPinata = async (imageCID: string, data: nftInfoProp
       method: 'post',
       url: 'https://api.pinata.cloud/pinning/pinJSONToIPFS',
       headers: {
-        // 'pinata_api_key': process.env.REACT_APP_PINATA_API_KEY || '',
-        // 'pinata_secret_api_key': process.env.REACT_APP_PINATA_SECRET_API_KEY || '',
-        'pinata_api_key': '',
-        'pinata_secret_api_key': ''
+        'pinata_api_key': import.meta.env.VITE_PINATA_API_KEY,
+        'pinata_secret_api_key': import.meta.env.VITE_PINATA_SECRET_API_KEY,
       },
       data: metadata,
     });

@@ -2,25 +2,16 @@
 import { ethers } from 'ethers';
 import MyNFT from '../../../blockchain/NFT/build/contracts/MyNFT.json'; // JSON 파일 임포트
 
-// NFT 스마트 계약 주소
-// const NFT_CONTRACT_ADDRESS = '0x91e4dd5c17671815aB13F0b8fE8903eDe02a96B9';
-// const cid = 'Qmbp8Ugq5gabMBQ7QAP18TPPF9FAENDsy34pM2RiuUzNKR'; // Pinata에서 받은 CID
-// const metadataURI = `ipfs://${cid}`; // IPFS CID를 URI로 사용
-
 // NFT ABI 정의
 const NFT_ABI = MyNFT.abi;
 
 export const CallTest = () => {
 
 
-  const Minting = async (
-    // cid: string
-  ) => {
-
+  const Minting = async ( cid: string ) => {
     // NFT 스마트 계약 주소
-    const cid = "Qmbp8Ugq5gabMBQ7QAP18TPPF9FAENDsy34pM2RiuUzNKR"
-    const NFT_CONTRACT_ADDRESS = '0x1781e6F689483d52F346b6dCbfD4732298Eb1AC9';
-    const metadataURI = `https://fuchsia-changing-flamingo-499.mypinata.cloud/ipfs/${cid}`; // IPFS CID를 URI로 사용
+    const NFT_CONTRACT_ADDRESS = import.meta.env.VITE_NFT_CONTRACT_ADDRESS;
+    const metadataURI = `ipfs://${cid}`; // IPFS CID를 URI로 사용
 
     try {
       // MetaMask의 window.ethereum 객체가 존재하는지 확인

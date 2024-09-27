@@ -41,8 +41,8 @@
  * https://trufflesuite.com/docs/truffle/getting-started/using-the-truffle-dashboard/
  */
 
-// require('dotenv').config();
-// const { MNEMONIC, PROJECT_ID } = process.env;
+require('dotenv').config();
+const { MNEMONIC } = process.env;
 
 // const HDWalletProvider = require('@truffle/hdwallet-provider');
 const HDWalletProvider = require('@truffle/hdwallet-provider');
@@ -71,7 +71,7 @@ module.exports = {
       network_id: "*",       // Any network (default: none)
     },
     ssafy: {
-      provider: () => new HDWalletProvider('ability bulk renew wet taxi tell staff trip top you rice keen', `https://rpc.ssafy-blockchain.com`),
+      provider: () => new HDWalletProvider(MNEMONIC, `https://rpc.ssafy-blockchain.com`),
       network_id: '31221',
       gas: 0
 

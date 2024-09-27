@@ -35,6 +35,7 @@ const Test = () => {
 
     const data = await generateImage(canvasRef);
     const hash = await pinata(data);
+    console.log(hash)
     const cid = await uploadMetadataToPinata(hash, defaultNftInfo);
   
     try {

@@ -12,7 +12,13 @@ const NFT_ABI = MyNFT.abi;
 
 export const CallTest = () => {
 
-  const Minting = async () => {
+
+  const Minting = async (cid: string) => {
+
+    // NFT 스마트 계약 주소
+    const NFT_CONTRACT_ADDRESS = '0xAED0ffff5e07b1adFa7ca1f0D0E3D4c57211cf4a';
+    const metadataURI = `https://fuchsia-changing-flamingo-499.mypinata.cloud/ipfs/${cid}`; // IPFS CID를 URI로 사용
+
     try {
       // MetaMask의 window.ethereum 객체가 존재하는지 확인
       if (typeof window.ethereum === "undefined") {

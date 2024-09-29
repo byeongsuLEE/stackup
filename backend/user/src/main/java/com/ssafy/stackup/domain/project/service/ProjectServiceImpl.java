@@ -32,6 +32,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -57,6 +58,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final BoardApplicantRepository boardApplicantRepository;
 
     @Override
+    @Transactional
     public void registerPreviousProject(MultipartFile certificateFile, String title, Long period) {
 
 
@@ -84,7 +86,9 @@ public class ProjectServiceImpl implements ProjectService {
      * @ 설명     :프로젝트 모집글에서 진행하기 누를 시 프로젝트 등록하기
      * @return
      */
+
     @Override
+    @Transactional
     public ProjectInfoResponseDto startProject(User user, ProjectStartRequestDto request) {
 
         Board board = boardRepository.findById(request.getBoardId())
@@ -132,6 +136,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ProjectInfoResponseDto getProjectInfo(Long projectId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(()-> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
@@ -172,6 +177,7 @@ public class ProjectServiceImpl implements ProjectService {
 
 
     @Override
+    @Transactional
     public ResponseEntity<ApiResponse<Boolean>> verifySignature(Long projectId, SignRequest signRequest, User user) {
         Project project = projectRepository.findById(projectId).orElse(null);
         Long userId = user.getId();
@@ -217,6 +223,7 @@ public class ProjectServiceImpl implements ProjectService {
      * @param user
      */
     @Override
+    @Transactional
     public ProjectStepCheckResponseDto projectStepCheck(Long projectId, User user) {
 
         Project project = projectRepository.findById(projectId)
@@ -284,6 +291,7 @@ public class ProjectServiceImpl implements ProjectService {
      * @return
      */
     @Override
+    @Transactional(readOnly = true)
     public List<ProjectInfoResponseDto> getAllProjects(User user) {
 
         Freelancer freelancer = freelancerRepository.findById(user.getId())

@@ -1,4 +1,4 @@
-//package com.ssafy.stackup.domain.payment.service;
+package com.ssafy.stackup.domain.payment.service;//package com.ssafy.stackup.domain.payment.service;
 //
 //import com.ssafy.stackup.domain.board.repository.BoardRepository;
 //import jakarta.annotation.PostConstruct;

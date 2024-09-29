@@ -68,7 +68,7 @@ export const generateImage = async (canvasRef: React.RefObject<HTMLCanvasElement
       ctx.fillText("2024.08.01 ~ 2024.08.31", 20, 170);
 
       ctx.font = "20px Arial";
-      ctx.fillText("송준혁이다", 20, 210);
+      ctx.fillText("이채연", 20, 210);
 
       // 이미지를 Blob 데이터로 변환하고 FormData로 반환
       return new Promise<FormData>((resolve) => {

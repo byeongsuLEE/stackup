@@ -8,20 +8,36 @@ const ContractDetail = () => {
       </div>
       <div className="flex flex-col">
         <br />
-        <span className="font-bold text-sm">프로젝트명 :</span>
-        <span className="font-bold text-sm">계약기간 :</span>
+        <span className="font-bold text-sm">프로젝트명 :
+        <input placeholder="프로젝트명" className="border p-1 border-mainGreen rounded-md h-[25px] m-1" type="text" />
+        </span>
+        <span className="font-bold text-sm">계약기간 :
+        <input placeholder="계약기간" className="border p-1 border-mainGreen rounded-md h-[25px] m-1" type="text" />
+        </span>
         <br />
-        <span className="text-sm">//회사명// (이하 “갑” 아리 한다.)와 //프리랜서//(이하 “을” 이라 한다.)는 프로젝트명에 명시된 업무작업을 수향하기 위해 다음과 같이 계약을 체결한다.</span>
+        <span className="text-sm">
+          <input placeholder="회사명" className="border p-1 border-mainGreen rounded-md h-[25px] m-1" type="text" />
+           (이하 “갑” 아리 한다.)와 
+           <input placeholder="프리랜서" className="border p-1 border-mainGreen rounded-md h-[25px] m-1" type="text" />
+           (이하 “을” 이라 한다.)는 프로젝트명에 명시된 업무작업을 수향하기 위해 다음과 같이 계약을 체결한다.</span>
         <br />
         <span className="font-bold text-sm">제 1조[목적]</span>
-        <span className="text-sm">본 계약을 “갑”이 “을”에게 의뢰한 업무를 “갑”에게 공급함에 있어 “갑”과 “ 사이에 필요한 사항을 정하는 것을 목적으로 한다.</span>
+        <span className="text-sm">본 계약을 “갑”이 “을”에게 의뢰한 업무를 “갑”에게 공급함에 있어 “갑”과 “을" 사이에 필요한 사항을 정하는 것을 목적으로 한다.</span>
         <br />
         <span className="font-bold text-sm">제 2조 [계약기간]</span>
-        <span className="text-sm">계약 기간은 //2024년 10월 01//일 까지로 하며, 갑과 을의 합의 하에 본 계약기간은 연장 될 수 있다.</span>
+        <span className="text-sm">계약 기간은 
+        <input placeholder="계약기간" className="border p-1 border-mainGreen rounded-md h-[25px] m-1" type="text" />
+          일 까지로 하며, 갑과 을의 합의 하에 본 계약기간은 연장 될 수 있다.</span>
         <br />
         <span className="font-bold text-sm">제 3조 [계약금액]</span>
-        <span className="text-sm">총 계약금액은 //1500//만원으로 하며, 계약금액 중 //500만원//은 착수시점에 지급하고,
-          잔금 //1000//만원은 작업 완료 시 작업완료납품과 동시에 “갑”은 “을”에게 지급하기로
+        <span className="text-sm">총 계약금액은 
+        <input placeholder="1,500" className="border p-1 border-mainGreen rounded-md h-[25px] m-1" type="text" />
+          만원으로 하며, 계약금액 중 
+          <input placeholder="500" className="border p-1 border-mainGreen rounded-md h-[25px] m-1" type="text" />
+          은 착수시점에 지급하고,
+          잔금 
+          <input placeholder="1,000" className="border p-1 border-mainGreen rounded-md h-[25px] m-1" type="text" />
+          만원은 작업 완료 시 작업완료납품과 동시에 “갑”은 “을”에게 지급하기로
           한다.
           단, 회사업무 수행을 위한 출장 등이 발생할 경우에는 “갑”이 그 비용을 지급하고,
           식대 등은 “을”의 비용으로 한다.</span>
@@ -57,7 +73,7 @@ const ContractDetail = () => {
         <span className="text-sm">각 당사자는 위 계약을 증명하기 위하여 본 계약서 2통을 작성하여 각각 서명(또는 기명)날인 후 “갑”과 “을”이 각각 1통씩 보관한다.</span>
         <br />
         <label htmlFor="condition" className="font-bold text-sm">추가 특약사항</label>
-        <textarea name="condition" className="bg-white border p-2 text-sm border-mainGreen h-[100px] mt-2">
+        <textarea name="condition" className="bg-white border p-2 text-sm border-mainGreen h-[100px] mt-2 rounded-lg">
         </textarea>
       </div>
       <div className="text-center my-10 font-bold">

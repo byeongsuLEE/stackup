@@ -1,5 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
+import Test from "./components/NFTPage/NFTMinting";
 import SimplePopup from "./components/common/ChatPopup";
 import Footer from "./components/common/Footer";
 import Navbar from "./components/common/Navbar";
@@ -27,7 +28,6 @@ import Signature from "./pages/SignaturePage";
 import Transfer from "./pages/TransferPage";
 import WorkDetail from "./pages/WorkDetailPage";
 import Work from "./pages/WorkPage";
-import Test from "./pages/TestPage";
 
 function App() {
 

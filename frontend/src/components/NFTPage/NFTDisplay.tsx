@@ -136,10 +136,10 @@ const NFTDisplay = () => {
       <div style={{ display: "flex", flexWrap: "wrap" }}>
         {nfts.length > 0 ? (
           nfts.map((nft) => (
-            <div key={nft.tokenId} style={{ margin: "10px" }}>
+            <div key={nft.tokenId} className="m-7">
               {nft.imageURL ? (
                 <a href={nft.documentURL || "#"} target="_blank" rel="noopener noreferrer">
-                  <img src={nft.imageURL} alt={`NFT`} width="200" />
+                  <img className="rounded-lg" src={nft.imageURL} alt={`NFT`} width="200" />
                 </a>
               ) : (
                 <p>이미지를 가져오는 데 실패했습니다.</p>

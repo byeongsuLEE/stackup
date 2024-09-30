@@ -17,6 +17,7 @@ public class UserInfoResponseDto {
     private String phone;
     private String secondPassword;
     private String accountKey;
+    private String mainAccount;
     private Double totalScore;
     private Integer reportedCount;
     protected List<String> roles;

@@ -162,4 +162,21 @@ public class AccountController {
             return ResponseEntity.status(401).body("비밀번호가 일치하지 않습니다.");
         }
     }
+
+    @PostMapping("/main/{accountId}")
+    public ResponseEntity<?> setMainAccount(@PathVariable Long accountId, @AuthUser User user){
+        Long userId = user.getId();
+        String account = accountService.getAccount(accountId).getAccountNum();
+        user.setMainAccount(account);
+        return ResponseEntity.ok("메인 계좌 설정 성공");
+    }
+
+    @GetMapping("/main")
+    public ResponseEntity<String> getMainAccount(@AuthUser User user){
+        Long userId = user.getId();
+        String account = user.getMainAccount();
+        return ResponseEntity.ok(account);
+    }
+
+    
 }

@@ -33,6 +33,32 @@ public class AccountService {
     @Autowired
     private UserRepository userRepository;
 
+//    private String apikey = "13d8a1c9199348928f01b0591c325460";
+
+    public String getApikey() {
+        String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/app/reIssuedApiKey";
+
+        // JSON 본문 생성
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("managerId" , "choho97@naver.com");
+
+        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody);
+
+        // POST 요청 보내기
+        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Map.class);
+
+//        String key = response.getBody().get("apikey").toString();
+        // 응답 본문에서 apiKey 추출
+        if (response.getBody() != null && response.getBody().containsKey("apiKey")) {
+            String key = response.getBody().get("apiKey").toString();
+            return key;
+        }
+
+        return null;
+    }
+
+    private String apikey = getApikey();
+
     public void fetchAndStoreAccountData(Long userId) {
         String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit/inquireDemandDepositAccountList";
 
@@ -67,7 +93,7 @@ public class AccountService {
         headers.set("fintechAppNo", "001");
         headers.set("apiServiceCode", "inquireDemandDepositAccountList");
         headers.set("institutionTransactionUniqueNo", institutionTransactionUniqueNo);
-        headers.set("apiKey", "ef9d38e608d64bc1817e0ab47aa757ba");
+        headers.set("apiKey", apikey);
         headers.set("userKey", accountKey);
 
         // JSON 본문 생성
@@ -80,7 +106,7 @@ public class AccountService {
                 "fintechAppNo", "001",
                 "apiServiceCode", "inquireDemandDepositAccountList",
                 "institutionTransactionUniqueNo", institutionTransactionUniqueNo,
-                "apiKey", "ef9d38e608d64bc1817e0ab47aa757ba",
+                "apiKey", apikey,
                 "userKey", accountKey
         ));
         requestBody.put("REC", Collections.emptyList()); // 필요한 경우 적절한 REC 필드 값을 추가
@@ -161,7 +187,7 @@ public class AccountService {
         // JSON 본문 생성
         Map<String, String> requestBody = new HashMap<>();
 
-        requestBody.put("apiKey", "ef9d38e608d64bc1817e0ab47aa757ba");
+        requestBody.put("apiKey", apikey);
         requestBody.put("userId", email);
 
         // 요청 엔터티 생성 (헤더 + 바디)
@@ -188,7 +214,7 @@ public class AccountService {
         // JSON 본문 생성
         Map<String, String> requestBody = new HashMap<>();
 
-        requestBody.put("apiKey", "ef9d38e608d64bc1817e0ab47aa757ba");
+        requestBody.put("apiKey", apikey);
         requestBody.put("userId", email);
 
         // 요청 엔터티 생성 (헤더 + 바디)

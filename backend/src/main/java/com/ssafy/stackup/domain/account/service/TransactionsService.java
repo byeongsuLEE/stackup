@@ -35,6 +35,31 @@ public class TransactionsService {
     @Autowired
     private AccountService accountService;
 
+    public String getApikey() {
+        String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/app/reIssuedApiKey";
+
+        // JSON 본문 생성
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("managerId" , "choho97@naver.com");
+
+        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody);
+
+        // POST 요청 보내기
+        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Map.class);
+
+        //        String key = response.getBody().get("apikey").toString();
+        // 응답 본문에서 apiKey 추출
+        if (response.getBody() != null && response.getBody().containsKey("apiKey")) {
+            String key = response.getBody().get("apiKey").toString();
+            return key;
+        }
+
+        return null;
+    }
+    private String apikey = getApikey();
+
+//    private String apikey = "13d8a1c9199348928f01b0591c325460";
+
     public List<Map<String, String>> fetchTransactions (Long accountId, String accountNo, Long userId) {
         String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit/inquireTransactionHistoryList";
 
@@ -75,7 +100,7 @@ public class TransactionsService {
         headers.set("fintechAppNo", "001");
         headers.set("apiServiceCode", "inquireTransactionHistoryList");
         headers.set("institutionTransactionUniqueNo", institutionTransactionUniqueNo);
-        headers.set("apiKey", "ef9d38e608d64bc1817e0ab47aa757ba");
+        headers.set("apiKey", apikey);
         headers.set("userKey", accountKey);
 
         // JSON 본문 생성
@@ -88,7 +113,7 @@ public class TransactionsService {
                 "fintechAppNo", "001",
                 "apiServiceCode", "inquireTransactionHistoryList",
                 "institutionTransactionUniqueNo", institutionTransactionUniqueNo,
-                "apiKey", "ef9d38e608d64bc1817e0ab47aa757ba",
+                "apiKey", apikey,
                 "userKey", accountKey
         ));
         requestBody.put("accountNo", accountNo); // 실제 계좌번호를 사용

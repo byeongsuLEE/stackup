@@ -137,7 +137,7 @@ const Test = () => {
     <div>
       <div ref={componentRef}>
       {ethereum && (
-        <div onClick={handleGetAcount}>
+        <div onClick={handleGetAccount}>
           <DoneButton height={30} width={200} title="Connect Wallet" />
         </div>
       )}

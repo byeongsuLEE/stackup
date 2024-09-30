@@ -110,19 +110,14 @@ const Test = () => {
   // 버튼 클릭 시 호출될 핸들러 함수
   const handleMintNFT = async () => {
     
-    const image = await generateImage(canvasRef);
-    const pdf = await handlePrint();
-
-    const imageHash = await pinata(image);
-    const pdfHash = await pinata(pdf);
-
-    const cid = await uploadMetadataToPinata(imageHash, pdfHash, defaultNftInfo);
-
     try {
-      const data = await generateImage(canvasRef);
-      const hash = await pinata(data);
-      console.log(hash);
-      const cid = await uploadMetadataToPinata(hash, defaultNftInfo);
+      const image = await generateImage(canvasRef);
+      const pdf = await handlePrint();
+
+      const imageHash = await pinata(image);
+      const pdfHash = await pinata(pdf);
+
+      const cid = await uploadMetadataToPinata(imageHash, pdfHash, defaultNftInfo);
 
       // NFT 발행
       await Minting(cid);
@@ -137,7 +132,7 @@ const Test = () => {
     <div>
       <div ref={componentRef}>
       {ethereum && (
-        <div onClick={handleGetAcount}>
+        <div onClick={handleGetAccount}>
           <DoneButton height={30} width={200} title="Connect Wallet" />
         </div>
       )}

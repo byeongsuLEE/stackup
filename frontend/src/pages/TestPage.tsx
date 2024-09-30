@@ -87,9 +87,9 @@ const Test = () => {
       <div onClick={handleMintNFT}>
         <DoneButton height={30} width={200} title="Contract 배포" />
         </div>
-        </div>
+        
         <NFTDisplay/>
-      
+        </div>
     </div>
   );
 };

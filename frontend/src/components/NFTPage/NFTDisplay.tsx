@@ -20,22 +20,27 @@ const connectWallet = async (): Promise<string | null> => {
   }
 };
 
-// 메타데이터에서 이미지 URL을 추출하는 함수
-const fetchMetadata = async (tokenURI: string): Promise<string | null> => {
+// 메타데이터에서 이미지 URL과 문서 URL을 추출하는 함수
+const fetchMetadata = async (tokenURI: string): Promise<{ image: string; document: string | null }> => {
   try {
     const response = await fetch(tokenURI); // tokenURI에서 메타데이터 JSON을 가져옴
     const metadata = await response.json();
-    return metadata.image || null; // JSON에서 image URL 추출
+    const image = metadata.image || null;
+    const documentAttribute = metadata.attributes?.find((attr: any) => attr.trait_type === "Document");
+    const document = documentAttribute ? documentAttribute.value : null;
+
+    return { image, document };
   } catch (error) {
     console.error("메타데이터를 가져오는 데 실패했습니다:", error);
-    return null;
+    return { image: "", document: null };
   }
 };
 
 // NFT 정보 가져오기
 interface NFTData {
   tokenId: string;
-  tokenURI: string; // 이 부분은 이미지 URL을 의미함
+  imageURL: string;
+  documentURL: string | null;
 }
 
 const getNFTs = async (
@@ -62,11 +67,11 @@ const getNFTs = async (
         const tokenId = await contract.methods.tokenOfOwnerByIndex(account, i).call();
         const tokenURI = await contract.methods.tokenURI(tokenId).call();
 
-        // tokenURI에서 메타데이터의 이미지 URL을 가져옴
-        const imageUrl = await fetchMetadata(tokenURI);
+        // tokenURI에서 메타데이터의 이미지와 문서 URL을 가져옴
+        const { image, document } = await fetchMetadata(tokenURI);
 
-        if (imageUrl) {
-          nftData.push({ tokenId: tokenId.toString(), tokenURI: imageUrl });
+        if (image) {
+          nftData.push({ tokenId: tokenId.toString(), imageURL: image, documentURL: document });
         } else {
           console.error(`이미지 URL을 가져오지 못했습니다. Token ID: ${tokenId}`);
         }
@@ -132,8 +137,10 @@ const NFTDisplay = () => {
         {nfts.length > 0 ? (
           nfts.map((nft) => (
             <div key={nft.tokenId} style={{ margin: "10px" }}>
-              {nft.tokenURI ? (
-                <img src={nft.tokenURI} alt={`NFT`} width="200" />
+              {nft.imageURL ? (
+                <a href={nft.documentURL || "#"} target="_blank" rel="noopener noreferrer">
+                  <img src={nft.imageURL} alt={`NFT`} width="200" />
+                </a>
               ) : (
                 <p>이미지를 가져오는 데 실패했습니다.</p>
               )}

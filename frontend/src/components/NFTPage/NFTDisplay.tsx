@@ -20,10 +20,22 @@ const connectWallet = async (): Promise<string | null> => {
   }
 };
 
+// 메타데이터에서 이미지 URL을 추출하는 함수
+const fetchMetadata = async (tokenURI: string): Promise<string | null> => {
+  try {
+    const response = await fetch(tokenURI); // tokenURI에서 메타데이터 JSON을 가져옴
+    const metadata = await response.json();
+    return metadata.image || null; // JSON에서 image URL 추출
+  } catch (error) {
+    console.error("메타데이터를 가져오는 데 실패했습니다:", error);
+    return null;
+  }
+};
+
 // NFT 정보 가져오기
 interface NFTData {
   tokenId: string;
-  tokenURI: string;
+  tokenURI: string; // 이 부분은 이미지 URL을 의미함
 }
 
 const getNFTs = async (
@@ -48,22 +60,16 @@ const getNFTs = async (
     for (let i = 0; i < numBalance; i++) {
       try {
         const tokenId = await contract.methods.tokenOfOwnerByIndex(account, i).call();
-        console.log("Token ID:", tokenId);
-        console.log( typeof tokenId);
-        // if (typeof tokenId !== "string") {
-        //   console.error(`tokenId가 string이 아닙니다: ${tokenId}`);
-        //   continue; // string이 아닐 경우 다음 반복으로
-        // }
-
         const tokenURI = await contract.methods.tokenURI(tokenId).call();
-        console.log("Token URI:", tokenURI);
-        
-        if (typeof tokenURI !== "string") {
-          console.error(`tokenURI가 string이 아닙니다: ${tokenURI}`);
-          continue; // string이 아닐 경우 다음 반복으로
+
+        // tokenURI에서 메타데이터의 이미지 URL을 가져옴
+        const imageUrl = await fetchMetadata(tokenURI);
+
+        if (imageUrl) {
+          nftData.push({ tokenId: tokenId.toString(), tokenURI: imageUrl });
+        } else {
+          console.error(`이미지 URL을 가져오지 못했습니다. Token ID: ${tokenId}`);
         }
-        
-        nftData.push({ tokenId:tokenId.toString(), tokenURI });
       } catch (innerError) {
         console.error(`토큰 ID ${i} 가져오기 실패:`, innerError);
       }
@@ -76,7 +82,6 @@ const getNFTs = async (
   }
 };
 
-
 import MyNFT from "../../../../blockchain/NFT/build/contracts/MyNFT.json"; // JSON 파일 임포트
 
 const NFTDisplay = () => {
@@ -85,7 +90,6 @@ const NFTDisplay = () => {
   const [nfts, setNfts] = useState<NFTData[]>([]);
   const [loading, setLoading] = useState(true);
   const NFT_CONTRACT_ADDRESS = import.meta.env.VITE_NFT_CONTRACT_ADDRESS;
-  
 
   useEffect(() => {
     const fetchNFTs = async () => {
@@ -106,7 +110,7 @@ const NFTDisplay = () => {
     fetchNFTs();
 
     // 계정 변경 감지
-    window.ethereum.on('accountsChanged', (accounts: string[]) => {
+    window.ethereum.on("accountsChanged", (accounts: string[]) => {
       if (accounts.length > 0) {
         setAccount(accounts[0]);
         fetchNFTs(); // 계정 변경 시 NFT 다시 가져오기
@@ -129,13 +133,9 @@ const NFTDisplay = () => {
           nfts.map((nft) => (
             <div key={nft.tokenId} style={{ margin: "10px" }}>
               {nft.tokenURI ? (
-                <img
-                  src={nft.tokenURI}
-                  alt={`NFT`}
-                  width="200"
-                />
+                <img src={nft.tokenURI} alt={`NFT`} width="200" />
               ) : (
-                <p>Token URI를 가져오는 데 실패했습니다.</p>
+                <p>이미지를 가져오는 데 실패했습니다.</p>
               )}
             </div>
           ))

@@ -1,10 +1,10 @@
-import { useRef, useState, useEffect } from "react";
-import DoneButton from "../components/common/DoneButton";
-import { CallTest } from "../hooks/Test";
-import { generateImage, nftInfoProp } from "../hooks/MakeImage";
-import { pinata, uploadMetadataToPinata } from "../apis/NftApi";
-import NFTDisplay from "../components/NFTPage/NFTDisplay";
-import { handlePrint } from "../hooks/MakePDF";
+import { useEffect, useRef, useState } from "react";
+import { pinata, uploadMetadataToPinata } from "../../apis/NftApi";
+import { generateImage, nftInfoProp } from "../../hooks/MakeImage";
+import { handlePrint } from "../../hooks/MakePDF";
+import { CallTest } from "../../hooks/Test";
+import DoneButton from "../common/DoneButton";
+import ContractDetail from "../ContractPage/ContractDetail";
 
 // window.ethereum 타입 확장
 declare global {
@@ -16,7 +16,7 @@ declare global {
 const Test = () => {
   //== pdf 생성 ==//
   const componentRef = useRef<HTMLDivElement>(null);
- 
+
   const { Minting } = CallTest();
   const ethereum = window.ethereum;
   const [addr, setAddr] = useState("");
@@ -52,7 +52,7 @@ const Test = () => {
 
   // 버튼 클릭 시 호출될 핸들러 함수
   const handleMintNFT = async () => {
-    
+
     try {
       const image = await generateImage(canvasRef);
       const pdf = await handlePrint(componentRef);
@@ -74,21 +74,19 @@ const Test = () => {
   return (
     <div>
       <div ref={componentRef}>
-      {ethereum && (
-        <div onClick={handleGetAccount}>
-          <DoneButton height={30} width={200} title="Connect Wallet" />
-        </div>
-      )}
-      {ethereum && <p>Your Wallet address: {addr}</p>}
+        <ContractDetail />
+        {/* {ethereum && (
+          <div onClick={handleGetAccount}>
+            <DoneButton height={30} width={200} title="Connect Wallet" />
+          </div>
+        )}
+        {ethereum && <p>Your Wallet address: {addr}</p>} */}
 
-      {/* 캔버스 요소 추가 */}
-      <canvas ref={canvasRef} style={{ border: "1px solid black" }}></canvas>
-
-      <div onClick={handleMintNFT}>
-        <DoneButton height={30} width={200} title="Contract 배포" />
-        </div>
-        
-        <NFTDisplay/>
+        {/* 캔버스 요소 추가 */}
+        <canvas ref={canvasRef} style={{ border: "1px solid black", display:"none" }}></canvas>
+      </div>
+        <div className="mt-10 text-end" onClick={handleMintNFT}>
+          <DoneButton height={30} width={150} title="제출" />
         </div>
     </div>
   );

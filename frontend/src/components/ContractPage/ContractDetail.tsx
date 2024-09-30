@@ -1,9 +1,8 @@
-import DoneButton from "../common/DoneButton";
 
 const ContractDetail = () => {
   const today = new Date();
   return (
-    <div className="bg-bgGreen border border-mainGreen h-auto w-auto p-5 mx-20">
+    <div className="bg-bgGreen border border-mainGreen h-auto w-auto mx-10 p-5">
       <div className="text-center text-lg font-bold">
         프리랜서 고용 계약서
       </div>
@@ -56,16 +55,15 @@ const ContractDetail = () => {
         <span className="text-sm">본 계약으로 발생하는 분쟁은 관할지방법원을 관할법원으로 한다.</span>
         <br />
         <span className="text-sm">각 당사자는 위 계약을 증명하기 위하여 본 계약서 2통을 작성하여 각각 서명(또는 기명)날인 후 “갑”과 “을”이 각각 1통씩 보관한다.</span>
-      <br />
-      <label htmlFor="condition" className="font-bold text-sm">추가 특약사항</label>
-      <textarea name="condition" className="bg-white border p-2 text-sm border-mainGreen h-[100px] mt-2">
-      </textarea>
+        <br />
+        <label htmlFor="condition" className="font-bold text-sm">추가 특약사항</label>
+        <textarea name="condition" className="bg-white border p-2 text-sm border-mainGreen h-[100px] mt-2">
+        </textarea>
       </div>
       <div className="text-center my-10 font-bold">
         계약일자 : {today.getFullYear()}년 {today.getMonth() + 1}월 {today.getDate()}일
       </div>
       <div className="text-end">
-      <DoneButton width={100} height={30} title="제출"/>
       </div>
     </div>
   )

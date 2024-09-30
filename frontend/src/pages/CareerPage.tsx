@@ -3,9 +3,8 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import { Box, Tab } from "@mui/material";
 import React from "react";
-import NFTCareer from "../components/CareerPage/NFTCareer";
 import RegisteredCareer from "../components/CareerPage/RegisteredCareer";
-import Wallet from "../components/CareerPage/Wallet";
+import NFTDisplay from "../components/NFTPage/NFTDisplay";
 
 const Career = () => {
   const [value, setValue] = React.useState('1');
@@ -15,7 +14,6 @@ const Career = () => {
   };
   return (
     <div className='mt-10'>
-      <Wallet />
       <Box sx={{ width: '100%', typography: 'body1' }}>
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -27,7 +25,7 @@ const Career = () => {
           <div className='flex justify-center'>
             <TabPanel value="1">
               <div className='mt-5'>
-                <NFTCareer />
+                <NFTDisplay />
               </div>
             </TabPanel>
             <TabPanel value="2">

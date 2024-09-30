@@ -1,6 +1,6 @@
 import { differenceInDays, format } from "date-fns";
 import { Link } from "react-router-dom";
-import { project } from "../../apis/Project.type";
+import { project } from "../../apis/Board.type";
 import WebIcon from "../../icons/WebIcon";
 import InfoBox from "../WorkPage/InfoBox";
 import DoneButton from "../common/DoneButton";

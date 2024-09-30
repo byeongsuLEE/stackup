@@ -1,4 +1,4 @@
-import { clientInfo, project } from "../../apis/Project.type";
+import { clientInfo, project } from "../../apis/Board.type";
 
 const DetailSide = (project: project) =>{
   const client: clientInfo = project.client

@@ -1,8 +1,8 @@
 import { Dayjs } from 'dayjs';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { createProjectProp } from '../../apis/Project.type';
-import { createProject } from '../../apis/ProjectApi';
+import { createProjectProp } from '../../apis/Board.type';
+import { createProject } from '../../apis/BoardApi';
 import AIIcon from '../../icons/AIIcon';
 import DBIcon from '../../icons/DBIcon';
 import MobileIcon from '../../icons/MobileIcon';

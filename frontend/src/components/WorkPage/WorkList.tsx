@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { allProject, projectFilter } from "../../apis/ProjectApi";
+import { allProject, projectFilter } from "../../apis/BoardApi";
 import { projectFilterStore } from "../../store/ProjectStore";
-import { project } from "../../apis/Project.type";
+import { project } from "../../apis/Board.type";
 import { useEffect, useState } from "react";
 import Work from "./Work";
 

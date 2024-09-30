@@ -1,12 +1,20 @@
 import DoneButton from "../common/DoneButton";
 import CalenderRange from "./CalenderRange";
+import { projectData } from "../../apis/Project.type";
+import { useForm } from "react-hook-form";
 
 const RegisterForm = () => {
+  const { register, setValue } = useForm<projectData>({});
 
   return (
     <div className="bg-bgGreen border flex flex-col border-mainGreen w-auto h-auto p-10 rounded-lg">
       <label htmlFor="projectName" className="text-sm">1. 프로젝트명</label>
-      <input name="projectName" className="mt-3 px-2 w-[200px] ml-5 h-[30px] border border-subTxt rounded-lg" type="text" />
+      <input
+      // name="projectName"
+      className="mt-3 px-2 w-[200px] ml-5 h-[30px] border border-subTxt rounded-lg"
+      type="text"
+      {...register("projectName", { required: '프로젝트명을 입력해주세요.'})}
+      />
       
       <span className="text-sm mt-10">2. 프로젝트 기간</span>
       <div className="flex mt-3 items-center ml-5">

@@ -11,7 +11,6 @@ const Callback = () => {
         const update = async() => {
             const tokenData = await getToken(userId);
             const infoData = await freelanceMypage();
-            
 
             if (tokenData !== "로그인") {
                 navigate("/login")

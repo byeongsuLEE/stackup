@@ -34,9 +34,10 @@ spring:
       repositories:
         enabled: true
   elasticsearch:
-    uris: http://localhost:9200
+    uris: ${ELASTIC_URL}
     connection-timeout: 3000
     socket-timeout: 3000
+#    password:
 
 
 

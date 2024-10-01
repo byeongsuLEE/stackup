@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { projectDetail } from "../apis/ProjectApi";
+import { projectDetail } from "../apis/BoardApi";
 import Detail from "../components/WorkDetailPage/Detail";
 import DetailSide from "../components/WorkDetailPage/DetailSide";
-import { project, projectBasic } from "../apis/Project.type";
+import { project, projectBasic } from "../apis/Board.type";
 
 const WorkDetail = () => {
   const { boardId } = useParams();

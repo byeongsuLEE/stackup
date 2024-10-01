@@ -9,7 +9,7 @@ import {
 import { useUserStore } from "../store/UserStore";
 
 const BASE_URL: string = "http://localhost:8080/api/user";
-const { setToken, setUserType, setFreelancerId } = useUserStore.getState();
+const { setToken, setUserType, setFreelancerId, setClientId } = useUserStore.getState();
 
 
 //== 프리랜서 깃허브 소셜 로그인 ==//
@@ -29,10 +29,6 @@ export const getToken = async (userId: string | null): Promise<string> => {
       },
     });
 
-    console.log(response.data)
-    const { setToken, setUserType, setFreelancerId } = useUserStore.getState();
-    const { isLogin,setIsLogin} = useLoginStore.getState();
-
     //== 토큰 저장 ==//
     setToken(response.data.data.accessToken);
     window.sessionStorage.setItem("token", response.data.data.accessToken);
@@ -44,7 +40,6 @@ export const getToken = async (userId: string | null): Promise<string> => {
     //== id 저장 ==//
     setFreelancerId(response.data.data.userId);
     window.sessionStorage.setItem("freelancerId", response.data.data.userId);
-
 
     return "로그인";
   } catch (error) {
@@ -168,8 +163,6 @@ export const clientLogin = async (
       },
 
     });
-    const { setToken, setUserType, setClientId } = useUserStore.getState();
-
 
     //== 토큰 값 설정 ==//
     setToken(response.headers.authorization);

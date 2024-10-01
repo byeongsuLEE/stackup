@@ -1,11 +1,11 @@
 package com.ssafy.stackup.domain.project.controller;
 
 import com.ssafy.stackup.common.response.ApiResponse;
+import com.ssafy.stackup.domain.project.dto.request.ProjectContractInfoRequestDto;
 import com.ssafy.stackup.domain.project.dto.response.ProjectInfoResponseDto;
 import com.ssafy.stackup.domain.project.dto.request.ProjectStartRequestDto;
 import com.ssafy.stackup.domain.project.dto.request.SignRequest;
 import com.ssafy.stackup.domain.project.dto.response.ProjectStepCheckResponseDto;
-import com.ssafy.stackup.domain.project.entity.Project;
 import com.ssafy.stackup.domain.project.repository.ProjectRepository;
 import com.ssafy.stackup.domain.project.service.ProjectService;
 import com.ssafy.stackup.domain.project.service.SignatureService;
@@ -28,6 +28,26 @@ public class ProjectController {
     private final SignatureService signatureService;
     private final UserServiceImpl userService;
     private final ProjectRepository projectRepository;
+
+
+    /**
+     * 프로젝트 계약서 작성 - 클라이언트
+     * @ 작성자   : 이병수
+     * @ 작성일   : 2024-10-01
+     * @ 설명     :
+     * @param projectContractInfoRequestDto
+     * @return
+
+     */
+    @PatchMapping("/contract/submit")
+    public ResponseEntity<ApiResponse<String>> contractSubmit(@RequestBody ProjectContractInfoRequestDto projectContractInfoRequestDto) {
+
+        projectService.contarctSubmit(projectContractInfoRequestDto);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success("계약서가 작성 되었습니다."));
+    }
+
 
     //등록
     @PostMapping("/previous-project")

@@ -12,6 +12,7 @@ import com.ssafy.stackup.domain.board.entity.BoardFramework;
 import com.ssafy.stackup.domain.board.entity.BoardLanguage;
 import com.ssafy.stackup.domain.board.repository.BoardApplicantRepository;
 import com.ssafy.stackup.domain.board.repository.BoardRepository;
+import com.ssafy.stackup.domain.project.dto.request.ProjectContractInfoRequestDto;
 import com.ssafy.stackup.domain.project.dto.request.SignRequest;
 import com.ssafy.stackup.domain.project.dto.response.ProjectInfoResponseDto;
 import com.ssafy.stackup.domain.project.dto.request.ProjectStartRequestDto;
@@ -34,9 +35,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Service
@@ -110,6 +109,7 @@ public class ProjectServiceImpl implements ProjectService {
             boardApplicantRepository.save(applicant);
 
             FreelancerProject freelancerProject = FreelancerProject.builder()
+                    .contractCreated(false)
                     .freelancerSigned(false)
                     .project(project)
                     .freelancer(applicant.getFreelancer())
@@ -225,6 +225,32 @@ public class ProjectServiceImpl implements ProjectService {
 
         boolean isUserAllStepChecked = isUserAllStepChecked(projectId,user,project);
         return changeProjectStep(project.getStep(), isUserAllStepChecked, project);
+    }
+
+    /**
+     * 계약서 작성
+     * @ 작성자   : 이병수
+     * @ 작성일   : 2024-10-01
+     * @ 설명     :
+     * @param requestDto
+     */
+    @Override
+    public void contarctSubmit(ProjectContractInfoRequestDto requestDto) {
+        FreelancerProject freelancerProject = freelancerProjectRepository.findById(requestDto.getFreelancerProjectId())
+                .orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
+
+        freelancerProject.updateContractCreated(true);
+        freelancerProject.updateContractStartDate(requestDto.getContractStartDate());
+        freelancerProject.updateContractEndDate(requestDto.getContractEndDate());
+        freelancerProject.updateContractDownPayment(requestDto.getContractDownPayment());
+        freelancerProject.updateContractFinalPayment(requestDto.getContractFinalPayment());
+        freelancerProject.updateContractCompanyName(requestDto.getContractCompanyName());
+        freelancerProject.updateContractAdditionalTerms(requestDto.getContractAdditionalTerms());
+        freelancerProject.updateContractTotalAmount(requestDto.getContractTotalAmount());
+        freelancerProject.updateContractConfidentialityClause(requestDto.getContractConfidentialityClause());
+
+        freelancerProjectRepository.save(freelancerProject);
+
     }
 
 

@@ -76,7 +76,51 @@ public class FreelancerProject {
     @Column(name = "contract_additional_terms", columnDefinition = "TEXT")
     private String contractAdditionalTerms; // 추가 특약 사항
 
+    // 클라이언트가 계약서 작성
+// 계약 시작일 업데이트
+    public void updateContractStartDate(Date contractStartDate) {
+        this.contractStartDate = contractStartDate;
+    }
 
+    // 계약 종료일 업데이트
+    public void updateContractEndDate(Date contractEndDate) {
+        this.contractEndDate = contractEndDate;
+    }
+
+    // 총 계약 금액 업데이트
+    public void updateContractTotalAmount(Long contractTotalAmount) {
+        this.contractTotalAmount = contractTotalAmount;
+    }
+
+    // 착수금 업데이트
+    public void updateContractDownPayment(Long contractDownPayment) {
+        this.contractDownPayment = contractDownPayment;
+    }
+
+    // 잔금 업데이트
+    public void updateContractFinalPayment(Long contractFinalPayment) {
+        this.contractFinalPayment = contractFinalPayment;
+    }
+
+    // 회사명 업데이트
+    public void updateContractCompanyName(String contractCompanyName) {
+        this.contractCompanyName = contractCompanyName;
+    }
+
+    // 비밀 유지 조항 업데이트
+    public void updateContractConfidentialityClause(String contractConfidentialityClause) {
+        this.contractConfidentialityClause = contractConfidentialityClause;
+    }
+
+    // 추가 특약 사항 업데이트
+    public void updateContractAdditionalTerms(String contractAdditionalTerms) {
+        this.contractAdditionalTerms = contractAdditionalTerms;
+    }
+
+    // 계약서 작성 여부 업데이트
+    public void updateContractCreated(boolean contractCreated) {
+        this.contractCreated = contractCreated;
+    }
 
 
     public void setFreelancerSigned(boolean freelancerSigned) {

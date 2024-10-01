@@ -1,6 +1,7 @@
 package com.ssafy.stackup.domain.project.service;
 
 import com.ssafy.stackup.common.response.ApiResponse;
+import com.ssafy.stackup.domain.project.dto.request.ProjectContractInfoRequestDto;
 import com.ssafy.stackup.domain.project.dto.request.SignRequest;
 import com.ssafy.stackup.domain.project.dto.response.ProjectInfoResponseDto;
 import com.ssafy.stackup.domain.project.dto.request.ProjectStartRequestDto;
@@ -23,4 +24,6 @@ public interface ProjectService {
     ResponseEntity<ApiResponse<Boolean>> verifySignature(Long projectId, SignRequest signRequest, User user);
 
     ProjectStepCheckResponseDto projectStepCheck(Long projectId, User user);
+
+    void contarctSubmit(ProjectContractInfoRequestDto projectContractInfoRequestDto);
 }

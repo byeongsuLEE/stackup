@@ -58,7 +58,7 @@ public class WonAuthService {
 
         return null;
     }
-        private String apikey = getApikey();
+        private String apikey;
 
     public void fetchWonAuth (String accountNo, Long userId) {
         String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/accountAuth/openAccountAuth";
@@ -68,6 +68,7 @@ public class WonAuthService {
         String accountKey = user.getAccountKey();
         String email = user.getEmail();
 
+        apikey = getApikey();
 
 
         if (accountKey == null) {
@@ -130,6 +131,8 @@ public class WonAuthService {
 
         String accountKey = user.getAccountKey();
         String email = user.getEmail();
+
+        apikey = getApikey();
 
         if (accountKey == null) {
             System.out.println("accountKey 없음");

@@ -51,18 +51,21 @@ public class AccountService {
         // 응답 본문에서 apiKey 추출
         if (response.getBody() != null && response.getBody().containsKey("apiKey")) {
             String key = response.getBody().get("apiKey").toString();
+            System.out.println("api : " + key);
             return key;
         }
 
         return null;
     }
 
-    private String apikey = getApikey();
+    private String apikey;
 
     public void fetchAndStoreAccountData(Long userId) {
         String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit/inquireDemandDepositAccountList";
 
         User user = userRepository.findById(userId).orElse(null);
+
+        apikey = getApikey();
 
         String accountKey = user.getAccountKey();
         String email = user.getEmail();
@@ -184,6 +187,8 @@ public class AccountService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
+        apikey = getApikey();
+
         // JSON 본문 생성
         Map<String, String> requestBody = new HashMap<>();
 
@@ -213,6 +218,9 @@ public class AccountService {
 
         // JSON 본문 생성
         Map<String, String> requestBody = new HashMap<>();
+        apikey = getApikey();
+
+        System.out.println(apikey);
 
         requestBody.put("apiKey", apikey);
         requestBody.put("userId", email);

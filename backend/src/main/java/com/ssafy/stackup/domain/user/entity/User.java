@@ -49,7 +49,7 @@ public abstract class User {
     @Column(name = "reported_count")
     private Integer reportedCount;
 
-    @Column(name = " main_account")
+    @Column(name = "main_account")
     private String mainAccount;
 
     @Column(name= "evaluated_count")

@@ -8,6 +8,7 @@ import com.ssafy.stackup.domain.account.service.TransferService;
 import com.ssafy.stackup.domain.account.service.WonAuthService;
 import com.ssafy.stackup.domain.user.entity.AuthUser;
 import com.ssafy.stackup.domain.user.entity.User;
+import com.ssafy.stackup.domain.user.repository.UserRepository;
 import com.ssafy.stackup.domain.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +31,8 @@ public class AccountController {
     private WonAuthService wonAuthService;
     @Autowired
     private TransferService transferService;
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping
     public List<AccountResponse> findALL(@AuthUser User user) {
@@ -164,17 +167,20 @@ public class AccountController {
     }
 
     @PostMapping("/main/{accountId}")
-    public ResponseEntity<?> setMainAccount(@PathVariable Long accountId, @AuthUser User user){
+    public ResponseEntity<?> setMainAccount(@PathVariable Long accountId, @AuthUser User user) throws Exception {
         Long userId = user.getId();
-        String account = accountService.getAccount(accountId).getAccountNum();
-        user.setMainAccount(account);
+        Account account = accountService.getAccount(accountId);
+        String accountNo = EncryptionUtil.decrypt(account.getAccountNum());
+
+        user.setMainAccount(EncryptionUtil.encrypt(accountNo));
+        userRepository.save(user);
         return ResponseEntity.ok("메인 계좌 설정 성공");
     }
 
     @GetMapping("/main")
-    public ResponseEntity<String> getMainAccount(@AuthUser User user){
+    public ResponseEntity<String> getMainAccount(@AuthUser User user) throws Exception {
         Long userId = user.getId();
-        String account = user.getMainAccount();
+        String account = EncryptionUtil.decrypt(user.getMainAccount());
         return ResponseEntity.ok(account);
     }
 

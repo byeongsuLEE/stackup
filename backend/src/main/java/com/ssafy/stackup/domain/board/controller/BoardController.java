@@ -179,11 +179,29 @@ public class BoardController {
                 .collect(Collectors.toList());
     }
 
-//    @GetMapping("/recommend/all")
-//    public Set<Recommend> recommendAll(@AuthUser User user) {
-//        Long freelancerId = user.getId();
-//        Set<Recommend> results = recommendationService.recommends(freelancerId);
-//        return results;
-//    }
+    /**
+     * 
+     * @ 작성자   : 김연지
+     * @ 작성일   : 2024-10-01
+     * @ 설명     : description이 유사한 board를 찾아 해당 classification, framework, language를 리턴
+     * @param requestBody
+     * @return
+     */
+
+    @PostMapping("/search")
+    public ResponseEntity<BoardSearchResponse> searchBoards(@RequestBody Map<String, String> requestBody) {
+        String description = requestBody.get("description");
+
+        // Flask 서버로 요청 보내기
+        BoardSearchResponse similarBoard = boardService.findSimilarBoards(description);
+
+        return ResponseEntity.ok(similarBoard);
+    }
+
+    @GetMapping("/search-all")
+    public ResponseEntity<?> findALlDescription() {
+        List<BoardSearchResponse> descriptions = boardService.getDescription();
+        return ResponseEntity.ok().body(ApiResponse.success(descriptions));
+    }
 
 }

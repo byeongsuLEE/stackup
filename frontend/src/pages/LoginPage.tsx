@@ -4,8 +4,6 @@ import Freelance from "../components/Loginpage/Freelance";
 
 const Login = () => {
   const [isChecked, setIsChecked] = useState(true);
-
-  console.log()
   return (
     <div className="flex flex-col items-center mt-10">
       <div className="flex items-center mt-5 mb-10">
@@ -15,7 +13,6 @@ const Login = () => {
         onClick={()=>(
           isChecked ? setIsChecked(false) : setIsChecked(true)
         )} />
-        {/* {input.checked ? <Freelance /> : <Client />} */}
         <span className="text-sm mx-2">프리랜서</span>
       </div>
       {isChecked? <Freelance /> : <Client />}

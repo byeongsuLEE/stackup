@@ -6,6 +6,7 @@ import { clientLoginInfo, clientSignupInfo, freelanceSignupInfo } from "./User.t
 const BASE_URL: string = "http://localhost:8080/api/user";
 const { setToken, setUserType, setFreelancerId, setClientId } = useUserStore.getState();
 
+
 //== 프리랜서 깃허브 소셜 로그인 ==//
 export const freelanceLogin = async (): Promise<void> => {
   window.location.href =
@@ -50,7 +51,6 @@ export const getToken = async (userId: string | null): Promise<string> => {
 //== 프리랜서 정보 등록 ==//
 export const registerFreelancerInfo = async (): Promise<void> => {
   const state = freelanceStore.getState();
-
   try {
     axios({
       method: 'post',
@@ -98,7 +98,9 @@ export const freelanceMypage = async (): Promise<string> => {
     state.updateState(data);
     state.setFramworks(response.data.data.framework);
     state.setLanguages(response.data.data.language);
-    state.setPortfolioURL(response.data.data.portfolioURL);
+
+    console.log(response.data)
+
     return response.data.data.email;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -141,6 +143,7 @@ export const clientSignup = async (
   }
 };
 
+
 //== 클라이언트 로그인 ==//
 export const clientLogin = async (
   information: clientLoginInfo
@@ -153,8 +156,8 @@ export const clientLogin = async (
         email: information.email,
         password: information.password,
       },
-
     });
+
 
     //== 토큰 값 설정 ==//
     setToken(response.headers.authorization);

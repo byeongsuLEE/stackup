@@ -16,11 +16,7 @@ export const useLoginStore = create<LoginState>((set) => ({
   // 세션에 저장된 토큰을 확인하고 로그인 상태를 업데이트하는 함수
   checkLogin: () => {
     const token = sessionStorage.getItem('token');  // 세션에 저장된 토큰 확인
-    if (token) {
-      set({ isLogin: true });
-    } else {
-      set({ isLogin: false });
-    }
+    set({ isLogin: !!token }); // token이 존재하면 true, 아니면 false
   },
 }));
 

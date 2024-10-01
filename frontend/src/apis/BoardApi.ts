@@ -116,3 +116,4 @@ export const projectDetail = async (boardId?: string): Promise<any> => {
         }
     }
 }
+

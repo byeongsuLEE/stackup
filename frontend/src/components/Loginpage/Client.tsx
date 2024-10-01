@@ -1,18 +1,32 @@
 import { SubmitHandler, useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router-dom";
 import { clientLoginInfo } from "../../apis/User.type";
 import { clientLogin } from "../../apis/UserApi";
 import DoneButton from "../common/DoneButton";
-import { Link, useNavigate } from "react-router-dom";
+import { useMutation } from "react-query";
+
 
 const Client = () => {
-  const navigate = useNavigate();
 
   const { register, handleSubmit } = useForm<clientLoginInfo>();
 
   const onSubmit: SubmitHandler<clientLoginInfo> = (data) => {
-    clientLogin(data);
-    navigate('/');
+    // clientLogin(data);
+    mutation.mutate(data);
+
   };
+
+  const navigate = useNavigate(); 
+
+  const mutation = useMutation({
+    mutationKey: ['user'],
+    mutationFn: clientLogin,
+    // 성공시, 유저 정보 입력 페이지로 이동
+    onSuccess: () => {
+      navigate('/');
+      console.log('성공');
+    },
+  });
 
   return (
     <form>
@@ -33,23 +47,15 @@ const Client = () => {
             {...register("password", { required: "password id required." })}
           />
         </div>
-
-        {/* <button
-          onClick={handleSubmit(onSubmit)}
-          type="button"
-          className="mt-10 theme-background-color font-bold rounded-2xl h-10 w-48 text-sm text-white "
-        >
-          로그인
-        </button> */}
         <div
-        onClick={handleSubmit(onSubmit)}
-        className="mt-5 mb-3"
+          onClick={handleSubmit(onSubmit)}
+          className="mt-5 mb-3"
         >
-        <DoneButton width={200} height={40} title="로그인" />
+          <DoneButton width={200} height={40} title="로그인" />
         </div>
-          <Link to="/signup/client">
-        <DoneButton width={200} height={40} title="회원가입" />
-          </Link>
+        <Link to="/signup/client">
+          <DoneButton width={200} height={40} title="회원가입" />
+        </Link>
 
       </div>
     </form>

@@ -10,9 +10,9 @@ interface SignListBoxProps {
 const SignListBox = ({ title, period, company }: SignListBoxProps) => {
 
   return (
-    <div className="bg-bgGreen border border-mainGreen h-[100px] w-full rounded-lg p-5 flex justify-between items-center">
+    <div className="bg-bgGreen border border-mainGreen h-[150px] w-full rounded-lg p-5 flex justify-between items-center">
       <div className="flex flex-col justify-center">
-        <span>{title} _ {company}</span>
+        <span className="mb-3">{title} _ {company}</span>
         <span>{period}</span>
       </div>
       <Link to="/signature/detail">

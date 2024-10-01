@@ -4,7 +4,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import { Box, Tab } from '@mui/material';
 import React from 'react';
 import ContractDone from '../components/ProjectPage/ContractDone';
-import ContractIng from '../components/ProjectPage/ContractIng';
+import SignList from '../components/ProjectPage/SignList';
 
 const Project = () => {
   const [value, setValue] = React.useState('1');
@@ -25,7 +25,7 @@ const Project = () => {
           <div className='flex justify-center'>
             <TabPanel value="1">
               <div className='mt-5'>
-                <ContractIng />
+                <SignList />
               </div>
             </TabPanel>
             <TabPanel value="2">

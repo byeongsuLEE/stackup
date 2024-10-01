@@ -24,30 +24,32 @@ import PostWork from "./pages/PostWorkPage";
 import ProjectDetail from "./pages/ProjectDetailPage";
 import Project from "./pages/ProjectPage";
 import SignatureDetail from "./pages/SignatureDetailPage";
-import Signature from "./pages/SignaturePage";
 import Transfer from "./pages/TransferPage";
 import WorkDetail from "./pages/WorkDetailPage";
 import Work from "./pages/WorkPage";
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 function App() {
-
+  const queryClient = new QueryClient();
+  
   return (
     <>
+    <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <div className=" relative flex flex-col min-h-screen">
-          <Navbar />
           <main className="flex-grow mt-28 mx-20">
+            <Navbar />
             <Routes>
               <Route path="/test" element={<Test />} />
               <Route path="/" element={<Home />} />
-              <Route path="/signature" element={<Signature />} />
               <Route path="/signature/detail" element={<SignatureDetail />} />
               <Route path="/login" element={<Login />} />
               <Route path="/work" element={<Work />} />
               <Route path="/work/post" element={<PostWork />} />
               <Route path="/work/detail/:boardId" element={<WorkDetail />} />
-              <Route path="/work/detail/candidate" element={<CandidateCheck />} />
-              <Route path="/work/detail/contract" element={<Contract />} />
+              <Route path="/work/detail/candidate/:boardId" element={<CandidateCheck />} />
+              <Route path="/work/detail/contract/:boardId" element={<Contract />} />
+
               <Route path="/project" element={<Project />} />
               <Route path="/project/detail" element={<ProjectDetail />} />
               <Route path="/career" element={<Career />} />
@@ -71,6 +73,7 @@ function App() {
           </div>
         </div>
       </BrowserRouter>
+      </QueryClientProvider>
     </>
   );
 }

@@ -4,6 +4,7 @@ import com.ssafy.stackup.domain.board.entity.Board;
 import com.ssafy.stackup.domain.board.entity.Level;
 import com.ssafy.stackup.domain.framework.dto.FrameworkRequest;
 import com.ssafy.stackup.domain.language.dto.LanguageRequest;
+import com.ssafy.stackup.domain.user.entity.Client;
 import lombok.Data;
 
 import java.awt.*;
@@ -16,16 +17,20 @@ import java.util.stream.Collectors;
 public class BoardFindAllResponse {
     private Long boardId;
     private String title;
+    private String description;
     private String classification;
+    private Client client;
     private List<FrameworkRequest> frameworks;
     private List<LanguageRequest> languages;
     private Long deposit;
     private Date startDate;
     private String period;
     private Long recruits;
-    private Boolean isCharged;
     private Long applicants;
     private Boolean worktype;
+    private String requirements;
+    private Boolean isCharged;
+    private String address;
     private Date deadline;
     private Date upload;
     private Level level;
@@ -34,6 +39,7 @@ public class BoardFindAllResponse {
     public BoardFindAllResponse(Board board) {
         this.boardId = board.getBoardId();
         this.title = board.getTitle();
+        this.description = board.getDescription();
         this.classification = board.getClassification();
         this.frameworks = board.getBoardFrameworks().stream()
                 .map(framework -> new FrameworkRequest(framework.getFramework()))

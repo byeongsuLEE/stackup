@@ -4,6 +4,7 @@ import com.ssafy.stackup.common.exception.ResourceNotFoundException;
 import com.ssafy.stackup.domain.board.dto.BoardApplicantRequest;
 import com.ssafy.stackup.domain.board.dto.BoardCreateRequest;
 import com.ssafy.stackup.domain.board.dto.BoardFindAllResponse;
+import com.ssafy.stackup.domain.board.dto.BoardSearchResponse;
 import com.ssafy.stackup.domain.board.entity.Board;
 import com.ssafy.stackup.domain.board.entity.BoardApplicant;
 import com.ssafy.stackup.domain.board.entity.BoardFramework;
@@ -29,6 +30,10 @@ import com.ssafy.stackup.domain.user.repository.FreelancerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -75,6 +80,14 @@ public class BoardService {
         List<Board> boards = boardRepository.findAll();
         return boards.stream()
                 .map(BoardFindAllResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<BoardSearchResponse> getDescription(){
+        List<Board> boards = boardRepository.findAll();
+        return boards.stream()
+                .map(BoardSearchResponse::new)
                 .collect(Collectors.toList());
     }
 
@@ -158,7 +171,7 @@ public class BoardService {
         board.setBoardLanguages(languages);
 
         // 벡터 생성 요청
-        double[] descriptionVector = generateVector(board.getDescription());
+//        double[] descriptionVector = generateVector(board.getDescription());
 
         Recommend recommend = new Recommend();
         recommend.setClassification(board.getClassification());
@@ -170,7 +183,7 @@ public class BoardService {
         recommend.setLevel(board.getLevel());
         recommend.setTitle(board.getTitle());
         recommend.setDeposit(board.getDeposit());
-        recommend.setDescriptionVector(descriptionVector);
+//        recommend.setDescriptionVector(descriptionVector);
 
 
         Board result = boardRepository.save(board);
@@ -194,6 +207,13 @@ public class BoardService {
                 .orElseThrow(() -> new RuntimeException("Board not found"));
         Freelancer freelancer = freelancerRepository.findById(freelancerId)
                 .orElseThrow(() -> new RuntimeException("Freelancer not found"));
+
+        // 이미 지원했는지 확인
+        for (BoardApplicant applicant : board.getBoardApplicants()) {
+            if (applicant.getFreelancer().getId().equals(freelancerId)) {
+                throw new RuntimeException("이미 지원한 프리랜서입니다");
+            }
+        }
 
         BoardApplicant boardApplicant = new BoardApplicant();
         boardApplicant.setBoard(board);
@@ -221,14 +241,25 @@ public class BoardService {
 
     private final RestTemplate restTemplate;
 
-    private double[] generateVector(String description) {
-        // Flask 서버로 벡터 생성 요청
-        String flaskUrl = "http://localhost:5000/vectorize"; // Flask 서버 URL
-        // JSON 형식으로 description을 감싸기
-        Map<String, String> requestBody = new HashMap<>();
-        requestBody.put("description", description);
+    public BoardSearchResponse findSimilarBoards(String description) {
+        String flaskUrl = "http://localhost:5000/similar_boards";
 
-        return restTemplate.postForObject(flaskUrl, requestBody, double[].class);
+        // Flask로 보낼 요청 데이터 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+
+        Map<String, String> requestBody = Map.of("description", description);
+        HttpEntity<Map<String, String>> entity = new HttpEntity<>(requestBody, headers);
+
+        // Flask 서버로 POST 요청 보내기
+        ResponseEntity<BoardSearchResponse> response = restTemplate.exchange(
+                flaskUrl,
+                HttpMethod.POST,
+                entity,
+                BoardSearchResponse.class
+        );
+
+        return response.getBody();
     }
 
 }

@@ -1,12 +1,7 @@
 import axios from "axios";
-import { freelanceStore } from "../store/FreelanceStore";
-import {
-  clientLoginInfo,
-  clientSignupInfo,
-  freelanceSignupInfo,
-} from "./User.type";
-
 import { useUserStore } from "../store/UserStore";
+import { freelanceStore } from "../store/FreelanceStore";
+import { clientLoginInfo, clientSignupInfo, freelanceSignupInfo } from "./User.type";
 
 const BASE_URL: string = "http://localhost:8080/api/user";
 const { setToken, setUserType, setFreelancerId, setClientId } = useUserStore.getState();
@@ -58,10 +53,10 @@ export const registerFreelancerInfo = async (): Promise<void> => {
   const state = freelanceStore.getState();
   try {
     axios({
-      method: "post",
+      method: 'post',
       url: `${BASE_URL}/info`,
       headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
       },
       data: {
         name: state.name,
@@ -73,10 +68,10 @@ export const registerFreelancerInfo = async (): Promise<void> => {
         language: state.languages,
         careerYear: state.careerYear,
         selfIntroduction: state.selfIntroduction,
+        portfolioURL: state.portfolioURL
       },
     });
 
-    freelanceMypage();
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error("Axios error: ", error.message);
@@ -185,3 +180,21 @@ export const clientLogin = async (
   }
 
 };
+
+//== 로그아웃 ==//
+export const logout = async (): Promise<void> => {
+  axios({
+    method: 'post',
+    url: `${BASE_URL}/logout`,
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem('token')}`
+    }
+  })
+  .then(() => {
+    sessionStorage.clear();
+    window.location.replace('/');
+  })
+  .catch((error) => {
+    console.log(error)
+  })
+}

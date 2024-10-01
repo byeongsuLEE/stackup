@@ -28,7 +28,6 @@ import com.ssafy.stackup.domain.user.repository.FreelancerRepository;
 import com.ssafy.stackup.domain.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -63,8 +62,9 @@ public class ProjectServiceImpl implements ProjectService {
         try {
             String certificateUrl = s3ImageUpLoadService.uploadImage(certificateFile);
             Project project = Project.builder()
+                    .status(ProjectStatus.BEFORE)
                     .title(title)
-                    .period(title)
+                    .period(String.valueOf(period))
                     .certificateUrl(certificateUrl)
                     .build();
 
@@ -162,6 +162,7 @@ public class ProjectServiceImpl implements ProjectService {
                 .worktype(board.getWorktype())
                 .applicants(board.getApplicants())
                 .upload(board.getUpload())
+                .certificateUrl(project.getCertificateUrl())
                 .freelancerStepConfirmed(project.isFreelancerStepConfirmed())
                 .clientStepConfirmed(project.isClientStepConfirmed())
                 .build();
@@ -276,38 +277,58 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     /**
-     *
+     * @param user
+     * @param projectType
+     * @return
      * @ 작성자   : 이병수
      * @ 작성일   : 2024-09-21
      * @ 설명     : 나의 페이지에서 사용할 프로젝트들 가져오기
-     * @param user
-     * @return
      */
     @Override
-    public List<ProjectInfoResponseDto> getAllProjects(User user) {
+    public List<ProjectInfoResponseDto> getAllProjects(User user, String projectType) {
 
         Freelancer freelancer = freelancerRepository.findById(user.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        Set<FreelancerProject> freelancerProjects = freelancer.getFreelancerProjects();
-        List<Project> projects = UserUtil.getProjects(freelancerProjects);
 
+        List<Project> projects = new ArrayList<>();
         List<ProjectInfoResponseDto> projectInfoResponseDtos = new ArrayList<>();
+        if(projectType.equals("BEFORE")){
+            ProjectStatus projectStatus = ProjectStatus.valueOf(projectType.toUpperCase());
+            projects = projectRepository.findByStatus(projectStatus);
+            for(Project project : projects) {
+                ProjectInfoResponseDto projectInfoResponseDto= ProjectInfoResponseDto.builder()
+                        .status(ProjectStatus.BEFORE)
+                        .title(project.getTitle())
+                        .period(project.getPeriod())
+                        .certificateUrl(project.getCertificateUrl())
+                        .build();
 
-        for(Project project : projects) {
-            ProjectInfoResponseDto projectInfoResponseDto= ProjectInfoResponseDto.builder()
-                    .projectId(project.getId())
-                    .status(project.getStatus())
-                    .title(project.getTitle())
-                    .startDate(project.getBoard().getStartDate())
-                    .period(project.getBoard().getPeriod())
-                    .classification(project.getBoard().getClassification())
-                    .build();
+                projectInfoResponseDtos.add(projectInfoResponseDto);
 
-            projectInfoResponseDtos.add(projectInfoResponseDto);
-            //sdfdsfsdfsfdsfdsdsasdadsadsaddsafdsa
+            }
+            return projectInfoResponseDtos;
         }
-        return projectInfoResponseDtos;
+        else{
+            Set<FreelancerProject> freelancerProjects = freelancer.getFreelancerProjects();
+            projects = UserUtil.getProjects(freelancerProjects);
+            for(Project project : projects) {
+                if(!project.getStatus().name().equals(projectType)) continue;
+                ProjectInfoResponseDto projectInfoResponseDto= ProjectInfoResponseDto.builder()
+                        .projectId(project.getId())
+                        .status(project.getStatus())
+                        .title(project.getTitle())
+                        .startDate(project.getBoard().getStartDate())
+                        .period(project.getBoard().getPeriod())
+                        .classification(project.getBoard().getClassification())
+                        .build();
+
+                projectInfoResponseDtos.add(projectInfoResponseDto);
+
+            }
+            return projectInfoResponseDtos;
+        }
+
     }
 
     private ProjectStepCheckResponseDto changeProjectStep(ProjectStep currentStep, boolean isUserAllStepChecked, Project project) {

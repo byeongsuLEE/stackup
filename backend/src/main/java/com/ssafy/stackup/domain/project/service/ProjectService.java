@@ -5,7 +5,6 @@ import com.ssafy.stackup.domain.project.dto.request.SignRequest;
 import com.ssafy.stackup.domain.project.dto.response.ProjectInfoResponseDto;
 import com.ssafy.stackup.domain.project.dto.request.ProjectStartRequestDto;
 import com.ssafy.stackup.domain.project.dto.response.ProjectStepCheckResponseDto;
-import com.ssafy.stackup.domain.project.entity.ProjectStep;
 import com.ssafy.stackup.domain.user.entity.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,7 +14,7 @@ import java.util.List;
 public interface ProjectService {
     void registerPreviousProject(MultipartFile certificateFile, String title, Long period);
 
-    List<ProjectInfoResponseDto> getAllProjects(User user);
+    List<ProjectInfoResponseDto> getAllProjects(User user, String projectType);
 
     ProjectInfoResponseDto startProject(User user, ProjectStartRequestDto freelancerIdList);
 

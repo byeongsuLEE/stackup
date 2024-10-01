@@ -5,6 +5,7 @@ import com.ssafy.stackup.domain.project.dto.response.ProjectInfoResponseDto;
 import com.ssafy.stackup.domain.project.dto.request.ProjectStartRequestDto;
 import com.ssafy.stackup.domain.project.dto.request.SignRequest;
 import com.ssafy.stackup.domain.project.dto.response.ProjectStepCheckResponseDto;
+import com.ssafy.stackup.domain.project.entity.Project;
 import com.ssafy.stackup.domain.project.repository.ProjectRepository;
 import com.ssafy.stackup.domain.project.service.ProjectService;
 import com.ssafy.stackup.domain.project.service.SignatureService;
@@ -27,6 +28,7 @@ public class ProjectController {
     private final SignatureService signatureService;
     private final UserServiceImpl userService;
     private final ProjectRepository projectRepository;
+
     //등록
     @PostMapping("/previous-project")
     public ResponseEntity<ApiResponse<String>> registerPreviousProject(            @RequestParam(value = "certificateFile") MultipartFile certificateFile,
@@ -40,8 +42,8 @@ public class ProjectController {
 
 
     @GetMapping("/info")
-    public ResponseEntity<ApiResponse<List<ProjectInfoResponseDto>>> getAllProjects(@AuthUser User user) {
-        List<ProjectInfoResponseDto> projects  = projectService.getAllProjects(user);
+    public ResponseEntity<ApiResponse<List<ProjectInfoResponseDto>>> getAllProjects(@RequestParam String projectType, @AuthUser User user) {
+        List<ProjectInfoResponseDto> projects  = projectService.getAllProjects(user,projectType);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(projects));

@@ -8,6 +8,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Date;
+
 @Entity
 @Builder
 @Data
@@ -43,6 +47,37 @@ public class FreelancerProject {
 
     @Column(name = "nft_certificate_hash")
     private String nftCertificateHash;  // 경력 증명서의 해시값
+
+
+    @Column(name = "contract_created")
+    private boolean contractCreated; // 계약서 작성 여부
+
+    @Column(name = "contract_start_date")
+    private Date contractStartDate; // 계약 시작일
+
+    @Column(name = "contract_end_date")
+    private Date contractEndDate; // 계약 종료일
+
+    @Column(name = "contract_total_amount")
+    private Long contractTotalAmount; // 총 계약 금액
+
+    @Column(name = "contract_down_payment")
+    private Long contractDownPayment; // 착수금
+
+    @Column(name = "contract_final_payment")
+    private Long contractFinalPayment; // 잔금
+
+    @Column(name = "contract_company_name")
+    private String contractCompanyName; // 회사명 (클라이언트)
+
+    @Column(name = "contract_confidentiality_clause", columnDefinition = "TEXT")
+    private String contractConfidentialityClause; // 비밀 유지 조항
+
+    @Column(name = "contract_additional_terms", columnDefinition = "TEXT")
+    private String contractAdditionalTerms; // 추가 특약 사항
+
+
+
 
     public void setFreelancerSigned(boolean freelancerSigned) {
         this.freelancerSigned = freelancerSigned;

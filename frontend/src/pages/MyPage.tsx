@@ -26,7 +26,7 @@ const Mypage = () => {
   
   return (
     <div className="flex flex-col">
-    <div className="mx-10 mt-20 flex justify-center">
+    <div className=" mt-20 flex justify-center">
       <MyRating {...state}/>
       <Introduce {...state}/>
     </div>

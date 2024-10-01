@@ -13,7 +13,7 @@ declare global {
   }
 }
 
-const Test = () => {
+const NFTMinting = () => {
   //== pdf 생성 ==//
   const componentRef = useRef<HTMLDivElement>(null);
 
@@ -74,7 +74,6 @@ const Test = () => {
   return (
     <div>
       <div ref={componentRef}>
-        <ContractDetail />
         {/* {ethereum && (
           <div onClick={handleGetAccount}>
             <DoneButton height={30} width={200} title="Connect Wallet" />
@@ -85,11 +84,13 @@ const Test = () => {
         {/* 캔버스 요소 추가 */}
         <canvas ref={canvasRef} style={{ border: "1px solid black", display:"none" }}></canvas>
       </div>
-        <div className="mt-10 text-end" onClick={handleMintNFT}>
+        <div className="mt-10 text-end" 
+        // onClick={handleMintNFT}
+        >
           <DoneButton height={30} width={150} title="제출" />
         </div>
     </div>
   );
 };
 
-export default Test;
+export default NFTMinting;

@@ -31,12 +31,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import javax.swing.text.html.Option;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -159,8 +157,12 @@ public class BoardService {
         }
         board.setBoardLanguages(languages);
 
+        // 벡터 생성 요청
+        double[] descriptionVector = generateVector(board.getDescription());
+
         Recommend recommend = new Recommend();
         recommend.setClassification(board.getClassification());
+        recommend.setDescription(board.getDescription());
         recommend.setFrameworks(board.getBoardFrameworks());
         recommend.setLanguages(board.getBoardLanguages());
 //        recommend.setLanguages(languageNames);
@@ -168,6 +170,7 @@ public class BoardService {
         recommend.setLevel(board.getLevel());
         recommend.setTitle(board.getTitle());
         recommend.setDeposit(board.getDeposit());
+        recommend.setDescriptionVector(descriptionVector);
 
 
         Board result = boardRepository.save(board);
@@ -216,5 +219,16 @@ public class BoardService {
         boardRepository.save(board);
     }
 
+    private final RestTemplate restTemplate;
+
+    private double[] generateVector(String description) {
+        // Flask 서버로 벡터 생성 요청
+        String flaskUrl = "http://localhost:5000/vectorize"; // Flask 서버 URL
+        // JSON 형식으로 description을 감싸기
+        Map<String, String> requestBody = new HashMap<>();
+        requestBody.put("description", description);
+
+        return restTemplate.postForObject(flaskUrl, requestBody, double[].class);
+    }
 
 }

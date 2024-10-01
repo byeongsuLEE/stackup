@@ -31,11 +31,24 @@
 //
 //        // Elasticsearch의 painless script로 벡터 간 유사도를 계산하는 스크립트
 //        String script = "cosineSimilarity(params.embedding, 'descriptionVector') + 1.0";
+//
+//        // 쿼리 생성
+//        NativeSearchQuery searchQuery = new NativeSearchQueryBuilder()
+//                .withQuery(QueryBuilders.scriptScoreQuery(
+//                        QueryBuilders.matchAllQuery(),
+//                        new Script(ScriptType.INLINE, "painless", script, params)
+//                ))
+//                .build();
+//
+//
+//
+//
 //        // ScriptScoreQuery 생성
-//        ScriptScoreQuery scriptScoreQuery = new ScriptScoreQuery(
-//                QueryBuilders.matchAllQuery(),
-//                new Script(ScriptType.INLINE, "painless", script, params)
-//        );
+//        ScriptScoreQuery query = new ScriptScoreQueryBuilder()
+//                .withQuery(QueryBuilders.matchAllQuery())
+//                .withScript(script)
+//                .withParam("embedding", embedding)
+//                .build();
 //
 //        // NativeQuery를 생성하여 스크립트 기반 검색 수행
 //        NativeQuery searchQuery = NativeQuery.builder()

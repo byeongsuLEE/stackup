@@ -56,7 +56,7 @@ spring:
             token-uri: https://github.com/login/oauth/access_token
             user-info-uri: https://api.github.com/user
   kafka:
-    bootstrap-servers: 34.64.98.78:9094
+    bootstrap-servers: 34.64.190.133:9092
     consumer:
       group-id: my-group
       auto-offset-reset: earliest
@@ -105,6 +105,15 @@ publicDataPortal:
   api:
     url: ${PUBLIC_DATA_PORTAL_API_URL}
     key: ${PUBLIC_DATA_PORTAL_API_KEY}
+
+
+
+portone:
+  api-key: 2266227468060441
+  api-secret: QuEDNv6I2IkSg2hqbpqAr31vy0fQK2DoqFYbMtE0GnG5eEdB9MSR6gHqkdhVx8xXoe8JqXSFN5pFR3Uv
+
+
+
 
 default:
   image: https://raw.githubusercontent.com/tailwindlabs/heroicons/56c073c2c9a66d2e51adb93d8e87e2e941d5b6db/src/20/solid/user-circle.svg

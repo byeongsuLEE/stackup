@@ -56,7 +56,7 @@ public class TransactionsService {
 
         return null;
     }
-    private String apikey = getApikey();
+    private String apikey;
 
 //    private String apikey = "13d8a1c9199348928f01b0591c325460";
 
@@ -67,6 +67,8 @@ public class TransactionsService {
 
         String accountKey = user.getAccountKey();
         String email = user.getEmail();
+
+        apikey = getApikey();
 
         if (accountKey == null) {
             System.out.println("accountKey 없음");

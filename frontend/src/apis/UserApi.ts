@@ -99,8 +99,6 @@ export const freelanceMypage = async (): Promise<string> => {
     state.setFramworks(response.data.data.framework);
     state.setLanguages(response.data.data.language);
 
-    console.log(response.data)
-
     return response.data.data.email;
   } catch (error) {
     if (axios.isAxiosError(error)) {

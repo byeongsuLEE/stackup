@@ -27,6 +27,7 @@ export const getToken = async (userId: string | null): Promise<string> => {
       },
     });
 
+    console.log(response.data)
     const { setToken, setUserType, setFreelancerId } = useUserStore.getState();
     const { isLogin,setIsLogin} = useLoginStore.getState();
 
@@ -61,14 +62,13 @@ export const getToken = async (userId: string | null): Promise<string> => {
 //== 프리랜서 정보 등록 ==//
 export const registerFreelancerInfo = async (): Promise<void> => {
   const state = freelanceStore.getState();
-  const { token } = useUserStore.getState();
 
   try {
     axios({
       method: "post",
       url: `${BASE_URL}/info`,
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
       data: {
         name: state.name,
@@ -112,6 +112,7 @@ export const freelanceMypage = async (): Promise<string> => {
     state.setFramworks(response.data.data.framework);
     state.setLanguages(response.data.data.language);
 
+    console.log(response.data)
     return response.data.data.email;
   } catch (error) {
     if (axios.isAxiosError(error)) {

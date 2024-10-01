@@ -33,13 +33,8 @@ const Navbar = () => {
 
         <div className="flex">
           {isLogin ? (
-            <span className="mr-6" onClick={logout} style={{ cursor: 'pointer' }}>로그아웃</span>
-          ):(
-          <Link to="/login" className="mr-6">
-            로그인
-          </Link>
-          )
-          }
+            <div>
+            <span className="mr-6">로그아웃</span>
           <Link to="/mypage">
             마이페이지
           </Link>

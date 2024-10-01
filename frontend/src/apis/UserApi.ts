@@ -1,16 +1,10 @@
 import axios from "axios";
-import { freelanceStore } from "../store/FreelanceStore";
-import {
-  clientLoginInfo,
-  clientSignupInfo,
-  freelanceSignupInfo,
-} from "./User.type";
-
 import { useUserStore } from "../store/UserStore";
+import { freelanceStore } from "../store/FreelanceStore";
+import { clientLoginInfo, clientSignupInfo, freelanceSignupInfo } from "./User.type";
 
 const BASE_URL: string = "http://localhost:8080/api/user";
 const { setToken, setUserType, setFreelancerId, setClientId } = useUserStore.getState();
-
 
 //== 프리랜서 깃허브 소셜 로그인 ==//
 export const freelanceLogin = async (): Promise<void> => {
@@ -59,10 +53,10 @@ export const registerFreelancerInfo = async (): Promise<void> => {
   console.log(state.portfolioURL)
   try {
     axios({
-      method: "post",
+      method: 'post',
       url: `${BASE_URL}/info`,
       headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
       },
       data: {
         name: state.name,
@@ -105,8 +99,6 @@ export const freelanceMypage = async (): Promise<string> => {
     state.setFramworks(response.data.data.framework);
     state.setLanguages(response.data.data.language);
     state.setPortfolioURL(response.data.data.portfolioURL);
-
-    console.log(response.data)
 
     return response.data.data.email;
   } catch (error) {
@@ -186,3 +178,21 @@ export const clientLogin = async (
   }
 
 };
+
+//== 로그아웃 ==//
+export const logout = async (): Promise<void> => {
+  axios({
+    method: 'post',
+    url: `${BASE_URL}/logout`,
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem('token')}`
+    }
+  })
+  .then(() => {
+    sessionStorage.clear();
+    window.location.replace('/');
+  })
+  .catch((error) => {
+    console.log(error)
+  })
+}

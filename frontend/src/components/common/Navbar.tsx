@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import Logo from "../../icons/Logo";
 import { useLoginStore } from "../../store/UserStore";
 import { useEffect } from "react";
+import { logout } from "../../apis/UserApi";
 
 const Navbar = () => {
   const { isLogin, checkLogin } = useLoginStore();
@@ -30,7 +31,7 @@ const Navbar = () => {
         </div>
         <div className="flex">
           {isLogin ? (
-            <span className="mr-6">로그아웃</span>
+            <span className="mr-6" onClick={logout} style={{ cursor: 'pointer' }}>로그아웃</span>
           ):(
           <Link to="/login" className="mr-6">
             로그인

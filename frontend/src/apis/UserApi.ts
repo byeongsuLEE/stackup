@@ -9,7 +9,7 @@ import {
 import { useUserStore } from "../store/UserStore";
 
 const BASE_URL: string = "http://localhost:8080/api/user";
-const { setToken, setUserType, setFreelancerId } = useUserStore.getState();
+const { setToken, setUserType, setFreelancerId, setClientId } = useUserStore.getState();
 
 
 //== 프리랜서 깃허브 소셜 로그인 ==//
@@ -29,10 +29,6 @@ export const getToken = async (userId: string | null): Promise<string> => {
       },
     });
 
-    console.log(response.data)
-    const { setToken, setUserType, setFreelancerId } = useUserStore.getState();
-    const { isLogin,setIsLogin} = useLoginStore.getState();
-
     //== 토큰 저장 ==//
     setToken(response.data.data.accessToken);
     window.sessionStorage.setItem("token", response.data.data.accessToken);
@@ -44,7 +40,6 @@ export const getToken = async (userId: string | null): Promise<string> => {
     //== id 저장 ==//
     setFreelancerId(response.data.data.userId);
     window.sessionStorage.setItem("freelancerId", response.data.data.userId);
-
 
     return "로그인";
   } catch (error) {
@@ -61,7 +56,6 @@ export const getToken = async (userId: string | null): Promise<string> => {
 //== 프리랜서 정보 등록 ==//
 export const registerFreelancerInfo = async (): Promise<void> => {
   const state = freelanceStore.getState();
-
   try {
     axios({
       method: "post",
@@ -95,14 +89,13 @@ export const registerFreelancerInfo = async (): Promise<void> => {
 //== 마이페이지 정보 ==//
 export const freelanceMypage = async (): Promise<string> => {
   const state = freelanceStore.getState();
-  const { token } = useUserStore.getState();
 
   try {
     const response = await axios({
       method: "get",
       url: `${BASE_URL}/info`,
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
     });
     const data: Partial<freelanceSignupInfo> = response.data.data;
@@ -112,6 +105,7 @@ export const freelanceMypage = async (): Promise<string> => {
     state.setLanguages(response.data.data.language);
 
     console.log(response.data)
+
     return response.data.data.email;
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -154,6 +148,7 @@ export const clientSignup = async (
   }
 };
 
+
 //== 클라이언트 로그인 ==//
 export const clientLogin = async (
   information: clientLoginInfo
@@ -166,9 +161,7 @@ export const clientLogin = async (
         email: information.email,
         password: information.password,
       },
-
     });
-    const { setToken, setUserType, setClientId } = useUserStore.getState();
 
 
     //== 토큰 값 설정 ==//

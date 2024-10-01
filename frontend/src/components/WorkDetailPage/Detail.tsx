@@ -1,14 +1,20 @@
 import { differenceInDays, format } from "date-fns";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { project } from "../../apis/Board.type";
 import WebIcon from "../../icons/WebIcon";
 import InfoBox from "../WorkPage/InfoBox";
 import DoneButton from "../common/DoneButton";
 
 const Detail = (project: project) => {
+  const boardId = project.boardId;
+  const navigate = useNavigate();
+  const toCandidate = () => {
+    navigate(`/work/detail/candidate/${boardId}`);
+  }
+  
 
   const remainDay = differenceInDays(project.deadline, format(Date(), 'yyyy-MM-dd'));
-  const workType = project.worktype? "재택" : "기간제 상주";
+  const workType = project.worktype ? "재택" : "기간제 상주";
   let classification = null
 
   if (project.classification === 'web') {
@@ -32,14 +38,13 @@ const Detail = (project: project) => {
         </div>
         <div className="flex justify-end">
 
-          {window.sessionStorage.getItem("userType") === 'freelancer'? (
+          {window.sessionStorage.getItem("userType") === 'freelancer' ? (
             <DoneButton width={100} height={25} title="지원하기" />
           ) : (
-            <div>
-              <Link to="/work/detail/candidate">
-              <DoneButton width={100} height={25} title="지원자 관리" />
-              </Link>
-
+            <div className="flex">
+              <div onClick={toCandidate}>
+                <DoneButton width={100} height={25} title="지원자 관리" />
+              </div>
               <button className="bg-subGreen2 text-bgGreen font-bold text-sm px-3 rounded-lg ml-2">마감하기</button>
             </div>
           )}

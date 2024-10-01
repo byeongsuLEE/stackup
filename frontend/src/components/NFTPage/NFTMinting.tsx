@@ -4,7 +4,6 @@ import { generateImage, nftInfoProp } from "../../hooks/MakeImage";
 import { handlePrint } from "../../hooks/MakePDF";
 import { CallTest } from "../../hooks/Test";
 import DoneButton from "../common/DoneButton";
-import ContractDetail from "../ContractPage/ContractDetail";
 
 // window.ethereum 타입 확장
 declare global {
@@ -82,13 +81,13 @@ const NFTMinting = () => {
         {ethereum && <p>Your Wallet address: {addr}</p>} */}
 
         {/* 캔버스 요소 추가 */}
-        <canvas ref={canvasRef} style={{ border: "1px solid black", display:"none" }}></canvas>
+        <canvas ref={canvasRef} style={{ border: "1px solid black", display: "none" }}></canvas>
       </div>
-        <div className="mt-10 text-end" 
-        // onClick={handleMintNFT}
-        >
-          <DoneButton height={30} width={150} title="제출" />
-        </div>
+      <div className="mt-10 text-end"
+        onClick={handleMintNFT}
+      >
+        <DoneButton height={30} width={150} title="제출" />
+      </div>
     </div>
   );
 };

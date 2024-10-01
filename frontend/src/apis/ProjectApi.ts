@@ -30,8 +30,8 @@ export const previousProject = async (data: projectData): Promise<void> => {
   }
 };
 
-//== 이전 프로젝트 가져오기 ==//
-export const getPriviosProject =  async (): Promise<void> => {
+//== 프로젝트 가져오기 ==//
+export const getProject =  async (): Promise<void> => {
   const response = await axios({
     method:'get',
     url: `${BASE_URL}/project/info`,

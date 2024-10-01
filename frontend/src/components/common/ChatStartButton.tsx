@@ -4,7 +4,6 @@ import { useUserStore } from "../../store/UserStore"; // 로그인한 유저 정
 interface ChatStartButtonProps {
   freelancerId: string; // 상대방 유저의 ID (프리랜서)
 }
-
 const ChatStartButton = ({ freelancerId }: ChatStartButtonProps) => {
   const loggedInUser = useUserStore((state) => state.clientId); // 로그인한 유저 정보 가져오기
 
@@ -16,7 +15,7 @@ const ChatStartButton = ({ freelancerId }: ChatStartButtonProps) => {
   return (
     <button
       onClick={handleChatButtonClick}
-      className="bg-mainGreen text-white rounded-lg px-2 font-bold text-sm"
+      className="bg-mainGreen text-white w-[80px] h-[30px] rounded-lg px-2 font-bold text-sm"
     >
       채팅 시작
     </button>

@@ -11,7 +11,6 @@ const Account = () => {
   const isAccount = true;
   const isMainAccount = true;
 
-
   const [accountList, setAccountList] = useState<accountInfo[]>([]);
 
   useEffect(() => {
@@ -19,10 +18,8 @@ const Account = () => {
       const data = await getAccount();
       setAccountList(data);
     }
-    update()
+    update();
   }, [])
-
-
 
   return (
     <div className="m-20">

@@ -1,34 +1,40 @@
 import axios from "axios"
 import { accountBasic, accountDetailInfo, accountInfo, transactionInfo } from "./Account.type"
+import { freelanceMypage } from "./UserApi";
+import { freelanceStore } from "../store/FreelanceStore";
 
-const BASE_URL: string = "http://localhost:8080/api/account"
-const token: string = "수정"
+const BASE_URL: string = "http://localhost:8080/api"
+
+//== api 키 발급 ==//
+export const getKey = async (): Promise<void> => {
+    await freelanceMypage();
+    console.log('안냥')
+    const state = freelanceStore.getState();
+    const response = await axios({
+        method: 'post',
+        url: `${BASE_URL}/account/key`,
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`
+        },
+        data: {
+            userId: state.email
+        }
+    })
+    console.log(response)
+}
 
 //== 계좌 목록 조회 ==//
 export const getAccount = async (): Promise<accountInfo[]> => {
-    try {
         const response = await axios({
             method: "get",
-            url: `${BASE_URL}`,
+            url: `${BASE_URL}/account`,
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`
             }
         })
 
         console.log(response.data)
         return response.data;
-
-    } catch (error) {
-
-        if (axios.isAxiosError(error)) {
-            console.error("Axios error: ", error.message)
-
-        } else {
-            console.error("Unexpected error: ", error)
-        }
-
-        return [];
-    }
 }
 
 //== 계좌 상세 조회 ==//
@@ -36,9 +42,9 @@ export const accountDetail  = async (accountId?: string): Promise<accountDetailI
     try {
         const response = await axios({
             method: 'get',
-            url: `${BASE_URL}/${accountId}`,
+            url: `${BASE_URL}/account/${accountId}`,
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`
             }
         })
 
@@ -58,14 +64,27 @@ export const accountDetail  = async (accountId?: string): Promise<accountDetailI
     }
 }
 
+//== 대표 계좌 설정 ==//
+export const mainAccout = async (accountId? : string): Promise<void> => {
+    const response = await axios({
+        method: 'patch',
+        url: `${BASE_URL}/account/${accountId}`,
+        headers: {
+            Authorization: `Bearer ${sessionStorage.getItem('token')}`
+        }
+    })
+
+    console.log(response.data)
+}
+
 //== 계좌 거래내역 조회 ==//
 export const accountTransaction = async (accountId?: string): Promise<transactionInfo[]> => {
     try {
         const response = await axios({
             method: 'get',
-            url: `${BASE_URL}/transactions/${accountId}`,
+            url: `${BASE_URL}/account/transactions/${accountId}`,
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`
             }
         })
         
@@ -90,9 +109,9 @@ export const authRequest = async (accountId: string): Promise<void> => {
     try {
         const response = await axios ({
             method: 'post',
-            url: `${BASE_URL}/auth/${accountId}`,
+            url: `${BASE_URL}/account/auth/${accountId}`,
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`
             },
             data: {
                 "accountNo": "수정 : 계좌번호",
@@ -119,9 +138,9 @@ export const authCheck = async (accountId: string): Promise<void> => {
     try {
         const response = await axios ({
             method:'post',
-            url: `${BASE_URL}/${accountId}/checkCode`,
+            url: `${BASE_URL}/account/${accountId}/checkCode`,
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${sessionStorage.getItem('token')}`
             },
             data: {
                 "account" : "수정: 계좌번호",

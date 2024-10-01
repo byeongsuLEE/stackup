@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom";
 import Logo from "../../icons/Logo";
 import { useLoginStore } from "../../store/UserStore";
+import { useEffect } from "react";
 
 const Navbar = () => {
-  const {isLogin} = useLoginStore.getState();
+  const { isLogin, checkLogin } = useLoginStore();
+  useEffect (() => {
+    checkLogin();
+  },[checkLogin])
   return (
     <>
       {/* 네비게이션 바를 fixed로 설정하고, 전체 너비를 유지하기 위해 container 클래스를 수정 */}

@@ -30,7 +30,7 @@ const UserInfo = (data: freelanceInformation) => {
   
   return (
     <form onSubmit={handleSubmit}>
-      <div className="bg-bgGreen flex flex-col my-10 p-10 border mx-44 border-mainGreen w-auto h-auto rounded-lg">
+      <div className="bg-bgGreen flex flex-col my-10 p-10 border  border-mainGreen w-auto h-auto rounded-lg">
         <div className="flex flex-col ml-10">
           <label htmlFor="name">이름</label>
           <input

@@ -1,5 +1,16 @@
 import { create } from'zustand'
 
+//로그인 상태 관리
+interface LoginState {
+  isLogin: boolean;
+  setIsLogin: (isLogin: boolean) => void;
+}
+
+export const useLoginStore = create<LoginState>((set) => ({
+  isLogin: false,
+  setIsLogin: (isLogin) => set({ isLogin }),
+}));
+
 interface UserState {
   userType: string | null;
   freelancerId: string | null;

@@ -6,7 +6,7 @@ import {
   freelanceSignupInfo,
 } from "./User.type";
 
-import { useUserStore } from "../store/UserStore";
+import { useLoginStore, useUserStore } from "../store/UserStore";
 
 const BASE_URL: string = "http://localhost:8080/api/user";
 
@@ -28,6 +28,7 @@ export const getToken = async (userId: string | null): Promise<string> => {
     });
 
     const { setToken, setUserType, setFreelancerId } = useUserStore.getState();
+    const { isLogin,setIsLogin} = useLoginStore.getState();
 
     //== 토큰 저장 ==//
     setToken(response.data.data.accessToken);
@@ -40,6 +41,10 @@ export const getToken = async (userId: string | null): Promise<string> => {
     //== id 저장 ==//
     setFreelancerId(response.data.data.userId);
     window.sessionStorage.setItem("freelancerId", response.data.data.userId);
+
+    // 로그인 상태 변경
+    setIsLogin(true);
+    console.log(isLogin)
 
     return "로그인";
   } catch (error) {

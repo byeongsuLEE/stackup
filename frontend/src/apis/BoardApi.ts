@@ -9,7 +9,10 @@ export const allProject = async (): Promise<project[]> => {
     try {
         const response = await axios({
             method: 'get',
-            url: BASE_URL
+            url: BASE_URL,
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem("token")}`
+            }
         })
         console.log(response.data)
         return response.data.data

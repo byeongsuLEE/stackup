@@ -1,6 +1,6 @@
 export interface projectData {
     projectName: string,
-    projectStart: string,
-    projectEnd: string,
-    file: any
+    startDate: string,
+    endDate: string,
+    projectFile: FileList
 }

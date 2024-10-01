@@ -166,7 +166,6 @@ export const clientLogin = async (
         password: information.password,
       },
     });
-
     const { setToken, setUserType, setClientId } = useUserStore.getState();
 
     //== 토큰 값 설정 ==//
@@ -179,7 +178,8 @@ export const clientLogin = async (
 
     //== id 저장 ==//
     setClientId(response.data.data.userId);
-    window.sessionStorage.setItem("clientId", response.data.data.userId);
+    window.sessionStorage.setItem("clientId", response.data.data.id);
+
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error("Axios error: ", error.message);

@@ -56,7 +56,7 @@ export const getToken = async (userId: string | null): Promise<string> => {
 //== 프리랜서 정보 등록 ==//
 export const registerFreelancerInfo = async (): Promise<void> => {
   const state = freelanceStore.getState();
-
+  console.log(state.portfolioURL)
   try {
     axios({
       method: "post",
@@ -74,10 +74,10 @@ export const registerFreelancerInfo = async (): Promise<void> => {
         language: state.languages,
         careerYear: state.careerYear,
         selfIntroduction: state.selfIntroduction,
+        portfolioURL: state.portfolioURL
       },
     });
 
-    freelanceMypage();
   } catch (error) {
     if (axios.isAxiosError(error)) {
       console.error("Axios error: ", error.message);
@@ -90,14 +90,13 @@ export const registerFreelancerInfo = async (): Promise<void> => {
 //== 마이페이지 정보 ==//
 export const freelanceMypage = async (): Promise<string> => {
   const state = freelanceStore.getState();
-  const { token } = useUserStore.getState();
 
   try {
     const response = await axios({
       method: "get",
       url: `${BASE_URL}/info`,
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       },
     });
     const data: Partial<freelanceSignupInfo> = response.data.data;
@@ -105,8 +104,10 @@ export const freelanceMypage = async (): Promise<string> => {
     state.updateState(data);
     state.setFramworks(response.data.data.framework);
     state.setLanguages(response.data.data.language);
+    state.setPortfolioURL(response.data.data.portfolioURL);
 
     console.log(response.data)
+
     return response.data.data.email;
   } catch (error) {
     if (axios.isAxiosError(error)) {

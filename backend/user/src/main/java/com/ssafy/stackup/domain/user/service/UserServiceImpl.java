@@ -287,6 +287,7 @@ public class UserServiceImpl implements UserService {
                     .email(freelancer.getEmail())
                     .secondPassword(freelancer.getSecondPassword())
                     .accountKey(freelancer.getAccountKey())
+                    .mainAccount(freelancer.getMainAccount())
                     .totalScore(freelancer.getTotalScore())
                     .framework(frameworks)
                     .language(languages)

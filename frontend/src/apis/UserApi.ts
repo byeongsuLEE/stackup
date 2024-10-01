@@ -50,7 +50,7 @@ export const getToken = async (userId: string | null): Promise<string> => {
 //== 프리랜서 정보 등록 ==//
 export const registerFreelancerInfo = async (): Promise<void> => {
   const state = freelanceStore.getState();
-  console.log(state.portfolioURL)
+
   try {
     axios({
       method: 'post',
@@ -99,7 +99,6 @@ export const freelanceMypage = async (): Promise<string> => {
     state.setFramworks(response.data.data.framework);
     state.setLanguages(response.data.data.language);
     state.setPortfolioURL(response.data.data.portfolioURL);
-
     return response.data.data.email;
   } catch (error) {
     if (axios.isAxiosError(error)) {

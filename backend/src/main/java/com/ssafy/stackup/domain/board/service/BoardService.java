@@ -215,4 +215,6 @@ public class BoardService {
         board.setIsCharged(true);
         boardRepository.save(board);
     }
+
+
 }

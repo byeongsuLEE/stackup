@@ -24,6 +24,8 @@ public interface BoardElasticsearchRepository extends ElasticsearchRepository<Re
     // 검색 조건으로 경력 연수 (careerYear)을 기준으로 프리랜서에게 적합한 board 목록을 찾는 메서드
     List<Recommend> findByLevel(Level level);
 
+    List<Recommend> findByDescriptionVector(double[] vector);
+
     @Query("""
     {
       "bool": {

@@ -179,11 +179,4 @@ public class BoardController {
                 .collect(Collectors.toList());
     }
 
-//    @GetMapping("/recommend/all")
-//    public Set<Recommend> recommendAll(@AuthUser User user) {
-//        Long freelancerId = user.getId();
-//        Set<Recommend> results = recommendationService.recommends(freelancerId);
-//        return results;
-//    }
-
 }

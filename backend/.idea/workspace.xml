@@ -4,7 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="770a738c-7cff-4cbe-947d-9fe8c12c7597" name="Changes" comment="init : msa 기본구조" />
+    <list default="true" id="770a738c-7cff-4cbe-947d-9fe8c12c7597" name="Changes" comment="init : msa 기본구조">
+      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/ssafy/stackup/domain/board/dto/BoardSummaryDTO.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/board/src/main/java/com/ssafy/stackup/domain/recommend/entity/Apply.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/board/src/main/java/com/ssafy/stackup/domain/board/controller/BoardController.java" beforeDir="false" afterPath="$PROJECT_DIR$/board/src/main/java/com/ssafy/stackup/domain/board/controller/BoardController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/board/src/main/java/com/ssafy/stackup/domain/board/controller/DetectionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/board/src/main/java/com/ssafy/stackup/domain/board/controller/DetectionController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/board/src/main/java/com/ssafy/stackup/domain/board/repository/BoardApplicantRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/board/src/main/java/com/ssafy/stackup/domain/board/repository/BoardApplicantRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/board/src/main/java/com/ssafy/stackup/domain/board/repository/BoardRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/board/src/main/java/com/ssafy/stackup/domain/board/repository/BoardRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/board/src/main/java/com/ssafy/stackup/domain/board/service/BoardService.java" beforeDir="false" afterPath="$PROJECT_DIR$/board/src/main/java/com/ssafy/stackup/domain/board/service/BoardService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/board/src/main/java/com/ssafy/stackup/domain/recommend/entity/Recommend.java" beforeDir="false" afterPath="$PROJECT_DIR$/board/src/main/java/com/ssafy/stackup/domain/recommend/entity/Recommend.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/board/src/main/java/com/ssafy/stackup/domain/recommend/service/RecommendationService.java" beforeDir="false" afterPath="$PROJECT_DIR$/board/src/main/java/com/ssafy/stackup/domain/recommend/service/RecommendationService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/board/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/board/src/main/resources/application.yml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -42,7 +54,7 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$/.." value="dev/be" />
+        <entry key="$PROJECT_DIR$/.." value="be/msa-user" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -78,9 +90,9 @@
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Spring Boot.StackUpApplication.executor": "Run",
-    "git-widget-placeholder": "be/msa",
+    "git-widget-placeholder": "be/msa-board",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/SSAFY/Desktop/S11P21C103/backend/src/main/java/com/ssafy/stackup/domain",
+    "last_opened_file_path": "C:/Users/user/OneDrive/바탕 화면/special/S11P21C103/backend/board/src/main/java/com/ssafy/stackup/domain",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -105,6 +117,7 @@
       <recent name="com.ssafy.stackup.domain.chat.dto.reqeust" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\user\OneDrive\바탕 화면\special\S11P21C103\backend\board\src\main\java\com\ssafy\stackup\domain" />
       <recent name="C:\Users\SSAFY\Desktop\S11P21C103\backend\src\main\java\com\ssafy\stackup\domain" />
       <recent name="C:\Users\SSAFY\Desktop\S11P21C103\backend\src\main\java\com\ssafy\stackup\domain\user" />
       <recent name="C:\Users\SSAFY\Desktop\S11P21C103\backend\src\main\java\com\ssafy\stackup\domain\evaluation" />
@@ -174,6 +187,7 @@
       <workItem from="1727222718962" duration="28693000" />
       <workItem from="1727309685358" duration="13678000" />
       <workItem from="1727338437542" duration="252000" />
+      <workItem from="1727758712646" duration="734000" />
     </task>
     <task id="LOCAL-00001" summary="test : pull 오류로 test">
       <option name="closed" value="true" />
@@ -360,7 +374,7 @@
                   <entry key="branch">
                     <value>
                       <list>
-                        <option value="origin/dev/be" />
+                        <option value="be/msa-board" />
                       </list>
                     </value>
                   </entry>

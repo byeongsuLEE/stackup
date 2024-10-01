@@ -5,6 +5,8 @@ import com.ssafy.stackup.common.response.ApiResponse;
 import com.ssafy.stackup.common.response.ErrorCode;
 import com.ssafy.stackup.domain.board.dto.*;
 import com.ssafy.stackup.domain.board.entity.Board;
+import com.ssafy.stackup.domain.board.entity.BoardApplicant;
+import com.ssafy.stackup.domain.board.repository.BoardApplicantRepository;
 import com.ssafy.stackup.domain.board.service.BoardService;
 import com.ssafy.stackup.domain.recommend.entity.Recommend;
 import com.ssafy.stackup.domain.recommend.service.RecommendationService;
@@ -155,6 +157,26 @@ public class BoardController {
         Long freelancerId = user.getId();
         Set<Recommend> recommendBoards = recommendationService.recommendBoardsForFreelancer(freelancerId);
         return recommendBoards;
+    }
+
+    @Autowired
+    BoardApplicantRepository boardApplicantRepository;
+
+    /**
+     *
+     * @ 작성자   : 김연지
+     * @ 작성일   : 2024-09-29
+     * @ 설명     : 프리랜서가 지원한 board 전체 조회
+     * @param user
+     * @return
+     */
+    @GetMapping("/apply-board")
+    public List<BoardFindAllResponse> applyBoards(@AuthUser User user) {
+        Long userId = user.getId();
+        List<Board> boards = boardApplicantRepository.findBoardsByUserId(userId);
+        return boards.stream()
+                .map(BoardFindAllResponse::new)
+                .collect(Collectors.toList());
     }
 
 //    @GetMapping("/recommend/all")

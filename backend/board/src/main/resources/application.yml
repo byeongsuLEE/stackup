@@ -34,9 +34,10 @@ spring:
       repositories:
         enabled: true
   elasticsearch:
-    uris: http://localhost:9200
+    uris: ${ELASTIC_URL}
     connection-timeout: 3000
     socket-timeout: 3000
+  #    password:
 
 
 
@@ -72,8 +73,8 @@ jwt:
 
 logging:
   level:
-#    root: info # 루트 로깅 레벨 설정
-#    com.ssafy: debug # com.wava 패키지 로깅 레벨 설정
+    #    root: info # 루트 로깅 레벨 설정
+    #    com.ssafy: debug # com.wava 패키지 로깅 레벨 설정
     org:
       springframework:
         data:

@@ -193,7 +193,7 @@ public class BoardService {
                 .orElseThrow(() -> new RuntimeException("Freelancer not found"));
 
         BoardApplicant boardApplicant = new BoardApplicant();
-//        boardApplicant.setBoard(board);
+        boardApplicant.setBoard(board);
         boardApplicant.setFreelancer(freelancer);
 
         // Add boardApplicant to the board's list

@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { accountInfo } from "../apis/Account.type";
 import { accountUpdate, getAccount, getMainAccount } from "../apis/AccountsApi";
 import AccountList from "../components/AccountPage/AccountList";
-import MainAccount from "../components/AccountPage/MainAccount";
 import DoneButton from "../components/common/DoneButton";
 import PlusIcon from "../icons/PlusIcon";
 
 const Account = () => {
   const isAccount = true;
-  const isMainAccount = true;
 
   const [accountList, setAccountList] = useState<accountInfo[]>([]);
   const [ mainAccount, setMainAccount ] = useState<string>(""); 

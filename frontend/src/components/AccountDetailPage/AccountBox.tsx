@@ -12,9 +12,11 @@ interface AccountBoxProps {
 
 const AccountBox = ({ account, mainAccount }: AccountBoxProps) => {
   const [isPasswordSet, setIsPasswordSet] = useState(false);
-  const handleSetPassword = () => {
+
+  const handleSetPassword = async() => {
     // SetPassword 버튼을 눌렀을 때 상태를 변경하여 CheckPassword가 렌더링되도록 함
     setIsPasswordSet(true);
+
   };
 
   const handleMainAccount = () => {

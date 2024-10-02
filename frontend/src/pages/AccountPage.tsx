@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { accountInfo } from "../apis/Account.type";
-import { getAccount } from "../apis/AccountsApi";
+import { accountUpdate, getAccount, getKey } from "../apis/AccountsApi";
 import AccountList from "../components/AccountPage/AccountList";
 import MainAccount from "../components/AccountPage/MainAccount";
 import DoneButton from "../components/common/DoneButton";
@@ -15,9 +15,11 @@ const Account = () => {
 
   useEffect(() => {
     const update = async () => {
+      await accountUpdate();
       const data = await getAccount();
       setAccountList(data);
     }
+    
     update();
   }, [])
 

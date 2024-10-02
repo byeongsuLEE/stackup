@@ -23,18 +23,31 @@ export const getKey = async (): Promise<void> => {
     console.log(response)
 }
 
+//== 계좌 목록 불러오기 ==//
+export const accountUpdate = async (): Promise<void> => {
+  const response = await axios({
+    method: 'get',
+    url: `${BASE_URL}/account/update`,
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem('token')}`
+    }
+  })
+
+  console.log(response)
+}
+
 //== 계좌 목록 조회 ==//
 export const getAccount = async (): Promise<accountInfo[]> => {
-        const response = await axios({
-            method: "get",
-            url: `${BASE_URL}/account`,
-            headers: {
-                Authorization: `Bearer ${sessionStorage.getItem('token')}`
-            }
-        })
+  const response = await axios({
+    method: "get",
+    url: `${BASE_URL}/account`,
+    headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`
+    }
+  })
 
-        console.log(response.data)
-        return response.data;
+  console.log(response)
+  return response.data;
 }
 
 //== 계좌 상세 조회 ==//

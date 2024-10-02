@@ -11,7 +11,7 @@ const AccountList = ({ accountList, mainAccount }: { accountList: accountInfo[];
         {accountList.map((account: accountInfo) => (
           <Link to={`/account/detail/${account.accountId}`} key={account.accountId}>
             {account.accountNum === mainAccount ? (
-              <MainAccount />
+              <MainAccount {...account}/>
             ) : (
               <Account {...account}/>
             )}

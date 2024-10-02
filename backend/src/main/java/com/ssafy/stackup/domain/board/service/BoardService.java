@@ -262,4 +262,13 @@ public class BoardService {
         return response.getBody();
     }
 
+
+    public List<BoardApplicantRequest> getSelectedApplicantListByBoardId(Long boardId) {
+
+            List<BoardApplicant> applicants = boardApplicantRepository.findByBoard_BoardIdAndIsPassedTrue(boardId);
+            return applicants.stream()
+                    .map(BoardApplicantRequest::new)
+                    .collect(Collectors.toList());
+
+    }
 }

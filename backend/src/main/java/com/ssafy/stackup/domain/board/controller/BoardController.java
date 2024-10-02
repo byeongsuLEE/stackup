@@ -130,6 +130,11 @@ public class BoardController {
         return boardService.getApplicantListByBoardId(boardId);
     }
 
+    @GetMapping("/{boardId}/selected-applicant-list")
+    public List<BoardApplicantRequest> getSelectedApplicantList(@PathVariable Long boardId) {
+        return boardService.getSelectedApplicantListByBoardId(boardId);
+    }
+
     @PostMapping("/{boardId}/payment-success")
     public ResponseEntity<?> handlePaymentSuccess(@PathVariable Long boardId, @RequestBody PaymentSuccessRequest request) {
         try {

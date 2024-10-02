@@ -12,6 +12,7 @@ import com.ssafy.stackup.domain.board.entity.BoardFramework;
 import com.ssafy.stackup.domain.board.entity.BoardLanguage;
 import com.ssafy.stackup.domain.board.repository.BoardApplicantRepository;
 import com.ssafy.stackup.domain.board.repository.BoardRepository;
+import com.ssafy.stackup.domain.project.dto.ContractInfoResponseDto;
 import com.ssafy.stackup.domain.project.dto.request.ProjectContractInfoRequestDto;
 import com.ssafy.stackup.domain.project.dto.request.SignRequest;
 import com.ssafy.stackup.domain.project.dto.response.ProjectInfoResponseDto;
@@ -32,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -105,8 +107,7 @@ public class ProjectServiceImpl implements ProjectService {
         // 지원자의 상태를 합격으로 변경
         for (Long freelancerId : request.getFreelancerIdList()) {
             BoardApplicant applicant = boardApplicantRepository.findByFreelancer_IdAndBoard_BoardId(freelancerId, request.getBoardId());
-            applicant.updateIsPassed();
-            boardApplicantRepository.save(applicant);
+
 
             FreelancerProject freelancerProject = FreelancerProject.builder()
                     .contractCreated(false)
@@ -116,7 +117,11 @@ public class ProjectServiceImpl implements ProjectService {
                     .build();
 
 
-            freelancerProjectRepository.save(freelancerProject);
+            FreelancerProject savedFreelancerProject = freelancerProjectRepository.save(freelancerProject);
+
+            applicant.updateIsPassed();
+            applicant.updateFreelancerProjectId(savedFreelancerProject.getId());
+            boardApplicantRepository.save(applicant);
         }
 
         ProjectInfoResponseDto response = ProjectInfoResponseDto.builder()
@@ -235,7 +240,7 @@ public class ProjectServiceImpl implements ProjectService {
      * @param requestDto
      */
     @Override
-    public void contarctSubmit(ProjectContractInfoRequestDto requestDto) {
+    public void contractSubmit(ProjectContractInfoRequestDto requestDto) {
         FreelancerProject freelancerProject = freelancerProjectRepository.findById(requestDto.getFreelancerProjectId())
                 .orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
 
@@ -251,6 +256,32 @@ public class ProjectServiceImpl implements ProjectService {
 
         freelancerProjectRepository.save(freelancerProject);
 
+    }
+
+
+
+    @Transactional(readOnly = true)
+    @Override
+    public ContractInfoResponseDto getContractInfo(Long freelancerProjectId, Long userId) {
+
+        FreelancerProject freelancerProject = freelancerProjectRepository.findById(freelancerProjectId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
+
+        ContractInfoResponseDto contractInfoResponseDto = ContractInfoResponseDto.builder()
+                .contractAdditionalTerms(freelancerProject.getContractAdditionalTerms())
+                .contractConfidentialityClause(freelancerProject.getContractConfidentialityClause())
+                .contractCompanyName(freelancerProject.getContractCompanyName())
+                .contractDownPayment(freelancerProject.getContractDownPayment())
+                .contractEndDate(freelancerProject.getContractEndDate())
+                .contractCreated(freelancerProject.isContractCreated())
+                .freelancerProjectId(freelancerProjectId)
+                .contractStartDate(freelancerProject.getContractStartDate())
+                .contractFinalPayment(freelancerProject.getContractFinalPayment())
+                .contractTotalAmount(freelancerProject.getContractTotalAmount())
+                .build();
+
+
+        return contractInfoResponseDto;
     }
 
 

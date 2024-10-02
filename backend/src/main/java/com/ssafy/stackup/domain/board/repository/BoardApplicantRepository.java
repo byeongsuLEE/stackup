@@ -11,6 +11,8 @@ import java.util.List;
 public interface BoardApplicantRepository extends JpaRepository<BoardApplicant, Long> {
     List<BoardApplicant> findByBoard_BoardId(Long boardId);
     BoardApplicant findByFreelancer_IdAndBoard_BoardId(Long freelancerId, Long boardId);
+    List<BoardApplicant> findByBoard_BoardIdAndIsPassedTrue(Long boardId);
+
 
     // user_id로 board 검색
     @Query("SELECT ba.board FROM BoardApplicant ba WHERE ba.freelancer.id = :userId")

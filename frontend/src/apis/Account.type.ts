@@ -1,10 +1,11 @@
 //== 계좌 정보 ==//
 export interface accountInfo {
     accountId: string,
-    bank: string,
-    accountNo: string,
-    balance: number,
-    bankCode: string
+    accountName: string,
+    accountNum: string,
+    balnace: string,
+    createdDate: string,
+    expiryDate: string
 }
 
 //== 계좌 상세 정보 ==//

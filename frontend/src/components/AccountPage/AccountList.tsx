@@ -12,7 +12,7 @@ const AccountList = ({accountList}: accountListProp) => {
     <div className="flex flex-wrap">
       <div className="flex justify-center">
         {accountList.map((account: accountInfo) => (
-          <Link to="/account/detail">
+          <Link to="/account/detail" key={account.accountId}>
           <Account {...account}/>
           </Link>
         ))}

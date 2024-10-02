@@ -1,5 +1,7 @@
 import axios from "axios"
 import { accountBasic, accountInfo, transactionInfo } from "./Account.type"
+import { passwordStore } from "../store/AccountStore"
+import { redirect } from "react-router-dom"
 
 const BASE_URL: string = "http://localhost:8080/api"
 
@@ -107,6 +109,27 @@ export const accountTransaction = async (accountId?: string): Promise<transactio
     }
 
     return [];
+  }
+}
+
+//== 간편 비밀번호 설정 ==//
+export const setPassword = async (): Promise<void> => {
+  const { password, confirmPassword } = passwordStore.getState();
+
+  if (password === confirmPassword) {
+    const response = await axios({
+      method: 'post',
+      url: `${BASE_URL}/account/password`,
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`
+      },
+      data : {
+        'secondPassword' : password
+      }
+    })
+    console.log(response)
+  } else {
+    alert('비밀번호가 다릅니다.')
   }
 }
 

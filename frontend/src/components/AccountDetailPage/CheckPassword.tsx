@@ -1,5 +1,7 @@
 // SecureKeypad.tsx
 import { useEffect, useState } from "react";
+import { passwordStore } from "../../store/AccountStore";
+import { setPassword } from "../../apis/AccountsApi";
 
 // 숫자 버튼의 랜덤 배열을 생성하는 함수
 const generateRandomButtonValues = () => {
@@ -18,6 +20,8 @@ const CheckPassword = () => {
   const [fixedButtons] = useState<string[]>(generateFixedButtons());
   const maxLength = 4;
 
+  const { setConfirmPassword } = passwordStore.getState();
+
   // 키패드가 보일 때마다 버튼 숫자 랜덤화
   useEffect(() => {
     if (isKeypadVisible) {
@@ -29,7 +33,9 @@ const CheckPassword = () => {
     if (value === "삭제") {
       setInputValue((prev) => prev.slice(0, -1));
     } else if (value === "완료") {
+      setConfirmPassword(inputValue);
       setIsKeypadVisible(false);
+      setPassword();
     } else {
       if (inputValue.length < maxLength) {
         setInputValue((prev) => prev + value);

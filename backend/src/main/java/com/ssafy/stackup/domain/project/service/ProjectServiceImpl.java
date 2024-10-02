@@ -93,16 +93,16 @@ public class ProjectServiceImpl implements ProjectService {
 
         //프로젝트 등록
         Project project = Project.builder()
+                .title(board.getTitle())
+                .period(board.getPeriod())
                 .client(board.getClient())
                 .step(ProjectStep.PLANNING)
                 .board(board)
-                .title(board.getTitle())
-                .period(board.getPeriod())
                 .status(ProjectStatus.PENDING)
                 .build();
 
-        project= projectRepository.save(project);
 
+        project= projectRepository.save(project);
 
         // 지원자의 상태를 합격으로 변경
         for (Long freelancerId : request.getFreelancerIdList()) {
@@ -112,6 +112,9 @@ public class ProjectServiceImpl implements ProjectService {
             FreelancerProject freelancerProject = FreelancerProject.builder()
                     .contractCreated(false)
                     .freelancerSigned(false)
+                    .contractEndDate(board.getDeadline())
+                    .contractStartDate(board.getStartDate())
+                    .contractCompanyName(board.getClient().getBusinessName())
                     .project(project)
                     .freelancer(applicant.getFreelancer())
                     .build();

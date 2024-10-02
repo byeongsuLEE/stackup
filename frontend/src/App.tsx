@@ -56,7 +56,7 @@ function App() {
               <Route path="/career/detail" element={<CareerDetail />} />
               <Route path="/career/register" element={<CareerRegister />} />
               <Route path="/account" element={<Account />} />
-              <Route path="/account/detail" element={<AccountDetail />} />
+              <Route path="/account/detail/:accountId" element={<AccountDetail />} />
               <Route path="/mypage" element={<Mypage />} />
               <Route path="/signup/client" element={<ClientSignup />} />
               <Route path="/signup/freelancer" element={<FreelancerSignup />} />

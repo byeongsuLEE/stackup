@@ -3,13 +3,13 @@ import AccountBox from "../components/AccountDetailPage/AccountBox";
 import TransactionList from "../components/AccountDetailPage/TransactionList";
 import { accountDetail, accountTransaction } from "../apis/AccountsApi";
 import { useParams } from "react-router-dom";
-import { accountDetailInfo, transactionInfo } from "../apis/Account.type";
+import { accountInfo, transactionInfo } from "../apis/Account.type";
 
 const AccountDetail = () => {
   const { accountId } = useParams();
 
   //== account detail ==//
-  const [ account, setAccount ] = useState<accountDetailInfo>();
+  const [ account, setAccount ] = useState<accountInfo>();
   const [ transactionList, setTransactionList ] = useState<transactionInfo[]>([]);
 
   useEffect(() => {

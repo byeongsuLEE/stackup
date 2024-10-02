@@ -1,5 +1,5 @@
 import axios from "axios"
-import { accountBasic, accountDetailInfo, accountInfo, transactionInfo } from "./Account.type"
+import { accountBasic, accountInfo, transactionInfo } from "./Account.type"
 
 const BASE_URL: string = "http://localhost:8080/api"
 
@@ -31,7 +31,7 @@ export const getAccount = async (): Promise<accountInfo[]> => {
 }
 
 //== 계좌 상세 조회 ==//
-export const accountDetail  = async (accountId?: string): Promise<accountDetailInfo> => {
+export const accountDetail  = async (accountId?: string): Promise<accountInfo> => {
   try {
     const response = await axios({
       method: 'get',
@@ -60,14 +60,27 @@ export const accountDetail  = async (accountId?: string): Promise<accountDetailI
 //== 대표 계좌 설정 ==//
 export const mainAccout = async (accountId? : string): Promise<void> => {
   const response = await axios({
-    method: 'patch',
-    url: `${BASE_URL}/account/${accountId}`,
+    method: 'post',
+    url: `${BASE_URL}/account/main/${accountId}`,
     headers: {
       Authorization: `Bearer ${sessionStorage.getItem('token')}`
     }
   })
 
   console.log(response.data)
+}
+
+//== 대표 계좌 조회 ==//
+export const getMainAccount = async (): Promise<string> => {
+  const response = await axios({
+    method: 'get',
+    url: `${BASE_URL}/account/main`,
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem('token')}`
+    }
+  })
+
+  return response.data
 }
 
 //== 계좌 거래내역 조회 ==//

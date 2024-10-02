@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { accountInfo } from "../apis/Account.type";
-import { accountUpdate, getAccount } from "../apis/AccountsApi";
+import { accountUpdate, getAccount, getMainAccount } from "../apis/AccountsApi";
 import AccountList from "../components/AccountPage/AccountList";
 import MainAccount from "../components/AccountPage/MainAccount";
 import DoneButton from "../components/common/DoneButton";
@@ -12,10 +12,15 @@ const Account = () => {
   const isMainAccount = true;
 
   const [accountList, setAccountList] = useState<accountInfo[]>([]);
+  const [ mainAccount, setMainAccount ] = useState<string>(""); 
 
   useEffect(() => {
     const update = async () => {
+      const main = await getMainAccount();
+      setMainAccount(main);
+
       await accountUpdate();
+
       const data = await getAccount();
       setAccountList(data);
     }
@@ -38,13 +43,7 @@ const Account = () => {
             <PlusIcon />
           </div>
           <div className="flex flex-col items-center">
-            <Link to="/account/detail">
-              {isMainAccount &&
-                <MainAccount />
-              }
-            </Link>
-
-            <AccountList accountList={accountList} />
+          <AccountList accountList={ accountList } mainAccount={mainAccount} />
           </div>
         </div>
       ) : (

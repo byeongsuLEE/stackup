@@ -9,10 +9,20 @@ const AppliedWork = () => {
     const detail = async () => {
       const data = await appliedProject();
       setProjectList(data);
-      console.log(data);
     }
     detail();
   }, [])
+  
+  // const { data: project, isLoading } = useQuery({
+  //   queryKey: ['project', 'boardId'],
+  //   queryFn: () => appliedProject(), 
+  // });
+  // console.log(project);
+
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+
+  // }
 
   return (
     <div className="flex flex-col w-[1000px] items-center mt-[50px]">

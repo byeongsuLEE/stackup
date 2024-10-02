@@ -156,6 +156,7 @@ export const clientLogin = async ( information: clientLoginInfo ): Promise<void>
         password: information.password,
       },
     });
+    window.location.replace('/');
 
     //== 토큰 값 설정 ==//
     setToken(response.headers.authorization);
@@ -176,6 +177,7 @@ export const clientLogin = async ( information: clientLoginInfo ): Promise<void>
       console.error("Unexpected error: ", error);
     }
   }
+  
 
 };
 

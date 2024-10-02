@@ -1,7 +1,13 @@
+import { useNavigate, useParams } from "react-router-dom";
 import DoneButton from "../common/DoneButton";
 import Candidate from "./Candidate";
 
 const CandidateList = () => {
+  const boardId = useParams<{ boardId: string }>().boardId;
+  const navigate = useNavigate();
+  const toProjectGroup = () => {
+    navigate(`/work/projectgroup/${boardId}`);
+  }
 
   return (
     <div className="overflow-x-auto">
@@ -25,8 +31,8 @@ const CandidateList = () => {
           />
         </tbody>
       </table>
-      <div className="text-end mt-5">
-      <DoneButton width={150} height={30} title="시작하기"/>
+      <div className="text-end mt-5" onClick={toProjectGroup}>
+        <DoneButton width={150} height={30} title="시작하기" />
       </div>
 
     </div>

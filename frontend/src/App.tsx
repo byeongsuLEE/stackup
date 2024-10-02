@@ -28,6 +28,7 @@ import Transfer from "./pages/TransferPage";
 import WorkDetail from "./pages/WorkDetailPage";
 import Work from "./pages/WorkPage";
 import { QueryClient, QueryClientProvider } from 'react-query';
+import ProjectGroup from "./pages/ProjectGruopPage";
 
 function App() {
   const queryClient = new QueryClient();
@@ -48,8 +49,8 @@ function App() {
               <Route path="/work/post" element={<PostWork />} />
               <Route path="/work/detail/:boardId" element={<WorkDetail />} />
               <Route path="/work/detail/candidate/:boardId" element={<CandidateCheck />} />
+              <Route path="/work/projectgroup/:boardId" element={<ProjectGroup />} />
               <Route path="/work/detail/contract/:boardId" element={<Contract />} />
-
               <Route path="/project" element={<Project />} />
               <Route path="/project/detail" element={<ProjectDetail />} />
               <Route path="/career" element={<Career />} />

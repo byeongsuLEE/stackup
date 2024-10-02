@@ -17,7 +17,8 @@ const Callback = () => {
             } else if (infoData == null) {
                 navigate("/signup/freelancer")
             } else {
-                navigate("/")
+                // navigate("/")
+                window.location.replace('/');
             }
             
         }

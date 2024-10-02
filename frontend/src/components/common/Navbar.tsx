@@ -3,12 +3,17 @@ import { Link } from "react-router-dom";
 import Logo from "../../icons/Logo";
 import { useLoginStore } from "../../store/UserStore";
 import DoneButton from "./DoneButton";
+import { logout } from "../../apis/UserApi";
 
 const Navbar = () => {
   const { isLogin, checkLogin } = useLoginStore();
   useEffect(() => {
     checkLogin();
   }, [checkLogin])
+
+  const callLogout = () => {
+    logout();
+  }
   return (
     <>
       {/* 네비게이션 바를 fixed로 설정하고, 전체 너비를 유지하기 위해 container 클래스를 수정 */}
@@ -33,8 +38,10 @@ const Navbar = () => {
 
         <div className="flex">
           {isLogin ? (
-            <div>
-            <span className="mr-6">로그아웃</span>
+            <div className="flex items-center">
+              <div onClick={callLogout} className="mr-3">
+            <DoneButton width={90} height={30} title="로그아웃"/>
+              </div>
           <Link to="/mypage">
             마이페이지
           </Link>

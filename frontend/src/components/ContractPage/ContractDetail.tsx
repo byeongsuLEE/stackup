@@ -1,19 +1,28 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
-import { project, projectBasic } from "../../apis/Board.type";
 import { projectDetail } from "../../apis/BoardApi";
+import { addDays, format } from "date-fns";
 
 const ContractDetail = () => {
   const boardId = useParams().boardId;
-  const [ project, setProject ] = useState<project>(projectBasic);
+  // const [project, setProject] = useState<project>(projectBasic);
 
-  useEffect(() => {
-    const detail = async () => {
-      const data = await projectDetail(boardId);
-      setProject(data)
-    }
-    detail();
-  }, [boardId])
+  const { data: project, isLoading } = useQuery({
+    queryKey: ['project', 'boardId'],
+    queryFn: () => projectDetail(boardId!),  // 화살표 함수로 감싸서 함수 참조 전달
+    enabled: !!boardId,
+  });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+
+  }
+ 
+const endDate = format(addDays(project.startDate, parseInt(project.period, 10)), 'yyyy-MM-dd')
+
+
+console.log(endDate); // 계산된 종료 날짜 출력
+
   const today = new Date();
   return (
     <div className="bg-bgGreen border border-mainGreen h-auto w-auto mx-10 p-5">
@@ -23,16 +32,16 @@ const ContractDetail = () => {
       <div className="flex flex-col">
         <br />
         <span className="font-bold text-sm">프로젝트명 :
-          <input defaultValue={project.title} className="border p-1 border-mainGreen rounded-md h-[25px] m-1" type="text" />
+          <input defaultValue={project.title} className="border p-2 border-mainGreen rounded-md h-[25px] m-1" type="text" />
         </span>
         <span className="font-bold text-sm">계약기간 :
-          <input className="border p-1 border-mainGreen rounded-md h-[25px] m-1" type="text" />
+          <input defaultValue={project.period} className="border p-2 border-mainGreen rounded-md h-[25px] m-1" type="text" />
         </span>
         <br />
         <span className="text-sm">
-          <input defaultValue={project.client.businessName} className="border p-1 border-mainGreen rounded-md h-[25px] m-1" type="text" />
+          <input defaultValue={project.client.businessName} className="border p-2 border-mainGreen rounded-md h-[25px] m-1" type="text" />
           (이하 “갑” 아리 한다.)와
-          <input placeholder="프리랜서" className="border p-1 border-mainGreen rounded-md h-[25px] m-1" type="text" />
+          <input placeholder="프리랜서" className="border p-2 border-mainGreen rounded-md h-[25px] m-1" type="text" />
           (이하 “을” 이라 한다.)는 프로젝트명에 명시된 업무작업을 수향하기 위해 다음과 같이 계약을 체결한다.</span>
         <br />
         <span className="font-bold text-sm">제 1조[목적]</span>
@@ -40,17 +49,18 @@ const ContractDetail = () => {
         <br />
         <span className="font-bold text-sm">제 2조 [계약기간]</span>
         <span className="text-sm">계약 기간은
-          <input placeholder="계약기간" className="border p-1 border-mainGreen rounded-md h-[25px] m-1" type="text" />
-          일 까지로 하며, 갑과 을의 합의 하에 본 계약기간은 연장 될 수 있다.</span>
+          <input defaultValue={project.startDate} className="border p-2 border-mainGreen rounded-md h-[25px] m-1" type="text" />부터
+          <input defaultValue={endDate} className="border p-2 border-mainGreen rounded-md h-[25px] m-1" type="text" />
+          까지로 하며, 갑과 을의 합의 하에 본 계약기간은 연장 될 수 있다.</span>
         <br />
         <span className="font-bold text-sm">제 3조 [계약금액]</span>
         <span className="text-sm">총 계약금액은
-          <input placeholder="1,500" className="border p-1 border-mainGreen rounded-md h-[25px] m-1" type="text" />
+          <input defaultValue={project.deposit} className="text-end border p-2 border-mainGreen rounded-md h-[25px] m-1" type="text" />
           만원으로 하며, 계약금액 중
-          <input placeholder="500" className="border p-1 border-mainGreen rounded-md h-[25px] m-1" type="text" />
-          은 착수시점에 지급하고,
+          <input placeholder="0" className="text-end border p-2 border-mainGreen rounded-md h-[25px] m-1" type="text" />
+          만원은 착수시점에 지급하고,
           잔금
-          <input placeholder="1,000" className="border p-1 border-mainGreen rounded-md h-[25px] m-1" type="text" />
+          <input placeholder="0" className="text-end border p-2 border-mainGreen rounded-md h-[25px] m-1" type="text" />
           만원은 작업 완료 시 작업완료납품과 동시에 “갑”은 “을”에게 지급하기로
           한다.
           단, 회사업무 수행을 위한 출장 등이 발생할 경우에는 “갑”이 그 비용을 지급하고,

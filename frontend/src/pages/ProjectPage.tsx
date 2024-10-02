@@ -5,6 +5,7 @@ import { Box, Tab } from '@mui/material';
 import React from 'react';
 import ContractDone from '../components/ProjectPage/ContractDone';
 import SignList from '../components/ProjectPage/SignList';
+import AppliedWork from '../components/ProjectPage/AppliedWork';
 
 const Project = () => {
   const [value, setValue] = React.useState('1');
@@ -18,17 +19,23 @@ const Project = () => {
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <TabList onChange={handleChange} aria-label="lab API tabs example" centered>
-              <Tab label="계약 진행" value="1" />
-              <Tab label="계약 완료" value="2" />
+              <Tab label="지원한 프로젝트" value="1" />
+              <Tab label="계약 진행" value="2" />
+              <Tab label="계약 완료" value="3" />
             </TabList>
           </Box>
           <div className='flex justify-center'>
-            <TabPanel value="1">
+          <TabPanel value="1">
+              <div className='mt-5'>
+                <AppliedWork />
+              </div>
+            </TabPanel>
+            <TabPanel value="2">
               <div className='mt-5'>
                 <SignList />
               </div>
             </TabPanel>
-            <TabPanel value="2">
+            <TabPanel value="3">
               <div className='mt-5'>
                 <ContractDone />
               </div>

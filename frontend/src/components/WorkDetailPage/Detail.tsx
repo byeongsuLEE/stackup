@@ -1,6 +1,7 @@
 import { differenceInDays, format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { project } from "../../apis/Board.type";
+import { projectApply } from "../../apis/FreelancerApi";
 import WebIcon from "../../icons/WebIcon";
 import InfoBox from "../WorkPage/InfoBox";
 import DoneButton from "../common/DoneButton";
@@ -11,7 +12,7 @@ const Detail = (project: project) => {
   const toCandidate = () => {
     navigate(`/work/detail/candidate/${boardId}`);
   }
-  
+
 
   const remainDay = differenceInDays(project.deadline, format(Date(), 'yyyy-MM-dd'));
   const workType = project.worktype ? "재택" : "기간제 상주";
@@ -29,17 +30,41 @@ const Detail = (project: project) => {
     classification = 'DB'
   }
 
+  const projectApplyHandler = async () => {
+    try {
+      await projectApply(boardId);
+      alert("지원이 완료되었습니다.");
+    } catch (error: any) {
+      if (error.response) {
+        // 서버에서 받은 응답이 있는 경우
+        console.error("Error response:", error.response.data);
+        alert(`지원 실패: ${error.response.status} - ${error.response.data.message}`);
+      } else if (error.request) {
+        // 요청이 서버에 도달하지 못한 경우
+        console.error("Error request:", error.request);
+        alert("지원 실패: 서버와의 통신에 문제가 발생했습니다.");
+      } else {
+        // 기타 에러
+        console.error("Error:", error.message);
+        alert("지원 실패: 알 수 없는 오류가 발생했습니다.");
+      }
+    }
+  }
+
   return (
     <>
       <div className="bg-bgGreen border border-mainGreen h-auto rounded-lg p-10 w-[1000px]] my-20 mx-10">
         <div className="flex flex-col">
-          <span className="text-lg font-bold">{project?.title}</span>
-          <span className="text-subTxt text-sm">{classification}</span>
+          <span className="text-lg font-bold">{project?.title} _ {classification}</span>
+          <span className="text-subTxt text-sm">{project?.client.businessName} _ 평점 {project?.client.totalScore}wja</span>
         </div>
         <div className="flex justify-end">
 
           {window.sessionStorage.getItem("userType") === 'freelancer' ? (
-            <DoneButton width={100} height={25} title="지원하기" />
+            <div
+              onClick={projectApplyHandler}>
+              <DoneButton width={100} height={25} title="지원하기" />
+            </div>
           ) : (
             <div className="flex">
               <div onClick={toCandidate}>

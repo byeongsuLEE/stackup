@@ -13,7 +13,7 @@ import logging
 app = Flask(__name__)
 
 # Kafka 프로듀서 설정
-conf = {'bootstrap.servers': 'localhost:9092'}
+conf = {'bootstrap.servers': '34.64.190.133:9092'}
 producer = Producer(conf)
 
 # 로그 설정

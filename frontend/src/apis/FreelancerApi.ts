@@ -9,9 +9,9 @@ export const projectApply = async (boardId: string): Promise<void> => {
       url: `${BASE_URL}/${boardId}/apply`,
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("token")}`
-    }
+      }
     });
-    
+
     return response.data;
   } catch (error: any) {
     if (axios.isAxiosError(error)) {
@@ -27,7 +27,7 @@ export const projectApply = async (boardId: string): Promise<void> => {
       // 예상치 못한 오류 처리
       console.error("Unexpected error: ", error);
     }
-    
+
     throw error; // 에러를 호출한 쪽에서 처리할 수 있도록 다시 던짐
   }
 };

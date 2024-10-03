@@ -1,5 +1,4 @@
 import axios from "axios";
-import { project } from "./Board.type";
 
 const BASE_URL: string = "http://localhost:8080/api/board";
 

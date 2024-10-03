@@ -147,11 +147,11 @@ public class Board {
     }
 
     public void setBoardApplicants(BoardApplicant boardApplicant) {
-        this.boardApplicants.clear();
-        this.boardApplicants.add(boardApplicant);
-        boardApplicant.setBoard(this);
+        if (boardApplicants != null) {
+            this.boardApplicants.add(boardApplicant);
+            this.applicants = (long) boardApplicants.size(); // applicants 필드 업데이트
+        } else {
+            this.applicants = 0L;
+        }
     }
-
-
-
 }

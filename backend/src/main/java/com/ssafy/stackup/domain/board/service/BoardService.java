@@ -221,6 +221,7 @@ public class BoardService {
 
         // Add boardApplicant to the board's list
         board.getBoardApplicants().add(boardApplicant);
+        board.setBoardApplicants(boardApplicant);
         boardApplicantRepository.save(boardApplicant);
     }
 

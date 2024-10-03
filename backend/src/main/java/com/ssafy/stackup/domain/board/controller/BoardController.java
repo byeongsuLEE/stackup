@@ -175,7 +175,7 @@ public class BoardController {
      * @param user
      * @return
      */
-    @GetMapping("/apply-board")
+    @GetMapping("/apply-list")
     public List<BoardFindAllResponse> applyBoards(@AuthUser User user) {
         Long userId = user.getId();
         List<Board> boards = boardApplicantRepository.findBoardsByUserId(userId);

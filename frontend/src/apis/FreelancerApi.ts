@@ -36,7 +36,7 @@ export const projectApply = async (boardId: string): Promise<void> => {
 export const appliedProject = async (): Promise<any> => {
   const response = await axios({
     method: 'get',
-    url: `${BASE_URL}/apply-board`,
+    url: `${BASE_URL}/apply-list`,
     headers: {
       Authorization: `Bearer ${sessionStorage.getItem('token')}`
     }

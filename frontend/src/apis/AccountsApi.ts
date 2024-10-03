@@ -1,7 +1,6 @@
 import axios from "axios"
 import { accountBasic, accountInfo, transactionInfo } from "./Account.type"
 import { passwordStore } from "../store/AccountStore"
-import { redirect } from "react-router-dom"
 
 const BASE_URL: string = "http://localhost:8080/api"
 
@@ -43,7 +42,6 @@ export const accountDetail  = async (accountId?: string): Promise<accountInfo> =
       }
     })
 
-    console.log(response.data)
     return response.data;
 
   } catch (error) {
@@ -60,7 +58,7 @@ export const accountDetail  = async (accountId?: string): Promise<accountInfo> =
 }
 
 //== 대표 계좌 설정 ==//
-export const mainAccout = async (accountId? : string): Promise<void> => {
+export const mainAccout = async (accountId? : string): Promise<string> => {
   const response = await axios({
     method: 'post',
     url: `${BASE_URL}/account/main/${accountId}`,
@@ -69,7 +67,7 @@ export const mainAccout = async (accountId? : string): Promise<void> => {
     }
   })
 
-  console.log(response.data)
+  return response.data
 }
 
 //== 대표 계좌 조회 ==//
@@ -127,10 +125,26 @@ export const setPassword = async (): Promise<void> => {
         'secondPassword' : password
       }
     })
-    console.log(response)
+
+    console.log(response.data)
   } else {
     alert('비밀번호가 다릅니다.')
   }
+}
+
+//== 간편 비밀번호 확인 ==//
+export const confirmPassword = async (password: string) : Promise<void> => {
+  const response = await axios({
+    method: 'get',
+    url: `${BASE_URL}/account/password`,
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`
+      },
+      data : {
+        'secondPassword' : password
+      }
+  })
+  console.log(response.data)
 }
 
 //== 1원 송금 요청 ==//
@@ -188,4 +202,21 @@ export const authCheck = async (accountId: string): Promise<void> => {
       console.error("Unexpected error: ", error)
     }
   }
+}
+
+//== 계좌 이체 ==//
+export const transfer = async (accountId: string, accountNum: string, balance: string): Promise<void> => {
+  const response = await axios ({
+    method: 'post',
+    url: `${BASE_URL}/account/${accountId}/transfer`,
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem('token')}`
+    },
+    data: {
+      'depositAccount': accountNum,
+      'transactionBalance': balance
+    }
+  })
+
+  console.log(response)
 }

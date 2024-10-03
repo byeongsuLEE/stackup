@@ -40,11 +40,16 @@ const Navbar = () => {
           {isLogin ? (
             <div className="flex items-center">
               <div onClick={callLogout} className="mr-3">
-            <DoneButton width={90} height={30} title="로그아웃"/>
+                <DoneButton width={90} height={30} title="로그아웃"/>
               </div>
-          <Link to="/mypage">
-            마이페이지
-          </Link>
+              {sessionStorage.getItem('userType') === 'client' ? (
+                <>
+                </>
+              ) : (
+                <Link to="/mypage">
+                  마이페이지
+                </Link>
+              )}
             </div>
           ) : (
             <Link to="/login" className="mr-6">

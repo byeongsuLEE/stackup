@@ -203,3 +203,20 @@ export const authCheck = async (accountId: string): Promise<void> => {
     }
   }
 }
+
+//== 계좌 이체 ==//
+export const transfer = async (accountId: string, accountNum: string, balance: string): Promise<void> => {
+  const response = await axios ({
+    method: 'post',
+    url: `${BASE_URL}/account/${accountId}/transfer`,
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem('token')}`
+    },
+    data: {
+      'depositAccount': accountNum,
+      'transactionBalance': balance
+    }
+  })
+
+  console.log(response)
+}

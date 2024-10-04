@@ -15,6 +15,9 @@ import BasicDatePicker from './Calender';
 import JuniorIcon from '../../icons/JuniorIcon';
 import MidIcon from '../../icons/MidIcon';
 import SeniorIcon from '../../icons/Senior';
+import axios from 'axios';
+import { useState } from 'react';
+
 
 const WorkForm = () => {
   const { register, handleSubmit, control, setValue, watch } = useForm<createProjectProp>({
@@ -26,31 +29,60 @@ const WorkForm = () => {
   //== 제출 ==//
   const onSubmit = (information: createProjectProp) => {
     createProject(information)
-
+    console.log(information.frameworks)
+    console.log(information.languages)
     //== 나중에 수정하기 ==//
     navigate("/work");
   }
 
   //== 언어 선택 ==//
   const choiceLanguage = (value: string) => {
-    const languageList = watch('languages')
-
+    const languageList = watch('languages');
     if (languageList.includes(value)) {
-      setValue('languages', languageList.filter(item => item !== value));
+      setValue('languages', languageList.filter(item => item != value));
     } else {
       setValue('languages', [...languageList, value]);
     }
-
-  }
+  };
 
   //== 프레임워크 선택 ==//
   const choiceFramework = (value: string) => {
     const frameworkList = watch('frameworks')
 
     if (frameworkList.includes(value)) {
-      setValue('frameworks', frameworkList.filter(item => item !== value));
+      setValue('frameworks', frameworkList.filter(item => item != value));
     } else {
       setValue('frameworks', [...frameworkList, value]);
+    }
+  }
+
+  // description을 상태로 관리
+  const [description, setDescription] = useState('');
+
+  // 버튼 클릭 시 POST 요청을 보내는 함수
+  const getAi = async () => {
+    if (!description) {
+      alert('Description을 입력하세요.');
+      return;
+    }
+
+    try {
+      const res = await axios.post('http://localhost:8080/api/board/search', {
+        description: description, // description을 POST 요청의 body에 포함
+      });
+
+      // 응답 처리
+      console.log('응답:', res.data);
+      // 선택된 값을 업데이트
+      setValue("classification", res.data.classification);
+      console.log(res.data.classification)
+      const languageIds: string[] = res.data.languages.map(language => language.languageId.toString())
+      setValue("languages", languageIds);
+      // res.data.frameworks에서 frameworkId만 추출하여 설정
+      const frameworkIds: string[] = res.data.frameworks.map(framework => framework.frameworkId.toString());
+      setValue('frameworks', frameworkIds);
+    } catch (error) {
+      console.error('Error:', error);
     }
   }
 
@@ -60,8 +92,10 @@ const WorkForm = () => {
         <div className="flex items-center">
           <span className="text-sm mr-5 text-subTxt">
             프로젝트 등록에 어려움이 있다면?
+            <div onClick={getAi}>
+              <Button width={200} height={30} title="AI 프로젝트 등록" />
+            </div>
           </span>
-          <Button width={200} height={30} title="AI 프로젝트 등록" />
         </div>
 
         <span className='text-sm text-subTxt mt-10'>[ 필수 입력사항 ]</span>
@@ -89,7 +123,12 @@ const WorkForm = () => {
             <textarea
               // name='projectInfo'
               className='py-2 px-2 border mt-3 border-slate-300 h-40 rounded-lg'
-              {...register("description", { required: "설명을 입력해주세요." })}
+              {...register("description", {
+                required: "설명을 입력해주세요.",
+                onChange: (e) => {
+                  setDescription(e.target.value);
+                }
+              })}
             />
 
             <input
@@ -172,13 +211,13 @@ const WorkForm = () => {
           <Controller
             name="classification"
             control={control}
-            render={({ field: { onChange } }) => (
+            render={({ field: { value, onChange } }) => (
               <div className="flex" onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}>
-                <Major major={WebIcon} title="웹" name="category" value="web" />
-                <Major major={MobileIcon} title="모바일" name="category" value="mobile" />
-                <Major major={PublisherIcon} title="퍼블리셔" name="category" value="publisher" />
-                <Major major={AIIcon} title="AI" name="category" value="ai" />
-                <Major major={DBIcon} title="DB" name="category" value="db" />
+                <Major major={WebIcon} title="웹" name="category" value="web" checked={value === "web"} onChange={onChange} />
+                <Major major={MobileIcon} title="모바일" name="category" value="mobile" checked={value === "mobile"} onChange={onChange} />
+                <Major major={PublisherIcon} title="퍼블리셔" name="category" value="publisher" checked={value === "publisher"} onChange={onChange} />
+                <Major major={AIIcon} title="AI" name="category" value="ai" checked={value === "ai"} onChange={onChange} />
+                <Major major={DBIcon} title="DB" name="category" value="db" checked={value ==="db"} onChange={onChange} />
               </div>
             )}
           />
@@ -188,9 +227,9 @@ const WorkForm = () => {
             control={control}
             render={({ field: { onChange } }) => (
               <div className="flex" onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}>
-                <Major major={JuniorIcon} title="주니어" name="levels" value="1" />
-                <Major major={MidIcon} title="미드" name="levels" value="2" />
-                <Major major={SeniorIcon} title="시니어" name="levels" value="3" />
+                <Major category='level' major={JuniorIcon} title="주니어" name="levels" value="JUNIOR" />
+                <Major category='level' major={MidIcon} title="미드" name="levels" value="MID" />
+                <Major category='level' major={SeniorIcon} title="시니어" name="levels" value="SENIOR" />
               </div>
             )}
           />
@@ -199,18 +238,18 @@ const WorkForm = () => {
           <Controller
             name="languages"
             control={control}
-            render={() => (
+            render={({ field: { onChange, value } }) => (
               <div onChange={(e: React.ChangeEvent<HTMLInputElement>) => choiceLanguage(e.target.value)}>
                 <div className="flex">
-                  <Skill category="languages" name="python" title="Python" value='1' />
-                  <Skill category="languages" name="java" title="JAVA" value='2' />
-                  <Skill category="languages" name="c" title="C언어" value='3' />
-                  <Skill category="languages" name="c++" title="C++" value='4' />
-                  <Skill category="languages" name="php" title="PHP" value='5' />
+                  <Skill category="languages" name="python" title="Python" value='1' checked={value.includes("1")} onChange={onChange} />
+                  <Skill category="languages" name="java" title="JAVA" value='2' checked={value.includes("2")} onChange={onChange} />
+                  <Skill category="languages" name="c" title="C언어" value='3' checked={value.includes("3")} onChange={onChange} />
+                  <Skill category="languages" name="c++" title="C++" value='4' checked={value.includes("4")} onChange={onChange} />
+                  <Skill category="languages" name="php" title="PHP" value='5' checked={value.includes("5")} onChange={onChange} />
                 </div>
                 <div className="flex mb-5">
-                  <Skill category="languages" name="typescript" title="Typescript" value='6' />
-                  <Skill category="languages" name="javascript" title="Javascript" value='7' />
+                  <Skill category="languages" name="typescript" title="Typescript" value='6' checked={value.includes("6")} onChange={onChange} />
+                  <Skill category="languages" name="javascript" title="Javascript" value='7' checked={value.includes("7")} onChange={onChange} />
                   <Skill category="languages" name="etc1" title="기타" value='8' />
                 </div>
               </div>
@@ -221,19 +260,54 @@ const WorkForm = () => {
           <Controller
             name="frameworks"
             control={control}
-            render={() => (
+            render={({ field: { onChange, value } }) => (
               <div className="flex" onChange={(e: React.ChangeEvent<HTMLInputElement>) => choiceFramework(e.target.value)}>
-                <Skill category="frameworks" name="react" title="React" value='1' />
-                <Skill category="frameworks" name="vue" title="Vue" value='2' />
-                <Skill category="frameworks" name="spring" title="Spring" value='3' />
-                <Skill category="frameworks" name="django" title="Django" value='4' />
-                <Skill category="frameworks" name="etc" title="기타" value='5' />
+                <Skill
+                  category="frameworks"
+                  name="react"
+                  title="React"
+                  value="1"
+                  checked={value.includes("1")} // React가 선택되었는지 확인
+                  onChange={onChange}
+                />
+                <Skill
+                  category="frameworks"
+                  name="vue"
+                  title="Vue"
+                  value='2'
+                  checked={value.includes('2')} // Vue가 선택되었는지 확인
+                  onChange={onChange} // 선택 상태를 업데이트
+                />
+                <Skill
+                  category="frameworks"
+                  name="spring"
+                  title="Spring"
+                  value='3'
+                  checked={value.includes('3')} // Spring이 선택되었는지 확인
+                  onChange={onChange} // 선택 상태를 업데이트
+                />
+                <Skill
+                  category="frameworks"
+                  name="django"
+                  title="Django"
+                  value='4'
+                  checked={value.includes('4')} // Django가 선택되었는지 확인
+                  onChange={onChange} // 선택 상태를 업데이트
+                />
+                <Skill
+                  category="frameworks"
+                  name="etc"
+                  title="기타"
+                  value='5'
+                  checked={value.includes('5')} // 기타가 선택되었는지 확인
+                  onChange={onChange} // 선택 상태를 업데이트
+                />
               </div>
             )}
           />
 
           <div className="flex justify-end mt-10">
-            <Button height={40} width={100} title="등록하기" />
+            <Button type="submit" height={40} width={100} title="등록하기" onClick={onSubmit} />
           </div>
 
         </div>

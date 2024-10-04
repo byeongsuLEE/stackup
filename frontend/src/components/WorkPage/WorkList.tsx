@@ -7,6 +7,7 @@ import Work from "./Work";
 
 
 const WorkList = () => {
+  
   const navigate = useNavigate();
   const toWorkDetail = (id: string) => {
     navigate(`/work/detail/${id}`);

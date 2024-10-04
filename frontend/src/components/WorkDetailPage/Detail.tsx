@@ -8,6 +8,8 @@ import PeriodIcon from "../../icons/PeriodIcon";
 import PriceIcon from "../../icons/PriceIcon";
 import InfoBox from "../WorkPage/InfoBox";
 import DoneButton from "../common/DoneButton";
+import { projectDelete } from "../../apis/BoardApi";
+import Payment from "../../pages/PullupPage";
 
 interface DetailProps {
   project: ProjectType;
@@ -20,6 +22,11 @@ const Detail = ({ project, clientId }: DetailProps) => {
 
   const boardId = project.boardId;
   const navigate = useNavigate();
+
+  // 프로젝트 삭제
+  const deleteProject = async () => {
+    projectDelete(boardId);
+  };
 
   const toCandidate = () => {
     navigate(`/work/detail/candidate/${boardId}`);
@@ -106,8 +113,9 @@ const Detail = ({ project, clientId }: DetailProps) => {
             <div onClick={toCandidate}>
               <DoneButton width={100} height={25} title="지원자 관리" />
             </div>
-            <button className="bg-subGreen2 text-bgGreen font-bold text-sm px-3 rounded-lg ml-2">
-              마감하기
+            <Payment boardId={boardId} />
+            <button onClick={deleteProject} className="bg-subGreen2 text-bgGreen font-bold text-sm px-3 rounded-lg ml-2">
+              삭제하기
             </button>
           </div>
         ) : (

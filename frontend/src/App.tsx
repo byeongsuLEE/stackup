@@ -35,43 +35,42 @@ function App() {
 
   return (
     <>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <div className=" relative flex flex-col min-h-screen">
-            <main className="flex-grow mt-28 mx-20">
-              <Navbar />
-              <Routes>
-                <Route path="/test" element={<Test />} />
-                <Route path="/" element={<Home />} />
-                <Route path="/signature/detail" element={<SignatureDetail />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/work" element={<Work />} />
-                <Route path="/work/post" element={<PostWork />} />
-                <Route path="/work/detail/:boardId" element={<WorkDetail />} />
-                <Route path="/work/detail/candidate/:boardId" element={<CandidateCheck />} />
-                <Route path="/work/projectgroup/:boardId" element={<ProjectGroup />} />
-                <Route path="/work/detail/contract/:boardId" element={<Contract />} />
-                <Route path="/project" element={<Project />} />
-                <Route path="/project/detail" element={<ProjectDetail />} />
-                <Route path="/career" element={<Career />} />
-                <Route path="/career/detail" element={<CareerDetail />} />
-                <Route path="/career/register" element={<CareerRegister />} />
-                <Route path="/account" element={<Account />} />
-                <Route path="/account/detail/:accountId" element={<AccountDetail />} />
-                <Route path="/mypage" element={<Mypage />} />
-                <Route path="/signup/client" element={<ClientSignup />} />
-                <Route path="/signup/freelancer" element={<FreelancerSignup />} />
-                <Route path="/signup/freelancer/skill" element={<FreelancerSkill />} />
-                <Route path="/evaluate/miterm" element={<MitermEvaluate />} />
-                <Route path="/evaluate/final" element={<FinalEvaluate />} />
-                <Route path="/transfer" element={<Transfer />} />
-                <Route path="/callback" element={<Callback />} />
-              </Routes>
-            </main>
-            <Footer />
-            <div className="fixed right-7 bottom-3">
-              <SimplePopup />
-            </div>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <div className=" relative flex flex-col min-h-screen">
+          <main className="flex-grow mt-28 mx-20">
+            <Navbar />
+            <Routes>
+              <Route path="/test" element={<Test />} />
+              <Route path="/" element={<Home />} />
+              <Route path="/signature/detail" element={<SignatureDetail />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/work" element={<Work />} />
+              <Route path="/work/post" element={<PostWork />} />
+              <Route path="/work/detail/:boardId" element={<WorkDetail />} />
+              <Route path="/work/detail/candidate/:boardId/" element={<CandidateCheck />} />
+              <Route path="/work/projectgroup/:boardId" element={<ProjectGroup />} />
+              <Route path="/work/detail/contract/:boardId/:candidateId" element={<Contract />} />
+              <Route path="/project" element={<Project />} />
+              <Route path="/project/detail" element={<ProjectDetail />} />
+              <Route path="/career" element={<Career />} />
+              <Route path="/career/detail" element={<CareerDetail />} />
+              <Route path="/career/register" element={<CareerRegister />} />
+              <Route path="/account" element={<Account />} />
+              <Route path="/account/detail/:accountId" element={<AccountDetail />} />
+              <Route path="/mypage" element={<Mypage />} />
+              <Route path="/signup/client" element={<ClientSignup />} />
+              <Route path="/signup/freelancer" element={<FreelancerSignup />} />
+              <Route path="/signup/freelancer/skill" element={<FreelancerSkill />} />
+              <Route path="/evaluate/miterm" element={<MitermEvaluate />} />
+              <Route path="/evaluate/final" element={<FinalEvaluate />} />
+              <Route path="/transfer" element={<Transfer />} />
+              <Route path="/callback" element={<Callback />} />
+            </Routes>
+          </main>
+          <Footer />
+          <div className="fixed right-7 bottom-3">
+            <SimplePopup />
           </div>
         </BrowserRouter>
       </QueryClientProvider>

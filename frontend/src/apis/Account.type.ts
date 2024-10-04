@@ -23,7 +23,9 @@ export interface transactionInfo {
     transactionTime: string,
     transactionType: string,
     transactionTypeName: string,
-    transactionBalance: number,
-    transcationAfterBalance: string,
-    transcationSummary: string
+    transactionBalance: string,
+    transactionAfterBalance: string,
+    transactionSummary: string,
+    transactionMemo: string,
+    transactionAccountNo: string
 }

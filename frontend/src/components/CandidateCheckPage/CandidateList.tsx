@@ -1,90 +1,30 @@
-import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import { useNavigate, useParams } from "react-router-dom";
+import { projectApplicantProps } from "../../apis/Board.type";
+import { projectApplicant } from "../../apis/BoardApi";
 import DoneButton from "../common/DoneButton";
 import Candidate from "./Candidate";
-import { useUserStore } from "../../store/UserStore";
-
-// API 응답에 맞는 타입 정의
-interface CandidateType {
-  id: number;
-  name: string;
-  email: string;
-  phone: string;
-  totalScore: number;
-  reportedCount: number;
-  isPassed: boolean;
-  portfolioUrl: string;
-}
+import { projectProps } from "../../apis/Project.type";
 
 const CandidateList = () => {
-  const { boardId } = useParams<{ boardId: string }>();
+  const [List, setList] = useState<projectProps[]>([]);
+  const boardId = useParams<{ boardId: string }>().boardId;
   const navigate = useNavigate();
-  const [candidates, setCandidates] = useState<CandidateType[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const { token } = useUserStore((state) => ({
-    token: state.token,
-  }));
-
   const toProjectGroup = () => {
     navigate(`/work/projectgroup/${boardId}`);
   };
 
+  const [candidateList, setCandidateList] = useState<projectApplicantProps[]>(
+    []
+  );
+  const update = async () => {
+    const data = await projectApplicant(boardId as string);
+    setCandidateList(data);
+  };
+  // 첫 렌더링 시에만 API 호출
   useEffect(() => {
-    if (!boardId) {
-      setError("Invalid board ID");
-      setLoading(false);
-      return;
-    }
-
-    const fetchApplicants = async () => {
-      try {
-        const response = await axios.get(
-          `/api/board/${boardId}/applicant-list`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        console.log("API 응답 데이터:", response.data); // 응답 데이터 확인
-
-        const data = response.data;
-
-        // 예시 1: data.candidates가 배열인 경우
-        if (Array.isArray(data.candidates)) {
-          setCandidates(data.candidates);
-        }
-        // 예시 2: data 자체가 배열인 경우
-        else if (Array.isArray(data)) {
-          setCandidates(data);
-        } else {
-          throw new Error(
-            "Expected an array in 'candidates' or 'data', but got something else."
-          );
-        }
-
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching applicants:", error);
-        setError("Failed to fetch applicants");
-        setLoading(false);
-      }
-    };
-
-    fetchApplicants();
-  }, [boardId, token]);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+    update();
+  }, []); // 빈 배열이므로, 컴포넌트가 처음 렌더링될 때만 실행
 
   return (
     <div className="overflow-x-auto">
@@ -100,20 +40,10 @@ const CandidateList = () => {
           </tr>
         </thead>
         <tbody>
-          {candidates.length > 0 ? (
-            candidates.map((candidate) => (
-              <Candidate
-                key={candidate.id}
-                name={candidate.name}
-                portfolio={candidate.portfolioUrl}
-                rating={candidate.totalScore}
-                freelancerId={candidate.id}
-              />
-            ))
-          ) : (
-            <tr>
-              <td colSpan={5}>No applicants found.</td>
-            </tr>
+          {candidateList?.map(
+            (candidate: projectApplicantProps, index: number) => (
+              <Candidate {...candidate} key={index} />
+            )
           )}
         </tbody>
       </table>
@@ -123,5 +53,4 @@ const CandidateList = () => {
     </div>
   );
 };
-
 export default CandidateList;

@@ -1,30 +1,34 @@
 import React, { useState } from "react";
 
 interface ChatInputProps {
-  onSendMessage: (message: string) => void;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onSend: () => void; // 메시지를 보낼 때 호출될 함수
 }
 
-const ChatInputComponent = ({ onSendMessage }: ChatInputProps) => {
-  const [message, setMessage] = useState("");
-
-  const handleSendMessage = () => {
-    if (message.trim()) {
-      onSendMessage(message);
-      setMessage(""); // 메시지 전송 후 입력 필드 초기화
+const ChatInputComponent: React.FC<ChatInputProps> = ({
+  value,
+  onChange,
+  onSend,
+}) => {
+  const handleSendMessage = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && value.trim() !== "") {
+      onSend(); // 메시지를 전송
     }
   };
 
   return (
-    <div className="flex items-center mt-4">
+    <div className="chat-input flex items-center mt-4">
       <input
         type="text"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        placeholder="메시지를 입력하세요"
+        placeholder="메시지를 입력하세요..."
+        value={value} // 입력 값을 props로 전달
+        onChange={onChange} // 입력 변경 시 호출되는 함수
+        onKeyDown={handleSendMessage} // Enter 키 입력 시 메시지 전송
         className="flex-1 border border-gray-300 rounded-lg p-2 mr-2"
       />
       <button
-        onClick={handleSendMessage}
+        onClick={onSend}
         className="bg-mainGreen text-white py-2 px-4 rounded-lg hover:bg-subGreen1"
       >
         전송

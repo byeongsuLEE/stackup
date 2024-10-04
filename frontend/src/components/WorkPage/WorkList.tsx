@@ -16,7 +16,6 @@ const WorkList = () => {
   
   const update = async () => {
     const data = await allProject();
-    // console.log("확인",data)
     setProjectList(data)
   }
   useEffect(() => {

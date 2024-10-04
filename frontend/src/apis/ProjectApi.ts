@@ -1,5 +1,5 @@
 import axios from "axios"
-import { projectData } from "./Project.type"
+import { projectData, projectProps } from "./Project.type"
 
 const BASE_URL: string = "http://localhost:8080/api"
 
@@ -37,6 +37,23 @@ export const getProject =  async (): Promise<void> => {
     url: `${BASE_URL}/project/info`,
     headers: {
       Authorization: `Bearer ${sessionStorage.getItem("token")}`
+    }
+  })
+
+  console.log(response.data)
+}
+
+// 프로젝트 시작하기
+export const startProject = async (data:projectProps): Promise<void> => {
+  const response = await axios({
+    method: 'post',
+    url: `${BASE_URL}/project/start`,
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem("token")}`
+    },
+    data: {
+      "freelancerIdList" : data.freelancerIdList,
+      "boardId" : data.boardId
     }
   })
 

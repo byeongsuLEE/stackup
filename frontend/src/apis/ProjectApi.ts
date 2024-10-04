@@ -31,10 +31,13 @@ export const previousProject = async (data: projectData): Promise<void> => {
 };
 
 //== 프로젝트 가져오기 ==//
-export const getProject =  async (): Promise<void> => {
+export const getProject =  async (type: string): Promise<void> => {
   const response = await axios({
     method:'get',
     url: `${BASE_URL}/project/info`,
+    params: {
+      'projectType': type
+    },
     headers: {
       Authorization: `Bearer ${sessionStorage.getItem("token")}`
     }

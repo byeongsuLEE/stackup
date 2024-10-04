@@ -107,6 +107,7 @@ public class ChatServiceImpl implements ChatService {
                         .chats(chatRoom.getChats())
                         .previewChat("")
                         .build();
+                return response;
             }
 
             User client = userRepository.findById(clientId).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));

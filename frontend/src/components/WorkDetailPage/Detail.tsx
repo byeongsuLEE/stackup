@@ -124,8 +124,8 @@ const Detail = (project: project) => {
             <span>{workType}</span>
 
             {/* 수정필요 => 데이터 안옴*/}
-            <span>{frameworksList.join(', ')}</span>
             <span>{languagesList.join(', ')}</span>
+            <span>{frameworksList.join(', ')}</span>
             {/* <span>{frameworksString}</span>
             <span>{languagesString}</span> */}
             {/* 수정 필요 */}

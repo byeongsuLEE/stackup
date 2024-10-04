@@ -146,3 +146,28 @@ export const recommendProject = async (): Promise<recommend[]> => {
         return [];
     }
 }
+
+// 프로젝트 지원자 조회
+export const projectApplicant = async (boardId: string): Promise<any> => {
+    try {
+        const response = await axios({
+            method: 'get',
+            url: `${BASE_URL}/${boardId}/applicant-list`,
+            headers: {
+                Authorization: `Bearer ${window.sessionStorage.getItem('token')}`,
+                 'Content-Type': 'application/json'
+            },
+        })
+
+        return response.data.data
+
+    } catch (error) {
+
+        if (axios.isAxiosError(error)) {
+            console.error("Axios error: ", error.message);
+
+        } else {
+            console.error("Unexpected error: ", error);
+        }
+    }
+}

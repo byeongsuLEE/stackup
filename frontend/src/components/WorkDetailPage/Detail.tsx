@@ -33,6 +33,23 @@ const Detail = (project: project) => {
     const frameworksList = project.frameworks.map(framework => framework.name);
     const languagesList = project.languages.map(language => language.name);
 
+    // frameworks와 languages 배열을 for문을 사용하여 , 구분된 하나의 string으로 만들기
+  // let frameworksString = '';
+  // for (let i = 0; i < project.frameworks.length; i++) {
+  //   frameworksString += project.frameworks[i].name;
+  //   if (i < project.frameworks.length - 1) {
+  //     frameworksString += ', '; // 마지막 요소가 아닐 경우에만 구분자 추가
+  //   }
+  // }
+
+  // let languagesString = '';
+  // for (let i = 0; i < project.languages.length; i++) {
+  //   languagesString += project.languages[i].name;
+  //   if (i < project.languages.length - 1) {
+  //     languagesString += ', '; // 마지막 요소가 아닐 경우에만 구분자 추가
+  //   }
+  // }
+
   const projectApplyHandler = async () => {
     try {
       await projectApply(boardId);
@@ -109,6 +126,8 @@ const Detail = (project: project) => {
             {/* 수정필요 => 데이터 안옴*/}
             <span>{frameworksList.join(', ')}</span>
             <span>{languagesList.join(', ')}</span>
+            {/* <span>{frameworksString}</span>
+            <span>{languagesString}</span> */}
             {/* 수정 필요 */}
             <span>{project.requirements}</span>
           </div>

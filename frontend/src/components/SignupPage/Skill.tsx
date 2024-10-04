@@ -5,9 +5,10 @@ interface SkillProps {
   title: string;
   name: string;
   value?: string;
+  checked?: boolean;
 }
 
-const Skill = ({category, title, name, value}:SkillProps)=>{
+const Skill = ({category, title, name, value, checked}:SkillProps)=>{
   const { frameworks, languages, addFramework, removeFramework, addLanguage, removeLanguage } = freelanceStore((state) => ({
     frameworks: state.frameworks,
     languages: state.languages,
@@ -41,7 +42,7 @@ const Skill = ({category, title, name, value}:SkillProps)=>{
     }
   }
 
-  const isChecked = value !== undefined && (
+  const isChecked = checked !== undefined? checked : (
     (category === "languages" && languages.includes(value)) ||
     (category === "frameworks" && frameworks.includes(value))
   );

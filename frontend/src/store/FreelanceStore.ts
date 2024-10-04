@@ -4,6 +4,7 @@ export interface freelanceInformation {
     name: string;
     email: string;
     address: string;
+    level: string;
     phone: string;
     classification: string;
     frameworks: string[];
@@ -21,6 +22,7 @@ export interface freelanceInformation {
     setAddress: (address: string) => void;
     setPhone: (phone: string) => void;
     setClassification: (classification: string) => void;
+    setLevel: (level: string) => void;
     setFramworks: (framworks: string[]) => void;
     addFramework: (framework: string) => void;
     removeFramework: (framwork: string) => void;
@@ -40,6 +42,7 @@ export const freelanceStore = create<freelanceInformation>((set) => ({
     address: "",
     phone: "",
     classification: "",
+    level: "",
     frameworks: [],
     languages: [],
     careerYear: "",
@@ -55,6 +58,7 @@ export const freelanceStore = create<freelanceInformation>((set) => ({
     setAddress: (address) => set({ address }),
     setPhone: (phone) => set({ phone }),
     setClassification: (classification) => set({ classification }),
+    setLevel: (level) => set({level}),
     setFramworks: (frameworks) => set({ frameworks }),
     addFramework: (framework) => set((state) => ({
         frameworks: [...state.frameworks, framework]

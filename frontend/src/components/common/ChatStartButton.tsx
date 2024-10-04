@@ -2,7 +2,7 @@ import React from "react";
 import { useUserStore } from "../../store/UserStore"; // 로그인한 유저 정보 불러오기
 
 interface ChatStartButtonProps {
-  freelancerId: string; // 상대방 유저의 ID (프리랜서)
+  freelancerId: number; // 상대방 유저의 ID (프리랜서)
 }
 const ChatStartButton = ({ freelancerId }: ChatStartButtonProps) => {
   const loggedInUser = useUserStore((state) => state.clientId); // 로그인한 유저 정보 가져오기

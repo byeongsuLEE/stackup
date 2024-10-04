@@ -14,12 +14,13 @@ const WorkList = () => {
 
   const [projectList, setProjectList] = useState<project[]>([]);
   
+  const update = async () => {
+    const data = await allProject();
+    setProjectList(data)
+  }
   useEffect(() => {
-    const update = async () => {
-      const data = await allProject();
-      setProjectList(data)
-    }
     update();
+    console.log("프로젝트 목록", projectList)
   }, [])
 
   //== projectList 반환 ==//

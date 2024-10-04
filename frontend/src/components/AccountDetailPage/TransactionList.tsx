@@ -5,22 +5,23 @@ interface transactionListProp {
   transactionList: transactionInfo[];
 }
 const TransactionList = ({transactionList}: transactionListProp) => {
+  
   return (
     <div className="mx-20">
     <table className="table">
       {/* head */}
       <thead>
         <tr>
-          <th>일시</th>
-          <th>입금액</th>
-          <th>출금액</th>
-          <th>사용처</th>
-          <th>잔액</th>
+          <th className="text-center">일시</th>
+          <th className="text-center">입금액</th>
+          <th className="text-center">출금액</th>
+          <th className="text-center">사용처</th>
+          <th className="text-center">잔액</th>
         </tr>
       </thead>
 
       {transactionList.map((transaction: transactionInfo) => (
-        <Transaction {...transaction} />
+        <Transaction {...transaction} key={transaction.transactionUniqueNo}/>
       ))}
     </table>
   </div>

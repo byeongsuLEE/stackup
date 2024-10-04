@@ -13,7 +13,6 @@ const Detail = (project: project) => {
     navigate(`/work/detail/candidate/${boardId}`);
   }
 
-
   const remainDay = differenceInDays(project.deadline, format(Date(), 'yyyy-MM-dd'));
   const workType = project.worktype ? "재택" : "기간제 상주";
   let classification = null
@@ -29,6 +28,27 @@ const Detail = (project: project) => {
   } else if (project.classification === 'db') {
     classification = 'DB'
   }
+
+    // frameworks와 languages 배열을 join으로 , 구분하여 출력
+    const frameworksList = project.frameworks.map(framework => framework.name);
+    const languagesList = project.languages.map(language => language.name);
+
+    // frameworks와 languages 배열을 for문을 사용하여 , 구분된 하나의 string으로 만들기
+  // let frameworksString = '';
+  // for (let i = 0; i < project.frameworks.length; i++) {
+  //   frameworksString += project.frameworks[i].name;
+  //   if (i < project.frameworks.length - 1) {
+  //     frameworksString += ', '; // 마지막 요소가 아닐 경우에만 구분자 추가
+  //   }
+  // }
+
+  // let languagesString = '';
+  // for (let i = 0; i < project.languages.length; i++) {
+  //   languagesString += project.languages[i].name;
+  //   if (i < project.languages.length - 1) {
+  //     languagesString += ', '; // 마지막 요소가 아닐 경우에만 구분자 추가
+  //   }
+  // }
 
   const projectApplyHandler = async () => {
     try {
@@ -104,10 +124,10 @@ const Detail = (project: project) => {
             <span>{workType}</span>
 
             {/* 수정필요 => 데이터 안옴*/}
-            {/* <span>{project.language}</span> */}
-            <span>java, c++</span>
-            {/* <span>{project.framework}</span> */}
-            <span>spring, vue</span>
+            <span>{languagesList.join(', ')}</span>
+            <span>{frameworksList.join(', ')}</span>
+            {/* <span>{frameworksString}</span>
+            <span>{languagesString}</span> */}
             {/* 수정 필요 */}
             <span>{project.requirements}</span>
           </div>

@@ -1,3 +1,4 @@
+import { projectApplicantProps } from "../../apis/Board.type";
 import ChatStartButton from "../common/ChatStartButton";
 import DoneButton from "../common/DoneButton";
 
@@ -14,6 +15,8 @@ const Candidate = ({
   portfolio,
   freelancerId,
 }: CandidateProps) => {
+const Candidate = ({ name,  portfolioUrl, totalScore, id }: projectApplicantProps) => {
+
   return (
     <tr>
       <td>
@@ -24,11 +27,9 @@ const Candidate = ({
         </div>
       </td>
       <td>{name}</td>
-      <td>{rating}</td>
+      <td>{totalScore}</td>
       <td>
-        <a href={portfolio} target="_blank" rel="noopener noreferrer">
-          {portfolio}
-        </a>
+        <a href={portfolioUrl}>{portfolioUrl}</a>
       </td>
       <td className="flex justify-center mt-1.5">
         <div className="mr-3">

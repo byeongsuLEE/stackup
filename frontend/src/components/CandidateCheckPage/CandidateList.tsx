@@ -4,8 +4,10 @@ import { projectApplicantProps } from "../../apis/Board.type";
 import { projectApplicant } from "../../apis/BoardApi";
 import DoneButton from "../common/DoneButton";
 import Candidate from "./Candidate";
+import { projectProps } from "../../apis/Project.type";
 
 const CandidateList = () => {
+  const [List, setList] = useState<projectProps[]>([]);
   const boardId = useParams<{ boardId: string }>().boardId;
   const navigate = useNavigate();
   const toProjectGroup = () => {

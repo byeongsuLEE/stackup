@@ -172,3 +172,4 @@ export const projectApplicant = async (boardId: string): Promise<projectApplican
         return [];
     }
 }
+

@@ -4,3 +4,8 @@ export interface projectData {
     endDate: Date,
     projectFile: FileList
 }
+
+export interface projectProps {
+    freelancerIdList: number[],
+    boardId: number;
+}

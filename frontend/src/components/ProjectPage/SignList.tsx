@@ -1,16 +1,29 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { getProject } from "../../apis/ProjectApi";
 import SignListBox from "./SignListBox";
+import { project } from "../../apis/Board.type";
 
 
 const SignList = () => {
+  const [ signList, setSignList ] = useState<project[]>([]);
+
   useEffect(() => {
-    getProject('PENDING');
+    const update = async () => {
+      const data = await getProject('PENDING');
+      setSignList(data)
+      console.log(data)
+    }
+
+    update();
   }, [])
 
   return (
     <div className="flex flex-col w-[1000px] items-center mt-[50px]">
-      <SignListBox title="프로젝트명" period="2024-09-01~2024-09-30" company="ssafy" />
+      {signList.map((sign: project) => (
+        <div className="w-[1000px]" key={sign.projectId}>
+          <SignListBox {...sign} />
+        </div>
+      ))}
     </div>
   )
 }

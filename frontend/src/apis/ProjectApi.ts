@@ -1,5 +1,6 @@
 import axios from "axios"
 import { projectData } from "./Project.type"
+import { project } from "./Board.type";
 
 const BASE_URL: string = "http://localhost:8080/api"
 
@@ -31,7 +32,7 @@ export const previousProject = async (data: projectData): Promise<void> => {
 };
 
 //== 프로젝트 가져오기 ==//
-export const getProject =  async (type: string): Promise<void> => {
+export const getProject =  async (type: string): Promise<project[]> => {
   const response = await axios({
     method:'get',
     url: `${BASE_URL}/project/info`,
@@ -43,7 +44,7 @@ export const getProject =  async (type: string): Promise<void> => {
     }
   })
 
-  console.log(response.data)
+  return response.data.data
 }
 
 // 프로젝트 시작하기

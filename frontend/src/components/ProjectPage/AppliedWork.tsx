@@ -17,8 +17,8 @@ const AppliedWork = () => {
   return (
     <div className="flex flex-col  items-center mt-[50px]">
       {projectList?.map((project: project, index: number) => (
-        <div className="w-[1000px]">
-          <AppliedBox {...project} key={index} />
+        <div className="w-[1000px]" key={index}>
+          <AppliedBox {...project} />
         </div>
       ))}
     </div>

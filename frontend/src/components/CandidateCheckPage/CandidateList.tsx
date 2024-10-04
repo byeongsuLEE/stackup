@@ -34,10 +34,9 @@ const CandidateList = () => {
     })
   }
 
-  // 첫 렌더링 시에만 API 호출
   useEffect(() => {
     update();
-  }, []); // 빈 배열이므로, 컴포넌트가 처음 렌더링될 때만 실행
+  }, []);
 
   return (
     <div className="overflow-x-auto">

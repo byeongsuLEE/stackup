@@ -1,14 +1,14 @@
 import axios from "axios"
-import { projectData, projectProps } from "./Project.type"
+import { projectData } from "./Project.type"
 
 const BASE_URL: string = "http://localhost:8080/api"
 
 //== 이전 프로젝트 등록 ==//
 export const previousProject = async (data: projectData): Promise<void> => {
-  console.log(typeof data.projectFile); // 파일 타입 확인
+  console.log(typeof data.projectFile);
 
   const formData = new FormData();
-  formData.append("certificateFile", data.projectFile[0]); // projectFile이 FileList라고 가정
+  formData.append("certificateFile", data.projectFile[0]);
   formData.append("title", data.projectName);
   formData.append("period", '10');
   // formData.append("endDate", data.endDate);
@@ -19,9 +19,9 @@ export const previousProject = async (data: projectData): Promise<void> => {
       url: `${BASE_URL}/project/previous-project`,
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-        'Content-Type': 'multipart/form-data', // 파일 업로드를 위해 필수
+        'Content-Type': 'multipart/form-data',
       },
-      data: formData, // JSON 대신 FormData 사용
+      data: formData,
     });
 
     console.log(response.data);

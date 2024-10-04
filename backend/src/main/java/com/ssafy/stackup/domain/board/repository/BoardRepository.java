@@ -46,4 +46,5 @@ public interface BoardRepository extends JpaRepository<Board, Long>{
 
     List<Board> findByClient_Id(Long id);
 
+
 }

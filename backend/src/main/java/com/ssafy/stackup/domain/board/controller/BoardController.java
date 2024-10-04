@@ -36,6 +36,13 @@ public class BoardController {
     private RecommendationService recommendationService;
 
 
+
+    @GetMapping("/client/{userId}")
+    public ResponseEntity<ApiResponse<?>> getBoard(@PathVariable Long userId) {
+        List<?> boards = boardService.getMyBoards(userId);
+        return ResponseEntity.ok(ApiResponse.success(boards));
+    }
+
     @GetMapping
     public ResponseEntity<?> findAllBoards(){
         List<?> boards = boardService.getboards();

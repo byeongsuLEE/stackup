@@ -76,6 +76,16 @@ public class BoardService {
 
     //모집글 목록 조회
     @Transactional(readOnly = true)
+    public List<BoardFindAllResponse> getMyBoards(Long userId) {
+        List<Board> boards = boardRepository.findByClient_Id(userId);
+        return boards.stream()
+                .map(BoardFindAllResponse::new)
+                .collect(Collectors.toList());
+    }
+
+
+    //모집글 목록 조회
+    @Transactional(readOnly = true)
     public List<BoardFindAllResponse> getboards() {
         List<Board> boards = boardRepository.findAll();
         return boards.stream()

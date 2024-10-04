@@ -46,12 +46,12 @@ public class BoardFindOneResponse {
         this.title = board.getTitle();
         this.description = board.getDescription();
         this.classification = board.getClassification();
-//        this.frameworks = board.getBoardFrameworks().stream()
-//                .map(framework -> new FrameworkRequest(framework.getFramework()))
-//                .collect(Collectors.toList());
-//        this.languages = board.getBoardLanguages().stream()
-//                .map(language -> new LanguageRequest(language.getLanguage()))
-//                .collect(Collectors.toList());
+        this.frameworks = board.getBoardFrameworks().stream()
+                .map(framework -> new FrameworkRequest(framework.getFramework()))
+                .collect(Collectors.toList());
+        this.languages = board.getBoardLanguages().stream()
+                .map(language -> new LanguageRequest(language.getLanguage()))
+                .collect(Collectors.toList());
         this.deposit = board.getDeposit();
         this.startDate = board.getStartDate();
         this.period = board.getPeriod();

@@ -166,6 +166,16 @@ public class AccountController {
         }
     }
 
+    @GetMapping("/password/check")
+    public ResponseEntity<?> checkPassword(@AuthUser User user){
+        String secondPassword = user.getSecondPassword();
+        if (secondPassword == null || secondPassword.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("비밀번호가 존재하지 않습니다");
+        } else {
+            return ResponseEntity.ok(" 비밀번호가 존재합니다.");
+        }
+    }
+
     @PostMapping("/main/{accountId}")
     public ResponseEntity<?> setMainAccount(@PathVariable Long accountId, @AuthUser User user) throws Exception {
         Long userId = user.getId();

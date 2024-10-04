@@ -50,6 +50,7 @@ public class BoardFindAllResponse {
                 .collect(Collectors.toList());
         this.deposit = board.getDeposit();
         this.startDate = board.getStartDate();
+        this.address = board.getAddress();
         this.period = board.getPeriod();
         this.recruits = board.getRecruits();
         this.isCharged = board.getIsCharged();

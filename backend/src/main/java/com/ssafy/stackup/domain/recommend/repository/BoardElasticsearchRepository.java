@@ -33,7 +33,7 @@ public interface BoardElasticsearchRepository extends ElasticsearchRepository<Re
 //    @Query("{\"match\": {\"description\": {\"query\": ?0, \"fuzziness\": \"AUTO\"}}}")
 //    List<Recommend> fuzzyFindByDescription(String description);
 
-    List<Recommend> findByDescriptionVector(double[] vector);
+//    List<Recommend> findByDescriptionVector(double[] vector);
 
     @Query("""
     {

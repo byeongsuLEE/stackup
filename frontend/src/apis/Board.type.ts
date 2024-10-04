@@ -126,3 +126,16 @@ export interface recommend {
     level: string;
     boardId: number;
 }
+
+
+export interface projectApplicantProps {
+    email: string;
+    freelancerProjectId: number;
+    id: number;
+    isPassed: boolean;
+    name: string;
+    phone: string;
+    portfolioUrl: string;
+    reportedCount: number;
+    totalScore: number;
+}

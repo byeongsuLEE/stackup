@@ -38,8 +38,8 @@ export interface project {
     address: string,
     deadline: Date,
     upload: Date,
-    client: clientInfo
-
+    client: clientInfo,
+    projectId: number
 }
 
 const clientBasic = {
@@ -138,4 +138,6 @@ export interface projectApplicantProps {
     portfolioUrl: string;
     reportedCount: number;
     totalScore: number;
+    isChecked: boolean;
+    onCheckboxChange: (id: number) => void;
 }

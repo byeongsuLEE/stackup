@@ -2,14 +2,18 @@ import { projectApplicantProps } from "../../apis/Board.type";
 import ChatStartButton from "../common/ChatStartButton";
 import DoneButton from "../common/DoneButton";
 
-const Candidate = ({ name,  portfolioUrl, totalScore, id }: projectApplicantProps) => {
+const Candidate = ({ name,  portfolioUrl, totalScore, id, onCheckboxChange }: projectApplicantProps) => {
+
+  const checkCandidate = () => {
+    onCheckboxChange(id);
+  }
 
   return (
     <tr>
       <td>
         <div className="form-control">
           <label className="cursor-pointer label">
-            <input type="checkbox" className="checkbox checkbox-success" />
+            <input type="checkbox" className="checkbox checkbox-success" onChange={checkCandidate}/>
           </label>
         </div>
       </td>

@@ -13,6 +13,7 @@ const Project = () => {
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+  
   return (
     <div className='mt-10'>
       <Box sx={{ width: '100%', typography: 'body1' }}>

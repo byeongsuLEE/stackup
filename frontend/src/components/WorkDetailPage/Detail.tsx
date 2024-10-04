@@ -1,63 +1,60 @@
 import { differenceInDays, format } from "date-fns";
 import { useNavigate } from "react-router-dom";
-import { project } from "../../apis/Board.type";
+import { useEffect, useState } from "react";
+import { project as ProjectType } from "../../apis/Board.type";
 import { projectApply } from "../../apis/FreelancerApi";
+import CandidateIcon from "../../icons/CandidateIcon";
+import PeriodIcon from "../../icons/PeriodIcon";
+import PriceIcon from "../../icons/PriceIcon";
 import InfoBox from "../WorkPage/InfoBox";
 import DoneButton from "../common/DoneButton";
-import PriceIcon from "../../icons/PriceIcon";
-import PeriodIcon from "../../icons/PeriodIcon";
-import CandidateIcon from "../../icons/CandidateIcon";
+import { projectDelete } from "../../apis/BoardApi";
+import Payment from "../../pages/PullupPage";
 
 interface DetailProps {
-  project: project;
+  project: ProjectType;
   clientId: string | null;
 }
 
-
 const Detail = ({ project, clientId }: DetailProps) => {
+  const [sessionClientId, setSessionClientId] = useState<string | null>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const boardId = project.boardId;
   const navigate = useNavigate();
+
+  // 프로젝트 삭제
+  const deleteProject = async () => {
+    projectDelete(boardId);
+  };
+
   const toCandidate = () => {
     navigate(`/work/detail/candidate/${boardId}`);
-  }
+  };
 
-  const remainDay = differenceInDays(project.deadline, format(Date(), 'yyyy-MM-dd'));
+  const remainDay = differenceInDays(
+    new Date(project.deadline),
+    new Date(format(new Date(), "yyyy-MM-dd"))
+  );
+
   const workType = project.worktype ? "재택" : "기간제 상주";
-  let classification = null
+  let classification = null;
 
-  if (project.classification === 'web') {
-    classification = '웹'
-  } else if (project.classification === 'mobile') {
-    classification = '모바일'
-  } else if (project.classification === 'publisher') {
-    classification = '퍼블리셔'
-  } else if (project.classification === 'ai') {
-    classification = 'AI'
-  } else if (project.classification === 'db') {
-    classification = 'DB'
+  if (project.classification === "web") {
+    classification = "웹";
+  } else if (project.classification === "mobile") {
+    classification = "모바일";
+  } else if (project.classification === "publisher") {
+    classification = "퍼블리셔";
+  } else if (project.classification === "ai") {
+    classification = "AI";
+  } else if (project.classification === "db") {
+    classification = "DB";
   }
 
   // frameworks와 languages 배열을 join으로 , 구분하여 출력
-  const frameworksList = project.frameworks.map(framework => framework.name);
-  const languagesList = project.languages.map(language => language.name);
-
-  // frameworks와 languages 배열을 for문을 사용하여 , 구분된 하나의 string으로 만들기
-  // let frameworksString = '';
-  // for (let i = 0; i < project.frameworks.length; i++) {
-  //   frameworksString += project.frameworks[i].name;
-  //   if (i < project.frameworks.length - 1) {
-  //     frameworksString += ', '; // 마지막 요소가 아닐 경우에만 구분자 추가
-  //   }
-  // }
-
-  // let languagesString = '';
-  // for (let i = 0; i < project.languages.length; i++) {
-  //   languagesString += project.languages[i].name;
-  //   if (i < project.languages.length - 1) {
-  //     languagesString += ', '; // 마지막 요소가 아닐 경우에만 구분자 추가
-  //   }
-  // }
+  const frameworksList = project.frameworks.map((framework) => framework.name);
+  const languagesList = project.languages.map((language) => language.name);
 
   const projectApplyHandler = async () => {
     try {
@@ -78,8 +75,23 @@ const Detail = ({ project, clientId }: DetailProps) => {
         alert("지원 실패: 알 수 없는 오류가 발생했습니다.");
       }
     }
+  };
+
+  // 클라이언트 ID와 세션 ID 비교하는 비동기 처리
+  useEffect(() => {
+    const fetchSessionClientId = async () => {
+      const storedClientId = window.sessionStorage.getItem("clientId");
+      setSessionClientId(storedClientId);
+      setIsLoaded(true); // 데이터가 모두 로드되었음을 나타냄
+    };
+
+    fetchSessionClientId();
+  }, []); // 빈 배열로 설정하면 컴포넌트가 마운트될 때 한 번만 실행
+
+  if (!isLoaded) {
+    // 데이터가 아직 로드되지 않았다면 로딩 화면 표시
+    return <div>Loading...</div>;
   }
-  // const clientId = project.client.id
 
   return (
     <>
@@ -155,9 +167,71 @@ const Detail = ({ project, clientId }: DetailProps) => {
         </div>
 
       </div>
-    </>
-  )
-}
+      <div className="flex justify-end">
+        {window.sessionStorage.getItem("userType") === "freelancer" ? (
+          <div onClick={projectApplyHandler}>
+            <DoneButton width={100} height={25} title="지원하기" />
+          </div>
+        ) : sessionClientId == clientId ? (
+          <div className="flex">
+            <div onClick={toCandidate}>
+              <DoneButton width={100} height={25} title="지원자 관리" />
+            </div>
+            <Payment boardId={boardId} />
+            <button onClick={deleteProject} className="bg-subGreen2 text-bgGreen font-bold text-sm px-3 rounded-lg ml-2">
+              삭제하기
+            </button>
+          </div>
+        ) : (
+          <div></div>
+        )}
+      </div>
+
+      <div className="bg-subTxt w-auto h-[1px] flex justify-center my-10"></div>
+
+      <div className="flex justify-center mb-10">
+        <InfoBox title="예상 금액" category="deposit" content={project.deposit} info={PriceIcon} />
+        <InfoBox title="예상 기간" category="period" content={project.period} info={PeriodIcon} />
+        <InfoBox title="지원자 수" category="applicants" content={project.applicants} info={CandidateIcon} />
+      </div>
+
+      <div className="flex ml-10">
+        <div className="flex flex-col mr-20 text-subTxt">
+          <span>모집 마감일</span>
+          <span>모집 인원</span>
+          <span>프로젝트 시작일</span>
+          <span>근무 형태</span>
+
+          <span>사용언어</span>
+          <span>프레임워크</span>
+          <span>기타 요구사항</span>
+        </div>
+        <div className="flex flex-col">
+          <div className="flex items-center">
+            <span>{project.deadline.toString()}</span>
+            <span className="text-xs ml-2 text-red-400">마감 {remainDay}일 전</span>
+          </div>
+          <span>{project.recruits} 명</span>
+          <span>{project.startDate.toString()}</span>
+          <span>{workType}</span>
+
+          <span>{languagesList.join(", ")}</span>
+          <span>{frameworksList.join(", ")}</span>
+          <span>{project.requirements}</span>
+        </div>
+      </div>
+
+      <div className="bg-subTxt w-auto h-[1px] flex justify-center my-10"></div>
+
+      <div>
+        <div className="font-bold text-lg mb-2">업무 내용</div>
+        <br />
+        <span>
+          <pre>{project.description}</pre>
+        </span>
+      </div>
+    </div>
+  );
+};
 
 export default Detail;
-

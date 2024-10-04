@@ -13,9 +13,10 @@ interface WorkProps {
 }
 
 const Work = ({ title, startDate, period, classification, deposit, deadline, recruits, applicants, client }: WorkProps) => {
-  // startDate와 deadline을 Date 객체로 변환
+ 
   const validStartDate = startDate ? new Date(startDate) : null;
   const validDeadline = deadline ? new Date(deadline) : null;
+
 
   // period가 숫자인지 확인하고, 유효한 경우에만 사용
   const validPeriod = !isNaN(parseInt(period, 10)) ? parseInt(period, 10) : 0;

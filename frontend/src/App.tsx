@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Test from "./components/NFTPage/NFTMinting";
@@ -22,17 +23,16 @@ import MitermEvaluate from "./pages/MitermEvaluatePage";
 import Mypage from "./pages/MyPage";
 import PostWork from "./pages/PostWorkPage";
 import ProjectDetail from "./pages/ProjectDetailPage";
+import ProjectGroup from "./pages/ProjectGruopPage";
 import Project from "./pages/ProjectPage";
 import SignatureDetail from "./pages/SignatureDetailPage";
 import Transfer from "./pages/TransferPage";
 import WorkDetail from "./pages/WorkDetailPage";
 import Work from "./pages/WorkPage";
-import { QueryClient, QueryClientProvider } from 'react-query';
-import ProjectGroup from "./pages/ProjectGruopPage";
 
 function App() {
   const queryClient = new QueryClient();
-  
+
   return (
     <>
     <QueryClientProvider client={queryClient}>
@@ -72,8 +72,7 @@ function App() {
           <div className="fixed right-7 bottom-3">
             <SimplePopup />
           </div>
-        </div>
-      </BrowserRouter>
+        </BrowserRouter>
       </QueryClientProvider>
     </>
   );

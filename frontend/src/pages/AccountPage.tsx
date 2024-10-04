@@ -39,7 +39,7 @@ const Account = () => {
             </span>
             <PlusIcon />
           </div>
-          <div className="flex flex-col items-center">
+          <div className="">
           <AccountList accountList={ accountList } mainAccount={mainAccount} />
           </div>
         </div>

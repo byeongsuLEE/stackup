@@ -1,5 +1,8 @@
 import InfoBox from "../components/WorkPage/InfoBox";
 import DoneButton from "../components/common/DoneButton";
+import CandidateIcon from "../icons/CandidateIcon";
+import PeriodIcon from "../icons/PeriodIcon";
+import PriceIcon from "../icons/PriceIcon";
 import WebIcon from "../icons/WebIcon";
 
 const ProjectDetail = () => {
@@ -24,9 +27,9 @@ const ProjectDetail = () => {
         <div className="bg-subTxt w-auto h-[1px] flex justify-center my-10"></div>
 
         <div className="flex justify-center mb-10">
-          <InfoBox title="금액" content="1000000원" info={WebIcon} />
-          <InfoBox title="기간" content="30일" info={WebIcon} />
-          <InfoBox title="팀원" content="3명" info={WebIcon} />
+          <InfoBox title="금액" content="1000000원" info={PriceIcon} />
+          <InfoBox title="기간" content="30일" info={PeriodIcon} />
+          <InfoBox title="팀원" content="3명" info={CandidateIcon} />
         </div>
 
         <div className="flex ml-10">

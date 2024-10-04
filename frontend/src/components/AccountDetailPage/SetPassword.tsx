@@ -4,6 +4,7 @@
 
 import { useEffect, useState } from "react";
 import DoneButton from "../common/DoneButton";
+import { passwordStore } from "../../store/AccountStore";
 
 // 숫자 버튼의 랜덤 배열을 생성하는 함수
 const generateRandomButtonValues = () => {
@@ -22,6 +23,8 @@ const SetPassword = ({ onSetPassword }: { onSetPassword: () => void }) => {
   const [fixedButtons] = useState<string[]>(generateFixedButtons());
   const maxLength = 4;
 
+  const { setPassword } = passwordStore.getState();
+
   // 키패드가 보일 때마다 버튼 숫자 랜덤화
   useEffect(() => {
     if (isKeypadVisible) {
@@ -34,6 +37,9 @@ const SetPassword = ({ onSetPassword }: { onSetPassword: () => void }) => {
       setInputValue((prev) => prev.slice(0, -1));
     } else if (value === "다음") {
       setIsKeypadVisible(false);
+
+      setPassword(inputValue);
+
       setInputValue("");
       onSetPassword();
     } else {

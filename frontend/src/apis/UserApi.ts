@@ -143,9 +143,10 @@ export const clientSignup = async (
 
 
 //== 클라이언트 로그인 ==//
-export const clientLogin = async (
-  information: clientLoginInfo
-): Promise<void> => {
+export const clientLogin = async ( information: clientLoginInfo ): Promise<void> => {
+  const state = freelanceStore.getState();
+  state.setEmail(information.email)
+
   try {
     const response = await axios({
       method: "post",
@@ -155,7 +156,7 @@ export const clientLogin = async (
         password: information.password,
       },
     });
-
+    window.location.replace('/');
 
     //== 토큰 값 설정 ==//
     setToken(response.headers.authorization);
@@ -176,6 +177,7 @@ export const clientLogin = async (
       console.error("Unexpected error: ", error);
     }
   }
+  
 
 };
 

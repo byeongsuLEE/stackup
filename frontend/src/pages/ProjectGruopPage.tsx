@@ -30,7 +30,7 @@ const ProjectGroup = () => {
         </thead>
         <tbody>
           {candidateList?.map((candidate: candidate) => (
-            <Group key={candidate.email} name={candidate.name} />
+            <Group {...candidate} key={candidate.email}/>
           ))}
         </tbody>
       </table>

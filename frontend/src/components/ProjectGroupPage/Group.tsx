@@ -1,16 +1,13 @@
 import { useNavigate, useParams } from "react-router-dom";
 import DoneButton from "../common/DoneButton";
+import { candidate } from "../../apis/Freelancer.type";
 
-interface GroupProps {
-  name: string;
-}
-
-const Group = ({ name }: GroupProps) => {
+const Group = ({ id, name }: candidate) => {
   const boardId = useParams<{ boardId: string }>().boardId;
   const navigate = useNavigate();
-  
+
   const toContract = () => {
-    navigate(`/work/detail/contract/${boardId}`);
+    navigate(`/work/detail/contract/${boardId}/${id}`);
   }
 
   return (

@@ -1,4 +1,5 @@
 export interface candidate {
+    id: string;
     email: string;
     freelancerProjectId: number;
     name: string;

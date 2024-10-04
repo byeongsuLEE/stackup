@@ -2,15 +2,31 @@ import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { projectDetail } from "../../apis/BoardApi";
 import { addDays, format } from "date-fns";
+import { useEffect, useState } from "react";
+import { selectedCandidate } from "../../apis/FreelancerApi";
+import { candidate } from "../../apis/Freelancer.type";
 
 const ContractDetail = () => {
   const boardId = useParams().boardId;
+  const { candidateId } = useParams<string>();
+
+  const [ candidate, setCandidate ] = useState<candidate>();
 
   const { data: project, isLoading } = useQuery({
     queryKey: ['project', 'boardId'],
     queryFn: () => projectDetail(boardId!),  // 화살표 함수로 감싸서 함수 참조 전달
     enabled: !!boardId,
   });
+
+  useEffect(() => {
+    const update = async () => {
+      const data = await selectedCandidate(boardId);
+      const candidateData = data.filter(item => item.id == candidateId)
+
+      setCandidate(candidateData[0])
+    }
+    update();
+  }, [])
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -40,7 +56,7 @@ console.log(endDate); // 계산된 종료 날짜 출력
         <span className="text-sm">
           <input defaultValue={project.client.businessName} className="border p-2 border-mainGreen rounded-md h-[25px] m-1" type="text" />
           (이하 “갑” 아리 한다.)와
-          <input placeholder="프리랜서" className="border p-2 border-mainGreen rounded-md h-[25px] m-1" type="text" />
+          <input defaultValue={candidate?.name} className="border p-2 border-mainGreen rounded-md h-[25px] m-1" type="text" />
           (이하 “을” 이라 한다.)는 프로젝트명에 명시된 업무작업을 수향하기 위해 다음과 같이 계약을 체결한다.</span>
         <br />
         <span className="font-bold text-sm">제 1조[목적]</span>

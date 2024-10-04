@@ -5,8 +5,18 @@ import { projectApply } from "../../apis/FreelancerApi";
 import WebIcon from "../../icons/WebIcon";
 import InfoBox from "../WorkPage/InfoBox";
 import DoneButton from "../common/DoneButton";
+import PriceIcon from "../../icons/PriceIcon";
+import PeriodIcon from "../../icons/PeriodIcon";
+import CandidateIcon from "../../icons/CandidateIcon";
 
-const Detail = (project: project) => {
+interface DetailProps {
+  project: project;
+  clientId: string | null;
+}
+
+
+const Detail = ({ project, clientId }: DetailProps) => {
+
   const boardId = project.boardId;
   const navigate = useNavigate();
   const toCandidate = () => {
@@ -29,11 +39,11 @@ const Detail = (project: project) => {
     classification = 'DB'
   }
 
-    // frameworks와 languages 배열을 join으로 , 구분하여 출력
-    const frameworksList = project.frameworks.map(framework => framework.name);
-    const languagesList = project.languages.map(language => language.name);
+  // frameworks와 languages 배열을 join으로 , 구분하여 출력
+  const frameworksList = project.frameworks.map(framework => framework.name);
+  const languagesList = project.languages.map(language => language.name);
 
-    // frameworks와 languages 배열을 for문을 사용하여 , 구분된 하나의 string으로 만들기
+  // frameworks와 languages 배열을 for문을 사용하여 , 구분된 하나의 string으로 만들기
   // let frameworksString = '';
   // for (let i = 0; i < project.frameworks.length; i++) {
   //   frameworksString += project.frameworks[i].name;
@@ -70,6 +80,7 @@ const Detail = (project: project) => {
       }
     }
   }
+  // const clientId = project.client.id
 
   return (
     <>
@@ -79,28 +90,31 @@ const Detail = (project: project) => {
           <span className="text-subTxt text-sm">{project?.client.businessName} _ 평점 {project?.client.totalScore}wja</span>
         </div>
         <div className="flex justify-end">
-
           {window.sessionStorage.getItem("userType") === 'freelancer' ? (
-            <div
-              onClick={projectApplyHandler}>
+            <div onClick={projectApplyHandler}>
               <DoneButton width={100} height={25} title="지원하기" />
             </div>
           ) : (
-            <div className="flex">
-              <div onClick={toCandidate}>
-                <DoneButton width={100} height={25} title="지원자 관리" />
+            window.sessionStorage.getItem("clientId") === clientId ? (
+              <div className="flex">
+                <div onClick={toCandidate}>
+                  <DoneButton width={100} height={25} title="지원자 관리" />
+                </div>
+                <button className="bg-subGreen2 text-bgGreen font-bold text-sm px-3 rounded-lg ml-2">마감하기</button>
               </div>
-              <button className="bg-subGreen2 text-bgGreen font-bold text-sm px-3 rounded-lg ml-2">마감하기</button>
-            </div>
+            ) : (
+              <div></div>
+            )
           )}
+
         </div>
 
         <div className="bg-subTxt w-auto h-[1px] flex justify-center my-10"></div>
 
         <div className="flex justify-center mb-10">
-          <InfoBox title="예상 금액" category="deposit" content={project.deposit} info={WebIcon} />
-          <InfoBox title="예상 기간" category="period" content={project.period} info={WebIcon} />
-          <InfoBox title="지원자 수" category="applicants" content={project.applicants} info={WebIcon} />
+          <InfoBox title="예상 금액" category="deposit" content={project.deposit} info={PriceIcon} />
+          <InfoBox title="예상 기간" category="period" content={project.period} info={PeriodIcon} />
+          <InfoBox title="지원자 수" category="applicants" content={project.applicants} info={CandidateIcon} />
         </div>
 
         <div className="flex ml-10">

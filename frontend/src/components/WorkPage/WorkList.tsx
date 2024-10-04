@@ -20,7 +20,7 @@ const WorkList = () => {
   }
   useEffect(() => {
     update();
-    console.log("프로젝트 목록", projectList)
+    // console.log("프로젝트 목록", projectList)
   }, [])
 
   //== projectList 반환 ==//

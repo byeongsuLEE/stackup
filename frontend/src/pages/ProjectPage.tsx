@@ -19,7 +19,11 @@ const Project = () => {
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
             <TabList onChange={handleChange} aria-label="lab API tabs example" centered>
-              <Tab label="지원한 프로젝트" value="1" />
+              {sessionStorage.getItem('userType') === 'client' ? (
+                <Tab label="게시한 프로젝트" value="1" />
+              ) : (
+                <Tab label="지원한 프로젝트" value="1" />
+              )}
               <Tab label="계약 진행" value="2" />
               <Tab label="계약 완료" value="3" />
             </TabList>

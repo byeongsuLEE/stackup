@@ -5,7 +5,7 @@ import SignListBox from "./SignListBox";
 
 const SignList = () => {
   useEffect(() => {
-    getProject();
+    getProject('PENDING');
   }, [])
 
   return (

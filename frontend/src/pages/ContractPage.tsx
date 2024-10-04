@@ -4,7 +4,6 @@ import DoneButton from "../components/common/DoneButton";
 
 const Contract = () => {
 
-
   return (
     <div className="my-20">
       <span className="font-bold text-subGreen1 text-lg">계약 페이지</span>

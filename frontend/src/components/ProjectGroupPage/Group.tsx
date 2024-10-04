@@ -8,6 +8,7 @@ interface GroupProps {
 const Group = ({ name }: GroupProps) => {
   const boardId = useParams<{ boardId: string }>().boardId;
   const navigate = useNavigate();
+  
   const toContract = () => {
     navigate(`/work/detail/contract/${boardId}`);
   }

@@ -5,7 +5,6 @@ import { addDays, format } from "date-fns";
 
 const ContractDetail = () => {
   const boardId = useParams().boardId;
-  // const [project, setProject] = useState<project>(projectBasic);
 
   const { data: project, isLoading } = useQuery({
     queryKey: ['project', 'boardId'],

@@ -1,4 +1,4 @@
-import { format, addDays, differenceInDays } from 'date-fns';
+import { addDays, differenceInDays, format } from 'date-fns';
 
 interface WorkProps {
   title: string;

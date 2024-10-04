@@ -107,7 +107,7 @@ export const projectDetail = async (boardId?: string): Promise<any> => {
             method: 'get',
             url: `${BASE_URL}/${boardId}`
         })
-        console.log('조회',response.data)
+        // console.log('조회',response.data)
         return response.data.data
 
     } catch (error) {

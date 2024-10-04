@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { appliedProject } from "../../apis/FreelancerApi";
+import { projectList } from "../../apis/Project.type";
 import AppliedBox from "./AppliedBox";
 
 const AppliedWork = () => {
-  const [projectList, setProjectList] = useState();
+  const [projectList, setProjectList] = useState<projectList[]>();
 
   useEffect(() => {
     const detail = async () => {
@@ -12,21 +13,14 @@ const AppliedWork = () => {
     }
     detail();
   }, [])
-  
-  // const { data: project, isLoading } = useQuery({
-  //   queryKey: ['project', 'boardId'],
-  //   queryFn: () => appliedProject(), 
-  // });
-  // console.log(project);
-
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-
-  // }
 
   return (
-    <div className="flex flex-col w-[1000px] items-center mt-[50px]">
-      <AppliedBox title="프로젝트명" period="2024-09-01~2024-09-30" company="ssafy" />
+    <div className="flex flex-col  items-center mt-[50px]">
+      {projectList?.map((project: projectList, index: number) => (
+        <div className="w-[1000px]">
+          <AppliedBox {...project} key={index} />
+        </div>
+      ))}
     </div>
   )
 }

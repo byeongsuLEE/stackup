@@ -42,13 +42,11 @@ public class AuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String token = tokenProvider.resolveToken(request);
         if (token != null && tokenProvider.validateToken(token)) {
-            Authentication authentication = tokenProvider.getAuthentication(token);
+
             if (redisUtil.getData(token) != null) {
                 jwtExceptionHandler(response, ErrorCode.BLACK_LIST_TOKEN);
                 return;
             }
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-            log.info("context : {}",SecurityContextHolder.getContext().getAuthentication());
 
         }
 

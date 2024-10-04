@@ -1,4 +1,4 @@
-package com.ssafy.stackup.domain.user.dto.response;
+package com.ssafy.stackup.common.jwt;
 
 import lombok.Builder;
 

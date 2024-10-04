@@ -50,7 +50,7 @@ public class  JwtExceptionFilter extends OncePerRequestFilter {
                 if(request.getHeader("refreshToken") == null) { // 만약 헤더에 refreshToken 이 없다면 토큰 만료 에러발생
                     errorCode = ErrorCode.EXPIRED_TOKEN;
                 } else { // RefreshToken이 있다면 reissue 요청이므로 refreshToken으로 Authentication을 만들고 토큰 재발급
-                    Authentication authentication = tokenProvider.getAuthentication(request.getHeader("refreshToken"));
+
                     if (redisUtil.getData(authentication.getName()) == null) {
                         errorCode = ErrorCode.EXPIRED_REFRESH_TOKEN;
                     } else {

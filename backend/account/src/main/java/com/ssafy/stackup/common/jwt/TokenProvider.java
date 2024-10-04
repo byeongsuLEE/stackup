@@ -2,8 +2,7 @@ package com.ssafy.stackup.common.jwt;
 
 
 import com.ssafy.stackup.common.response.ErrorCode;
-import com.ssafy.stackup.domain.user.dto.response.TokenDto;
-import com.ssafy.stackup.domain.user.service.UserDetailsServiceImpl;
+
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -31,8 +30,6 @@ public class TokenProvider {
     private final String GRANT_TYPE = "Bearer ";
     private final Key key;
 
-    @Autowired
-    private UserDetailsServiceImpl userDetailsServiceImpl;
 
     private final long accessTokenExpTime;
 
@@ -89,17 +86,6 @@ public class TokenProvider {
                 .build();
     }
 
-    /**
-     * 토큰을 복호화 하여 토큰에 들어있는 정보를 꺼내기
-     * @param accessToken
-     * @return Authentication
-     */
-    public Authentication getAuthentication(String accessToken) throws RuntimeException {
-        Claims claims = parseClaims(accessToken);
-        UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(claims.getSubject());
-
-        return new UsernamePasswordAuthenticationToken(userDetails, accessToken, userDetails.getAuthorities());
-    }
 
     /**
      * AccessToken 복호화

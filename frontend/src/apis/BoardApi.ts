@@ -1,6 +1,6 @@
 import axios from "axios";
 import { projectFilterStore } from "../store/ProjectStore";
-import { createProjectProp, project } from "./Board.type";
+import { createProjectProp, project, recommend } from "./Board.type";
 
 const BASE_URL: string = "http://localhost:8080/api/board";
 
@@ -33,6 +33,10 @@ export const allProject = async (): Promise<project[]> => {
 //== 프로젝트 등록 ==//
 export const createProject = async (data: createProjectProp): Promise<void> => {
 
+     // 데이터 변환
+     const frameworks = data.frameworks.map(framework => ({ frameworkId: framework }));
+     const languages = data.languages.map(language => ({ languageId: language }));
+ 
     axios({
         method: 'post',
         url: BASE_URL,
@@ -43,8 +47,8 @@ export const createProject = async (data: createProjectProp): Promise<void> => {
             "title": data.title,
             "description": data.description,
             "classification": data.classification,
-            "framework": data.frameworks,
-            "language": data.languages,
+            "frameworks": frameworks,
+            "languages": languages,
             "deposit": data.deposit,
             "startDate": data.startDate,
             "period": data.period,
@@ -103,7 +107,7 @@ export const projectDetail = async (boardId?: string): Promise<any> => {
             method: 'get',
             url: `${BASE_URL}/${boardId}`
         })
-        
+        console.log('조회',response.data)
         return response.data.data
 
     } catch (error) {
@@ -117,19 +121,18 @@ export const projectDetail = async (boardId?: string): Promise<any> => {
     }
 }
 
-// 프로젝트 지원자 조회
-export const projectApplicant = async (boardId: string): Promise<any> => {
+//== 추천 프로젝트 목록 조회 ==//
+export const recommendProject = async (): Promise<recommend[]> => {
     try {
         const response = await axios({
             method: 'get',
-            url: `${BASE_URL}/${boardId}/applicant-list`,
+            url: `${BASE_URL}/recommend`,
             headers: {
-                Authorization: `Bearer ${window.sessionStorage.getItem('token')}`,
-                 'Content-Type': 'application/json'
-            },
+                Authorization: `Bearer ${sessionStorage.getItem("token")}`
+            }
         })
-
-        return response.data.data
+        console.log(response.data)
+        return response.data
 
     } catch (error) {
 
@@ -139,5 +142,7 @@ export const projectApplicant = async (boardId: string): Promise<any> => {
         } else {
             console.error("Unexpected error: ", error);
         }
+
+        return [];
     }
 }

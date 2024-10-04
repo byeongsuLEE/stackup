@@ -172,7 +172,7 @@ const Detail = ({ project, clientId }: DetailProps) => {
           <div onClick={projectApplyHandler}>
             <DoneButton width={100} height={25} title="지원하기" />
           </div>
-        ) : sessionClientId == clientId ? (
+        ) : sessionClientId == clientId && (
           <div className="flex">
             <div onClick={toCandidate}>
               <DoneButton width={100} height={25} title="지원자 관리" />
@@ -182,9 +182,7 @@ const Detail = ({ project, clientId }: DetailProps) => {
               삭제하기
             </button>
           </div>
-        ) : (
-          <div></div>
-        )}
+        ) }
       </div>
 
       <div className="bg-subTxt w-auto h-[1px] flex justify-center my-10"></div>
@@ -230,7 +228,7 @@ const Detail = ({ project, clientId }: DetailProps) => {
           <pre>{project.description}</pre>
         </span>
       </div>
-    </div>
+    </>
   );
 };
 

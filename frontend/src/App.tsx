@@ -72,6 +72,7 @@ function App() {
           <div className="fixed right-7 bottom-3">
             <SimplePopup />
           </div>
+          </div>
         </BrowserRouter>
       </QueryClientProvider>
     </>

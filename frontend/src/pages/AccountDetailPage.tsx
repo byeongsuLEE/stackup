@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import AccountBox from "../components/AccountDetailPage/AccountBox";
 import TransactionList from "../components/AccountDetailPage/TransactionList";
-import { accountDetail, accountTransaction, getMainAccount } from "../apis/AccountsApi";
+import { accountDetail, accountTransaction, checkPassword, getMainAccount } from "../apis/AccountsApi";
 import { useParams } from "react-router-dom";
 import { accountInfo, transactionInfo } from "../apis/Account.type";
 
@@ -17,6 +17,8 @@ const AccountDetail = () => {
     const update = async () => {
       const main = await getMainAccount();
       setMainAccount(main);
+
+      checkPassword();
 
       const accountData = await accountDetail(accountId);
       setAccount(accountData)

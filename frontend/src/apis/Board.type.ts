@@ -11,9 +11,9 @@ export interface createProjectProp {
     address: string;
     requirements: string;
     classification: string;
-    frameworks: Array<string>;
-    languages: Array<string>;
-    levels: number;
+    frameworks: Pick<Framework, 'frameworkId'>[]; // 'frameworkId'만 사용
+    languages: Pick<Language, 'languageId'>[];   // 'languageId'만 사용
+    level: string;
 }
 
 //== project ==//
@@ -21,10 +21,10 @@ export interface project {
     boardId: string,
     title: string,
     description: string,
-    levels: number,
+    level: string,
     classification: string,
-    framework: string[],
-    language: string[],
+    framework: Framework[],
+    language: Language[],
     deposit: string,
     startDate: Date,
     period: string,
@@ -32,7 +32,7 @@ export interface project {
     applicants: number,
     worktype: boolean,
     company: string,
-    requirements: string,
+    requirements: string | null,
     rate: number,
     is_charged: boolean,
     address: string,
@@ -43,7 +43,7 @@ export interface project {
 }
 
 const clientBasic = {
-    accountKey : "0",
+    accountKey: "0",
     businessName: "0",
     businessRegistrationNumber: "0",
     email: "0",
@@ -54,7 +54,7 @@ const clientBasic = {
     roles: "0",
     secondPassword: "0",
     totalScore: "0"
-  }
+}
 
 //== project 기본 값 ==//
 export const projectBasic = {
@@ -90,7 +90,7 @@ export interface projectFilterProp {
 
 //== client 정보 ==//
 export interface clientInfo {
-    accountKey : string,
+    accountKey: string,
     businessName: string,
     businessRegistrationNumber: string,
     email: string,
@@ -101,4 +101,28 @@ export interface clientInfo {
     roles: string,
     secondPassword: string,
     totalScore: string
-  }
+}
+
+// framework와 language 각각의 타입 정의
+export interface Framework {
+    frameworkId: number;
+    name: string;
+}
+
+export interface Language {
+    languageId: number;
+    name: string;
+}
+
+// 추천프로젝트 타입
+export interface recommend {
+    recommendId: string;
+    title: string;
+    description: string;
+    deposit: number;
+    classification: string;
+    frameworks: Framework[];
+    languages: Language[];
+    level: string;
+    boardId: number;
+}

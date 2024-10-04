@@ -132,6 +132,24 @@ export const setPassword = async (): Promise<void> => {
   }
 }
 
+//== 간편 비밀번호 유무 ==//
+export const checkPassword = async (): Promise<void> => {
+  // const { setCheckoutPassword } = passwordStore.getState();
+  try {
+    const response = await axios ({
+      method: 'get',
+      url: `${BASE_URL}/account/password/chec`,
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`
+      }
+    })
+    console.log(response)
+  } catch {
+    
+  }
+}
+
+
 //== 간편 비밀번호 확인 ==//
 export const confirmPassword = async (password: string) : Promise<void> => {
   const response = await axios({

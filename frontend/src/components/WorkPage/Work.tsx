@@ -13,7 +13,7 @@ interface WorkProps {
 }
 
 const Work = ({ title, startDate, period, classification, deposit, deadline, recruits, applicants, client }: WorkProps) => {
-  const projectPeriod = startDate + ' ~ ' + format(addDays(startDate, parseInt(period, 10)), 'yyyy-MM-dd');
+  const projectPeriod = new Date(startDate) + ' ~ ' + format(addDays(new Date(startDate), parseInt(period, 10)), 'yyyy-MM-dd');
   const budget = new Intl.NumberFormat().format(parseInt(deposit, 10));
   const remainDay = differenceInDays(deadline, format(Date(), 'yyyy-MM-dd'));
 

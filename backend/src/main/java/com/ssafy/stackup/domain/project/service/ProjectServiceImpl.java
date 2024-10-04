@@ -22,9 +22,12 @@ import com.ssafy.stackup.domain.project.entity.Project;
 import com.ssafy.stackup.domain.project.entity.ProjectStatus;
 import com.ssafy.stackup.domain.project.entity.ProjectStep;
 import com.ssafy.stackup.domain.project.repository.ProjectRepository;
+import com.ssafy.stackup.domain.user.dto.response.ClientResponseDto;
+import com.ssafy.stackup.domain.user.entity.Client;
 import com.ssafy.stackup.domain.user.entity.Freelancer;
 import com.ssafy.stackup.domain.user.entity.User;
 import com.ssafy.stackup.domain.user.entity.FreelancerProject;
+import com.ssafy.stackup.domain.user.repository.ClientRepository;
 import com.ssafy.stackup.domain.user.repository.FreelancerProjectRepository;
 import com.ssafy.stackup.domain.user.repository.FreelancerRepository;
 import com.ssafy.stackup.domain.user.service.UserServiceImpl;
@@ -38,6 +41,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -55,6 +59,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final BoardRepository boardRepository;
     private final BoardApplicantRepository boardApplicantRepository;
+    private final ClientRepository clientRepository;
 
     @Override
     public void registerPreviousProject(MultipartFile certificateFile, String title, Long period) {
@@ -347,6 +352,42 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<ProjectInfoResponseDto> getAllProjects(User user, String projectType) {
 
+
+        if(user.isClient()){
+
+            List<Board> clientBoardList = boardRepository.findByClient_Id(user.getId());
+            List<ProjectInfoResponseDto> projectInfoResponseDtos = new ArrayList<>();
+
+            List<Project> clientProjectList = clientBoardList.stream()
+                            .map(Board::getProject)
+                    .filter(Objects::nonNull)
+                    .filter(project -> project.getStatus().equals(ProjectStatus.valueOf(projectType.toUpperCase())))
+                    .collect(Collectors.toList());
+
+
+            for(Project project : clientProjectList) {
+                if(!project.getStatus().name().equals(projectType)) continue;
+                ProjectInfoResponseDto projectInfoResponseDto= ProjectInfoResponseDto.builder()
+                        .projectId(project.getId())
+                        .status(project.getStatus())
+                        .step(project.getStep())
+                        .title(project.getTitle())
+                        .startDate(project.getBoard().getStartDate())
+                        .period(project.getBoard().getPeriod())
+                        .deadline(project.getBoard().getDeadline())
+                        .upload(project.getBoard().getUpload())
+                        .classification(project.getBoard().getClassification())
+                        .build();
+
+
+                projectInfoResponseDto.updateClient(project);
+                projectInfoResponseDtos.add(projectInfoResponseDto);
+
+            }
+            return projectInfoResponseDtos;
+        }
+
+
         Freelancer freelancer = freelancerRepository.findById(user.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -380,9 +421,12 @@ public class ProjectServiceImpl implements ProjectService {
                         .title(project.getTitle())
                         .startDate(project.getBoard().getStartDate())
                         .period(project.getBoard().getPeriod())
+                        .deadline(project.getBoard().getDeadline())
+                        .upload(project.getBoard().getUpload())
                         .classification(project.getBoard().getClassification())
                         .build();
 
+                projectInfoResponseDto.updateClient(project);
                 projectInfoResponseDtos.add(projectInfoResponseDto);
 
             }

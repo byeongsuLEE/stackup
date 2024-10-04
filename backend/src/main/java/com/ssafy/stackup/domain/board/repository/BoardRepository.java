@@ -4,6 +4,7 @@ import com.ssafy.stackup.domain.board.dto.BoardSummaryDTO;
 import com.ssafy.stackup.domain.board.entity.Board;
 import com.ssafy.stackup.domain.framework.entity.Framework;
 import com.ssafy.stackup.domain.language.entity.Language;
+import com.ssafy.stackup.domain.project.entity.Project;
 import com.ssafy.stackup.domain.user.entity.Freelancer;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -41,5 +42,8 @@ public interface BoardRepository extends JpaRepository<Board, Long>{
     @Query("SELECT new com.ssafy.stackup.domain.board.dto.BoardSummaryDTO(b.boardId, b.period, b.deposit, b.level) " +
             "FROM Board b WHERE b.boardId = :id")
     BoardSummaryDTO findBoardFieldsById(@Param("id") Long id);
+
+
+    List<Board> findByClient_Id(Long id);
 
 }

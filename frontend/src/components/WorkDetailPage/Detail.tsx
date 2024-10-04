@@ -11,7 +11,7 @@ const Detail = (project: project) => {
   const toCandidate = () => {
     navigate(`/work/detail/candidate/${boardId}`);
   }
-  
+  console.log(project)
 
   const remainDay = differenceInDays(project.deadline, format(Date(), 'yyyy-MM-dd'));
   const workType = project.worktype ? "재택" : "기간제 상주";
@@ -28,6 +28,10 @@ const Detail = (project: project) => {
   } else if (project.classification === 'db') {
     classification = 'DB'
   }
+
+    // frameworks와 languages 배열을 join으로 , 구분하여 출력
+    const frameworksList = project.frameworks.map(framework => framework.name);
+    const languagesList = project.languages.map(language => language.name);
 
   return (
     <>
@@ -79,10 +83,8 @@ const Detail = (project: project) => {
             <span>{workType}</span>
 
             {/* 수정필요 => 데이터 안옴*/}
-            {/* <span>{project.language}</span> */}
-            <span>java, c++</span>
-            {/* <span>{project.framework}</span> */}
-            <span>spring, vue</span>
+            <span>{frameworksList.join(', ')}</span>
+            <span>{languagesList.join(', ')}</span>
             {/* 수정 필요 */}
             <span>{project.requirements}</span>
           </div>

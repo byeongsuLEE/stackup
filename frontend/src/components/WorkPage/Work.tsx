@@ -13,9 +13,6 @@ interface WorkProps {
 }
 
 const Work = ({ title, startDate, period, classification, deposit, deadline, recruits, applicants, client }: WorkProps) => {
-  // const projectPeriod = startDate + ' ~ ' + format(addDays(startDate, parseInt(period, 10)), 'yyyy-MM-dd');
-  // const budget = new Intl.NumberFormat().format(parseInt(deposit, 10));
-  // const remainDay = differenceInDays(deadline, format(Date(), 'yyyy-MM-dd'));
   // startDate와 deadline을 Date 객체로 변환
   const validStartDate = startDate ? new Date(startDate) : null;
   const validDeadline = deadline ? new Date(deadline) : null;

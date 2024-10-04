@@ -2,7 +2,6 @@ import { differenceInDays, format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { project } from "../../apis/Board.type";
 import { projectApply } from "../../apis/FreelancerApi";
-import WebIcon from "../../icons/WebIcon";
 import InfoBox from "../WorkPage/InfoBox";
 import DoneButton from "../common/DoneButton";
 import PriceIcon from "../../icons/PriceIcon";
@@ -95,7 +94,7 @@ const Detail = ({ project, clientId }: DetailProps) => {
               <DoneButton width={100} height={25} title="지원하기" />
             </div>
           ) : (
-            window.sessionStorage.getItem("clientId") === clientId ? (
+            window.sessionStorage.getItem("clientId") == clientId ? (
               <div className="flex">
                 <div onClick={toCandidate}>
                   <DoneButton width={100} height={25} title="지원자 관리" />

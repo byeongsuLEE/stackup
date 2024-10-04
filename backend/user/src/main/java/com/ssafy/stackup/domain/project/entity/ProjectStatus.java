@@ -9,7 +9,9 @@ import jakarta.persistence.Enumerated;
  */
 
 public enum ProjectStatus {
+    BEFORE,
     PENDING,
     PROGRESS,
     FINISH;
+
 }

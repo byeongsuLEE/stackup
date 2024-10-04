@@ -68,6 +68,7 @@ public class Board {
     @Column(nullable = false)
     private Long recruits; //모집인원
 
+    @Column(nullable = false)
     private Long applicants; //지원자수
 
     @Column(nullable = false)
@@ -96,15 +97,21 @@ public class Board {
     private Project project;
 
 
-
-
     @PrePersist
-    protected void onCreate() {
+    @PreUpdate // 수정된 부분
+    protected void onCreateOrUpdate() {
         if (upload == null) {
             upload = new Date(); // 현재 날짜와 시간으로 설정
         }
         if (isCharged == null) {
             isCharged = false; // 기본값 설정
+        }
+
+        // applicants 필드 업데이트
+        if (boardApplicants == null || boardApplicants.isEmpty()) {
+            applicants = 0L; // 리스트가 비어 있을 경우 0으로 설정
+        } else {
+            applicants = (long) boardApplicants.size(); // 리스트의 길이로 설정
         }
     }
 //    @JsonIgnore
@@ -140,11 +147,11 @@ public class Board {
     }
 
     public void setBoardApplicants(BoardApplicant boardApplicant) {
-        this.boardApplicants.clear();
-        this.boardApplicants.add(boardApplicant);
-        boardApplicant.setBoard(this);
+        if (boardApplicants != null) {
+            this.boardApplicants.add(boardApplicant);
+            this.applicants = (long) boardApplicants.size(); // applicants 필드 업데이트
+        } else {
+            this.applicants = 0L;
+        }
     }
-
-
-
 }

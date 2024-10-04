@@ -4,6 +4,7 @@ import com.ssafy.stackup.common.exception.ResourceNotFoundException;
 import com.ssafy.stackup.domain.board.dto.BoardApplicantRequest;
 import com.ssafy.stackup.domain.board.dto.BoardCreateRequest;
 import com.ssafy.stackup.domain.board.dto.BoardFindAllResponse;
+import com.ssafy.stackup.domain.board.dto.BoardSearchResponse;
 import com.ssafy.stackup.domain.board.entity.Board;
 import com.ssafy.stackup.domain.board.entity.BoardApplicant;
 import com.ssafy.stackup.domain.board.entity.BoardFramework;
@@ -29,14 +30,16 @@ import com.ssafy.stackup.domain.user.repository.FreelancerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import javax.swing.text.html.Option;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -77,6 +80,14 @@ public class BoardService {
         List<Board> boards = boardRepository.findAll();
         return boards.stream()
                 .map(BoardFindAllResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<BoardSearchResponse> getDescription(){
+        List<Board> boards = boardRepository.findAll();
+        return boards.stream()
+                .map(BoardSearchResponse::new)
                 .collect(Collectors.toList());
     }
 
@@ -159,8 +170,12 @@ public class BoardService {
         }
         board.setBoardLanguages(languages);
 
+        // 벡터 생성 요청
+//        double[] descriptionVector = generateVector(board.getDescription());
+
         Recommend recommend = new Recommend();
         recommend.setClassification(board.getClassification());
+        recommend.setDescription(board.getDescription());
         recommend.setFrameworks(board.getBoardFrameworks());
         recommend.setLanguages(board.getBoardLanguages());
 //        recommend.setLanguages(languageNames);
@@ -168,6 +183,7 @@ public class BoardService {
         recommend.setLevel(board.getLevel());
         recommend.setTitle(board.getTitle());
         recommend.setDeposit(board.getDeposit());
+//        recommend.setDescriptionVector(descriptionVector);
 
 
         Board result = boardRepository.save(board);
@@ -192,12 +208,20 @@ public class BoardService {
         Freelancer freelancer = freelancerRepository.findById(freelancerId)
                 .orElseThrow(() -> new RuntimeException("Freelancer not found"));
 
+        // 이미 지원했는지 확인
+        for (BoardApplicant applicant : board.getBoardApplicants()) {
+            if (applicant.getFreelancer().getId().equals(freelancerId)) {
+                throw new RuntimeException("이미 지원한 프리랜서입니다");
+            }
+        }
+
         BoardApplicant boardApplicant = new BoardApplicant();
         boardApplicant.setBoard(board);
         boardApplicant.setFreelancer(freelancer);
 
         // Add boardApplicant to the board's list
         board.getBoardApplicants().add(boardApplicant);
+        board.setBoardApplicants(boardApplicant);
         boardApplicantRepository.save(boardApplicant);
     }
 
@@ -214,5 +238,38 @@ public class BoardService {
                 .orElseThrow(() -> new ResourceNotFoundException("Board not found"));
         board.setIsCharged(true);
         boardRepository.save(board);
+    }
+
+    private final RestTemplate restTemplate;
+
+    public BoardSearchResponse findSimilarBoards(String description) {
+        String flaskUrl = "http://localhost:5000/similar_boards";
+
+        // Flask로 보낼 요청 데이터 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Type", "application/json");
+
+        Map<String, String> requestBody = Map.of("description", description);
+        HttpEntity<Map<String, String>> entity = new HttpEntity<>(requestBody, headers);
+
+        // Flask 서버로 POST 요청 보내기
+        ResponseEntity<BoardSearchResponse> response = restTemplate.exchange(
+                flaskUrl,
+                HttpMethod.POST,
+                entity,
+                BoardSearchResponse.class
+        );
+
+        return response.getBody();
+    }
+
+
+    public List<BoardApplicantRequest> getSelectedApplicantListByBoardId(Long boardId) {
+
+            List<BoardApplicant> applicants = boardApplicantRepository.findByBoard_BoardIdAndIsPassedTrue(boardId);
+            return applicants.stream()
+                    .map(BoardApplicantRequest::new)
+                    .collect(Collectors.toList());
+
     }
 }

@@ -26,6 +26,14 @@ public class Recommend {
 
     private String title;
 
+    @Column(nullable = false)
+    private String description;
+
+    // Elasticsearch에 벡터로 저장되는 BERT 임베딩 필드 (768 차원)
+    @Field(type = FieldType.Dense_Vector, dims = 768)
+    @Transient // JPA가 관리하지 않도록 설정 (Elasticsearch에서만 사용)
+    private double[] descriptionVector;
+
     private Long deposit;
 
     @Field(type = FieldType.Keyword)

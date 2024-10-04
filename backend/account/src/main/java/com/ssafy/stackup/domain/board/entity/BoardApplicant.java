@@ -1,6 +1,7 @@
 package com.ssafy.stackup.domain.board.entity;
 
 import com.ssafy.stackup.domain.user.entity.Freelancer;
+import com.ssafy.stackup.domain.user.entity.FreelancerProject;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,10 +36,15 @@ public class BoardApplicant {
         appliedDate = new Date(); // 신청 시점 기록
     }
 
+    //프로젝트 시작 후 채택한 지원자만 프로젝트 id를 가지고있 음
+    private Long freelancerProjectId;
+
+
     @Column(nullable = false)
     private boolean isPassed;
 
-    public Boolean getIsPassed() {
+
+    public boolean getIsPassed() {
         return isPassed;
     }
 
@@ -46,4 +52,8 @@ public class BoardApplicant {
         this.isPassed = true;
     }
 
+
+    public void updateFreelancerProjectId(Long freelancerProjectId) {
+        this.freelancerProjectId= freelancerProjectId;
+    }
 }

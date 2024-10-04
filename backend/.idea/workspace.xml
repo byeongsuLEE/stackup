@@ -4,16 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="770a738c-7cff-4cbe-947d-9fe8c12c7597" name="Changes" comment="init : msa 기본구조">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/config/ElasticSearchConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/config/ElasticSearchConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/user/dto/response/UserInfoResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/user/dto/response/UserInfoResponseDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/user/service/UserService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/user/service/UserServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/common/config/ElasticSearchConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/common/config/ElasticSearchConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/dto/response/UserInfoResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/dto/response/UserInfoResponseDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/service/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/service/UserServiceImpl.java" afterDir="false" />
-    </list>
+    <list default="true" id="770a738c-7cff-4cbe-947d-9fe8c12c7597" name="Changes" comment="init : msa 기본구조" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -87,9 +78,9 @@
     "RequestMappingsPanelWidth1": "75",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Spring Boot.StackUpApplication.executor": "Run",
-    "git-widget-placeholder": "be/msa",
+    "git-widget-placeholder": "be/msa-user",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/user/OneDrive/바탕 화면/special/S11P21C103/backend/board/src/main/java/com/ssafy/stackup/domain",
+    "last_opened_file_path": "C:/Users/SSAFY/Desktop/stackup/S11P21C103/backend/account",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -397,9 +388,9 @@
     <MESSAGE value="fix :  error level;" />
     <MESSAGE value="fix : merge error 수정" />
     <MESSAGE value="fix : 머지 오류수정" />
-    <MESSAGE value="init : msa 기본구조" />
     <MESSAGE value="feat : &quot;보드 분리 중&quot;" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat : &quot;보드 분리 중&quot;" />
+    <MESSAGE value="init : msa 기본구조" />
+    <option name="LAST_COMMIT_MESSAGE" value="init : msa 기본구조" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

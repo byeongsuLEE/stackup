@@ -36,6 +36,30 @@ public class WonAuthService {
     @Autowired
     private AccountService accountService;
 
+//    private String apikey = "13d8a1c9199348928f01b0591c325460";
+    public String getApikey() {
+        String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/app/reIssuedApiKey";
+
+        // JSON 본문 생성
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("managerId" , "choho97@naver.com");
+
+        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody);
+
+        // POST 요청 보내기
+        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Map.class);
+
+    //        String key = response.getBody().get("apikey").toString();
+        // 응답 본문에서 apiKey 추출
+        if (response.getBody() != null && response.getBody().containsKey("apiKey")) {
+            String key = response.getBody().get("apiKey").toString();
+            return key;
+        }
+
+        return null;
+    }
+        private String apikey;
+
     public void fetchWonAuth (String accountNo, Long userId) {
         String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/accountAuth/openAccountAuth";
 
@@ -43,6 +67,9 @@ public class WonAuthService {
 
         String accountKey = user.getAccountKey();
         String email = user.getEmail();
+
+        apikey = getApikey();
+
 
         if (accountKey == null) {
             System.out.println("accountKey 없음");
@@ -69,8 +96,8 @@ public class WonAuthService {
         headers.set("fintechAppNo", "001");
         headers.set("apiServiceCode", "openAccountAuth");
         headers.set("institutionTransactionUniqueNo", institutionTransactionUniqueNo);
-        headers.set("apiKey", "ef9d38e608d64bc1817e0ab47aa757ba");
-        headers.set("userKey", "85ea7b07-cc04-42f2-93d8-287aa13b9a7f");
+        headers.set("apiKey", apikey);
+        headers.set("userKey", accountKey);
 
         // JSON 본문 생성
         Map<String, Object> requestBody = new HashMap<>();
@@ -83,8 +110,8 @@ public class WonAuthService {
                 "fintechAppNo", "001",
                 "apiServiceCode", "openAccountAuth",
                 "institutionTransactionUniqueNo", institutionTransactionUniqueNo,
-                "apiKey", "ef9d38e608d64bc1817e0ab47aa757ba",
-                "userKey", "85ea7b07-cc04-42f2-93d8-287aa13b9a7f"
+                "apiKey", apikey,
+                "userKey", accountKey
         ));
 
         requestBody.put("accountNo", accountNo); // 실제 계좌번호를 사용
@@ -104,6 +131,8 @@ public class WonAuthService {
 
         String accountKey = user.getAccountKey();
         String email = user.getEmail();
+
+        apikey = getApikey();
 
         if (accountKey == null) {
             System.out.println("accountKey 없음");
@@ -127,8 +156,8 @@ public class WonAuthService {
         headers.set("fintechAppNo", "001");
         headers.set("apiServiceCode", "checkAuthCode");
         headers.set("institutionTransactionUniqueNo", institutionTransactionUniqueNo);
-        headers.set("apiKey", "ef9d38e608d64bc1817e0ab47aa757ba");
-        headers.set("userKey", "85ea7b07-cc04-42f2-93d8-287aa13b9a7f");
+        headers.set("apiKey", apikey);
+        headers.set("userKey", accountKey);
 
         // JSON 본문 생성
         Map<String, Object> requestBody = new HashMap<>();
@@ -140,8 +169,8 @@ public class WonAuthService {
                 "fintechAppNo", "001",
                 "apiServiceCode", "checkAuthCode",
                 "institutionTransactionUniqueNo", institutionTransactionUniqueNo,
-                "apiKey", "ef9d38e608d64bc1817e0ab47aa757ba",
-                "userKey", "85ea7b07-cc04-42f2-93d8-287aa13b9a7f"
+                "apiKey", apikey,
+                "userKey", accountKey
         ));
         requestBody.put("accountNo", accountNo);
         requestBody.put("authText", "STACKUP");

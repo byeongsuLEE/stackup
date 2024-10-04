@@ -31,6 +31,31 @@ public class TransferService {
     @Autowired
     private AccountService accountService;
 
+    public String getApikey() {
+        String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/app/reIssuedApiKey";
+
+        // JSON 본문 생성
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("managerId" , "choho97@naver.com");
+
+        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody);
+
+        // POST 요청 보내기
+        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Map.class);
+
+        //        String key = response.getBody().get("apikey").toString();
+        // 응답 본문에서 apiKey 추출
+        if (response.getBody() != null && response.getBody().containsKey("apiKey")) {
+            String key = response.getBody().get("apiKey").toString();
+            return key;
+        }
+
+        return null;
+    }
+    private String apikey;
+
+//    private String apikey = "13d8a1c9199348928f01b0591c325460";
+
     public Map<String, Object> fetchTransfer(String depositAccount, String withdrawAccount, String transactionBalance, Long userId) {
         String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit/updateDemandDepositAccountTransfer";
 
@@ -38,6 +63,8 @@ public class TransferService {
 
         String accountKey = user.getAccountKey();
         String email = user.getEmail();
+
+        apikey = getApikey();
 
         if (accountKey == null) {
             System.out.println("accountKey 없음");
@@ -64,7 +91,7 @@ public class TransferService {
         headers.set("fintechAppNo", "001");
         headers.set("apiServiceCode", "updateDemandDepositAccountTransfer");
         headers.set("institutionTransactionUniqueNo", institutionTransactionUniqueNo);
-        headers.set("apiKey", "ef9d38e608d64bc1817e0ab47aa757ba");
+        headers.set("apiKey", apikey);
         headers.set("userKey", accountKey);
 
         // JSON 본문 생성
@@ -77,7 +104,7 @@ public class TransferService {
                 "fintechAppNo", "001",
                 "apiServiceCode", "updateDemandDepositAccountTransfer",
                 "institutionTransactionUniqueNo", institutionTransactionUniqueNo,
-                "apiKey", "ef9d38e608d64bc1817e0ab47aa757ba",
+                "apiKey", apikey,
                 "userKey", accountKey
         ));
         requestBody.put("depositAccountNo", depositAccount); // 입급할 계좌번호

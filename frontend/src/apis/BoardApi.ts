@@ -1,6 +1,6 @@
 import axios from "axios";
 import { projectFilterStore } from "../store/ProjectStore";
-import { createProjectProp, project, recommend } from "./Board.type";
+import { createProjectProp, project, projectApplicantProps, recommend } from "./Board.type";
 
 const BASE_URL: string = "http://localhost:8080/api/board";
 
@@ -148,18 +148,18 @@ export const recommendProject = async (): Promise<recommend[]> => {
 }
 
 // 프로젝트 지원자 조회
-export const projectApplicant = async (boardId: string): Promise<any> => {
+export const projectApplicant = async (boardId: string): Promise<projectApplicantProps[]> => {
     try {
         const response = await axios({
             method: 'get',
             url: `${BASE_URL}/${boardId}/applicant-list`,
             headers: {
                 Authorization: `Bearer ${window.sessionStorage.getItem('token')}`,
-                 'Content-Type': 'application/json'
+                'Content-Type': 'application/json'
             },
         })
 
-        return response.data.data
+        return response.data
 
     } catch (error) {
 
@@ -169,5 +169,6 @@ export const projectApplicant = async (boardId: string): Promise<any> => {
         } else {
             console.error("Unexpected error: ", error);
         }
+        return [];
     }
 }

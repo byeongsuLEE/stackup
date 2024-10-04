@@ -138,4 +138,6 @@ export interface projectApplicantProps {
     portfolioUrl: string;
     reportedCount: number;
     totalScore: number;
+    isChecked: boolean;
+    onCheckboxChange: (id: number) => void;
 }

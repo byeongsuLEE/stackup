@@ -4,28 +4,40 @@ import { projectApplicantProps } from "../../apis/Board.type";
 import { projectApplicant } from "../../apis/BoardApi";
 import DoneButton from "../common/DoneButton";
 import Candidate from "./Candidate";
-import { projectProps } from "../../apis/Project.type";
+import { startProject } from "../../apis/ProjectApi";
 
 const CandidateList = () => {
-  const [List, setList] = useState<projectProps[]>([]);
+  const [checkedList, setCheckedList] = useState<number[]>([]);
   const boardId = useParams<{ boardId: string }>().boardId;
   const navigate = useNavigate();
-  const toProjectGroup = () => {
+  const [candidateList, setCandidateList] = useState<projectApplicantProps[]>([]);
+
+  const toProjectGroup = async() => {
+    
+    await startProject(checkedList, String(boardId));
+    
     navigate(`/work/projectgroup/${boardId}`);
   }
 
-  const [candidateList, setCandidateList] = useState<projectApplicantProps[]>([]);
   const update = async () => {
     const data = await projectApplicant(boardId as string);
     setCandidateList(data)
   }
+
+  const handleCheck = (id: number) => {
+    setCheckedList((list) => {
+      if(list.includes(id)) {
+        return list.filter(candidateId => candidateId !== id)
+      } else {
+        return [...list, id]
+      }
+    })
+  }
+
   // 첫 렌더링 시에만 API 호출
   useEffect(() => {
     update();
   }, []); // 빈 배열이므로, 컴포넌트가 처음 렌더링될 때만 실행
-
-
-
 
   return (
     <div className="overflow-x-auto">
@@ -44,6 +56,7 @@ const CandidateList = () => {
           {candidateList?.map((candidate: projectApplicantProps, index: number) => (
             <Candidate
               {...candidate}
+              onCheckboxChange={handleCheck}
               key={index}
             />
           ))}

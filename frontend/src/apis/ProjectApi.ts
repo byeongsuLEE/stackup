@@ -47,7 +47,8 @@ export const getProject =  async (type: string): Promise<void> => {
 }
 
 // 프로젝트 시작하기
-export const startProject = async (data:projectProps): Promise<void> => {
+export const startProject = async (checkedList: Number[], boardId: string): Promise<void> => {
+
   const response = await axios({
     method: 'post',
     url: `${BASE_URL}/project/start`,
@@ -55,8 +56,8 @@ export const startProject = async (data:projectProps): Promise<void> => {
       Authorization: `Bearer ${sessionStorage.getItem("token")}`
     },
     data: {
-      "freelancerIdList" : data.freelancerIdList,
-      "boardId" : data.boardId
+      "freelancerIdList" : checkedList,
+      "boardId" : boardId
     }
   })
 

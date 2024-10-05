@@ -297,6 +297,12 @@ public class UserServiceImpl implements UserService {
                     .classification(freelancer.getClassification())
                     .githubId(freelancer.getGithubId())
                     .address(freelancer.getAddress())
+                    .userType("freelancer")
+                    .userAddress(user.getUserAddress())
+                    .evaluatedCount(user.getEvaluatedCount())
+                    .publicKey(user.getPublicKey())
+                    .secondPassword(user.getSecondPassword())
+                    .reportedCount(user.getReportedCount())
                     .build();
             return freelancerResponseDto;
 
@@ -318,6 +324,12 @@ public class UserServiceImpl implements UserService {
                     .businessName(client.getBusinessName())
                     .reportedCount(client.getReportedCount())
                     .totalScore(client.getTotalScore())
+                    .userType("client")
+                    .userAddress(user.getUserAddress())
+                    .evaluatedCount(user.getEvaluatedCount())
+                    .publicKey(user.getPublicKey())
+                    .secondPassword(user.getSecondPassword())
+                    .reportedCount(user.getReportedCount())
                     .build();
 
             return clientResponseDto;

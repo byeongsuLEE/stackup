@@ -1,18 +1,20 @@
-package com.ssafy.stackup.domain.user.dto.response;
+package com.ssafy.stackup.domain.account.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 
 import java.util.List;
 
+/**
+ * 작성자   : user
+ * 작성날짜 : 2024-10-05
+ * 설명    :
+ */
+
+@Builder
 @Data
-@SuperBuilder
-@NoArgsConstructor
 @AllArgsConstructor
-public class UserInfoResponseDto {
+@NoArgsConstructor
+public class User {
     private Long id;
     private String userType;
     private String name;
@@ -28,6 +30,17 @@ public class UserInfoResponseDto {
     private Integer evaluatedCount;
     protected List<String> roles;
 
+
+    private String githubId; // 프리랜서
+    private String portfolioURL; // 프리랜서
+    private String selfIntroduction; // 프리랜서
+    private String address; // 프리랜서
+    private Integer careerYear; // 프리랜서
+    private String classification; // 프리랜서
+    private String businessRegistrationNumber; // 클라이언트
+    private String businessName; // 클라이언트
+    private List<String> framework;
+    private List<String> language;
     // 특정 역할이 있는지 확인하는 메서드
     public boolean hasRole(String role) {
         return roles != null && roles.contains(role);
@@ -41,5 +54,3 @@ public class UserInfoResponseDto {
         return hasRole("ROLE_CLIENT");
     }
 }
-
-

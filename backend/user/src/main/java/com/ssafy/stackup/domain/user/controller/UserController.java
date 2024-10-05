@@ -48,7 +48,7 @@ public class UserController {
     }
 
     @GetMapping("/info")
-    ResponseEntity<ApiResponse<?>> getInfo(@AuthUser User user) {
+    ResponseEntity<ApiResponse<UserInfoResponseDto>> getInfo(@AuthUser User user) {
         UserInfoResponseDto userInfoResponseDto=   userService.getInfo(user);
 
         return ResponseEntity.status(HttpStatus.OK)

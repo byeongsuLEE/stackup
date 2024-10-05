@@ -14,15 +14,25 @@ const getRandomPastelColor = (): string => {
 };
 
 const getRandomGradient = (ctx: CanvasRenderingContext2D, width: number, height: number) => {
-  const gradient = ctx.createLinearGradient(0, 0, width, height);
+  // 랜덤 좌표 생성
+  const x0 = Math.random() * width;
+  const y0 = Math.random() * height;
+  const x1 = Math.random() * width;
+  const y1 = Math.random() * height;
 
-  // 파스텔 톤의 랜덤 색상 하나 생성
+  const gradient = ctx.createLinearGradient(x0, y0, x1, y1);
+
+  // 파스텔 톤의 랜덤 색상 두 개 생성
   const color1 = getRandomPastelColor();
   const color2 = getRandomPastelColor();
 
-  // 그라디언트 색상 설정
-  gradient.addColorStop(0, color1);
-  gradient.addColorStop(1, color2);
+  // 랜덤한 색상 스톱 포인트 (0 ~ 1 사이의 값)
+  const stop1 = Math.random();
+  const stop2 = Math.random();
+
+  // 그라디언트 색상과 스톱 값 설정
+  gradient.addColorStop(Math.min(stop1, stop2), color1);
+  gradient.addColorStop(Math.max(stop1, stop2), color2);
 
   return gradient;
 };
@@ -36,7 +46,7 @@ export const defaultNftInfo: nftInfoProp = {
 };
 
 // 캔버스에서 이미지를 생성하고 FormData로 반환하는 함수
-export const generateImage = async (canvasRef: React.RefObject<HTMLCanvasElement>): Promise<FormData> => {
+export const generateImage = async (canvasRef: React.RefObject<HTMLCanvasElement>, data: nftInfoProp): Promise<FormData> => {
   const canvas = canvasRef.current;
 
   if (canvas) {
@@ -59,30 +69,28 @@ export const generateImage = async (canvasRef: React.RefObject<HTMLCanvasElement
 
       // 텍스트 추가
       ctx.font = "bold 30px Arial";
-      ctx.fillText("UACV", 20, 80);
+      ctx.fillText(data.projectName, 20, 80);
 
       ctx.font = "23px Arial";
-      ctx.fillText("정채준", 20, 130);
+      ctx.fillText(data.companyName, 20, 130);
 
       ctx.font = "15px Arial";
-      ctx.fillText("2024.08.01 ~ 2024.08.31", 20, 170);
+      ctx.fillText(data.period, 20, 170);
 
       ctx.font = "20px Arial";
-      ctx.fillText("이채연", 20, 210);
+      ctx.fillText(data.name, 20, 210);
 
-      // 이미지를 Blob 데이터로 변환하고 FormData로 반환
       return new Promise<FormData>((resolve) => {
         canvas.toBlob((blob) => {
           const formData = new FormData();
           if (blob) {
-            // Blob 데이터를 FormData로 추가
             formData.append("file", blob, "nftImage.png");
           }
-          resolve(formData); // Blob이 없더라도 빈 FormData 반환
-        }, "image/png");  // 이미지 형식 설정 (여기선 png로 설정)
+          resolve(formData);
+        }, "image/png");
       });
     }
   }
   
-  return new FormData(); // 캔버스가 없을 경우에도 빈 FormData 반환
+  return new FormData();
 };

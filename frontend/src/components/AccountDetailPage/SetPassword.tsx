@@ -23,7 +23,7 @@ const SetPassword = ({ onSetPassword }: { onSetPassword: () => void }) => {
   const [fixedButtons] = useState<string[]>(generateFixedButtons());
   const maxLength = 4;
 
-  const { setPassword } = passwordStore.getState();
+  const { checkoutPassword, setPassword } = passwordStore.getState();
 
   // 키패드가 보일 때마다 버튼 숫자 랜덤화
   useEffect(() => {
@@ -54,8 +54,12 @@ const SetPassword = ({ onSetPassword }: { onSetPassword: () => void }) => {
   return (
     <div>
       <div onClick={() => setIsKeypadVisible(true)} >
-        <DoneButton
-          width={120} height={30} title="비밀번호 설정" />
+        {checkoutPassword ? (
+          <DoneButton width={120} height={30} title="비밀번호 수정" />
+        ) : (
+          <DoneButton width={120} height={30} title="비밀번호 설정" />
+        )}
+        
       </div>
       {isKeypadVisible && (
         <div

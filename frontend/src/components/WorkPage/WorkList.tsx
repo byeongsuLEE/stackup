@@ -7,6 +7,7 @@ import Work from "./Work";
 
 
 const WorkList = () => {
+  
   const navigate = useNavigate();
   const toWorkDetail = (id: string) => {
     navigate(`/work/detail/${id}`);
@@ -16,11 +17,11 @@ const WorkList = () => {
   
   const update = async () => {
     const data = await allProject();
-    console.log("확인",data)
     setProjectList(data)
   }
   useEffect(() => {
     update();
+    // console.log("프로젝트 목록", projectList)
   }, [])
 
   //== projectList 반환 ==//

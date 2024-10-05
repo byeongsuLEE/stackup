@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Test from "./components/NFTPage/NFTMinting";
@@ -22,17 +23,16 @@ import MitermEvaluate from "./pages/MitermEvaluatePage";
 import Mypage from "./pages/MyPage";
 import PostWork from "./pages/PostWorkPage";
 import ProjectDetail from "./pages/ProjectDetailPage";
+import ProjectGroup from "./pages/ProjectGruopPage";
 import Project from "./pages/ProjectPage";
 import SignatureDetail from "./pages/SignatureDetailPage";
 import Transfer from "./pages/TransferPage";
 import WorkDetail from "./pages/WorkDetailPage";
 import Work from "./pages/WorkPage";
-import { QueryClient, QueryClientProvider } from 'react-query';
-import ProjectGroup from "./pages/ProjectGruopPage";
 
 function App() {
   const queryClient = new QueryClient();
-  
+
   return (
     <>
     <QueryClientProvider client={queryClient}>
@@ -48,9 +48,9 @@ function App() {
               <Route path="/work" element={<Work />} />
               <Route path="/work/post" element={<PostWork />} />
               <Route path="/work/detail/:boardId" element={<WorkDetail />} />
-              <Route path="/work/detail/candidate/:boardId" element={<CandidateCheck />} />
+              <Route path="/work/detail/candidate/:boardId/" element={<CandidateCheck />} />
               <Route path="/work/projectgroup/:boardId" element={<ProjectGroup />} />
-              <Route path="/work/detail/contract/:boardId" element={<Contract />} />
+              <Route path="/work/detail/contract/:boardId/:candidateId" element={<Contract />} />
               <Route path="/project" element={<Project />} />
               <Route path="/project/detail" element={<ProjectDetail />} />
               <Route path="/career" element={<Career />} />
@@ -72,8 +72,8 @@ function App() {
           <div className="fixed right-7 bottom-3">
             <SimplePopup />
           </div>
-        </div>
-      </BrowserRouter>
+          </div>
+        </BrowserRouter>
       </QueryClientProvider>
     </>
   );

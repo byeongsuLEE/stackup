@@ -29,9 +29,14 @@ const Navbar = () => {
             <Link to="/project" className="mr-6">
               나의 프로젝트
             </Link>
-            <Link to="/career" className="mr-6">
-              경력관리
-            </Link>
+            {sessionStorage.getItem('userType') === 'client' ? (
+              <>
+              </>
+            ) : (
+              <Link to="/career" className="mr-6">
+                경력관리
+              </Link>
+            )}
             <Link to="/account">계좌관리</Link>
           </div>
         }

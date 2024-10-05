@@ -38,8 +38,8 @@ export interface project {
     address: string,
     deadline: Date,
     upload: Date,
-    client: clientInfo
-
+    client: clientInfo,
+    projectId: number
 }
 
 const clientBasic = {
@@ -125,4 +125,19 @@ export interface recommend {
     languages: Array<{ language: Language }>;   // languages 타입 수정
     level: string;
     boardId: number;
+}
+
+
+export interface projectApplicantProps {
+    email: string;
+    freelancerProjectId: number;
+    id: number;
+    isPassed: boolean;
+    name: string;
+    phone: string;
+    portfolioUrl: string;
+    reportedCount: number;
+    totalScore: number;
+    isChecked: boolean;
+    onCheckboxChange: (id: number) => void;
 }

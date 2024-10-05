@@ -1,11 +1,13 @@
 import axios from "axios";
 import { projectFilterStore } from "../store/ProjectStore";
-import { createProjectProp, project, recommend } from "./Board.type";
+import { createProjectProp, project, projectApplicantProps, recommend } from "./Board.type";
+import { useNavigate } from "react-router-dom";
 
 const BASE_URL: string = "http://localhost:8080/api/board";
 
 //== 프로젝트 목록 조회 ==//
 export const allProject = async (): Promise<project[]> => {
+    
     try {
         const response = await axios({
             method: 'get',
@@ -15,7 +17,12 @@ export const allProject = async (): Promise<project[]> => {
             }
         })
         console.log(response.data)
-        return response.data.data
+        
+        // isCharged가 true인 항목을 위로 정렬
+        const sortedBoards = [...response.data.data].sort((a, b) => {
+            return Number(b.isCharged) - Number(a.isCharged);
+        });
+        return sortedBoards
 
     } catch (error) {
 
@@ -107,7 +114,7 @@ export const projectDetail = async (boardId?: string): Promise<any> => {
             method: 'get',
             url: `${BASE_URL}/${boardId}`
         })
-        console.log('조회',response.data)
+        // console.log('조회',response.data)
         return response.data.data
 
     } catch (error) {
@@ -148,18 +155,43 @@ export const recommendProject = async (): Promise<recommend[]> => {
 }
 
 // 프로젝트 지원자 조회
-export const projectApplicant = async (boardId: string): Promise<any> => {
+export const projectApplicant = async (boardId: string): Promise<projectApplicantProps[]> => {
     try {
         const response = await axios({
             method: 'get',
             url: `${BASE_URL}/${boardId}/applicant-list`,
             headers: {
                 Authorization: `Bearer ${window.sessionStorage.getItem('token')}`,
-                 'Content-Type': 'application/json'
+                'Content-Type': 'application/json'
             },
         })
 
-        return response.data.data
+        return response.data
+
+    } catch (error) {
+
+        if (axios.isAxiosError(error)) {
+            console.error("Axios error: ", error.message);
+
+        } else {
+            console.error("Unexpected error: ", error);
+        }
+        return [];
+    }
+}
+
+// 게시글 삭제
+export const projectDelete = async (boardId: string): Promise<void> => {
+    
+    try {
+        await axios({
+            method: 'delete',
+            url: `${BASE_URL}/${boardId}`,
+            headers: {
+                Authorization: `Bearer ${window.sessionStorage.getItem('token')}`
+            }
+        })
+        window.location.href = '/work';
 
     } catch (error) {
 

@@ -1,13 +1,42 @@
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { projectApplicantProps } from "../../apis/Board.type";
+import { projectApplicant } from "../../apis/BoardApi";
 import DoneButton from "../common/DoneButton";
 import Candidate from "./Candidate";
+import { startProject } from "../../apis/ProjectApi";
 
 const CandidateList = () => {
+  const [checkedList, setCheckedList] = useState<number[]>([]);
   const boardId = useParams<{ boardId: string }>().boardId;
   const navigate = useNavigate();
-  const toProjectGroup = () => {
+  const [candidateList, setCandidateList] = useState<projectApplicantProps[]>([]);
+
+  const toProjectGroup = async() => {
+    
+    await startProject(checkedList, String(boardId));
+    
     navigate(`/work/projectgroup/${boardId}`);
   }
+
+  const update = async () => {
+    const data = await projectApplicant(boardId as string);
+    setCandidateList(data)
+  }
+
+  const handleCheck = (id: number) => {
+    setCheckedList((list) => {
+      if(list.includes(id)) {
+        return list.filter(candidateId => candidateId !== id)
+      } else {
+        return [...list, id]
+      }
+    })
+  }
+
+  useEffect(() => {
+    update();
+  }, []);
 
   return (
     <div className="overflow-x-auto">
@@ -23,12 +52,13 @@ const CandidateList = () => {
           </tr>
         </thead>
         <tbody>
-          <Candidate
-            name="이호영"
-            portfolio="github.com/hoyoung"
-            rating={5.0}
-            freelancerId="freelancer123"
-          />
+          {candidateList?.map((candidate: projectApplicantProps, index: number) => (
+            <Candidate
+              {...candidate}
+              onCheckboxChange={handleCheck}
+              key={index}
+            />
+          ))}
         </tbody>
       </table>
       <div className="text-end mt-5" onClick={toProjectGroup}>

@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import { appliedProject } from "../../apis/FreelancerApi";
 import { project } from "../../apis/Board.type";
 import AppliedBox from "./AppliedBox";
+import { myBoard } from "../../apis/ClientApi";
 
-const AppliedWork = () => {
+const MyWork = () => {
   const [projectList, setProjectList] = useState<project[]>();
 
   useEffect(() => {
     const detail = async () => {
-      const data = await appliedProject();
+      const data = await myBoard();
       setProjectList(data);
     }
     detail();
@@ -24,4 +24,4 @@ const AppliedWork = () => {
     </div>
   )
 }
-export default AppliedWork;
+export default MyWork;

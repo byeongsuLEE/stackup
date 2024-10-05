@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import DoneButton from '../components/common/DoneButton';
-import WorkList from '../components/WorkPage/WorkList';
 import RecommendList from '../components/WorkPage/RecommendList';
+import WorkList from '../components/WorkPage/WorkList';
+import DoneButton from '../components/common/DoneButton';
 
 const Work = () => {
   const navigate = useNavigate();
@@ -18,10 +18,10 @@ const Work = () => {
         </div>
       ) : (
         // 프리랜서 추천 일감
-        <RecommendList/>
+        <RecommendList />
       )}
       <div className="bg-subTxt w-auto h-[1px] flex justify-center my-10"></div>
-      <WorkList/>
+      <WorkList />
     </div>
   )
 }

@@ -1,14 +1,15 @@
 import axios from "axios"
 import { projectData } from "./Project.type"
+import { project } from "./Board.type";
 
-const BASE_URL: string = "http://localhost:8080/api"
+const BASE_URL: string = "http://localhost:8080/api/project"
 
 //== 이전 프로젝트 등록 ==//
 export const previousProject = async (data: projectData): Promise<void> => {
-  console.log(typeof data.projectFile); // 파일 타입 확인
+  console.log(typeof data.projectFile);
 
   const formData = new FormData();
-  formData.append("certificateFile", data.projectFile[0]); // projectFile이 FileList라고 가정
+  formData.append("certificateFile", data.projectFile[0]);
   formData.append("title", data.projectName);
   formData.append("period", '10');
   // formData.append("endDate", data.endDate);
@@ -16,12 +17,12 @@ export const previousProject = async (data: projectData): Promise<void> => {
   try {
     const response = await axios({
       method: 'post',
-      url: `${BASE_URL}/project/previous-project`,
+      url: `${BASE_URL}/previous-project`,
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-        'Content-Type': 'multipart/form-data', // 파일 업로드를 위해 필수
+        'Content-Type': 'multipart/form-data',
       },
-      data: formData, // JSON 대신 FormData 사용
+      data: formData,
     });
 
     console.log(response.data);
@@ -31,14 +32,50 @@ export const previousProject = async (data: projectData): Promise<void> => {
 };
 
 //== 프로젝트 가져오기 ==//
-export const getProject =  async (): Promise<void> => {
+export const getProject =  async (type: string): Promise<project[]> => {
   const response = await axios({
     method:'get',
-    url: `${BASE_URL}/project/info`,
+    url: `${BASE_URL}/info`,
+    params: {
+      'projectType': type
+    },
     headers: {
       Authorization: `Bearer ${sessionStorage.getItem("token")}`
     }
   })
 
+  return response.data.data
+}
+
+// 프로젝트 시작하기
+export const startProject = async (checkedList: Number[], boardId: string): Promise<void> => {
+
+  const response = await axios({
+    method: 'post',
+    url: `${BASE_URL}/start`,
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem("token")}`
+    },
+    data: {
+      "freelancerIdList" : checkedList,
+      "boardId" : boardId
+    }
+  })
+
   console.log(response.data)
+}
+
+//== 서명 확인 ==//
+export const signature = async (projectId: string): Promise<void> => {
+  const response = await axios({
+    method: 'patch',
+    url: `${BASE_URL}/${projectId}/contract/sign`,
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem('token')}`
+    },
+    data: {
+      "message": "서명하고 싶은 메시지",
+      "signature": "지갑에서 가져온 서명 값"
+    }
+  })
 }

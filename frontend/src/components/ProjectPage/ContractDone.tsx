@@ -1,7 +1,14 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { getProject } from "../../apis/ProjectApi";
 
 const ContractDone = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    getProject('PROGRESS');
+  }, [])
+
   const toProjectDetail = () => {
     navigate('/project/detail');
   }

@@ -2,6 +2,7 @@ import axios from "axios";
 
 const BASE_URL: string = "http://localhost:8080/api/board";
 
+//== 프로젝트 지원 ==//
 export const projectApply = async (boardId: string): Promise<void> => {
   try {
     const response = await axios({
@@ -13,6 +14,7 @@ export const projectApply = async (boardId: string): Promise<void> => {
     });
 
     return response.data;
+
   } catch (error: any) {
     if (axios.isAxiosError(error)) {
       if (error.response) {
@@ -28,7 +30,7 @@ export const projectApply = async (boardId: string): Promise<void> => {
       console.error("Unexpected error: ", error);
     }
 
-    throw error; // 에러를 호출한 쪽에서 처리할 수 있도록 다시 던짐
+    throw error;
   }
 };
 

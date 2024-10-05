@@ -2,7 +2,7 @@ import axios from "axios"
 import { projectData } from "./Project.type"
 import { project } from "./Board.type";
 
-const BASE_URL: string = "http://localhost:8080/api"
+const BASE_URL: string = "http://localhost:8080/api/project"
 
 //== 이전 프로젝트 등록 ==//
 export const previousProject = async (data: projectData): Promise<void> => {
@@ -17,7 +17,7 @@ export const previousProject = async (data: projectData): Promise<void> => {
   try {
     const response = await axios({
       method: 'post',
-      url: `${BASE_URL}/project/previous-project`,
+      url: `${BASE_URL}/previous-project`,
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         'Content-Type': 'multipart/form-data',
@@ -35,7 +35,7 @@ export const previousProject = async (data: projectData): Promise<void> => {
 export const getProject =  async (type: string): Promise<project[]> => {
   const response = await axios({
     method:'get',
-    url: `${BASE_URL}/project/info`,
+    url: `${BASE_URL}/info`,
     params: {
       'projectType': type
     },
@@ -52,7 +52,7 @@ export const startProject = async (checkedList: Number[], boardId: string): Prom
 
   const response = await axios({
     method: 'post',
-    url: `${BASE_URL}/project/start`,
+    url: `${BASE_URL}/start`,
     headers: {
       Authorization: `Bearer ${sessionStorage.getItem("token")}`
     },
@@ -63,4 +63,19 @@ export const startProject = async (checkedList: Number[], boardId: string): Prom
   })
 
   console.log(response.data)
+}
+
+//== 서명 확인 ==//
+export const signature = async (projectId: string): Promise<void> => {
+  const response = await axios({
+    method: 'patch',
+    url: `${BASE_URL}/${projectId}/contract/sign`,
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem('token')}`
+    },
+    data: {
+      "message": "서명하고 싶은 메시지",
+      "signature": "지갑에서 가져온 서명 값"
+    }
+  })
 }

@@ -21,9 +21,6 @@ export const callNft = () => {
       // ethers.js v6: BrowserProvider 사용
       const provider = new ethers.BrowserProvider(window.ethereum as any);
 
-      // ethers.js v5: Web3Provider 사용
-      // const provider = new ethers.providers.Web3Provider(window.ethereum as any);
-
       const signer = await provider.getSigner(); // 사용자의 서명 계정 가져오기
 
       const nftContract = new ethers.Contract(NFT_CONTRACT_ADDRESS, NFT_ABI, signer);

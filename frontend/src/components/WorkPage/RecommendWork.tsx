@@ -1,13 +1,12 @@
 import { Framework, Language } from "../../apis/Board.type";
-import { freelanceStore } from "../../store/FreelanceStore";
 
 interface RecommendProps {
   title: string;
   classification: string;
-  deposit: string;
+  deposit: number;
   level: string;
-  frameworks: Framework[];
-  languages: Language[];
+  frameworks: Array<{ framework: Framework }>; // frameworks 타입 수정
+  languages: Array<{ language: Language }>;   // languages 타입 수정
 }
 
 const RecommendWork = ({ title, classification, frameworks, languages }: RecommendProps) => {
@@ -40,7 +39,6 @@ const RecommendWork = ({ title, classification, frameworks, languages }: Recomme
           <span className="font-bold text-subTxt">{classification}</span>
           <span className="my-1">사용언어 및 프레임워크</span>
           <span>{languagesList.join(',')}, {frameworksList.join(',')}</span> {/* 언어 목록 */}
-          <p></p> {/* 프레임워크 목록 */}
         </div>
       </div>
 

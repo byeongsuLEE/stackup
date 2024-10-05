@@ -1,7 +1,7 @@
 import { Dayjs } from 'dayjs';
 import { Controller, useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
-import { createProjectProp } from '../../apis/Board.type';
+import { createProjectProp, Framework, Language } from '../../apis/Board.type';
 import { createProject } from '../../apis/BoardApi';
 import AIIcon from '../../icons/AIIcon';
 import DBIcon from '../../icons/DBIcon';
@@ -29,6 +29,7 @@ const WorkForm = () => {
   //== 제출 ==//
   const onSubmit = (information: createProjectProp) => {
     createProject(information)
+    console.log(information)
     console.log(information.frameworks)
     console.log(information.languages)
     //== 나중에 수정하기 ==//
@@ -36,8 +37,8 @@ const WorkForm = () => {
   }
 
   //== 언어 선택 ==//
+  const languageList = watch('languages');
   const choiceLanguage = (value: string) => {
-    const languageList = watch('languages');
     if (languageList.includes(value)) {
       setValue('languages', languageList.filter(item => item != value));
     } else {
@@ -46,8 +47,8 @@ const WorkForm = () => {
   };
 
   //== 프레임워크 선택 ==//
+  const frameworkList = watch('frameworks')
   const choiceFramework = (value: string) => {
-    const frameworkList = watch('frameworks')
 
     if (frameworkList.includes(value)) {
       setValue('frameworks', frameworkList.filter(item => item != value));
@@ -76,10 +77,10 @@ const WorkForm = () => {
       // 선택된 값을 업데이트
       setValue("classification", res.data.classification);
       console.log(res.data.classification)
-      const languageIds: string[] = res.data.languages.map(language => language.languageId.toString())
+      const languageIds: string[] = res.data.languages.map((language : Language) => language.languageId.toString())
       setValue("languages", languageIds);
       // res.data.frameworks에서 frameworkId만 추출하여 설정
-      const frameworkIds: string[] = res.data.frameworks.map(framework => framework.frameworkId.toString());
+      const frameworkIds: string[] = res.data.frameworks.map((framework : Framework) => framework.frameworkId.toString());
       setValue('frameworks', frameworkIds);
     } catch (error) {
       console.error('Error:', error);
@@ -213,23 +214,23 @@ const WorkForm = () => {
             control={control}
             render={({ field: { value, onChange } }) => (
               <div className="flex" onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}>
-                <Major major={WebIcon} title="웹" name="category" value="web" checked={value === "web"} onChange={onChange} />
-                <Major major={MobileIcon} title="모바일" name="category" value="mobile" checked={value === "mobile"} onChange={onChange} />
-                <Major major={PublisherIcon} title="퍼블리셔" name="category" value="publisher" checked={value === "publisher"} onChange={onChange} />
-                <Major major={AIIcon} title="AI" name="category" value="ai" checked={value === "ai"} onChange={onChange} />
-                <Major major={DBIcon} title="DB" name="category" value="db" checked={value ==="db"} onChange={onChange} />
+                <Major major={WebIcon} title="웹" category='classification' name="web" value="web" checked={value === "web"} onChange={onChange} />
+                <Major major={MobileIcon} title="모바일" category='classification' name="mobile" value="mobile" checked={value === "mobile"} onChange={onChange} />
+                <Major major={PublisherIcon} title="퍼블리셔" category='classification' name="publisher" value="publisher" checked={value === "publisher"} onChange={onChange} />
+                <Major major={AIIcon} title="AI" category='classification' name="ai" value="ai" checked={value === "ai"} onChange={onChange} />
+                <Major major={DBIcon} title="DB" category='classification' name="db" value="db" checked={value ==="db"} onChange={onChange} />
               </div>
             )}
           />
           <span>프로젝트 레벨</span>
           <Controller
-            name="levels"
+            name="level"
             control={control}
             render={({ field: { onChange } }) => (
               <div className="flex" onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}>
-                <Major category='level' major={JuniorIcon} title="주니어" name="levels" value="JUNIOR" />
-                <Major category='level' major={MidIcon} title="미드" name="levels" value="MID" />
-                <Major category='level' major={SeniorIcon} title="시니어" name="levels" value="SENIOR" />
+                <Major category='level' major={JuniorIcon} title="주니어" name="junior" value="JUNIOR" />
+                <Major category='level' major={MidIcon} title="미드" name="mid" value="MID" />
+                <Major category='level' major={SeniorIcon} title="시니어" name="senior" value="SENIOR" />
               </div>
             )}
           />
@@ -307,7 +308,7 @@ const WorkForm = () => {
           />
 
           <div className="flex justify-end mt-10">
-            <Button type="submit" height={40} width={100} title="등록하기" onClick={onSubmit} />
+            <Button height={40} width={100} title="등록하기" />
           </div>
 
         </div>

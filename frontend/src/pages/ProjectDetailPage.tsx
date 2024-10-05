@@ -1,8 +1,17 @@
 import InfoBox from "../components/WorkPage/InfoBox";
 import DoneButton from "../components/common/DoneButton";
 import WebIcon from "../icons/WebIcon";
+import { useNavigate } from "react-router-dom";
 
 const ProjectDetail = () => {
+  const navigate = useNavigate(); // navigate 훅 초기화
+  const userId = 14; // 임시 userId
+  const projectId = 31; // 임시 projectId 
+
+  const handleNavigateToMitermForm = () => {
+    console.log("이동")
+    navigate(`/evaluate/final/${projectId}`, { state: { userId } }); // MitermForm으로 이동
+  };
   return (
     <div className="m-20 flex items-center flex-col">
       <div className="bg-bgGreen border border-mainGreen rounded-xl w-[1000px] mb-5 p-5 h-[120px] flex flex-col">
@@ -48,7 +57,7 @@ const ProjectDetail = () => {
             <span>연락이 빠른 프리랜서를 원합니다.</span>
           </div>
         </div>
-        <div className="text-end">
+        <div className="text-end" onClick={handleNavigateToMitermForm}>
           <DoneButton width={100} height={30} title="단계 완료" />
         </div>
 

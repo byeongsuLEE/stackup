@@ -28,12 +28,12 @@ const RecommendWork = ({ title, classification, frameworks, languages }: Recomme
   const frameworksList = frameworks.map(framework => framework.framework.name);
   const languagesList = languages.map(language => language.language.name);
 
-  const name = freelanceStore((state) => state.name); 
+  
 
   console.log(name)
   return (
     <div>
-      <span className="text-start">{name}님을 위한 추천 프로젝트</span>
+      
       <div className="flex justify-between">
         <div className="flex flex-col bg-bgGreen mx-1 mt-3 w-[300px] h-[150px] border border-mainGreen rounded-xl px-5 py-5">
           <span className="font-bold text-xl">{title}</span>

@@ -63,7 +63,7 @@ function App() {
               <Route path="/signup/freelancer" element={<FreelancerSignup />} />
               <Route path="/signup/freelancer/skill" element={<FreelancerSkill />} />
               <Route path="/evaluate/miterm/:projectId" element={<MitermEvaluate />} />
-              <Route path="/evaluate/final" element={<FinalEvaluate />} />
+              <Route path="/evaluate/final/:projectId" element={<FinalEvaluate />} />
               <Route path="/transfer" element={<Transfer />} />
               <Route path="/callback" element={<Callback />} />
             </Routes>

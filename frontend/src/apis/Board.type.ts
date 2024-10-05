@@ -11,8 +11,8 @@ export interface createProjectProp {
     address: string;
     requirements: string;
     classification: string;
-    frameworks: Pick<Framework, 'frameworkId'>[]; // 'frameworkId'만 사용
-    languages: Pick<Language, 'languageId'>[];   // 'languageId'만 사용
+    frameworks: string[]; // 'frameworkId'만 사용
+    languages: string[];   // 'languageId'만 사용
     level: string;
 }
 
@@ -25,7 +25,7 @@ export interface project {
     classification: string,
     frameworks: Framework[],
     languages: Language[],
-    deposit: string,
+    deposit: number,
     startDate: Date,
     period: string,
     recruits: number,
@@ -61,11 +61,11 @@ export const projectBasic = {
     boardId: '',
     title: '',
     description: '',
-    levels: 0,
+    level: '',
     classification: '',
     frameworks: [],
     languages: [],
-    deposit: '',
+    deposit: 0,
     startDate: new Date(),
     period: '',
     recruits: 0,
@@ -121,8 +121,8 @@ export interface recommend {
     description: string;
     deposit: number;
     classification: string;
-    frameworks: Framework[];
-    languages: Language[];
+    frameworks: Array<{ framework: Framework }>; // frameworks 타입 수정
+    languages: Array<{ language: Language }>;   // languages 타입 수정
     level: string;
     boardId: number;
 }

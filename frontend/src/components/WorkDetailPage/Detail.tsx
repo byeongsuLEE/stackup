@@ -139,9 +139,21 @@ const Detail = ({ project, clientId }: DetailProps) => {
             <span>기타 요구사항</span>
           </div>
           <div className="flex flex-col">
-          <div className="flex items-center">
-            <span>{project.deadline.toString()}</span>
-            <span className="text-xs ml-2 text-red-400">마감 {remainDay}일 전</span>
+            <div className="flex items-center">
+              <span>{project.deadline.toString()}</span>
+              <span className="text-xs ml-2 text-red-400">마감 {remainDay}일 전</span>
+            </div>
+            <span>{project.recruits} 명</span>
+            <span>{project.startDate.toString()}</span>
+            <span>{workType}</span>
+
+            {/* 수정필요 => 데이터 안옴*/}
+            <span>{languagesList.join(', ')}</span>
+            <span>{frameworksList.join(', ')}</span>
+            {/* <span>{frameworksString}</span>
+            <span>{languagesString}</span> */}
+            {/* 수정 필요 */}
+            <span>{project.requirements}</span>
           </div>
           <span>{project.recruits} 명</span>
           <span>{project.startDate.toString()}</span>

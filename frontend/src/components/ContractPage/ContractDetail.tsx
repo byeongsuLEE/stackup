@@ -3,8 +3,8 @@ import { useParams } from "react-router-dom";
 import { projectDetail } from "../../apis/BoardApi";
 import { addDays, format } from "date-fns";
 import { useEffect, useState } from "react";
-import { selectedCandidate } from "../../apis/FreelancerApi";
 import { candidate } from "../../apis/Freelancer.type";
+import { selectedCandidate } from "../../apis/ClientApi";
 
 const ContractDetail = () => {
   const boardId = useParams().boardId;
@@ -36,7 +36,7 @@ const ContractDetail = () => {
 const endDate = format(addDays(project.startDate, parseInt(project.period, 10)), 'yyyy-MM-dd')
 
 
-console.log(endDate); // 계산된 종료 날짜 출력
+console.log(endDate);
 
   const today = new Date();
   return (

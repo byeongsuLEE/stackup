@@ -1,5 +1,4 @@
 import axios from "axios";
-import { candidate } from "./Freelancer.type";
 
 const BASE_URL: string = "http://localhost:8080/api/board";
 
@@ -46,17 +45,4 @@ export const appliedProject = async (): Promise<any> => {
   })
   console.log(response.data)
   return response.data
-}
-
-//== 선택된 지원자 리스트 ==//
-export const selectedCandidate = async (boardId?: string): Promise<candidate[]> => {
-  const response = await axios({
-    method: 'get',
-    url: `${BASE_URL}/${boardId}/selected-applicant-list`,
-    headers: {
-      Authorization: `Bearer ${sessionStorage.getItem('token')}`
-    }
-  })
-
-  return response.data;
 }

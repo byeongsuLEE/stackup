@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import Group from "../components/ProjectGroupPage/Group";
-import { selectedCandidate } from "../apis/FreelancerApi";
 import { useParams } from "react-router-dom";
 import { candidate } from "../apis/Freelancer.type";
+import { selectedCandidate } from "../apis/ClientApi";
 
 const ProjectGroup = () => {
   const { boardId } = useParams<string>();

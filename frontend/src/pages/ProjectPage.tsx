@@ -6,6 +6,7 @@ import React from 'react';
 import ContractDone from '../components/ProjectPage/ContractDone';
 import SignList from '../components/ProjectPage/SignList';
 import AppliedWork from '../components/ProjectPage/AppliedWork';
+import MyWork from '../components/ProjectPage/MyWork';
 
 const Project = () => {
   const [value, setValue] = React.useState('1');
@@ -32,7 +33,12 @@ const Project = () => {
           <div className='flex justify-center'>
           <TabPanel value="1">
               <div className='mt-5'>
-                <AppliedWork />
+                {sessionStorage.getItem('userType') === 'client' ? (
+                  <MyWork />
+                ) : (
+                  <AppliedWork />
+                )}
+                
               </div>
             </TabPanel>
             <TabPanel value="2">

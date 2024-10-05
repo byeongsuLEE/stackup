@@ -2,41 +2,36 @@ import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import { projectDetail } from "../../apis/BoardApi";
 import { addDays, format } from "date-fns";
-import { useEffect, useState } from "react";
-import { candidate } from "../../apis/Freelancer.type";
 import { selectedCandidate } from "../../apis/ClientApi";
 
 const ContractDetail = () => {
   const boardId = useParams().boardId;
   const { candidateId } = useParams<string>();
 
-  const [ candidate, setCandidate ] = useState<candidate>();
-
-  const { data: project, isLoading } = useQuery({
+  const { data: project, isLoading: isProjectLoading } = useQuery({
     queryKey: ['project', 'boardId'],
     queryFn: () => projectDetail(boardId!),  // 화살표 함수로 감싸서 함수 참조 전달
     enabled: !!boardId,
   });
-
-  useEffect(() => {
-    const update = async () => {
+  
+  const { data: candidate, isLoading: isCandidateLoading, isError: isLoadingError } = useQuery({
+    queryKey: ['candidate', boardId, candidateId],
+    queryFn: async () => {
       const data = await selectedCandidate(boardId);
-      const candidateData = data.filter(item => item.id == candidateId)
-
-      setCandidate(candidateData[0])
-    }
-    update();
-  }, [])
-
-  if (isLoading) {
+      return data.find(item => item.id == candidateId);
+    },
+    enabled: !!boardId && !!candidateId,
+  });
+  
+  if (isProjectLoading || isCandidateLoading) {
     return <div>Loading...</div>;
-
   }
- 
-const endDate = format(addDays(project.startDate, parseInt(project.period, 10)), 'yyyy-MM-dd')
+  
+  if (isLoadingError) {
+    return <div>Error loading candidate data.</div>;
+  }
 
-
-console.log(endDate);
+const endDate = format(addDays(project.startDate, parseInt(project.period, 10)), 'yyyy-MM-dd');
 
   const today = new Date();
   return (

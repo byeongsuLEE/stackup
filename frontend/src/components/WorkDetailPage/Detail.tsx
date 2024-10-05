@@ -147,32 +147,22 @@ const Detail = ({ project, clientId }: DetailProps) => {
             <span>{project.startDate.toString()}</span>
             <span>{workType}</span>
 
-            {/* 수정필요 => 데이터 안옴*/}
             <span>{languagesList.join(', ')}</span>
             <span>{frameworksList.join(', ')}</span>
-            {/* <span>{frameworksString}</span>
-            <span>{languagesString}</span> */}
-            {/* 수정 필요 */}
             <span>{project.requirements}</span>
           </div>
-          <span>{project.recruits} 명</span>
-          <span>{project.startDate.toString()}</span>
-          <span>{workType}</span>
-
-          <span>{languagesList.join(", ")}</span>
-          <span>{frameworksList.join(", ")}</span>
-          <span>{project.requirements}</span>
-        </div>
         </div>
 
-        <div className="bg-subTxt w-auto h-[1px] flex justify-center my-10"></div>
-
-        <div>
-          <div className="font-bold text-lg mb-2">업무 내용</div>
-          <br />
-          <span><pre>{project.description}</pre></span>
+          <div className="bg-subTxt w-auto h-[1px] flex justify-center my-10"></div>
+          <div>
+            <div className="font-bold text-lg mb-2">업무 내용</div>
+            <br />
+            <span><pre>{project.description}</pre></span>
+          </div>
         </div>
-      </div>
+
+        
+
     </>
   );
 };

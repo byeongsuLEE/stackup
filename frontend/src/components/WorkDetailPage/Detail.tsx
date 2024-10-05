@@ -101,21 +101,21 @@ const Detail = ({ project, clientId }: DetailProps) => {
           <span className="text-subTxt text-sm">{project?.client.businessName} _ 평점 {project?.client.totalScore}wja</span>
         </div>
         <div className="flex justify-end">
-        {window.sessionStorage.getItem("userType") === "freelancer" ? (
-          <div onClick={projectApplyHandler}>
-            <DoneButton width={100} height={25} title="지원하기" />
-          </div>
-        ) : sessionClientId == clientId && (
-          <div className="flex">
-            <div onClick={toCandidate}>
-              <DoneButton width={100} height={25} title="지원자 관리" />
+          {window.sessionStorage.getItem("userType") === "freelancer" ? (
+            <div onClick={projectApplyHandler}>
+              <DoneButton width={100} height={25} title="지원하기" />
             </div>
-            <Payment boardId={boardId} />
-            <button onClick={deleteProject} className="bg-subGreen2 text-bgGreen font-bold text-sm px-3 rounded-lg ml-2">
-              삭제하기
-            </button>
-          </div>
-        ) }
+          ) : sessionClientId == clientId && (
+            <div className="flex">
+              <div onClick={toCandidate}>
+                <DoneButton width={100} height={25} title="지원자 관리" />
+              </div>
+              <Payment boardId={boardId} />
+              <button onClick={deleteProject} className="bg-subGreen2 text-bgGreen font-bold text-sm px-3 rounded-lg ml-2">
+                삭제하기
+              </button>
+            </div>
+          )}
 
         </div>
 
@@ -150,29 +150,23 @@ const Detail = ({ project, clientId }: DetailProps) => {
             {/* 수정필요 => 데이터 안옴*/}
             <span>{languagesList.join(', ')}</span>
             <span>{frameworksList.join(', ')}</span>
-            {/* <span>{frameworksString}</span>
-            <span>{languagesString}</span> */}
             {/* 수정 필요 */}
             <span>{project.requirements}</span>
           </div>
-          <span>{project.recruits} 명</span>
-          <span>{project.startDate.toString()}</span>
-          <span>{workType}</span>
-
-          <span>{languagesList.join(", ")}</span>
-          <span>{frameworksList.join(", ")}</span>
-          <span>{project.requirements}</span>
-        </div>
         </div>
 
-        <div className="bg-subTxt w-auto h-[1px] flex justify-center my-10"></div>
 
-        <div>
-          <div className="font-bold text-lg mb-2">업무 내용</div>
-          <br />
-          <span><pre>{project.description}</pre></span>
+        <div className="bg-subTxt w-auto h-[1px] flex justify-start my-10">
+          <div>
+            <div className="font-bold text-lg mb-2">업무 내용</div>
+            <br />
+            <span><pre>{project.description}</pre></span>
+          </div>
         </div>
+
       </div>
+
+
     </>
   );
 };

@@ -1,7 +1,6 @@
 import axios from "axios";
 import { projectFilterStore } from "../store/ProjectStore";
 import { createProjectProp, project, projectApplicantProps, recommend } from "./Board.type";
-import { useNavigate } from "react-router-dom";
 
 const BASE_URL: string = "http://localhost:8080/api/board";
 
@@ -155,7 +154,7 @@ export const recommendProject = async (): Promise<recommend[]> => {
 }
 
 // 프로젝트 지원자 조회
-export const projectApplicant = async (boardId: string): Promise<projectApplicantProps[]> => {
+export const projectApplicant = async (boardId?: string): Promise<projectApplicantProps[]> => {
     try {
         const response = await axios({
             method: 'get',

@@ -8,6 +8,10 @@ const AppliedBox = ({ title, client, period, startDate,boardId }: project) => {
     navigate(`/work/detail/${boardId}`);
   }
 
+  if (period === '일') {
+    period = '0'
+  }
+
   const projectPeriod = startDate + ' ~ ' + format(addDays(startDate, parseInt(period, 10)), 'yyyy-MM-dd');
   return (
     <div onClick={toDetail} className="bg-bgGreen border my-2 border-mainGreen h-[150px] w-full rounded-lg p-5 flex justify-between items-center">

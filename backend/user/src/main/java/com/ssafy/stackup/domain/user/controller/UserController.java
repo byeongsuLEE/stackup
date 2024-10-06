@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.shaded.com.google.protobuf.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -115,6 +116,16 @@ public class UserController {
              return ResponseEntity.badRequest().body(ApiResponse.error(HttpStatus.BAD_REQUEST,isValidBusinessNum,"등록되지않은 사업자번호입니다."));
          }
 
+    }
+
+
+    @PatchMapping("/info/second-password")
+    public ResponseEntity<ApiResponse<String>> setSecondPassword(@RequestBody UserInfoResponseDto userRequestInfo){
+           userService.setSecondPassword(userRequestInfo);
+
+
+           return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("2차 비밀번호 저장 완료"));
+           
     }
 
 

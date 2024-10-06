@@ -5,25 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="770a738c-7cff-4cbe-947d-9fe8c12c7597" name="Changes" comment="init : msa 기본구조">
-      <change afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/dto/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-10-04__9_28__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-10-04__9_28__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-10-04__9_28__Changes_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-10-04__9_28__Changes_1.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/jwt/AuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/jwt/AuthenticationFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/jwt/JwtExceptionFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/jwt/JwtExceptionFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/util/BadWordFilter.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/util/RedisUtil.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/util/UserUtil.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/response/ErrorCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/response/ErrorCode.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/controller/AccountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/controller/AccountController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/entity/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/entity/Account.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/service/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/service/AccountService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/service/TransactionsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/service/TransactionsService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/service/TransferService.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/service/TransferService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/service/WonAuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/service/WonAuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/common/jwt/TokenProvider.java" beforeDir="false" afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/common/jwt/TokenProvider.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/dto/response/UserInfoResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/dto/response/UserInfoResponseDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/service/UserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/service/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/service/UserServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -197,6 +188,7 @@
       <workItem from="1727309685358" duration="13678000" />
       <workItem from="1727338437542" duration="252000" />
       <workItem from="1727758712646" duration="734000" />
+      <workItem from="1728189744624" duration="7846000" />
     </task>
     <task id="LOCAL-00001" summary="test : pull 오류로 test">
       <option name="closed" value="true" />

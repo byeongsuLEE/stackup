@@ -7,6 +7,7 @@ import com.ssafy.stackup.common.response.ApiResponse;
 import com.ssafy.stackup.common.response.ErrorCode;
 import com.ssafy.stackup.common.util.RedisUtil;
 import com.ssafy.stackup.domain.account.dto.User;
+import com.ssafy.stackup.domain.account.service.AccountService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -64,7 +65,6 @@ public class AuthenticationFilter extends OncePerRequestFilter {
                     .id(userId)
                     .userType(userType)
                     .build();
-
 
             Authentication authentication  = new UsernamePasswordAuthenticationToken(userInfo, null,authorities);
             SecurityContextHolder.getContext().setAuthentication(authentication);

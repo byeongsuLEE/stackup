@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User,Long> {
     Optional<User> findByEmail(String email);
-    User findByUserAddress(String userAddress);
+    Optional<User> findByUserAddress(String userAddress);
 
 
     // 연관된 projects와 roles을 즉시 로드

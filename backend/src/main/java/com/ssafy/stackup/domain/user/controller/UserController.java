@@ -19,6 +19,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -117,6 +119,13 @@ public class UserController {
 
     }
 
+
+    @PatchMapping("/{userId}/address")
+    public ResponseEntity<ApiResponse<String>> setAddress (@PathVariable Long userId, @RequestBody Map<String, String> requestBody){
+        String address = requestBody.get("address");
+        userService.setAddress(userId,address);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("주소 등록완료"));
+    }
 
 
 

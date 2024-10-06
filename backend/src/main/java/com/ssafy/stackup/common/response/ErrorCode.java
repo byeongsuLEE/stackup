@@ -42,6 +42,7 @@ public enum ErrorCode {
     BOARD_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 모집 게시글을 찾을 수 없습니다."),
     CLIENT_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 클라이언트를 찾을 수 없습니다."),
     PROJECT_NOT_FOUND(HttpStatus.NOT_FOUND,"진행중인 해당 프로젝트를 찾을 수 없습니다."),
+    ADDRESS_NOT_REGISTER(HttpStatus.NOT_FOUND," 회원의 전자지갑이 등록되지 않았습니다."),
     PROJECT_ALREADY_EXISTS(HttpStatus.CONFLICT,"해당 모집 게시글에 해당 프로젝트가 이미 존재합니다" );
     private HttpStatus status;
     private String message;

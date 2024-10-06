@@ -196,7 +196,12 @@ public class ProjectServiceImpl implements ProjectService {
         try{
             String loggedInUserAddress = userService.getUserAddress(userId);
 
-            // 요청에서 서명한 지갑 주소와 로그인한 사용자의 지갑 주소 비교
+            if(loggedInUserAddress ==null  || user.getUserAddress() == null){
+                throw new CustomException(ErrorCode.ADDRESS_NOT_REGISTER);
+            }
+
+
+            // 요청에서 서명한 지갑 주소와 로그인한 사용자의 지갑 주소 비교  ==> 나중에 추가해야함!!@
             if (!user.getUserAddress().equalsIgnoreCase(loggedInUserAddress)) {
                 return ResponseEntity.badRequest().body(ApiResponse.error(HttpStatus.BAD_REQUEST,false,"지갑 주소가 일치하지 않습니다."));
             }

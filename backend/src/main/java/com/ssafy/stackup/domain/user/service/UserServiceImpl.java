@@ -353,6 +353,13 @@ public class UserServiceImpl implements UserService {
         return freelancerLoginResponseDto;
     }
 
+    @Override
+    public void setAddress(Long userId, String address) {
+        User user = userRepository.findById(userId).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+        user.updateAddress(address);
+        userRepository.save(user);
+    }
+
     /**
      * @param tokenDto 로그인 시 발급한 토큰 데이터
      * @param response 토큰을 헤더에 추가하기 위한 servlet

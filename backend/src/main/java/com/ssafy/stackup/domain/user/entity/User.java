@@ -89,6 +89,10 @@ public abstract class User {
         this.reportedCount = reportedCount;
     }
 
+
+    public void updateAddress(String address){
+            this.userAddress = address;
+    }
     // 특정 역할이 있는지 확인하는 메서드
     public boolean hasRole(String role) {
         return roles != null && roles.contains(role);

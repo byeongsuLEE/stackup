@@ -96,6 +96,10 @@ public class ProjectServiceImpl implements ProjectService {
         Board board = boardRepository.findById(request.getBoardId())
                 .orElseThrow(()-> new CustomException(ErrorCode.BOARD_NOT_FOUND));
 
+        if (board.getProject() != null) {
+            throw new CustomException(ErrorCode.PROJECT_ALREADY_EXISTS);
+        }
+
         //프로젝트 등록
         Project project = Project.builder()
                 .title(board.getTitle())

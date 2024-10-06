@@ -41,7 +41,8 @@ public enum ErrorCode {
     OAUTH2_USER_NOT_FOUND(HttpStatus.UNAUTHORIZED,"OAuth2 인증 과정에서 사용자 정보를 불러오지 못했습니다."),
     BOARD_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 모집 게시글을 찾을 수 없습니다."),
     CLIENT_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 클라이언트를 찾을 수 없습니다."),
-    PROJECT_NOT_FOUND(HttpStatus.NOT_FOUND,"진행중인 해당 프로젝트를 찾을 수 없습니다.");
+    PROJECT_NOT_FOUND(HttpStatus.NOT_FOUND,"진행중인 해당 프로젝트를 찾을 수 없습니다."),
+    PROJECT_ALREADY_EXISTS(HttpStatus.CONFLICT,"해당 모집 게시글에 해당 프로젝트가 이미 존재합니다" );
     private HttpStatus status;
     private String message;
 }

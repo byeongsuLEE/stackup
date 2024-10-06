@@ -19,7 +19,7 @@ public class Project{
     @Column(name = "project_id",  unique = true, nullable = false)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
     private Client client;
 

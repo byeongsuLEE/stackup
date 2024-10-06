@@ -19,7 +19,7 @@ export const allProject = async (page: number, size: number): Promise<{ data: pr
             }
         });
 
-        console.log(response.data.content);
+        console.log(response.data);
         
         // isCharged가 true인 항목을 위로 정렬
         // const sortedBoards = [...response.data.data].sort((a, b) => {

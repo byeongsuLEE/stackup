@@ -21,7 +21,7 @@ export const selectedCandidate = async (boardId?: string): Promise<candidate[]> 
   export const myBoard = async (): Promise<project[]> => {
     const response = await axios({
         method: 'get',
-        url: `${BASE_URL}/client/${sessionStorage.getItem('clientId')}`,
+        url: `${BASE_URL}/client/${sessionStorage.getItem('userId')}`,
         headers: {
             Authorization: `Bearer ${sessionStorage.getItem('token')}`
         }

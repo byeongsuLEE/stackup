@@ -43,7 +43,7 @@ export const getProject =  async (type: string): Promise<project[]> => {
       Authorization: `Bearer ${sessionStorage.getItem("token")}`
     }
   })
-
+  console.log(response.data.data)
   return response.data.data
 }
 

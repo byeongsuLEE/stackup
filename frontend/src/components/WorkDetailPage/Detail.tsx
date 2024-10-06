@@ -10,6 +10,9 @@ import InfoBox from "../WorkPage/InfoBox";
 import DoneButton from "../common/DoneButton";
 import { projectDelete } from "../../apis/BoardApi";
 import Payment from "../../pages/PullupPage";
+import axios from "axios";
+
+const svURL = import.meta.env.VITE_SERVER_URL;
 
 interface DetailProps {
   project: ProjectType;
@@ -19,6 +22,8 @@ interface DetailProps {
 const Detail = ({ project, clientId }: DetailProps) => {
   const [sessionClientId, setSessionClientId] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isAnomaly, setIsAnomaly] = useState<boolean | null>(null); // is_anomaly 상태
+  const [loading, setLoading] = useState(true); // 로딩 상태
 
   const boardId = project.boardId;
   const navigate = useNavigate();
@@ -88,7 +93,23 @@ const Detail = ({ project, clientId }: DetailProps) => {
     fetchSessionClientId();
   }, []); // 빈 배열로 설정하면 컴포넌트가 마운트될 때 한 번만 실행
 
-  if (!isLoaded) {
+   // boardId를 이용해 anomaly 확인
+   useEffect(() => {
+    const checkAnomaly = async () => {
+      try {
+        const response = await axios.get(`${svURL}/detect/illegal/${boardId}`);
+        setIsAnomaly(response.data.is_anomaly[0]);
+      } catch (error) {
+        console.error("Error fetching anomaly data:", error);
+      } finally {
+        setLoading(false); // 로딩 완료
+      }
+    };
+
+    checkAnomaly();
+  }, [boardId]);
+
+  if (!isLoaded || loading) {
     // 데이터가 아직 로드되지 않았다면 로딩 화면 표시
     return <div>Loading...</div>;
   }
@@ -123,6 +144,11 @@ const Detail = ({ project, clientId }: DetailProps) => {
 
         <div className="flex justify-center mb-10">
           <InfoBox title="예상 금액" category="deposit" content={project.deposit} info={PriceIcon} />
+          {isAnomaly !== null && (
+            <span className={`ml-2 ${isAnomaly ? "text-red-500" : "text-green-500"}`}>
+              {isAnomaly ? "⚠️" : "✅"}
+            </span>
+          )}
           <InfoBox title="예상 기간" category="period" content={project.period} info={PeriodIcon} />
           <InfoBox title="지원자 수" category="applicants" content={project.applicants} info={CandidateIcon} />
         </div>

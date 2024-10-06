@@ -42,17 +42,19 @@ export const submitContract = async (data: any, freelancerProjectId?: string): P
      console.log(response.data)
   }
   
+  
   //== 서명 확인 ==//
-  export const signature = async (projectId: string): Promise<void> => {
+  export const signature = async (sign?: string, projectId?: string): Promise<void> => {
+    console.log(sign)
     const response = await axios({
-      method: 'patch',
+      method: 'post',
       url: `${BASE_URL}/${projectId}/contract/sign`,
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem('token')}`
       },
       data: {
-        "message": "서명하고 싶은 메시지",
-        "signature": "지갑에서 가져온 서명 값"
+        "message": "서명완료",
+        "signature": sign
       }
     })
 

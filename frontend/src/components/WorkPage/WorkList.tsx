@@ -4,25 +4,31 @@ import { projectFilterStore } from "../../store/ProjectStore";
 import { project } from "../../apis/Board.type";
 import { useEffect, useState } from "react";
 import Work from "./Work";
+import { Pagination } from "@mui/material";
 
 
 const WorkList = () => {
-  
+  const [page, setPage] = useState(0); // 페이지를 0부터 시작하도록 수정
+  const [totalPages, setTotalPages] = useState(1);
+  const itemsPerPage = 5; // 페이지 당 항목 수 설정
+  const [projectList, setProjectList] = useState<project[]>([]);
+
+
   const navigate = useNavigate();
   const toWorkDetail = (id: string) => {
     navigate(`/work/detail/${id}`);
   }
 
-  const [projectList, setProjectList] = useState<project[]>([]);
-  
+
   const update = async () => {
-    const data = await allProject();
+    const {data, totalPages} = await allProject(page, itemsPerPage);
     setProjectList(data)
+    setTotalPages(totalPages);
   }
   useEffect(() => {
     update();
     // console.log("프로젝트 목록", projectList)
-  }, [])
+  }, [page])
 
   //== projectList 반환 ==//
   const state = projectFilterStore();
@@ -51,16 +57,21 @@ const WorkList = () => {
     filter();
   }
 
+  // 페이지 변경 핸들러
+  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value - 1); // 페이지 번호를 0부터 시작하도록 조정
+  }
+
   return (
     <div>
       <span className="font-bold text-xl text-subGreen1">프로젝트 찾기</span>
 
       <div className="mt-5">
         <select
-        defaultValue="classification"
-        className="bg-bgGreen text-center text-sm mx-2 border border-mainGreen w-[90px] h-[30px] rounded-2xl"
-        name="category"
-        onChange={(e) => choice(e.target.value, "classification")}
+          defaultValue="classification"
+          className="bg-bgGreen text-center text-sm mx-2 border border-mainGreen w-[90px] h-[30px] rounded-2xl"
+          name="category"
+          onChange={(e) => choice(e.target.value, "classification")}
         >
           <option value="null">대분류</option>
           <option value="web">웹</option>
@@ -71,10 +82,10 @@ const WorkList = () => {
         </select>
 
         <select
-        defaultValue="workType"
-        className="bg-bgGreen mx-2 text-center text-sm border border-mainGreen w-[90px] h-[30px] rounded-2xl"
-        name="category"
-        onChange={(e) => choice(e.target.value, "workType")}
+          defaultValue="workType"
+          className="bg-bgGreen mx-2 text-center text-sm border border-mainGreen w-[90px] h-[30px] rounded-2xl"
+          name="category"
+          onChange={(e) => choice(e.target.value, "workType")}
         >
           <option value="null">근무형태</option>
           <option value="true">재택</option>
@@ -82,10 +93,10 @@ const WorkList = () => {
         </select>
 
         <select
-        defaultValue="budget"
-        className="bg-bgGreen mx-2 text-center text-sm border border-mainGreen w-[90px] h-[30px] rounded-2xl"
-        name="category"
-        onChange={(e) => choice(e.target.value, "budget")}
+          defaultValue="budget"
+          className="bg-bgGreen mx-2 text-center text-sm border border-mainGreen w-[90px] h-[30px] rounded-2xl"
+          name="category"
+          onChange={(e) => choice(e.target.value, "budget")}
         >
           <option value="null">금액</option>
           <option value="1">500만원 미만</option>
@@ -98,9 +109,20 @@ const WorkList = () => {
 
       {projectList?.map((project: project, index: number) => (
         <div onClick={() => toWorkDetail(project.boardId)} className="mb-10" key={index}>
-        <Work {...project}/>
-      </div>
+          <Work {...project} />
+        </div>
       ))}
+
+      {/* 페이징 컴포넌트 */}
+      <div className="flex justify-center mt-4">
+        <Pagination
+          count={totalPages}
+          page={page + 1}
+          onChange={handlePageChange}
+          variant="outlined"
+          shape="rounded"
+        />
+      </div>
     </div>
   )
 }

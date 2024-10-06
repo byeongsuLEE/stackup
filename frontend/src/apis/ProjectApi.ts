@@ -44,7 +44,6 @@ export const getProject =  async (type: string): Promise<project[]> => {
     }
   })
   console.log(response.data.data)
-
   return response.data.data
 }
 

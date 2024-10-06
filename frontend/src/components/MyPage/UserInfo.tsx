@@ -5,6 +5,10 @@ import Major from "../SignupPage/Major";
 import Skill from "../SignupPage/Skill";
 import DoneButton from "../common/DoneButton";
 import { registerFreelancerInfo } from "../../apis/UserApi";
+import MobileIcon from "../../icons/MobileIcon";
+import PublisherIcon from "../../icons/PublisherIcon";
+import AIIcon from "../../icons/AIIcon";
+import DBIcon from "../../icons/DBIcon";
 
 const UserInfo = (data: freelanceInformation) => {
   const [local, setLocal] = useState({
@@ -88,10 +92,10 @@ const UserInfo = (data: freelanceInformation) => {
           <span>대분류</span>
           <div className="flex">
             <Major major={WebIcon} title="웹" name="category" value="web" />
-            <Major major={WebIcon} title="모바일" name="category" value="mobile" />
-            <Major major={WebIcon} title="퍼블리셔" name="category" value="publisher" />
-            <Major major={WebIcon} title="AI" name="category" value="ai" />
-            <Major major={WebIcon} title="DB" name="category" value="db" />
+            <Major major={MobileIcon} title="모바일" name="category" value="mobile" />
+            <Major major={PublisherIcon} title="퍼블리셔" name="category" value="publisher" />
+            <Major major={AIIcon} title="AI" name="category" value="ai" />
+            <Major major={DBIcon} title="DB" name="category" value="db" />
           </div>
 
           <span>사용언어(중복선택 가능)</span>

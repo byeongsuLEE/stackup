@@ -27,5 +27,7 @@ export const selectedCandidate = async (boardId?: string): Promise<candidate[]> 
         }
     })
 
-    return response.data.data
+    return response.data.data;
   }
+
+  

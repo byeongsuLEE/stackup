@@ -6,7 +6,7 @@ const BASE_URL: string = "http://localhost:8080/api/board";
 
 //== 프로젝트 목록 조회 ==//
 export const allProject = async (): Promise<project[]> => {
-    
+
     try {
         const response = await axios({
             method: 'get',
@@ -16,12 +16,13 @@ export const allProject = async (): Promise<project[]> => {
             }
         })
         console.log(response.data)
-        
+
         // isCharged가 true인 항목을 위로 정렬
-        const sortedBoards = [...response.data.data].sort((a, b) => {
-            return Number(b.isCharged) - Number(a.isCharged);
-        });
-        return sortedBoards
+        const sortedBoards = Array.isArray(response.data)
+            ? [...response.data].sort((a, b) => Number(b.isCharged) - Number(a.isCharged))
+            : [];
+        return sortedBoards;
+
 
     } catch (error) {
 
@@ -39,10 +40,10 @@ export const allProject = async (): Promise<project[]> => {
 //== 프로젝트 등록 ==//
 export const createProject = async (data: createProjectProp): Promise<void> => {
 
-     // 데이터 변환
-     const frameworks = data.frameworks.map(framework => ({ frameworkId: framework }));
-     const languages = data.languages.map(language => ({ languageId: language }));
- 
+    // 데이터 변환
+    const frameworks = data.frameworks.map(framework => ({ frameworkId: framework }));
+    const languages = data.languages.map(language => ({ languageId: language }));
+
     axios({
         method: 'post',
         url: BASE_URL,
@@ -65,14 +66,14 @@ export const createProject = async (data: createProjectProp): Promise<void> => {
             "deadline": data.deadline
         }
     })
-    .catch((error) => {
-        if (axios.isAxiosError(error)) {
-            console.error("Axios error: ", error.message);
+        .catch((error) => {
+            if (axios.isAxiosError(error)) {
+                console.error("Axios error: ", error.message);
 
-        } else {
-            console.error("Unexpected error: ", error);
-        }
-    })
+            } else {
+                console.error("Unexpected error: ", error);
+            }
+        })
 
 }
 
@@ -181,7 +182,7 @@ export const projectApplicant = async (boardId?: string): Promise<projectApplica
 
 // 게시글 삭제
 export const projectDelete = async (boardId: string): Promise<void> => {
-    
+
     try {
         await axios({
             method: 'delete',

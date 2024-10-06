@@ -52,7 +52,7 @@ function App() {
               <Route path="/work/detail/candidate/:boardId" element={<CandidateCheck />} />
               <Route path="/work/detail/select/:boardId" element={<SelectedCandidate />} />
               <Route path="/work/projectgroup/:boardId" element={<ProjectGroup />} />
-              <Route path="/work/detail/contract/:boardId" element={<Contract />} />
+              <Route path="/work/detail/contract/:boardId/:freelancerProjectId" element={<Contract />} />
               <Route path="/project" element={<Project />} />
               <Route path="/project/detail" element={<ProjectDetail />} />
               <Route path="/career" element={<Career />} />

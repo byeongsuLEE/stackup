@@ -1,23 +1,20 @@
-import { useParams } from "react-router-dom";
 import { addDays, format } from "date-fns";
-import { useQuery } from "react-query";
-import { projectDetail } from "../../apis/BoardApi";
+import { project as ProjectType } from "../../apis/Board.type";
+import { candidate as CandidateType } from "../../apis/Freelancer.type";
 
-const ContractDetail = () => {
-  const boardId = useParams().boardId;
-  
-  const { data: project, isLoading: isProjectLoading } = useQuery({
-    queryKey: ['project', 'boardId'],
-    queryFn: () => projectDetail(boardId!),  // 화살표 함수로 감싸서 함수 참조 전달
-    enabled: !!boardId,
-  })
+interface ContractDetailProps {
+  project: ProjectType;
+  candidate: CandidateType;
+}
 
-  if (isProjectLoading) {
-    return <div>Loading...</div>;
-  }
+const ContractDetail = ({ project, candidate }: ContractDetailProps) => {
+  // 시작 날짜 포맷
+  const startDate = project.startDate ? new Date(project.startDate) : new Date();
+  const formattedStartDate = isNaN(startDate.getTime()) ? "" : format(startDate, 'yyyy-MM-dd');
+  const endDate = isNaN(startDate.getTime()) ? "" : format(addDays(startDate, parseInt(project.period, 10)), 'yyyy-MM-dd');
 
-const endDate = format(addDays(project.startDate, parseInt(project.period, 10)), 'yyyy-MM-dd');
   const today = new Date();
+
   return (
     <div className="bg-bgGreen border border-mainGreen h-auto w-auto mx-10 p-5">
       <div className="text-center text-lg font-bold">
@@ -35,15 +32,15 @@ const endDate = format(addDays(project.startDate, parseInt(project.period, 10)),
         <span className="text-sm">
           <input defaultValue={project.client.businessName} className="border p-2 border-mainGreen rounded-md h-[25px] m-1" type="text" />
           (이하 “갑” 아리 한다.)와
-          <input placeholder={'프리랜서'} className="border p-2 border-mainGreen rounded-md h-[25px] m-1" type="text" />
-          (이하 “을” 이라 한다.)는 프로젝트명에 명시된 업무작업을 수향하기 위해 다음과 같이 계약을 체결한다.</span>
+          <input defaultValue={candidate?.name} className="border p-2 border-mainGreen rounded-md h-[25px] m-1" type="text" />
+          (이하 “을” 이라 한다.)는 프로젝트명에 명시된 업무작업을 수행하기 위해 다음과 같이 계약을 체결한다.</span>
         <br />
         <span className="font-bold text-sm">제 1조[목적]</span>
         <span className="text-sm">본 계약을 “갑”이 “을”에게 의뢰한 업무를 “갑”에게 공급함에 있어 “갑”과 “을" 사이에 필요한 사항을 정하는 것을 목적으로 한다.</span>
         <br />
         <span className="font-bold text-sm">제 2조 [계약기간]</span>
         <span className="text-sm">계약 기간은
-          <input defaultValue={project.startDate} className="border p-2 border-mainGreen rounded-md h-[25px] m-1" type="text" />부터
+          <input defaultValue={formattedStartDate} className="border p-2 border-mainGreen rounded-md h-[25px] m-1" type="text" />부터
           <input defaultValue={endDate} className="border p-2 border-mainGreen rounded-md h-[25px] m-1" type="text" />
           까지로 하며, 갑과 을의 합의 하에 본 계약기간은 연장 될 수 있다.</span>
         <br />
@@ -61,7 +58,7 @@ const endDate = format(addDays(project.startDate, parseInt(project.period, 10)),
           식대 등은 “을”의 비용으로 한다.</span>
         <br />
         <span className="font-bold text-sm">제 4조 [납품]</span>
-        <span className="text-sm">“을”은 작업 진행중 중간 완료된 셩과물을 1회에 걸쳐 중간 납품을 하며, 최종 자료는 검토 및 수정 후 완성품으로 납품하기로 한다.</span>
+        <span className="text-sm">“을”은 작업 진행중 중간 완료된 성과물을 1회에 걸쳐 중간 납품을 하며, 최종 자료는 검토 및 수정 후 완성품으로 납품하기로 한다.</span>
         <br />
         <span className="font-bold text-sm">제 5조 [비밀유지]</span>
         <span className="text-sm">“을”은 본 작업과 관련된 어떠한 일체의 정보를 외부에 누설하거나 유출해서는 안되며 이로 인해 발생하는 모든 책임은 “을”이 진다.</span>
@@ -80,7 +77,7 @@ const endDate = format(addDays(project.startDate, parseInt(project.period, 10)),
           <br />
           (1) 정당한 이유 없이 작업 진행이 이루어지지 않을 때 <br />
           (2) 정당한 이유 없이 계약기간에 작업완료가 불가능 하다고 판단될 때 <br />
-          (3) “갑”이 계약금을 지금하지 않았을 경우</span>
+          (3) “갑”이 계약금을 지급하지 않았을 경우</span>
         <br />
         <span className="font-bold text-sm">제 9조 [손해배상]</span>
         <span className="text-sm">“을”의 귀책사유로 인하여 본 계약이 불이행이 되었을 경우 “을”은 “갑”이 제시한 손해배상의 책임을 진다.</span>
@@ -100,6 +97,7 @@ const endDate = format(addDays(project.startDate, parseInt(project.period, 10)),
       <div className="text-end">
       </div>
     </div>
-  )
-}
+  );
+};
+
 export default ContractDetail;

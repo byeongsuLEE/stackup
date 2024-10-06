@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import DoneButton from "../common/DoneButton";
 import { project } from "../../apis/Board.type";
 

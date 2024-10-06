@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { candidate } from "../../apis/Freelancer.type";
-import DoneButton from "../common/DoneButton";
 import { selectedCandidate } from "../../apis/ClientApi";
 import { useParams } from "react-router-dom";
 import SelectedCandidate from "./SelectedCandidate";

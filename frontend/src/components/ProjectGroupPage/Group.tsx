@@ -2,7 +2,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import DoneButton from "../common/DoneButton";
 import { candidate } from "../../apis/Freelancer.type";
 
-const Group = ({ id, name }: candidate) => {
+const Group = ({ name }: candidate) => {
   const boardId = useParams<{ boardId: string }>().boardId;
   const navigate = useNavigate();
 

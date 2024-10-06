@@ -1,3 +1,4 @@
+import axios from "axios";
 import InfoBox from "../components/WorkPage/InfoBox";
 import DoneButton from "../components/common/DoneButton";
 import CandidateIcon from "../icons/CandidateIcon";
@@ -6,15 +7,30 @@ import PriceIcon from "../icons/PriceIcon";
 import WebIcon from "../icons/WebIcon";
 import { useNavigate } from "react-router-dom";
 
+const svURL = import.meta.env.VITE_SERVER_URL;
+
 const ProjectDetail = () => {
   const navigate = useNavigate(); // navigate 훅 초기화
-  const userId = 14; // 임시 userId
+  const userId = 15; // 임시 userId
   const projectId = 31; // 임시 projectId 
 
   const handleNavigateToMitermForm = () => {
     console.log("이동")
     navigate(`/evaluate/final/${projectId}`, { state: { userId } }); // MitermForm으로 이동
   };
+
+  const handleReport = async () => {
+    try {
+      const response = await axios.patch(`${svURL}/user/report/${userId}`);
+      if (response.status === 200) {
+        alert("신고가 완료되었습니다.");
+      }
+    } catch (error) {
+      console.error("신고 실패:", error);
+      alert("신고에 실패했습니다. 다시 시도해주세요.");
+    }
+  };
+
   return (
     <div className="m-20 flex items-center flex-col">
       <div className="bg-bgGreen border border-mainGreen rounded-xl w-[1000px] mb-5 p-5 h-[120px] flex flex-col">
@@ -29,7 +45,9 @@ const ProjectDetail = () => {
       <div className="bg-bgGreen border border-mainGreen h-auto rounded-lg p-10 w-[1000px] ">
         <div className="flex justify-between ">
           <span className="text-lg font-bold">프로젝트명</span>
-          <button className="w-[80px] h-[25px] rounded-md bg-red-400 text-white flex items-center justify-center font-bold text-sm">신고하기</button>
+          <div onClick={handleReport}>
+            <button className="w-[80px] h-[25px] rounded-md bg-red-400 text-white flex items-center justify-center font-bold text-sm">신고하기</button>
+          </div>
         </div>
         <span className="text-subTxt text-sm">대분류</span>
 

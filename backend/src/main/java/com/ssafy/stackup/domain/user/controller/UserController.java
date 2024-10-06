@@ -51,7 +51,7 @@ public class UserController {
 
     @GetMapping("/info")
     ResponseEntity<ApiResponse<?>> getInfo(@AuthUser User user) {
-        UserInfoResponseDto userInfoResponseDto=   userService.getInfo(user);
+        UserInfoResponseDto userInfoResponseDto=   userService.getInfo(user.getId());
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(userInfoResponseDto));
@@ -125,6 +125,14 @@ public class UserController {
         String address = requestBody.get("address");
         userService.setAddress(userId,address);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("주소 등록완료"));
+    }
+
+    @GetMapping("/info/{applicantId}")
+    public ResponseEntity<ApiResponse<?>> getApplicantInfo (@PathVariable Long applicantId){
+        UserInfoResponseDto userInfoResponseDto=   userService.getInfo(applicantId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(userInfoResponseDto));
     }
 
 

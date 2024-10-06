@@ -264,11 +264,14 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 내 상세 정보 조회
-     * @param user
+     * @param
      * @return
      */
     @Override
-    public UserInfoResponseDto getInfo(User user) {
+    public UserInfoResponseDto getInfo(Long userId) {
+
+        User user = userRepository.findById(userId).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+
 
         if(user.getRoles().contains("ROLE_FREELANCER")) {
             Freelancer freelancer = freelancerRepository.findById(user.getId()).orElseThrow(

@@ -30,6 +30,8 @@ import com.ssafy.stackup.domain.user.repository.FreelancerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -39,6 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import javax.swing.text.html.Option;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -85,12 +88,17 @@ public class BoardService {
 
 
     //모집글 목록 조회
+//    @Transactional(readOnly = true)
+//    public List<BoardFindAllResponse> getboards() {
+//        List<Board> boards = boardRepository.findAll();
+//        return boards.stream()
+//                .map(BoardFindAllResponse::new)
+//                .collect(Collectors.toList());
+//    }
     @Transactional(readOnly = true)
-    public List<BoardFindAllResponse> getboards() {
-        List<Board> boards = boardRepository.findAll();
-        return boards.stream()
-                .map(BoardFindAllResponse::new)
-                .collect(Collectors.toList());
+    public Page<Board> findAll(Pageable pageable) {
+        LocalDate today = LocalDate.now();
+        return boardRepository.findAllByDeadlineAfter(today,pageable);
     }
 
     @Transactional(readOnly = true)

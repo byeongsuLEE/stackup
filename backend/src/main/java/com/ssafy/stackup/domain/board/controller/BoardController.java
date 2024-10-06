@@ -16,6 +16,9 @@ import com.ssafy.stackup.domain.user.entity.Freelancer;
 import com.ssafy.stackup.domain.user.entity.User;
 import com.ssafy.stackup.domain.user.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,10 +46,25 @@ public class BoardController {
         return ResponseEntity.ok(ApiResponse.success(boards));
     }
 
+//    @GetMapping
+//    public ResponseEntity<?> findAllBoards(){
+//        List<?> boards = boardService.getboards();
+//        return ResponseEntity.ok().body(ApiResponse.success(boards));
+//    }
+
     @GetMapping
-    public ResponseEntity<?> findAllBoards(){
-        List<?> boards = boardService.getboards();
-        return ResponseEntity.ok().body(ApiResponse.success(boards));
+    public ResponseEntity<?> findAllBoards(Pageable pageable) {
+        Page<Board> boards = boardService.findAll(pageable);
+
+        List<BoardFindAllResponse> responseList = boards.stream()
+                .map(BoardFindAllResponse::new)
+                .collect(Collectors.toList());
+
+        Page<BoardFindAllResponse> pages = new PageImpl<>(responseList, pageable, boards.getTotalElements());
+        PageResponse result = new PageResponse(pages);
+
+        return ResponseEntity.ok(result);
+
     }
 
     @GetMapping("/recommend-list")

@@ -101,21 +101,21 @@ const Detail = ({ project, clientId }: DetailProps) => {
           <span className="text-subTxt text-sm">{project?.client.businessName} _ 평점 {project?.client.totalScore}wja</span>
         </div>
         <div className="flex justify-end">
-        {window.sessionStorage.getItem("userType") === "freelancer" ? (
-          <div onClick={projectApplyHandler}>
-            <DoneButton width={100} height={25} title="지원하기" />
-          </div>
-        ) : sessionClientId == clientId && (
-          <div className="flex">
-            <div onClick={toCandidate}>
-              <DoneButton width={100} height={25} title="지원자 관리" />
+          {window.sessionStorage.getItem("userType") === "freelancer" ? (
+            <div onClick={projectApplyHandler}>
+              <DoneButton width={100} height={25} title="지원하기" />
             </div>
-            <Payment boardId={boardId} />
-            <button onClick={deleteProject} className="bg-subGreen2 text-bgGreen font-bold text-sm px-3 rounded-lg ml-2">
-              삭제하기
-            </button>
-          </div>
-        ) }
+          ) : sessionClientId == clientId && (
+            <div className="flex">
+              <div onClick={toCandidate}>
+                <DoneButton width={100} height={25} title="지원자 관리" />
+              </div>
+              <Payment boardId={boardId} />
+              <button onClick={deleteProject} className="bg-subGreen2 text-bgGreen font-bold text-sm px-3 rounded-lg ml-2">
+                삭제하기
+              </button>
+            </div>
+          )}
 
         </div>
 

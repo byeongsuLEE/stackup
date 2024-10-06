@@ -4,11 +4,14 @@ import com.ssafy.stackup.domain.board.dto.BoardSummaryDTO;
 import com.ssafy.stackup.domain.board.entity.Board;
 import com.ssafy.stackup.domain.framework.entity.Framework;
 import com.ssafy.stackup.domain.language.entity.Language;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,4 +46,6 @@ public interface BoardRepository extends JpaRepository<Board, Long>{
 
     List<Board> findByClient_Id(Long id);
 
+    @Query("SELECT b FROM Board b WHERE b.deadline > :today")
+    Page<Board> findAllByDeadlineAfter(LocalDate today, Pageable pageable);
 }

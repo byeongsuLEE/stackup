@@ -4,6 +4,7 @@ import DoneButton from "../components/common/DoneButton";
 import { signature, submitContract } from "../apis/ContractApi";
 import { useParams } from "react-router-dom";
 import { MakeSign } from "../hooks/MakeSign";
+import { wallet } from "../apis/UserApi";
 
 interface ContractDetailComponentType {
   getContractData: () => any; // 필요한 타입으로 반환 타입을 변경하세요.
@@ -20,7 +21,11 @@ const Contract = () => {
     await submitContract(data, freelancerProjectId);
     }
     const sign = await signMessage();
-    await signature(sign, projectId);
+    if (sign) {
+      await wallet(sign.address);
+      await signature(sign.signedMessage, projectId);
+    }
+    
   };
 
   return (

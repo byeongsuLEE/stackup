@@ -38,9 +38,9 @@ const Work = ({ title, startDate, period, classification, deposit, deadline, rec
     : 0; // 유효하지 않은 경우 기본값 0
 
   // remainDay가 0 이하이면 출력하지 않기
-  if (remainDay < 0) {
-    return null;
-  }
+  // if (remainDay < 0) {
+  //   return null;
+  // }
 
   if (classification === 'web') {
     classification = '웹'
@@ -56,11 +56,6 @@ const Work = ({ title, startDate, period, classification, deposit, deadline, rec
 
   if (applicants === null) {
     applicants = 0
-  }
-
-  //== remainDay가 0이하이면 출력X ==//
-  if (remainDay < 0) {
-    return null;
   }
 
   return (

@@ -6,33 +6,37 @@ import { useNavigate } from "react-router-dom";
 const BASE_URL: string = "http://localhost:8080/api/board";
 
 //== 프로젝트 목록 조회 ==//
-export const allProject = async (): Promise<project[]> => {
-    
+export const allProject = async (page: number, size: number): Promise<{ data: project[], totalPages: number }> => {
     try {
         const response = await axios({
             method: 'get',
-            url: BASE_URL,
+            url: `${BASE_URL}`,
             headers: {
                 Authorization: `Bearer ${sessionStorage.getItem("token")}`
+            },
+            params: {
+                page,
+                size
             }
-        })
-        console.log(response.data)
+        });
+
+        console.log(response.data.content);
         
         // isCharged가 true인 항목을 위로 정렬
-        const sortedBoards = [...response.data.data].sort((a, b) => {
-            return Number(b.isCharged) - Number(a.isCharged);
-        });
-        return sortedBoards
+        // const sortedBoards = [...response.data.data].sort((a, b) => {
+        //     return Number(b.isCharged) - Number(a.isCharged);
+        // });
+        return {
+            data: response.data.content,
+            totalPages: response.data.totalPages
+        }
 
     } catch (error) {
-
         if (axios.isAxiosError(error)) {
             console.error("Axios error: ", error.message);
-
         } else {
             console.error("Unexpected error: ", error);
         }
-
         return [];
     }
 }

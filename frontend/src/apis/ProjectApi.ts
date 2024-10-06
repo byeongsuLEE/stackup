@@ -49,7 +49,6 @@ export const getProject =  async (type: string): Promise<project[]> => {
 
 // 프로젝트 시작하기
 export const startProject = async (checkedList: Number[], boardId: string): Promise<void> => {
-
   const response = await axios({
     method: 'post',
     url: `${BASE_URL}/start`,
@@ -63,19 +62,4 @@ export const startProject = async (checkedList: Number[], boardId: string): Prom
   })
 
   console.log(response.data)
-}
-
-//== 서명 확인 ==//
-export const signature = async (projectId: string): Promise<void> => {
-  const response = await axios({
-    method: 'patch',
-    url: `${BASE_URL}/${projectId}/contract/sign`,
-    headers: {
-      Authorization: `Bearer ${sessionStorage.getItem('token')}`
-    },
-    data: {
-      "message": "서명하고 싶은 메시지",
-      "signature": "지갑에서 가져온 서명 값"
-    }
-  })
 }

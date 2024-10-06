@@ -85,6 +85,10 @@ public abstract class User {
         this.evaluatedCount++;
     }
 
+    public void updatePublicKey(String publicKey) {
+        this.publicKey = publicKey;
+    }
+
     public void updateReportedCount(Integer reportedCount) {
         this.reportedCount = reportedCount;
     }

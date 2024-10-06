@@ -1,5 +1,7 @@
 package com.ssafy.stackup.domain.account.service;
 
+import com.ssafy.stackup.common.exception.CustomException;
+import com.ssafy.stackup.common.response.ErrorCode;
 import com.ssafy.stackup.domain.account.dto.EncryptionUtil;
 import com.ssafy.stackup.domain.account.entity.Account;
 import com.ssafy.stackup.domain.account.repository.AccountRepository;
@@ -15,10 +17,7 @@ import java.security.SecureRandom;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class AccountService {
@@ -234,6 +233,10 @@ public class AccountService {
         // 응답 바디에서 userKey 추출
         Map<String, Object> responseMap = response.getBody();
         if (responseMap != null && responseMap.containsKey("userKey")) {
+
+            User user  = userRepository.findByEmail(email).orElseThrow((() -> new CustomException(ErrorCode.USER_NOT_FOUND)));
+            user.updatePublicKey(apikey);
+            userRepository.save(user);
             return responseMap.get("userKey").toString(); // userKey만 반환
         }
 

@@ -43,6 +43,7 @@ public class ProjectInfoResponseDto {
     private boolean clientStepConfirmed;
     private boolean freelancerStepConfirmed;
     private ClientResponseDto client;
+    private Long boardId;
 
 
     public void updateClient (Project project)

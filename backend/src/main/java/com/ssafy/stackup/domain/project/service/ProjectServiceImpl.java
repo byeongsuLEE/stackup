@@ -377,6 +377,7 @@ public class ProjectServiceImpl implements ProjectService {
                         .deadline(project.getBoard().getDeadline())
                         .upload(project.getBoard().getUpload())
                         .classification(project.getBoard().getClassification())
+                        .boardId(project.getBoard().getBoardId())
                         .build();
 
 

@@ -7,7 +7,7 @@ const Group = ({ id, name }: candidate) => {
   const navigate = useNavigate();
 
   const toContract = () => {
-    navigate(`/work/detail/contract/${boardId}/${id}`);
+    navigate(`/work/detail/contract/${boardId}`);
   }
 
   return (

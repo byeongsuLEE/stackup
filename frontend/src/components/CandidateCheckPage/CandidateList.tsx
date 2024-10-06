@@ -8,7 +8,7 @@ import { startProject } from "../../apis/ProjectApi";
 
 const CandidateList = () => {
   const [checkedList, setCheckedList] = useState<number[]>([]);
-  const boardId = useParams<{ boardId: string }>().boardId;
+  const { boardId } = useParams();
   const navigate = useNavigate();
   const [candidateList, setCandidateList] = useState<projectApplicantProps[]>([]);
 
@@ -20,7 +20,7 @@ const CandidateList = () => {
   }
 
   const update = async () => {
-    const data = await projectApplicant(boardId as string);
+    const data = await projectApplicant(boardId);
     setCandidateList(data)
   }
 

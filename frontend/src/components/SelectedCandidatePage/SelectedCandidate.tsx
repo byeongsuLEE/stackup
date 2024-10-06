@@ -7,7 +7,6 @@ const SelectedCandidate = ({ name,  portfolioUrl, totalScore, freelancerProjectI
   const { boardId } = useParams();
 
   const handleContract = () => {
-    console.log(freelancerProjectId)
     navigate(`/work/detail/contract/${boardId}/${freelancerProjectId}`)
   }
 
@@ -19,7 +18,7 @@ const SelectedCandidate = ({ name,  portfolioUrl, totalScore, freelancerProjectI
         <a href={portfolioUrl}>{portfolioUrl}</a>
       </td >
       <td className="flex justify-center mt-1.5 center">
-        <div className="mr-3" onChange={handleContract}>
+        <div className="mr-3" onClick={handleContract}>
           <DoneButton width={100} height={30} title="서명하기" />
         </div>
       </td>

@@ -3,7 +3,8 @@ import axios from "axios"
 const BASE_URL: string = "http://localhost:8080/api/project"
 
 //== 계약서 정보 저장 ==//
-export const submitContract = async (): Promise<void> => {
+export const submitContract = async (data: any, freelancerProjectId?: string): Promise<void> => {
+  console.log(data)
     const response = await axios({
       method: 'patch',
       url: `${BASE_URL}/contract/submit`,
@@ -11,15 +12,15 @@ export const submitContract = async (): Promise<void> => {
         Authorization: `Bearer ${sessionStorage.getItem('token')}`
       },
       data: {
-        "freelancerProjectId" : 1,
-        "contractStartDate": "2024-10-05",
-        "contractEndDate": "2025-01-01",
-        "contractTotalAmount": 5000000,
-        "contractDownPayment": 1000000,
-        "contractFinalPayment": 4000000,
-        "contractCompanyName": "ABC Corp",
+        "freelancerProjectId" : freelancerProjectId,
+        "contractStartDate": data.startDate,
+        "contractEndDate": data.endDate,
+        "contractTotalAmount": data.deposit,
+        "contractDownPayment": data.startPayment,
+        "contractFinalPayment": data.finalPayment,
+        "contractCompanyName": data.clientName,
         "contractConfidentialityClause": "All parties agree to confidentiality.",
-        "contractAdditionalTerms": "Freelancer must provide weekly reports."
+        "contractAdditionalTerms": data.condition
       }
     })
     console.log(response.data)

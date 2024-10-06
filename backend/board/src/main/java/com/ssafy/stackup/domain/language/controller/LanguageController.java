@@ -1,6 +1,5 @@
 package com.ssafy.stackup.domain.language.controller;
 
-import com.ssafy.stackup.domain.framework.dto.FrameworkRequest;
 import com.ssafy.stackup.domain.language.dto.LanguageRequest;
 import com.ssafy.stackup.domain.language.dto.LanguageResponse;
 import com.ssafy.stackup.domain.language.entity.Language;
@@ -10,7 +9,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 

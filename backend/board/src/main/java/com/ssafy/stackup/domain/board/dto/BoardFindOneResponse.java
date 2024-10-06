@@ -4,14 +4,11 @@ import com.ssafy.stackup.domain.board.entity.Board;
 import com.ssafy.stackup.domain.board.entity.Level;
 import com.ssafy.stackup.domain.framework.dto.FrameworkRequest;
 import com.ssafy.stackup.domain.language.dto.LanguageRequest;
-import com.ssafy.stackup.domain.user.dto.request.FreelancerInfoRequestDto;
 import com.ssafy.stackup.domain.user.dto.response.ClientResponseDto;
-import com.ssafy.stackup.domain.user.dto.response.FreelancerRegisterResponseDto;
 import com.ssafy.stackup.domain.user.entity.Client;
 import com.ssafy.stackup.domain.user.entity.Freelancer;
-import lombok.*;
+import lombok.Data;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,12 +43,12 @@ public class BoardFindOneResponse {
         this.title = board.getTitle();
         this.description = board.getDescription();
         this.classification = board.getClassification();
-//        this.frameworks = board.getBoardFrameworks().stream()
-//                .map(framework -> new FrameworkRequest(framework.getFramework()))
-//                .collect(Collectors.toList());
-//        this.languages = board.getBoardLanguages().stream()
-//                .map(language -> new LanguageRequest(language.getLanguage()))
-//                .collect(Collectors.toList());
+        this.frameworks = board.getBoardFrameworks().stream()
+                .map(framework -> new FrameworkRequest(framework.getFramework()))
+                .collect(Collectors.toList());
+        this.languages = board.getBoardLanguages().stream()
+                .map(language -> new LanguageRequest(language.getLanguage()))
+                .collect(Collectors.toList());
         this.deposit = board.getDeposit();
         this.startDate = board.getStartDate();
         this.period = board.getPeriod();

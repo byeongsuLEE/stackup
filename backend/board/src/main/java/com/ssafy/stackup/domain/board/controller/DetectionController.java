@@ -1,14 +1,12 @@
 package com.ssafy.stackup.domain.board.controller;
 
 import com.ssafy.stackup.domain.board.dto.BoardSummaryDTO;
-import com.ssafy.stackup.domain.board.entity.Board;
 import com.ssafy.stackup.domain.board.repository.BoardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

@@ -5,21 +5,22 @@ import com.ssafy.stackup.common.response.ApiResponse;
 import com.ssafy.stackup.common.response.ErrorCode;
 import com.ssafy.stackup.domain.board.dto.*;
 import com.ssafy.stackup.domain.board.entity.Board;
-import com.ssafy.stackup.domain.board.entity.BoardApplicant;
 import com.ssafy.stackup.domain.board.repository.BoardApplicantRepository;
 import com.ssafy.stackup.domain.board.service.BoardService;
 import com.ssafy.stackup.domain.recommend.entity.Recommend;
 import com.ssafy.stackup.domain.recommend.service.RecommendationService;
 import com.ssafy.stackup.domain.user.entity.AuthUser;
 import com.ssafy.stackup.domain.user.entity.Client;
-import com.ssafy.stackup.domain.user.entity.Freelancer;
 import com.ssafy.stackup.domain.user.entity.User;
 import com.ssafy.stackup.domain.user.repository.ClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -130,6 +131,11 @@ public class BoardController {
         return boardService.getApplicantListByBoardId(boardId);
     }
 
+    @GetMapping("/{boardId}/selected-applicant-list")
+    public List<BoardApplicantRequest> getSelectedApplicantList(@PathVariable Long boardId) {
+        return boardService.getSelectedApplicantListByBoardId(boardId);
+    }
+
     @PostMapping("/{boardId}/payment-success")
     public ResponseEntity<?> handlePaymentSuccess(@PathVariable Long boardId, @RequestBody PaymentSuccessRequest request) {
         try {
@@ -170,7 +176,7 @@ public class BoardController {
      * @param user
      * @return
      */
-    @GetMapping("/apply-board")
+    @GetMapping("/apply-list")
     public List<BoardFindAllResponse> applyBoards(@AuthUser User user) {
         Long userId = user.getId();
         List<Board> boards = boardApplicantRepository.findBoardsByUserId(userId);
@@ -179,11 +185,29 @@ public class BoardController {
                 .collect(Collectors.toList());
     }
 
-//    @GetMapping("/recommend/all")
-//    public Set<Recommend> recommendAll(@AuthUser User user) {
-//        Long freelancerId = user.getId();
-//        Set<Recommend> results = recommendationService.recommends(freelancerId);
-//        return results;
-//    }
+    /**
+     * 
+     * @ 작성자   : 김연지
+     * @ 작성일   : 2024-10-01
+     * @ 설명     : description이 유사한 board를 찾아 해당 classification, framework, language를 리턴
+     * @param requestBody
+     * @return
+     */
+
+    @PostMapping("/search")
+    public ResponseEntity<BoardSearchResponse> searchBoards(@RequestBody Map<String, String> requestBody) {
+        String description = requestBody.get("description");
+
+        // Flask 서버로 요청 보내기
+        BoardSearchResponse similarBoard = boardService.findSimilarBoards(description);
+
+        return ResponseEntity.ok(similarBoard);
+    }
+
+    @GetMapping("/search-all")
+    public ResponseEntity<?> findALlDescription() {
+        List<BoardSearchResponse> descriptions = boardService.getDescription();
+        return ResponseEntity.ok().body(ApiResponse.success(descriptions));
+    }
 
 }

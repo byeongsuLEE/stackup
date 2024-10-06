@@ -3,9 +3,10 @@ package com.ssafy.stackup.domain.board.entity;
 
 import com.ssafy.stackup.domain.framework.entity.Framework;
 import jakarta.persistence.*;
-import lombok.*;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "board_framework")

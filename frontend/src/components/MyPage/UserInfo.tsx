@@ -54,9 +54,6 @@ const UserInfo = (data: freelanceInformation) => {
 
   };
 
-
-
-
   return (
     <form onSubmit={handleSubmit}>
       <div className="bg-bgGreen flex flex-col mx-20 my-10 p-10 border border-mainGreen w-auto h-auto rounded-lg">

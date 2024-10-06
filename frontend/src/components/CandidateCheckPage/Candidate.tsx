@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { projectApplicantProps } from "../../apis/Board.type";
 import ChatStartButton from "../common/ChatStartButton";
 import DoneButton from "../common/DoneButton";
@@ -6,6 +7,11 @@ const Candidate = ({ name,  portfolioUrl, totalScore, id, onCheckboxChange }: pr
 
   const checkCandidate = () => {
     onCheckboxChange(id);
+  }
+
+  const navigate = useNavigate();
+  const toProfile = () => {
+    navigate(`/mypage/${id}`);
   }
 
   return (
@@ -23,7 +29,7 @@ const Candidate = ({ name,  portfolioUrl, totalScore, id, onCheckboxChange }: pr
         <a href={portfolioUrl}>{portfolioUrl}</a>
       </td>
       <td className="flex justify-center mt-1.5">
-        <div className="mr-3">
+        <div onClick={toProfile} className="mr-3">
           <DoneButton width={60} height={30} title="프로필" />
         </div>
 

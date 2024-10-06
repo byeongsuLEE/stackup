@@ -12,11 +12,16 @@ declare global {
   }
 }
 
-const NFTMinting = () => {
+interface NFTMintingProps {
+  Minting: (cid: string) => Promise<void>; // 부모 컴포넌트에서 전달받는 Minting 함수의 타입
+  isLoading: boolean; // 부모 컴포넌트에서 전달받는 로딩 상태
+}
+
+const NFTMinting = ({ Minting, isLoading }: NFTMintingProps) => {
   //== pdf 생성 ==//
   const componentRef = useRef<HTMLDivElement>(null);
 
-  const { Minting } = CallTest();
+  // const { Minting, isLoading } = CallTest();
   const ethereum = window.ethereum;
   const [addr, setAddr] = useState("");
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -40,20 +45,33 @@ const NFTMinting = () => {
     }
   };
 
-  // accountsChanged 이벤트 처리
+
   useEffect(() => {
+
     if (ethereum) {
       ethereum.on("accountsChanged", function (accounts: string[]) {
         setAddr(accounts[0]);
       });
     }
+    else {
+      handleGetAccount();
+    }
   }, [ethereum]);
+
+  //test data 
+  const testdata = {
+    projectName: "Default Project",
+    companyName: "Default Company",
+    period: "2024.01.01 ~ 2024.12.31",
+    name: "Default Name"
+  }
 
   // 버튼 클릭 시 호출될 핸들러 함수
   const handleMintNFT = async () => {
 
     try {
-      const image = await generateImage(canvasRef);
+
+      const image = await generateImage(canvasRef, testdata);
       const pdf = await handlePrint(componentRef);
 
       const imageHash = await pinata(image);
@@ -63,23 +81,21 @@ const NFTMinting = () => {
 
       // NFT 발행
       await Minting(cid);
-      alert("NFT 발행 호출");
+      alert("NFT가 완성되었습니다.");
     } catch (error) {
       console.error("NFT 발행 오류:", error);
       alert("NFT 발행 실패");
     }
+
   };
 
   return (
+    <>
+    {isLoading ? (
+      <div></div>
+    ) : (
     <div>
       <div ref={componentRef}>
-        {/* {ethereum && (
-          <div onClick={handleGetAccount}>
-            <DoneButton height={30} width={200} title="Connect Wallet" />
-          </div>
-        )}
-        {ethereum && <p>Your Wallet address: {addr}</p>} */}
-
         {/* 캔버스 요소 추가 */}
         <canvas ref={canvasRef} style={{ border: "1px solid black", display: "none" }}></canvas>
       </div>
@@ -89,6 +105,8 @@ const NFTMinting = () => {
         <DoneButton height={30} width={150} title="제출" />
       </div>
     </div>
+  )}
+    </>
   );
 };
 

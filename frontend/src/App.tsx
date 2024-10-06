@@ -30,6 +30,7 @@ import Transfer from "./pages/TransferPage";
 import WorkDetail from "./pages/WorkDetailPage";
 import Work from "./pages/WorkPage";
 import SelectedCandidate from './pages/SelectedCandidatePage';
+import NFTLoading from './pages/NFTLoadingPage';
 
 function App() {
   const queryClient = new QueryClient();
@@ -42,7 +43,7 @@ function App() {
           <main className="flex-grow mt-28 mx-20">
             <Navbar />
             <Routes>
-              <Route path="/test" element={<Test />} />
+              <Route path="/test" element={<NFTLoading />} />
               <Route path="/" element={<Home />} />
               <Route path="/signature/detail" element={<SignatureDetail />} />
               <Route path="/login" element={<Login />} />
@@ -60,7 +61,7 @@ function App() {
               <Route path="/career/register" element={<CareerRegister />} />
               <Route path="/account" element={<Account />} />
               <Route path="/account/detail/:accountId" element={<AccountDetail />} />
-              <Route path="/mypage" element={<Mypage />} />
+              <Route path="/mypage/:accountId" element={<Mypage />} />
               <Route path="/signup/client" element={<ClientSignup />} />
               <Route path="/signup/freelancer" element={<FreelancerSignup />} />
               <Route path="/signup/freelancer/skill" element={<FreelancerSkill />} />

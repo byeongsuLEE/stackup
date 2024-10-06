@@ -4,7 +4,10 @@ import com.ssafy.stackup.domain.board.entity.Board;
 import com.ssafy.stackup.domain.user.entity.Client;
 import com.ssafy.stackup.domain.user.entity.FreelancerProject;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
@@ -30,7 +33,7 @@ public class Project{
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private ProjectStatus status; // 프로젝트 상태 (pending, progress, finished 등)
+    private ProjectStatus status; // 프로젝트 상태 (before,pending, progress, finished 등)
 
 
     @Column

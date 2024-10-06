@@ -4,10 +4,9 @@ import com.ssafy.stackup.domain.board.entity.Board;
 import com.ssafy.stackup.domain.board.entity.Level;
 import com.ssafy.stackup.domain.framework.dto.FrameworkRequest;
 import com.ssafy.stackup.domain.language.dto.LanguageRequest;
+import com.ssafy.stackup.domain.user.dto.response.ClientResponseDto;
 import lombok.Data;
 
-import java.awt.*;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,16 +15,20 @@ import java.util.stream.Collectors;
 public class BoardFindAllResponse {
     private Long boardId;
     private String title;
+    private String description;
     private String classification;
+    private ClientResponseDto client;
     private List<FrameworkRequest> frameworks;
     private List<LanguageRequest> languages;
     private Long deposit;
     private Date startDate;
     private String period;
     private Long recruits;
-    private Boolean isCharged;
     private Long applicants;
     private Boolean worktype;
+    private String requirements;
+    private Boolean isCharged;
+    private String address;
     private Date deadline;
     private Date upload;
     private Level level;
@@ -34,6 +37,7 @@ public class BoardFindAllResponse {
     public BoardFindAllResponse(Board board) {
         this.boardId = board.getBoardId();
         this.title = board.getTitle();
+        this.description = board.getDescription();
         this.classification = board.getClassification();
         this.frameworks = board.getBoardFrameworks().stream()
                 .map(framework -> new FrameworkRequest(framework.getFramework()))
@@ -43,6 +47,7 @@ public class BoardFindAllResponse {
                 .collect(Collectors.toList());
         this.deposit = board.getDeposit();
         this.startDate = board.getStartDate();
+        this.address = board.getAddress();
         this.period = board.getPeriod();
         this.recruits = board.getRecruits();
         this.isCharged = board.getIsCharged();
@@ -51,5 +56,22 @@ public class BoardFindAllResponse {
         this.deadline = board.getDeadline();
         this.upload = board.getUpload();
         this.level = board.getLevel();
+        // Client 정보를 ClientResponseDto로 변환
+        if (board.getClient() != null) {
+            this.client = ClientResponseDto.builder()
+                    .id(board.getClient().getId())
+                    .name(board.getClient().getName())
+                    .email(board.getClient().getEmail())
+                    .phone(board.getClient().getPhone())
+                    .secondPassword(board.getClient().getSecondPassword())
+                    .accountKey(board.getClient().getAccountKey())
+                    .mainAccount(board.getClient().getMainAccount())
+                    .totalScore(board.getClient().getTotalScore())
+                    .reportedCount(board.getClient().getReportedCount())
+                    .roles(board.getClient().getRoles())
+                    .businessRegistrationNumber(board.getClient().getBusinessRegistrationNumber())
+                    .businessName(board.getClient().getBusinessName())
+                    .build();
+        }
     }
 }

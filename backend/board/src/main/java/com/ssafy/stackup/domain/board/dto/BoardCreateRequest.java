@@ -4,8 +4,6 @@ import com.ssafy.stackup.domain.board.entity.Level;
 import com.ssafy.stackup.domain.framework.dto.BoardFrameworkUpdateRequest;
 import com.ssafy.stackup.domain.language.dto.BoardLanguageUpdateRequest;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Date;

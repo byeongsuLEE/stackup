@@ -34,7 +34,7 @@ export const getToken = async (userId: string | null): Promise<string> => {
 
     //== id 저장 ==//
     setFreelancerId(response.data.data.userId);
-    window.sessionStorage.setItem("freelancerId", response.data.data.userId);
+    window.sessionStorage.setItem("userId", response.data.data.userId);
 
     return "로그인";
   } catch (error) {
@@ -168,7 +168,7 @@ export const clientLogin = async ( information: clientLoginInfo ): Promise<void>
 
     //== id 저장 ==//
     setClientId(response.data.data.userId);
-    window.sessionStorage.setItem("clientId", response.data.data.id);
+    window.sessionStorage.setItem("userId", response.data.data.id);
 
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -197,4 +197,19 @@ export const logout = async (): Promise<void> => {
   .catch((error) => {
     console.log(error)
   })
+}
+
+//== 지갑주소 등록 ==//
+export const wallet = async (address: string): Promise<void> => {
+  const response = await axios({
+    method: 'patch',
+    url: `${BASE_URL}/${sessionStorage.getItem('userId')}/address`,
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem('token')}`
+    },
+    data: {
+      "address": address
+    }
+  })
+  console.log(response.data)
 }

@@ -22,7 +22,7 @@ public interface ProjectService {
 
     ProjectInfoResponseDto getProjectInfo(Long projectId);
 
-    ResponseEntity<ApiResponse<Boolean>> verifySignature(Long projectId, SignRequest signRequest, User user);
+    ResponseEntity<ApiResponse<String>> saveSignature(Long projectId, SignRequest signRequest, User user);
 
     ProjectStepCheckResponseDto projectStepCheck(Long projectId, User user);
 

@@ -105,9 +105,9 @@ public class ProjectController {
      * @return
      */
     @PostMapping("/{projectId}/contract/sign")
-    public ResponseEntity<ApiResponse<Boolean>> verifySignature(@PathVariable Long projectId, @RequestBody SignRequest signRequest, @AuthUser User user){
+    public ResponseEntity<ApiResponse<String>> saveSignature(@PathVariable Long projectId, @RequestBody SignRequest signRequest, @AuthUser User user){
 
-        return projectService.verifySignature(projectId,signRequest,user);
+        return projectService.saveSignature(projectId,signRequest,user);
     }
 
 

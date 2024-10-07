@@ -8,8 +8,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -35,6 +33,12 @@ public class FreelancerProject {
 
     @Column (name = "client_signed")
     private boolean clientSigned;
+
+    @Column (name = "freelancer_signatrue_value")
+    private String freelancerSignatureValue;
+
+    @Column (name = "client_signature_value")
+    private String clientSignatureValue;
 
     @Column(name = "nft_contract_url")
     private String nftContractUrl;
@@ -132,12 +136,20 @@ public class FreelancerProject {
     }
 
 
-    void updateFreelancerSigned(boolean freelancerSigned) {
+   public  void updateFreelancerSigned() {
         this.freelancerSigned = true;
     }
 
-    void updateClientSigned(boolean clientSigned) {
+    public void updateClientSigned() {
         this.clientSigned = true;
+    }
+
+    public void updateClientSignatureValue(String clientSignatureValue) {
+        this.clientSignatureValue = clientSignatureValue;
+    }
+
+    public void updateFreelancerSignatureValue(String freelancerSignatureValue) {
+        this.freelancerSignatureValue = freelancerSignatureValue;
     }
 
     /**
@@ -147,7 +159,7 @@ public class FreelancerProject {
      * @ 설명     :
      * @return
      */
-    boolean checkUsersSignConfirm(){
+    public boolean checkUsersSignConfirm(){
         return this.freelancerSigned && this.clientSigned;
     }
 

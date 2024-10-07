@@ -101,11 +101,21 @@ public class ChatServiceImpl implements ChatService {
             if (optionalChatRoom.isPresent()) {
                 chatRoom = optionalChatRoom.get();
 
+                // Chat 엔티티를 ChatDto로 변환
+                List<ChatDto> chatDtoList = chatRoom.getChats().stream()
+                        .map(chat -> ChatDto.builder()
+                                .chatroomId(chat.getId())
+                                .receiverId(chat.getUser().getId())
+                                .message(chat.getMessage())
+                                .registTime(chat.getRegistTime())
+                                .build())
+                        .collect(Collectors.toList());
+
                 ChatRoomInfoResponseDto response = ChatRoomInfoResponseDto.builder()
                         .chatRoomId(chatRoom.getId())
                         .clientId(clientId)
                         .freelancerId(freelancerId)
-                        .chats(chatRoom.getChats())
+                        .chats(chatDtoList)
                         .previewChat("")
                         .build();
                 return response;
@@ -127,7 +137,7 @@ public class ChatServiceImpl implements ChatService {
                     .chatRoomId(chatRoom.getId())
                     .clientId(clientId)
                     .freelancerId(freelancerId)
-                    .chats(chatRoom.getChats())
+                    .chats(null)
                     .previewChat("")
                     .build();
         }
@@ -148,10 +158,24 @@ public class ChatServiceImpl implements ChatService {
         List<ChatRoom> chatRoomList = chatRoomRepository.findAllByFreelancerIdOrClientId(userId, userId).orElse(null);
 
 
+
+
+
         for(ChatRoom chatRoom : chatRoomList) {
+
+            // Chat 엔티티를 ChatDto로 변환
+            List<ChatDto> chatDtoList = chatRoom.getChats().stream()
+                    .map(chat -> ChatDto.builder()
+                            .chatroomId(chat.getId())
+                            .receiverId(chat.getUser().getId())
+                            .message(chat.getMessage())
+                            .registTime(chat.getRegistTime())
+                            .build())
+                    .collect(Collectors.toList());
+
             ChatRoomInfoResponseDto chatRoomInfoResponseDto = ChatRoomInfoResponseDto.builder()
                     .chatRoomId(chatRoom.getId())
-                    .chats(chatRoom.getChats())
+                    .chats(chatDtoList)
                     .clientId(chatRoom.getClient().getId())
                     .freelancerId(chatRoom.getFreelancer().getId())
                     .build();

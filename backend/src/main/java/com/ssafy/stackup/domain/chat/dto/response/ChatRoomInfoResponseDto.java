@@ -1,5 +1,6 @@
 package com.ssafy.stackup.domain.chat.dto.response;
 
+import com.ssafy.stackup.domain.chat.dto.reqeust.ChatDto;
 import com.ssafy.stackup.domain.chat.entity.Chat;
 import com.ssafy.stackup.domain.user.entity.User;
 import jakarta.persistence.CascadeType;
@@ -27,7 +28,7 @@ public class ChatRoomInfoResponseDto {
     private Long chatRoomId;
     private Long clientId;
     private Long freelancerId;
-    private List<Chat> chats ;
+    private List<ChatDto> chats ;
     private String previewChat;
 
     public String setPreviewChat() {

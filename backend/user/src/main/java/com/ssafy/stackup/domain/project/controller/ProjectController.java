@@ -40,6 +40,15 @@ public class ProjectController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(contractInfoResponseDto));
     }
 
+
+    @GetMapping("/info/{projectId}")
+    public ResponseEntity<ApiResponse<ProjectInfoResponseDto>> getProject(@PathVariable Long projectId) {
+        ProjectInfoResponseDto projectInfoResponseDto  = projectService.getProjectInfo(projectId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(projectInfoResponseDto));
+    }
+
     /**
      * 프로젝트 계약서 작성 - 클라이언트
      * @ 작성자   : 이병수

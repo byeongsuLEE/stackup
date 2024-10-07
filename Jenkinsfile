@@ -21,6 +21,23 @@ pipeline {
         // Argo CD 설정
         ARGOCD_SERVER = 'http://34.64.46.226:30081' // 실제 Argo CD 서버 주소 및 NodePort
         ARGOCD_CREDENTIALS_ID = 'stackup_argo' // Jenkins에 설정한 Argo CD 자격 증명 ID (argocd-password)
+
+        // 추가한 환경변수들
+        AWS_ACCESS_KEY_ID = 'AKIAYS2NQJX3RYCARFUQ'
+        AWS_SECRET_ACCESS_KEY = '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'
+        DB_PASSWORD = '1q2w3e4r!'
+        DB_URL = 'jdbc:mysql://34.22.93.211:3306/stackup'
+        DB_USERNAME = 'root'
+        ELASTIC_URL = 'http://34.47.84.173:9200/'
+        GITHUB_ID = 'Iv23li51nY1w8lyOBlai'
+        GITHUB_SECRET = 'c2cd01f968c1d38a9b528cece96b3de94ab43733'
+        PUBLIC_DATA_PORTAL_API_KEY = 'npc0/ueEMOagYro4kXt4rObYM1FEIbIV/UvVUHM5zG2K9E4zl2cEFx3uvkJfM13LxXPrJG2jYh/I9mZoxbB8ig=='
+        PUBLIC_DATA_PORTAL_API_URL = 'https://api.odcloud.kr/api/nts-businessman/v1/status'
+        REDIS_IP = '34.64.42.43'
+        REDIS_PASSWORD = 'I9JR5oaodA'
+        S3_BUCKET = 'worqbucket'
+        SECRET = 'uw5YoYHImqUhahQfNWU7VZpPrZ2pQx4kyN6hQkztIiJN/CMfhjnBwcVW3ccDud2e3Dq/xzeCvF4kQ2YUt5Ncpg=='
+        SECRET_ACCOUNT_KEY = 'vBpCYu3TdmWmcBc='
     }
 
     stages {

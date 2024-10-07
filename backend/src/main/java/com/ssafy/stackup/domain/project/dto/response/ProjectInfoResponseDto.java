@@ -22,6 +22,7 @@ import java.util.List;
 @Getter
 public class ProjectInfoResponseDto {
     private Long projectId;
+    private Long freelancerProjectId;
     private ProjectStatus status;
     private ProjectStep step;
     private String title;

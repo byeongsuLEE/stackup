@@ -426,6 +426,7 @@ public class ProjectServiceImpl implements ProjectService {
         }
 
 
+        // 프리랜서일 경우
         Freelancer freelancer = freelancerRepository.findById(user.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -450,10 +451,23 @@ public class ProjectServiceImpl implements ProjectService {
         }
         else{
             Set<FreelancerProject> freelancerProjects = freelancer.getFreelancerProjects();
+
             projects = UserUtil.getProjects(freelancerProjects);
             for(Project project : projects) {
                 if(!project.getStatus().name().equals(projectType)) continue;
+
+
+                Long freelancerProjectId = freelancerProjects.stream()
+                        .filter(fp -> fp.getProject().getId().equals(project.getId())
+                                && fp.getFreelancer().getId().equals(user.getId()))
+                        .map(FreelancerProject::getId)
+                        .findFirst()
+                        .orElse(null);
+
+
+
                 ProjectInfoResponseDto projectInfoResponseDto= ProjectInfoResponseDto.builder()
+                        .freelancerProjectId(freelancerProjectId)
                         .projectId(project.getId())
                         .status(project.getStatus())
                         .title(project.getTitle())
@@ -494,5 +508,19 @@ public class ProjectServiceImpl implements ProjectService {
             project.updateIsFreelancerConfirmed();
         }
         return project.checkUsersConfirm();
+    }
+
+
+    public List<Long> getFreelancerProjectIds(Project project) {
+        // freelancerProjectList가 null인지 확인하고, null이면 빈 리스트를 반환
+        if (project.getFreelancerProjectList() == null) {
+            return Collections.emptyList();
+        }
+
+        // freelancerProjectList에서 null 값도 처리하여 안전하게 ID 추출
+        return project.getFreelancerProjectList().stream()
+                .filter(Objects::nonNull) // null인 FreelancerProject 제외
+                .map(FreelancerProject::getId) // FreelancerProject의 id 추출
+                .collect(Collectors.toList()); // 리스트로 변환
     }
 }

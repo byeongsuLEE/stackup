@@ -118,8 +118,13 @@ def buildDockerImage(project, imageName) {
                     git config user.name "jenkins"
                     git add deployment.yaml
                     git commit -m "Update image to choho97/stackup-${project}:${IMAGE_TAG}"
-                    git push origin main
                 """
+                // GitHub에 푸시 - 자격 증명 사용
+                withCredentials([usernamePassword(credentialsId: "${GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+                    sh """
+                        git push https://$GIT_USER:$GIT_PASS@github.com/S-Choi-1997/stackupM-manifests.git main
+                    """
+                }
 
                 // Argo CD Sync
                 withCredentials([usernamePassword(credentialsId: "${ARGOCD_CREDENTIALS_ID}", usernameVariable: 'ARGOCD_USER', passwordVariable: 'ARGOCD_PASS')]) {

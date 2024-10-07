@@ -31,28 +31,39 @@ pipeline {
             }
         }
 
+        stage('Build Project') {
+            steps {
+                script {
+                    // 전체 프로젝트 루트에서 Gradle 빌드 실행
+                    sh './gradlew clean build -x test --stacktrace'
+                }
+            }
+        }
+
         stage('Build and Push Docker Images') {
-            parallel {
-                stage('Build User Docker Image') {
-                    steps {
-                        script {
-                            buildDockerImage('user', "choho97/stackup-user:${IMAGE_TAG}")
+            steps {
+                parallel {
+                    stage('Build User Docker Image') {
+                        steps {
+                            script {
+                                buildDockerImage('user', "choho97/stackup-user:${IMAGE_TAG}")
+                            }
                         }
                     }
-                }
 
-                stage('Build Board Docker Image') {
-                    steps {
-                        script {
-                            buildDockerImage('board', "choho97/stackup-board:${IMAGE_TAG}")
+                    stage('Build Board Docker Image') {
+                        steps {
+                            script {
+                                buildDockerImage('board', "choho97/stackup-board:${IMAGE_TAG}")
+                            }
                         }
                     }
-                }
 
-                stage('Build Account Docker Image') {
-                    steps {
-                        script {
-                            buildDockerImage('account', "choho97/stackup-account:${IMAGE_TAG}")
+                    stage('Build Account Docker Image') {
+                        steps {
+                            script {
+                                buildDockerImage('account', "choho97/stackup-account:${IMAGE_TAG}")
+                            }
                         }
                     }
                 }
@@ -81,13 +92,6 @@ def buildDockerImage(project, imageName) {
                 // 디렉터리 내용 출력 (디버깅용)
                 sh 'echo "Listing files in $(pwd)"'
                 sh 'ls -la'
-
-                // Gradle 빌드 실행 (테스트 제외)
-                sh 'chmod +x ./gradlew'
-                sh './gradlew clean build -x test'
-
-                // 빌드 후 JAR 파일 위치 확인 (디버깅용)
-                sh 'ls -la build/libs/'
 
                 // Docker 이미지 빌드 및 푸시 (Dockerfile을 명시적으로 참조)
                 sh """

@@ -21,11 +21,14 @@ const SignList = () => {
   return (
     <div className="flex flex-col w-[1000px] items-center mt-[50px]">
       {sessionStorage.getItem('userType') === 'client' ? (
-        signList.map((sign: project) => (
+        <>
+        {signList?.length === 0 && <div className="flex items-center">계약 진행중인 프로젝트가 없습니다.</div>}
+        {signList?.map((sign: project) => (
           <div className="w-[1000px]" key={sign.projectId}>
             <ClientSignListBox {...sign} />
           </div>
-        ))
+        ))}
+        </>
       ) : (
         <>
         {signList?.length === 0 && <div className="flex items-center">계약 진행중인 프로젝트가 없습니다.</div>}

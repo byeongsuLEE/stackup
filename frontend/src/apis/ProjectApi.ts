@@ -1,6 +1,6 @@
 import axios from "axios";
 import { project } from "./Board.type";
-import { projectData } from "./Project.type";
+import { ProjectStepResponse, projectData } from "./Project.type";
 
 const BASE_URL: string = "http://localhost:8080/api/project"
 
@@ -63,6 +63,7 @@ export const startProject = async (checkedList: number[], boardId: string): Prom
 
   console.log(response.data)
 }
+
 
 
 //프로젝트 단계 확인 및 변경

@@ -90,33 +90,33 @@ const WorkForm = () => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="bg-bgGreen flex flex-col px-20 py-10 mt-10 w-[900px] h-auto border rounded-lg border-mainGreen ">
-        <div className="flex items-center">
-          <span className="text-sm mr-5 text-subTxt">
+        <div className="flex">
+          <div className="text-sm mr-5 text-subTxt">
             프로젝트 등록에 어려움이 있다면?
+          </div>
             <div onClick={getAi}>
               <Button width={200} height={30} title="AI 프로젝트 등록" />
             </div>
-          </span>
         </div>
 
         <span className='text-sm text-subTxt mt-10'>[ 필수 입력사항 ]</span>
         <div className='flex mt-5'>
           <div className='flex flex-col mr-32'>
             <label htmlFor="title">프로젝트명</label>
-            <label className='mt-3' htmlFor="description">프로젝트 설명</label>
+            <label className='mt-4' htmlFor="description">프로젝트 설명</label>
             <label className="mt-40" htmlFor="recruits">모집 인원</label>
-            <label className='mt-3' htmlFor="deposit">예상 금액</label>
-            <label className='mt-3' htmlFor="projectStart">프로젝트 시작일</label>
-            <label className='mt-3' htmlFor="period">프로젝트 기간</label>
-            <label className='mt-3' htmlFor="deadline">공고 마감일</label>
-            <label className='mt-3' htmlFor="workType">근무 형태</label>
-            <label className='mt-3' htmlFor="address">실제 근무지</label>
-            <label className='mt-3' htmlFor="requirements">기타 요구사항</label>
+            <label className='mt-4' htmlFor="deposit">예상 금액</label>
+            <label className='mt-5' htmlFor="projectStart">프로젝트 시작일</label>
+            <label className='mt-5' htmlFor="period">프로젝트 기간</label>
+            <label className='mt-5' htmlFor="deadline">공고 마감일</label>
+            <label className='mt-5' htmlFor="workType">근무 형태</label>
+            <label className='mt-5' htmlFor="address">실제 근무지</label>
+            <label className='mt-5' htmlFor="requirements">기타 요구사항</label>
           </div>
           <div className='flex flex-col'>
             <input
               // name="projectName"
-              className='border border-slate-300 rounded-lg w-96'
+              className='border border-slate-300 rounded-lg w-96 p-2'
               type="text"
               {...register("title", { required: '제목을 입력해주세요.' })}
             />
@@ -192,13 +192,13 @@ const WorkForm = () => {
 
             <input
               // name='workAddress' 
-              className='border border-slate-300 rounded-lg w-96 mt-3'
+              className='border border-slate-300 rounded-lg w-96 mt-3 p-1'
               type="text"
               {...register("address", { required: "실제 근무지를 입력해주세요." })}
             />
             <input
               // name='requirement' 
-              className='border border-slate-300 rounded-lg w-96 mt-3'
+              className='border border-slate-300 rounded-lg w-96 mt-3 p-1'
               type="text"
               {...register("requirements", { required: "기타 요구사항을 입력해주세요." })}
             />

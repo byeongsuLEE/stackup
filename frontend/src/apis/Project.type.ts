@@ -9,3 +9,4 @@ export interface projectProps {
     freelancerIdList: number[],
     boardId: number;
 }
+

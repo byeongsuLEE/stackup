@@ -8,10 +8,10 @@ pipeline {
 
         // GitHub 리포지토리 설정 (매니페스트)
         GITHUB_REPO = 'https://github.com/S-Choi-1997/stackupM-manifests.git' // GitHub 매니페스트 리포지토리
-        GITHUB_CREDENTIALS_ID = 'stackupM' // Jenkins에 설정한 GitHub 자격 증명 ID (stackupM-github)
+        GITHUB_CREDENTIALS_ID = 'stackup_github' // Jenkins에 설정한 GitHub 자격 증명 ID (stackupM-github)
 
         // Docker Hub 설정
-        DOCKER_HUB_CREDENTIALS_ID = 'stackup-docker' // Jenkins에 설정한 Docker Hub 자격 증명 ID (stackup-docker)
+        DOCKER_HUB_CREDENTIALS_ID = 'docker-hub-token' // Jenkins에 설정한 Docker Hub 자격 증명 ID (stackup-docker)
         DOCKER_REGISTRY = 'docker.io'
         IMAGE_TAG = "${env.BUILD_NUMBER}" // 빌드 번호를 이미지 태그로 사용
 
@@ -20,7 +20,7 @@ pipeline {
 
         // Argo CD 설정
         ARGOCD_SERVER = 'http://34.64.46.226:30081' // 실제 Argo CD 서버 주소 및 NodePort
-        ARGOCD_CREDENTIALS_ID = 'argocd-password' // Jenkins에 설정한 Argo CD 자격 증명 ID (argocd-password)
+        ARGOCD_CREDENTIALS_ID = 'stackup_argo' // Jenkins에 설정한 Argo CD 자격 증명 ID (argocd-password)
     }
 
     stages {
@@ -73,16 +73,22 @@ pipeline {
 def buildDockerImage(project, imageName) {
     script {
         dir("backend/${project}") { // 프로젝트별 Dockerfile이 위치한 디렉터리로 이동
+            // 디렉터리 내용 출력
+            sh 'ls -la'
+            
             // Gradle 빌드 실행 (테스트 생략)
             sh 'chmod +x ./gradlew'
             sh './gradlew clean build -x test'
+            
+            // 빌드 후 JAR 파일 위치 확인
+            sh 'ls -la build/libs/'
 
             // Docker 이미지 빌드 및 푸시 (Dockerfile을 명시적으로 참조)
             sh """
-                docker build -t ${imageName} -f Dockerfile .  # Dockerfile 사용
+                docker build -t ${imageName} -f Dockerfile .
                 docker push ${imageName}
             """
-
+            
             // GitHub 매니페스트 업데이트 및 ArgoCD 동기화
             dir("../../manifests/${project}") {
                 git branch: 'main', url: "${GITHUB_REPO}", credentialsId: "${GITHUB_CREDENTIALS_ID}"
@@ -95,7 +101,7 @@ def buildDockerImage(project, imageName) {
                     git push origin main
                 """
             }
-
+            
             // Argo CD Sync
             withCredentials([usernamePassword(credentialsId: "${ARGOCD_CREDENTIALS_ID}", usernameVariable: 'ARGOCD_USER', passwordVariable: 'ARGOCD_PASS')]) {
                 sh """

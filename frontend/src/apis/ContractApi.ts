@@ -44,10 +44,10 @@ export const submitContract = async (data: any, freelancerProjectId?: string): P
   
   
   //== 서명 확인 ==//
-  export const signature = async (sign?: string, projectId?: string): Promise<void> => {
+  export const signature = async (sign?: string, freelancerProjectId?: string): Promise<void> => {
     const response = await axios({
       method: 'post',
-      url: `${BASE_URL}/${projectId}/contract/sign`,
+      url: `${BASE_URL}/${freelancerProjectId}/contract/sign`,
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem('token')}`
       },
@@ -58,3 +58,16 @@ export const submitContract = async (data: any, freelancerProjectId?: string): P
 
     console.log(response.data)
   }
+
+  //== 계약서 정보 ==//
+export const contractData = async (freelancerProjectId?: string): Promise<void> => {
+  const response = await axios({
+    method: 'get',
+    url: `${BASE_URL}/contract/${freelancerProjectId}`,
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem('token')}`
+    }
+  })
+
+  console.log(response.data)
+}

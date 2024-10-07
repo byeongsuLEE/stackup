@@ -44,7 +44,7 @@ function App() {
             <Routes>
               <Route path="/test" element={<NFTLoading />} />
               <Route path="/" element={<Home />} />
-              <Route path="/signature/detail" element={<SignatureDetail />} />
+              <Route path="/signature/detail/:projectId" element={<SignatureDetail />} />
               <Route path="/login" element={<Login />} />
               <Route path="/work" element={<Work />} />
               <Route path="/work/post" element={<PostWork />} />
@@ -54,7 +54,7 @@ function App() {
               <Route path="/work/projectgroup/:boardId" element={<ProjectGroup />} />
               <Route path="/work/detail/contract/:boardId/:freelancerProjectId" element={<Contract />} />
               <Route path="/project" element={<Project />} />
-              <Route path="/project/detail" element={<ProjectDetail />} />
+              <Route path="/project/detail/" element={<ProjectDetail />} />
               <Route path="/career" element={<Career />} />
               <Route path="/career/detail" element={<CareerDetail />} />
               <Route path="/career/register" element={<CareerRegister />} />

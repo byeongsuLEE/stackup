@@ -2,6 +2,8 @@ import DoneButton from "../components/common/DoneButton";
 
 const SignatureDetail = () => {
   const today = new Date();
+
+  
   return (
     <div className="bg-bgGreen border border-mainGreen h-auto w-auto p-5 mx-20 my-20">
       <div className="text-center text-lg font-bold">

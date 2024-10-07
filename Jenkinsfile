@@ -89,6 +89,15 @@ pipeline {
                         }
                     }
                 }
+
+                // 리액트 애플리케이션을 위한 Docker 이미지 빌드 단계 추가
+                stage('Build Frontend Docker Image') {
+                    steps {
+                        script {
+                            buildDockerImage('frontend', "choho97/stackup-frontend:${IMAGE_TAG}")
+                        }
+                    }
+                }
             }
         }
     }
@@ -111,10 +120,20 @@ def buildDockerImage(project, imageName) {
 
             echo "Image name: ${imageName}"
 
-            dir("backend/${project}") {
-                sh 'chmod +x ./gradlew'
-                sh './gradlew clean build -x test --stacktrace'
-                sh "docker build -t ${imageName} -f Dockerfile ."
+            // 백엔드 프로젝트와 프론트엔드 프로젝트를 구분하여 디렉터리 설정
+            def projectDir = project == 'frontend' ? "frontend" : "backend/${project}"
+
+            dir("${projectDir}") {
+                // 프론트엔드의 경우 Gradle 빌드가 아닐 수 있으므로 조건부 빌드 명령어
+                if (project == 'frontend') {
+                    sh 'npm install'
+                    sh 'npm run build'
+                    sh "docker build -t ${imageName} -f Dockerfile ."
+                } else {
+                    sh 'chmod +x ./gradlew'
+                    sh './gradlew clean build -x test --stacktrace'
+                    sh "docker build -t ${imageName} -f Dockerfile ."
+                }
                 sh "docker push ${imageName}"
             }
 
@@ -122,7 +141,9 @@ def buildDockerImage(project, imageName) {
             git branch: 'main', url: "${GITHUB_REPO}", credentialsId: "${GITHUB_CREDENTIALS_ID}"
 
             // spring-${project} 디렉터리로 이동해서 작업
-            dir("spring-${project}") {
+            def gitProjectDir = project == 'frontend' ? "spring-frontend" : "spring-${project}"
+
+            dir("${gitProjectDir}") {
 
                  // 로컬 변경 사항을 커밋 또는 스태시
                 sh """
@@ -155,7 +176,7 @@ def buildDockerImage(project, imageName) {
                     // 변경 사항을 스테이징하고 커밋한 후 푸시
                     withCredentials([usernamePassword(credentialsId: "${GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
                         sh """
-                            git add spring-${project}/deployment.yaml spring-${project}/kustomization.yaml spring-${project}/service.yaml
+                            git add ${gitProjectDir}/deployment.yaml ${gitProjectDir}/kustomization.yaml ${gitProjectDir}/service.yaml
                             git commit -m "Update image to choho97/stackup-${project}:${IMAGE_TAG}" || echo "No changes to commit"
                             git push https://$GIT_USER:$GIT_PASS@github.com/S-Choi-1997/stackupM.git main
                         """
@@ -164,7 +185,7 @@ def buildDockerImage(project, imageName) {
             }
 
             // Argo CD Sync
-            def appName = "spring-${project}"
+            def appName = project == 'frontend' ? "spring-frontend" : "spring-${project}"
             withCredentials([usernamePassword(credentialsId: "${ARGOCD_CREDENTIALS_ID}", usernameVariable: 'ARGOCD_USER', passwordVariable: 'ARGOCD_PASS')]) {
                 sh """
                     echo y | ./argocd login ${ARGOCD_SERVER} --username ${ARGOCD_USER} --password ${ARGOCD_PASS} --insecure

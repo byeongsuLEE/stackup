@@ -134,7 +134,7 @@ def buildDockerImage(project, imageName) {
                     git config user.email "jenkins@example.com"
                     git config user.name "jenkins"
                     git add deployment.yaml kustomization.yaml service.yaml
-                    git commit -m "Update image to choho97/stackup-${project}:${IMAGE_TAG}"
+                    git commit -m "Update image to choho97/stackup-${project}:${IMAGE_TAG}"|| echo "No changes to commit"
                 """
                 // GitHub에 푸시 - 자격 증명 사용
                 withCredentials([usernamePassword(credentialsId: "${GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {

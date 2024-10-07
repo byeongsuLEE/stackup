@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../../icons/Logo";
 import { useLoginStore } from "../../store/UserStore";
 import DoneButton from "./DoneButton";
@@ -7,6 +7,11 @@ import { logout } from "../../apis/UserApi";
 
 const Navbar = () => {
   const { isLogin, checkLogin } = useLoginStore();
+  const freelancerId = sessionStorage.getItem('freelancerId');
+  const navigate = useNavigate();
+  const toMypage = () => {
+    navigate(`/mypage/${freelancerId}`);
+  }
   useEffect(() => {
     checkLogin();
   }, [checkLogin])
@@ -51,9 +56,10 @@ const Navbar = () => {
                 <>
                 </>
               ) : (
-                <Link to="/mypage">
+                <button onClick={toMypage}>
                   마이페이지
-                </Link>
+                </button>
+                
               )}
             </div>
           ) : (

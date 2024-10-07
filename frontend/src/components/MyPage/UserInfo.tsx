@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
+import { registerFreelancerInfo } from "../../apis/UserApi";
+import AIIcon from "../../icons/AIIcon";
+import DBIcon from "../../icons/DBIcon";
+import MobileIcon from "../../icons/MobileIcon";
+import PublisherIcon from "../../icons/PublisherIcon";
 import WebIcon from "../../icons/WebIcon";
 import { freelanceInformation } from "../../store/FreelanceStore";
 import Major from "../SignupPage/Major";
 import Skill from "../SignupPage/Skill";
 import DoneButton from "../common/DoneButton";
-import { registerFreelancerInfo } from "../../apis/UserApi";
 
 const UserInfo = (data: freelanceInformation) => {
   const [local, setLocal] = useState({
@@ -17,6 +21,8 @@ const UserInfo = (data: freelanceInformation) => {
     selfIntroduction: data.selfIntroduction || ''
   });
 
+  const [isReadOnly, setIsReadOnly] = useState(false);
+
   useEffect(() => {
     setLocal({
       name: data.name || '',
@@ -27,6 +33,11 @@ const UserInfo = (data: freelanceInformation) => {
       portfolioURL: data.portfolioURL || '',
       selfIntroduction: data.selfIntroduction || ''
     });
+    // 세션 스토리지에서 userType 확인 후 freelancer면 readonly 설정
+    const userType = window.sessionStorage.getItem('userType');
+    if (userType == 'client') {
+      setIsReadOnly(true);
+    }
   }, [data]);
 
   const changeValue = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,11 +47,11 @@ const UserInfo = (data: freelanceInformation) => {
     }));
   };
 
-  const handleSubmit = async(e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     data.updateState(local);
     await registerFreelancerInfo();
-    
+
   };
 
   return (
@@ -54,6 +65,7 @@ const UserInfo = (data: freelanceInformation) => {
             type="text"
             value={local.name || ""}
             onChange={changeValue('name')}
+            readOnly={isReadOnly}
           />
 
           <label htmlFor="email">이메일</label>
@@ -63,6 +75,7 @@ const UserInfo = (data: freelanceInformation) => {
             type="text"
             value={local.email || ""}
             onChange={changeValue('email')}
+            readOnly={isReadOnly}
           />
 
           <label htmlFor="address">주소</label>
@@ -72,6 +85,7 @@ const UserInfo = (data: freelanceInformation) => {
             type="text"
             value={local.address || ""}
             onChange={changeValue('address')}
+            readOnly={isReadOnly}
           />
 
           <label htmlFor="phone">연락처</label>
@@ -81,6 +95,7 @@ const UserInfo = (data: freelanceInformation) => {
             type="text"
             value={local.phone || ""}
             onChange={changeValue('phone')}
+            readOnly={isReadOnly}
           />
         </div>
 
@@ -88,10 +103,10 @@ const UserInfo = (data: freelanceInformation) => {
           <span>대분류</span>
           <div className="flex">
             <Major major={WebIcon} title="웹" name="category" value="web" />
-            <Major major={WebIcon} title="모바일" name="category" value="mobile" />
-            <Major major={WebIcon} title="퍼블리셔" name="category" value="publisher" />
-            <Major major={WebIcon} title="AI" name="category" value="ai" />
-            <Major major={WebIcon} title="DB" name="category" value="db" />
+            <Major major={MobileIcon} title="모바일" name="category" value="mobile" />
+            <Major major={PublisherIcon} title="퍼블리셔" name="category" value="publisher" />
+            <Major major={AIIcon} title="AI" name="category" value="ai" />
+            <Major major={DBIcon} title="DB" name="category" value="db" />
           </div>
 
           <span>사용언어(중복선택 가능)</span>
@@ -122,16 +137,23 @@ const UserInfo = (data: freelanceInformation) => {
             placeholder="년"
             className="mt-2 text-right px-2 border border-subGreen2 w-52 h-10 rounded-xl"
             type="text"
-            value={local.careerYear ? local.careerYear : ""}
-            onChange={changeValue('careerYear')}
+            value={local.careerYear ? `${local.careerYear}년` : ""}
+            onChange={(e) => {
+              const value = e.target.value.replace(/[^0-9]/g, ""); // 숫자 외의 값 제거
+              changeValue('careerYear')(value); // 상태 업데이트는 숫자만 처리
+            }}
+            readOnly={isReadOnly}
           />
 
+          {window.sessionStorage.getItem('userType') === 'freelancer' &&
+          <>
           <span className="mt-5">포트폴리오 링크</span>
           <input
             type="text"
             className="px-2 mt-2 border border-subGreen2 w-72 h-10 rounded-xl"
             value={local.portfolioURL || ""}
             onChange={changeValue('portfolioURL')}
+            readOnly={isReadOnly}
           />
 
           <span className="mt-5">한 줄 자기소개</span>
@@ -140,12 +162,16 @@ const UserInfo = (data: freelanceInformation) => {
             className="px-2 mt-2 border border-subGreen2 w-72 h-10 rounded-xl"
             value={local.selfIntroduction || ""}
             onChange={changeValue('selfIntroduction')}
+            readOnly={isReadOnly}
           />
+          </>
+          }
         </div>
-
-        <div className="flex justify-end mr-10 my-5">
-          <DoneButton height={40} width={100} title="수정하기" />
-        </div>
+        {window.sessionStorage.getItem('userType') === 'freelancer' &&
+          <div className="flex justify-end mr-10 my-5">
+            <DoneButton height={40} width={100} title="수정하기" />
+          </div>
+        }
       </div>
     </form>
   );

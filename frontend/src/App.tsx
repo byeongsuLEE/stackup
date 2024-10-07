@@ -30,6 +30,7 @@ import Transfer from "./pages/TransferPage";
 import WorkDetail from "./pages/WorkDetailPage";
 import Work from "./pages/WorkPage";
 import SelectedCandidate from './pages/SelectedCandidatePage';
+import NFTLoading from './pages/NFTLoadingPage';
 
 function App() {
   const queryClient = new QueryClient();
@@ -42,7 +43,7 @@ function App() {
           <main className="flex-grow mt-28 mx-20">
             <Navbar />
             <Routes>
-              <Route path="/test" element={<Test />} />
+              <Route path="/test" element={<NFTLoading />} />
               <Route path="/" element={<Home />} />
               <Route path="/signature/detail" element={<SignatureDetail />} />
               <Route path="/login" element={<Login />} />
@@ -50,9 +51,9 @@ function App() {
               <Route path="/work/post" element={<PostWork />} />
               <Route path="/work/detail/:boardId" element={<WorkDetail />} />
               <Route path="/work/detail/candidate/:boardId" element={<CandidateCheck />} />
-              <Route path="/work/detail/select/:boardId" element={<SelectedCandidate />} />
+              <Route path="/work/detail/select/:boardId/:projectId" element={<SelectedCandidate />} />
               <Route path="/work/projectgroup/:boardId" element={<ProjectGroup />} />
-              <Route path="/work/detail/contract/:boardId/:freelancerProjectId" element={<Contract />} />
+              <Route path="/work/detail/contract/:boardId/:projectId/:freelancerProjectId" element={<Contract />} />
               <Route path="/project" element={<Project />} />
               <Route path="/project/detail" element={<ProjectDetail />} />
               <Route path="/career" element={<Career />} />
@@ -60,7 +61,7 @@ function App() {
               <Route path="/career/register" element={<CareerRegister />} />
               <Route path="/account" element={<Account />} />
               <Route path="/account/detail/:accountId" element={<AccountDetail />} />
-              <Route path="/mypage" element={<Mypage />} />
+              <Route path="/mypage/:accountId" element={<Mypage />} />
               <Route path="/signup/client" element={<ClientSignup />} />
               <Route path="/signup/freelancer" element={<FreelancerSignup />} />
               <Route path="/signup/freelancer/skill" element={<FreelancerSkill />} />

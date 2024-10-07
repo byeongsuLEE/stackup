@@ -43,7 +43,7 @@ export const getProject =  async (type: string): Promise<project[]> => {
       Authorization: `Bearer ${sessionStorage.getItem("token")}`
     }
   })
-
+  console.log(response.data.data)
   return response.data.data
 }
 
@@ -62,4 +62,17 @@ export const startProject = async (checkedList: Number[], boardId: string): Prom
   })
 
   console.log(response.data)
+}
+
+
+//프로젝트 단계 확인 및 변경
+export const projectStep = async (boardId: string,): Promise<void> => {
+  await axios({
+      method: 'put',
+      url: `${BASE_URL}/${boardId}/step/check`,
+      headers: {
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`
+          
+      }
+  })
 }

@@ -34,7 +34,7 @@ export const getToken = async (userId: string | null): Promise<string> => {
 
     //== id 저장 ==//
     setFreelancerId(response.data.data.userId);
-    window.sessionStorage.setItem("freelancerId", response.data.data.userId);
+    window.sessionStorage.setItem("userId", response.data.data.userId);
 
     return "로그인";
   } catch (error) {
@@ -168,7 +168,7 @@ export const clientLogin = async ( information: clientLoginInfo ): Promise<void>
 
     //== id 저장 ==//
     setClientId(response.data.data.userId);
-    window.sessionStorage.setItem("clientId", response.data.data.id);
+    window.sessionStorage.setItem("userId", response.data.data.id);
 
   } catch (error) {
     if (axios.isAxiosError(error)) {
@@ -198,3 +198,48 @@ export const logout = async (): Promise<void> => {
     console.log(error)
   })
 }
+
+//== 지갑주소 등록 ==//
+export const wallet = async (address: string): Promise<void> => {
+  const response = await axios({
+    method: 'patch',
+    url: `${BASE_URL}/${sessionStorage.getItem('userId')}/address`,
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem('token')}`
+    },
+    data: {
+      "address": address
+    }
+  })
+  console.log(response.data)
+}
+
+// 클라이언트가 프리랜서 프로필 조회
+export const getClientFreelancerProfile = async (freelancerId:string): Promise<string> => {
+  const state = freelanceStore.getState();
+
+  try {
+    const response = await axios({
+      method: "get",
+      url: `${BASE_URL}/info/${freelancerId}`,
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      },
+    });
+    const data: Partial<freelanceSignupInfo> = response.data.data;
+
+    state.updateState(data);
+    state.setFramworks(response.data.data.framework);
+    state.setLanguages(response.data.data.language);
+
+    return response.data.data.email;
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Axios error: ", error.message);
+    } else {
+      console.error("Unexpected error: ", error);
+    }
+
+    return "실패";
+  }
+};

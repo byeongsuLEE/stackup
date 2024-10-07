@@ -72,30 +72,22 @@ pipeline {
 // Docker 이미지 빌드 및 푸시 함수 정의
 def buildDockerImage(project, imageName) {
     script {
-        dir("backend/${project}") { // 정확한 디렉토리 경로로 수정
-            // gradlew 파일에 실행 권한 부여
+        dir("backend/${project}") { // 프로젝트별 Dockerfile이 위치한 디렉터리로 이동
+            // Gradle 빌드 실행 (테스트 생략)
             sh 'chmod +x ./gradlew'
-            // Gradle 빌드 실행
             sh './gradlew clean build -x test'
 
-            // Docker 이미지 빌드 및 푸시
-            dockerImage = docker.build(imageName)
-            docker.withRegistry("https://${DOCKER_REGISTRY}", "${DOCKER_HUB_CREDENTIALS_ID}") {
-                dockerImage.push()
-            }
+            // Docker 이미지 빌드 및 푸시 (Dockerfile을 명시적으로 참조)
+            sh """
+                docker build -t ${imageName} -f Dockerfile .  # Dockerfile 사용
+                docker push ${imageName}
+            """
 
-            // GitHub 매니페스트 업데이트
-            dir("../../manifests/${project}") { // 매니페스트 리포지토리 디렉토리로 이동
-                // GitHub 매니페스트 리포지토리 체크아웃
+            // GitHub 매니페스트 업데이트 및 ArgoCD 동기화
+            dir("../../manifests/${project}") {
                 git branch: 'main', url: "${GITHUB_REPO}", credentialsId: "${GITHUB_CREDENTIALS_ID}"
-
-                // Deployment 매니페스트의 이미지 태그 업데이트
                 sh """
                     sed -i 's|image: choho97/stackup/${project}:.*|image: choho97/stackup/${project}:${IMAGE_TAG}|' deployment.yaml
-                """
-
-                // Git 사용자 설정 및 변경 사항 커밋 & 푸시
-                sh """
                     git config user.email "jenkins@example.com"
                     git config user.name "jenkins"
                     git add deployment.yaml

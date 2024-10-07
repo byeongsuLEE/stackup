@@ -43,7 +43,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 // Git 리포지토리에서 소스 코드를 체크아웃
-                git branch: 'main', url: "${GIT_REPO}", credentialsId: "${GIT_CREDENTIALS_ID}"
+                git branch: 'dev/ml', url: "${GIT_REPO}", credentialsId: "${GIT_CREDENTIALS_ID}"
             }
         } 
 

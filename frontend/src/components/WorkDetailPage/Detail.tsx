@@ -26,6 +26,7 @@ const Detail = ({ project, clientId }: DetailProps) => {
   const [loading, setLoading] = useState(true); // 로딩 상태
   
   const boardId = project.boardId;
+  const { pathId } = useParams();
 
 
   const navigate = useNavigate();
@@ -97,9 +98,12 @@ const Detail = ({ project, clientId }: DetailProps) => {
 
    // boardId를 이용해 anomaly 확인
    useEffect(() => {
+    console.log(project)
+    console.log(project.boardId)
     const checkAnomaly = async () => {
       try {
-        const response = await axios.get(`${svURL}/detect/illegal/${project.boardId}`);
+        const response = await axios.get(`${svURL}/api/detect/illegal/${project.boardId}`);
+        console.log(response)
         setIsAnomaly(response.data.is_anomaly[0]);
       } catch (error) {
         console.error("Error fetching anomaly data:", error);
@@ -109,7 +113,7 @@ const Detail = ({ project, clientId }: DetailProps) => {
     };
 
     checkAnomaly();
-  }, []);
+  }, [project]);
 
   if (!isLoaded || loading) {
     // 데이터가 아직 로드되지 않았다면 로딩 화면 표시
@@ -145,12 +149,7 @@ const Detail = ({ project, clientId }: DetailProps) => {
         <div className="bg-subTxt w-auto h-[1px] flex justify-center my-10"></div>
 
         <div className="flex justify-center mb-10">
-          <InfoBox title="예상 금액" category="deposit" content={project.deposit} info={PriceIcon} />
-          {isAnomaly !== null && (
-            <span className={`ml-2 ${isAnomaly ? "text-red-500" : "text-green-500"}`}>
-              {isAnomaly ? "⚠️" : "✅"}
-            </span>
-          )}
+          <InfoBox title="예상 금액" category="deposit" content={project.deposit} info={PriceIcon} isAnomaly={isAnomaly}/>
           <InfoBox title="예상 기간" category="period" content={project.period} info={PeriodIcon} />
           <InfoBox title="지원자 수" category="applicants" content={project.applicants} info={CandidateIcon} />
         </div>

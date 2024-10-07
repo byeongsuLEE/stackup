@@ -15,8 +15,8 @@ const WorkList = () => {
 
 
   const navigate = useNavigate();
-  const toWorkDetail = (id: string) => {
-    navigate(`/work/detail/${id}`);
+  const toWorkDetail = (boardId: string) => {
+    navigate(`/work/detail/${boardId}`);
   }
 
 

@@ -1,0 +1,216 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+.content-section {
+  --scroll-length: 1.5;
+  /* 스크롤 길이를 조절하는 사용자 정의 CSS 변수 */
+  height: calc(var(--scroll-length) * 100vh);
+  /* 화면 높이의 1.5배로 섹션의 높이를 설정 */
+}
+
+.content-section .content .subheading,
+.content-section .content .paragraph {
+  /* 뷰포인트에서 얼마나 보이는지에 따라 텍스트의 투명도를 계산 */
+  opacity: calc(1 - (3 * var(--viewport-y)));
+  /* var(--viewport-y)는 스크롤 위치에 따라 0에서 1 사이 값을 가짐 */
+}
+
+.figure {
+  --scale: 0.8;
+  /* 이미지 기본 축소 크기를 80%로 설정 */
+  position: sticky;
+  /* 이미지가 화면에 고정되도록 설정 (스티키 효과) */
+  top: 0;
+  /* 스티키 효과의 기준을 화면의 최상단으로 설정 */
+  left: 0;
+  /* 이미지의 왼쪽을 화면의 왼쪽에 고정 */
+  margin: 0;
+  /* 이미지 주위를 감싸는 여백을 제거 */
+  display: block;
+  /* 이미지를 블록 요소로 설정 */
+  overflow: hidden;
+  /* 이미지 요소가 벗어나는 부분은 숨김 */
+  will-change: transform;
+  /* CSS 변경 성능을 향상시키기 위해 transform 속성을 미리 할당 */
+  transform: scale(var(--scale));
+  /* 이미지 크기를 80%로 설정 */
+  transition: transform 1s ease-out;
+  /* 이미지 크기 변경이 부드럽게 1초 동안 진행되도록 설정 */
+}
+
+.figure.in-view {
+  --scale: 1.2;
+  /* 이미지가 뷰포인트에 진입할 때 확대 크기를 120%로 설정 */
+}
+
+.figure>img {
+  display: block;
+  /* 이미지를 블록 요소로 설정 */
+  will-change: transform;
+  /* transform 속성을 미리 할당하여 성능을 향상 */
+  transition: transform 1s ease-out;
+  /* 이미지 크기 변경이 부드럽게 1초 동안 진행되도록 설정 */
+}
+
+.char {
+  color:rgb(77, 113, 17);
+  display: inline-block;
+  /* 각 글자를 개별 블록으로 설정하여 제어 가능하도록 설정 */
+  /* 글자가 뷰포인트에서 얼마나 보이는지에 따라 투명도를 계산 */
+  opacity: calc(1 - ((var(--viewport-y) * 2) - var(--char-percent)));
+  /* var(--viewport-y)는 스크롤 위치에 따라 0에서 1 사이 값을 가지며, var(--char-percent)는 글자의 상대적 위치를 나타냄 */
+}
+
+*,
+*:before,
+*:after {
+  position: relative;
+  /* 요소를 기준으로 자식 요소들의 위치를 상대적으로 설정 */
+  box-sizing: border-box;
+  /* 요소의 너비와 높이에 패딩과 테두리 크기를 포함하도록 설정 */
+}
+
+body,
+html {
+  height: 100%;
+  /* 문서 전체 높이를 100%로 설정 */
+  width: 100%;
+  /* 문서 전체 너비를 100%로 설정 */
+  margin: 0;
+  /* 기본 여백을 제거 */
+  padding: 0;
+  /* 기본 패딩을 제거 */
+  line-height: 1.05;
+  /* 텍스트 라인의 높이를 설정 */
+  font-weight: 400;
+  /* 기본 폰트 굵기를 설정 */
+  letter-spacing: -0.015em;
+  /* 글자 간격을 좁게 설정 */
+  font-family: "SF Pro Display", "Helvetica Neue", "Helvetica", "Arial",
+    sans-serif;
+  /* 기본 폰트 패밀리 설정 */
+}
+
+.content {
+  z-index: 10;
+  /* 텍스트의 z-축 위치를 설정하여 이미지 위에 표시되도록 설정 */
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  /* 텍스트에 그림자 효과를 추가하여 가독성을 높임 */
+  transition: opacity 0.7s ease-out, transform 0.3s ease-out;
+  /* 투명도와 위치 변경을 부드럽게 0.3초 동안 진행되도록 설정 */
+  /* 스크롤 위치에 따라 텍스트의 투명도를 계산 */
+  opacity: calc(1 - (2 * var(--viewport-y)));
+  /* 스크롤 위치에 따라 텍스트의 수직 위치를 계산하여 움직임을 만듦 */
+  transform: translateY(calc(var(--viewport-y) * 50px));
+  font-size: 2.5vmin;
+  /* 폰트 크기를 뷰포트 크기에 비례하게 설정하여 가변적으로 조정 */
+}
+
+.heading {
+  font-size: 2.75em;
+  margin: 0;
+  
+}
+
+.subheading {
+  font-size: 1.25em;
+  font-weight: 600;
+  margin-bottom: 0.5em;
+  color: rgb(195, 233, 86);
+}
+
+.mainbox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  height: 200vh;
+  margin: 5vh 0;
+  /* 상하 여백을 추가하여 전체 레이아웃과 조화롭게 설정 */
+}
+
+.text {
+  font-size: 10vw;
+  /* 뷰포트 너비에 비례하는 글꼴 크기 */
+  letter-spacing: -0.01em;
+  line-height: 100%;
+  margin: 0;
+  width: 100%;
+  color: rgba(182, 182, 182, 0.2);
+  /* 투명도를 주어 배경과 어울리도록 설정 */
+  background: linear-gradient(to right, #b6b6b6, #b6b6b6) no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  background-size: 0%;
+  /* 초기 배경 크기 설정 */
+  transition: background-size cubic-bezier(0.1, 0.5, 0.5, 1) 0.5s;
+  /* 배경 크기 변화 트랜지션 */
+  border-bottom: 1px solid #2f2b28;
+  /* 텍스트 하단에 경계선 추가 */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+}
+
+article {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(195, 233, 86);
+  /* 텍스트 효과 배경 색상 */
+  color: rgb(255, 255, 255);
+  /* 텍스트 색상 */
+  clip-path: polygon(0 50%,
+      100% 50%,
+      100% 50%,
+      0 50%);
+  /* 초기 클립 경로 설정 */
+  transform-origin: center;
+  transition: all cubic-bezier(0.1, 0.5, 0.5, 1) 0.4s;
+  /* 클립 효과의 트랜지션 */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.text:hover>article {
+  clip-path: polygon(0 0,
+      100% 0,
+      100% 100%,
+      0% 100%);
+  /* 호버 시 클립 효과를 변경하여 텍스트 강조 */
+}
+
+a {
+  text-decoration: none;
+  /* 앵커 텍스트의 밑줄 제거 */
+  color: inherit;
+  /* 부모 요소의 색상을 상속받도록 설정 */
+}
+
+.intro-section {
+  background-image: url("/assets/main.webp");
+  /* 배경 이미지 경로 설정 */
+  background-size: cover;
+  /* 이미지가 섹션 전체를 덮도록 설정 */
+  background-position: center;
+  /* 이미지의 위치를 가운데로 설정 */
+  background-repeat: no-repeat;
+  /* 이미지 반복하지 않도록 설정 */
+  min-height: 50vh;
+  /* 섹션 높이 설정 */
+  display: flex;
+  /* 플렉스 박스 사용 */
+  flex-direction: column;
+  /* 플렉스 박스의 방향을 수직으로 설정 */
+  align-items: center;
+  /* 콘텐츠를 수평 가운데 정렬 */
+  justify-content: center;
+  /* 콘텐츠를 수직 가운데 정렬 */
+  text-align: center;
+  /* 텍스트 가운데 정렬 */
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}

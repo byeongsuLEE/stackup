@@ -41,6 +41,8 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.ssafy.stackup.domain.project.entity.ProjectStatus.PROGRESS;
+
 
 @Service
 @RequiredArgsConstructor
@@ -212,9 +214,17 @@ public class ProjectServiceImpl implements ProjectService {
             freelancerProject.updateFreelancerSignatureValue(signRequest.getSignature());
         }
 
-        freelancerProjectRepository.save(freelancerProject);
+        freelancerProject = freelancerProjectRepository.save(freelancerProject);
 
-        return  ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(" 서명완료"));
+        // 두명다 서명을 했으면 프로젝트의 상태를 변경해보도록합시다.
+
+        Project project =freelancerProject.getProject();
+        if(project.isAllFreelancersSigned()){
+            project.updateStatus(PROGRESS);
+            projectRepository.save(project);
+            return  ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(" 모든 지원자 및 클라이언트가 서명 완료되었습니다."));
+        }
+        return  ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("해당 유저 서명 완료, 모든 서명이 완료되지 않았습니다."));
     }
 
 

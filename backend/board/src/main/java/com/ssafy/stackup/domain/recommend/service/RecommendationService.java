@@ -1,6 +1,5 @@
 package com.ssafy.stackup.domain.recommend.service;
 
-import com.ssafy.stackup.domain.board.entity.Board;
 import com.ssafy.stackup.domain.board.entity.Level;
 import com.ssafy.stackup.domain.board.repository.BoardRepository;
 import com.ssafy.stackup.domain.recommend.entity.Recommend;
@@ -9,11 +8,11 @@ import com.ssafy.stackup.domain.user.entity.Freelancer;
 import com.ssafy.stackup.domain.user.repository.FreelancerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
-import org.springframework.data.elasticsearch.core.IndexOperations;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -42,7 +41,6 @@ public class RecommendationService {
         // 1. 프리랜서 정보 가져오기
         Freelancer freelancer = freelancerRepository.findById(freelancerId)
                 .orElseThrow(() -> new IllegalArgumentException("프리랜서를 찾을 수 없습니다."));
-        System.out.println(freelancer.getClassification());
 
         List<Recommend> recommendListByClassification = boardElasticsearchRepo.findByClassification(freelancer.getClassification()).stream().toList();
 
@@ -50,12 +48,10 @@ public class RecommendationService {
         Set<String> languages = freelancer.getLanguages().stream()
                 .map(language -> language.getLanguage().getName())
                 .collect(Collectors.toSet());
-        System.out.println(languages);
         // 각 언어별로 추천 검색
         Set<Recommend> recommendedBoardsByLanguage = new HashSet<>();
         for (String language : languages) {
             List<Recommend> recommendsByLanguage = boardElasticsearchRepo.findByLanguages(language);
-            System.out.println(recommendsByLanguage.size()+ "언어" + language);
             recommendedBoardsByLanguage.addAll(recommendsByLanguage);
         }
 
@@ -67,14 +63,12 @@ public class RecommendationService {
         Set<Recommend> recommendedBoardsByFramework = new HashSet<>();
         for (String framework : frameworks) {
             List<Recommend> recommendsByFramework = boardElasticsearchRepo.findByFrameworks(framework);
-            System.out.println(recommendsByFramework.size()+"프레임워크"+framework);
             recommendedBoardsByFramework.addAll(recommendsByFramework);
         }
 //
         // 4. 프리랜서의 경력 연수에 맞는 레벨을 계산하여 보드 추천
         Integer careerYear = freelancer.getCareerYear();
         Level freelancerLevel = getLevelByCareerYear(careerYear);
-        System.out.println(freelancerLevel);
 
         // 프리랜서 경력에 맞는 보드 추천
         List<Recommend> recommendedBoardsByLevel = boardElasticsearchRepo.findByLevel(freelancerLevel);

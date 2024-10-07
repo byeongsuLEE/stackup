@@ -1,4 +1,4 @@
-//package com.ssafy.stackup.common.config;
+package com.ssafy.stackup.common.config;//package com.ssafy.stackup.common.config;
 //
 //import jakarta.persistence.EntityManagerFactory;
 //import org.springframework.boot.autoconfigure.domain.EntityScan;

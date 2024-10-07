@@ -1,6 +1,8 @@
 package com.ssafy.stackup.domain.language.repository;
+
 import com.ssafy.stackup.domain.language.entity.Language;
 import org.springframework.data.jpa.repository.JpaRepository;
+
 import java.util.List;
 import java.util.Optional;
 

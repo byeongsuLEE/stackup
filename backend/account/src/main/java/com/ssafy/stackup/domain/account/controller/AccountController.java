@@ -1,6 +1,7 @@
 package com.ssafy.stackup.domain.account.controller;
 
 import co.elastic.clients.elasticsearch.nodes.Http;
+import com.ssafy.stackup.common.exception.ResourceNotFoundException;
 import com.ssafy.stackup.domain.account.dto.*;
 import com.ssafy.stackup.domain.account.entity.Account;
 import com.ssafy.stackup.domain.account.service.AccountService;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
@@ -113,17 +115,30 @@ public class AccountController {
         return transactionsService.fetchTransactions(accountId, accountNo, user, request);
     }
 
-    @PostMapping("/{accountId}/transfer")
-    public void accountTransfer(@RequestBody TransferRequest request, @PathVariable Long accountId,HttpServletRequest httpServletRequest) throws Exception {
 
-        User user = getUserDetailInfo(httpServletRequest);
-        Account account = accountService.getAccount(accountId);
-        String accountNo = EncryptionUtil.decrypt(account.getAccountNum());
-        System.out.println(accountNo);
-        System.out.println(request.getDepositAccount());
-        System.out.println(request.getTransactionBalance());
-        transferService.fetchTransfer(request.getDepositAccount(), accountNo, request.getTransactionBalance(), user,httpServletRequest);
+    @Transactional
+    @PostMapping("/transfer")
+    public void accountTransfer(@RequestBody TransferRequest request,HttpServletRequest httpServletRequest) throws Exception {
+
+
+        User client = getUserDetailInfo(httpServletRequest);
+        Long freelancerId = request.getFreelancerId();
+
+        User freelancer = accountService.getDetailUserInfo(freelancerId, httpServletRequest);
+        if (freelancer.getMainAccount() == null) {
+            throw new IllegalArgumentException("프리랜서 계좌 번호가 존재하지 않습니다.");
+        }
+        if (client.getMainAccount() == null) {
+            throw new IllegalArgumentException("클라이언트 계좌 번호가 존재하지 않습니다.");
+        }
+        String freelancerAccountNo = EncryptionUtil.decrypt(freelancer.getMainAccount());
+        String clientAccountNo = EncryptionUtil.decrypt(client.getMainAccount());
+        transferService.fetchTransfer(freelancerAccountNo, clientAccountNo, request.getTransactionBalance(), client,httpServletRequest);
     }
+
+
+
+
 
     @PostMapping("/auth/{accountId}")
     public void wonAuth(@PathVariable Long accountId, HttpServletRequest request) throws Exception {

@@ -2,7 +2,6 @@ package com.ssafy.stackup.domain.board.service;
 
 import com.ssafy.stackup.common.exception.ResourceNotFoundException;
 import com.ssafy.stackup.domain.board.dto.BoardApplicantRequest;
-import com.ssafy.stackup.domain.board.dto.BoardCreateRequest;
 import com.ssafy.stackup.domain.board.dto.BoardFindAllResponse;
 import com.ssafy.stackup.domain.board.dto.BoardSearchResponse;
 import com.ssafy.stackup.domain.board.entity.Board;
@@ -30,6 +29,8 @@ import com.ssafy.stackup.domain.user.repository.FreelancerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -38,8 +39,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import javax.swing.text.html.Option;
-import java.util.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -76,11 +80,26 @@ public class BoardService {
 
     //모집글 목록 조회
     @Transactional(readOnly = true)
-    public List<BoardFindAllResponse> getboards() {
-        List<Board> boards = boardRepository.findAll();
+    public List<BoardFindAllResponse> getMyBoards(Long userId) {
+        List<Board> boards = boardRepository.findByClient_Id(userId);
         return boards.stream()
                 .map(BoardFindAllResponse::new)
                 .collect(Collectors.toList());
+    }
+
+
+    //모집글 목록 조회
+//    @Transactional(readOnly = true)
+//    public List<BoardFindAllResponse> getboards() {
+//        List<Board> boards = boardRepository.findAll();
+//        return boards.stream()
+//                .map(BoardFindAllResponse::new)
+//                .collect(Collectors.toList());
+//    }
+    @Transactional(readOnly = true)
+    public Page<Board> findAll(Pageable pageable) {
+        LocalDate today = LocalDate.now();
+        return boardRepository.findAllByDeadlineAfter(today,pageable);
     }
 
     @Transactional(readOnly = true)

@@ -3,7 +3,6 @@ package com.ssafy.stackup.common.oauth2.service;
 import com.ssafy.stackup.common.exception.CustomOAuth2Exception;
 import com.ssafy.stackup.common.oauth2.dto.GitHubResponse;
 import com.ssafy.stackup.common.response.ErrorCode;
-
 import com.ssafy.stackup.domain.user.entity.Freelancer;
 import com.ssafy.stackup.domain.user.entity.UserAdapter;
 import com.ssafy.stackup.domain.user.repository.FreelancerRepository;

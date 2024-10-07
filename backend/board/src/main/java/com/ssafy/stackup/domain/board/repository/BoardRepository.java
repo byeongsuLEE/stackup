@@ -4,12 +4,15 @@ import com.ssafy.stackup.domain.board.dto.BoardSummaryDTO;
 import com.ssafy.stackup.domain.board.entity.Board;
 import com.ssafy.stackup.domain.framework.entity.Framework;
 import com.ssafy.stackup.domain.language.entity.Language;
+import com.ssafy.stackup.domain.project.entity.Project;
+import com.ssafy.stackup.domain.user.entity.Freelancer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;

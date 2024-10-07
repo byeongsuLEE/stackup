@@ -62,6 +62,7 @@ export const createProject = async (data: createProjectProp): Promise<void> => {
             "deposit": data.deposit,
             "startDate": data.startDate,
             "period": data.period,
+            "level" : data.level,
             "recruits": parseInt(data.recruits, 10),
             "worktype": data.workType,
             "requirements": data.requirements,

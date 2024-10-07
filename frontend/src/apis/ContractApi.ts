@@ -4,7 +4,6 @@ const BASE_URL: string = "http://localhost:8080/api/project"
 
 //== 계약서 정보 저장 ==//
 export const submitContract = async (data: any, freelancerProjectId?: string): Promise<void> => {
-  console.log(data)
     const response = await axios({
       method: 'patch',
       url: `${BASE_URL}/contract/submit`,
@@ -28,20 +27,6 @@ export const submitContract = async (data: any, freelancerProjectId?: string): P
     })
     console.log(response.data)
   }
-  
-  //== 계약서 정보 불러오기 ==//
-  export const getContract = async (freelancerProjectId: string): Promise<void> => {
-    await axios({
-      method: 'get',
-      url: `${BASE_URL}/contract/${freelancerProjectId}`,
-      headers: {
-        Authorization: `Bearer ${sessionStorage.getItem('token')}`
-      },
-      data: {
-        freelancerProjectId : "1"
-      }
-    })
-  }
 
   //== 서명 확인 ==//
   export const signature = async (sign?: string, freelancerProjectId?: string): Promise<void> => {
@@ -59,7 +44,7 @@ export const submitContract = async (data: any, freelancerProjectId?: string): P
     console.log(response.data)
   }
 
-  //== 계약서 정보 ==//
+//== 계약서 정보 ==//
 export const contractData = async (freelancerProjectId?: string): Promise<any> => {
   const response = await axios({
     method: 'get',

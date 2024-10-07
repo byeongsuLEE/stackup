@@ -9,6 +9,7 @@ import DoneButton from "../components/common/DoneButton";
 import CandidateIcon from "../icons/CandidateIcon";
 import PeriodIcon from "../icons/PeriodIcon";
 import PriceIcon from "../icons/PriceIcon";
+import AlertBox from "../components/common/AlertBox";
 
 interface Step {
   name: string;
@@ -18,22 +19,37 @@ interface Step {
 const svURL = import.meta.env.VITE_SERVER_URL;
 
 const ProjectDetail = () => {
+  const [showAlert, setShowAlert] = useState(false);
+  const [loading, setLoading] = useState(true); // 추가: 로딩 상태 관리
+  const handleConfirmStep = () => {
+    setShowAlert(true);
+    setTimeout(() => {
+      setShowAlert(false);
+      window.location.reload();
+    }, 2000);
+  };
+
   const [buttonTitle, setButtonTitle] = useState("단계 완료");
   const [steps, setSteps] = useState<Step[]>([
-    { name: '기획 및 설계', completed: false },
-    { name: '퍼블리셔 및 디자인', completed: false },
-    { name: '개발', completed: false },
-    { name: '테스트', completed: false },
-    { name: '배포', completed: false },
+    { name: "기획 및 설계", completed: false },
+    { name: "퍼블리셔 및 디자인", completed: false },
+    { name: "개발", completed: false },
+    { name: "테스트", completed: false },
+    { name: "배포", completed: false },
   ]);
 
-  type Status = 'DEPLOYMENT' | 'DESIGN' | 'DEVELOPMENT' | 'PLANNING' | 'TESTING';
+  type Status =
+    | "DEPLOYMENT"
+    | "DESIGN"
+    | "DEVELOPMENT"
+    | "PLANNING"
+    | "TESTING";
   const responseMapping: Record<Status, string> = {
-    DEPLOYMENT: '배포',
-    DESIGN: '퍼블리셔 및 디자인',
-    DEVELOPMENT: '개발',
-    PLANNING: '기획 및 설계',
-    TESTING: '테스트',
+    DEPLOYMENT: "배포",
+    DESIGN: "퍼블리셔 및 디자인",
+    DEVELOPMENT: "개발",
+    PLANNING: "기획 및 설계",
+    TESTING: "테스트",
   };
 
   const updateSteps = (status: Status) => {
@@ -41,12 +57,11 @@ const ProjectDetail = () => {
     const stepIndex = steps.findIndex((step) => step.name === stepName);
 
     if (stepIndex !== -1) {
-      // 새로운 배열을 생성하여 상태를 업데이트
       const updatedSteps = steps.map((step, index) => ({
         ...step,
-        completed: index <= stepIndex,  // 현재 단계까지 완료 처리
+        completed: index <= stepIndex,
       }));
-      setSteps(updatedSteps);  // 상태 업데이트
+      setSteps(updatedSteps);
     }
   };
 
@@ -56,7 +71,7 @@ const ProjectDetail = () => {
   const numericProjectId = projectId ? parseInt(projectId, 10) : undefined;
 
   const [project, setProject] = useState<project>(projectBasic);
-  const [workType, setWorkType] = useState(""); 
+  const [workType, setWorkType] = useState("");
   const [stepResponse, setStepResponse] = useState<Status | null>(null);
 
   useEffect(() => {
@@ -74,18 +89,27 @@ const ProjectDetail = () => {
         try {
           const data = await contractProjectDetail(numericProjectId);
           setProject(data);
-          setWorkType(data.worktype ? '재택' : '통근');
+          setWorkType(data.worktype ? "재택" : "통근");
+          setLoading(false); // 추가: 데이터 로딩 완료 후 로딩 상태 해제
         } catch (error) {
           console.error("Failed to fetch project details", error);
+          setLoading(false); // 실패 시에도 로딩 상태 해제
         }
       };
 
-      fetchStepResponse();
       fetchProjectDetail();
+      fetchStepResponse();
     } else {
       console.error("numericProjectId가 정의되지 않았습니다.");
     }
   }, [numericProjectId]);
+
+  const frameworksList = project?.frameworks
+    ? project.frameworks.map((framework) => framework.name)
+    : [];
+  const languagesList = project?.languages
+    ? project.languages.map((language) => language.name)
+    : [];
 
   useEffect(() => {
     if (stepResponse) {
@@ -94,21 +118,18 @@ const ProjectDetail = () => {
     }
   }, [stepResponse]);
 
-  const frameworksList = project.frameworks.map((framework) => framework.name);
-  const languagesList = project.languages.map((language) => language.name);
-
   const startDateObject = new Date(project.startDate);
   if (!isValid(startDateObject)) {
     return <div>유효하지 않은 시작 날짜입니다.</div>;
   }
-  const startDate = format(startDateObject, 'yyyy-MM-dd');
-  const periodAsNumber = parseInt(project.period.replace(/[^0-9]/g, ''), 10);
+  const startDate = format(startDateObject, "yyyy-MM-dd");
+  const periodAsNumber = parseInt(project.period.replace(/[^0-9]/g, ""), 10);
   const endDateObject = addDays(startDateObject, periodAsNumber);
   if (!isValid(endDateObject)) {
     return <div>유효하지 않은 종료 날짜입니다.</div>;
   }
-  const endDate = format(endDateObject, 'yyyy-MM-dd');
-  const remainDay = differenceInDays(new Date(endDate), new Date(format(new Date(), "yyyy-MM-dd")));
+  const endDate = format(endDateObject, "yyyy-MM-dd");
+  const remainDay = differenceInDays(new Date(endDate), new Date());
   const period = `${startDate} ~ ${endDate}`;
 
   const handleNavigateToMitermForm = () => {
@@ -120,13 +141,11 @@ const ProjectDetail = () => {
   };
 
   const handleStep = async () => {
-    console.log(numericProjectId);
     try {
       if (stepResponse) {
         const result = await projectStep(numericProjectId, stepResponse, true);
         console.log(result);
-        alert("프로젝트 단계 변경이 요청되었습니다.");
-        window.location.reload();
+        handleConfirmStep();
 
         if (stepResponse === "DEVELOPMENT") {
           handleNavigateToMitermForm();
@@ -137,7 +156,7 @@ const ProjectDetail = () => {
         console.warn("stepResponse 값이 없습니다.");
       }
     } catch (error) {
-      console.error('프로젝트 단계 변경 중 오류가 발생했습니다:', error);
+      console.error("프로젝트 단계 변경 중 오류가 발생했습니다:", error);
     }
   };
 
@@ -153,22 +172,35 @@ const ProjectDetail = () => {
     }
   };
 
+  if (loading) {
+    return <div>로딩 중...</div>; // 로딩 중일 때 표시할 내용
+  }
+
   return (
-    <div className="m-20 flex items-center flex-col">
-      <div className="bg-bgGreen border border-mainGreen rounded-xl w-[1000px] mb-5 p-5 h-[120px] flex flex-col">
+    <div className="mx-20 my-10 flex items-center flex-col">
+      {showAlert && <AlertBox title="단계 완료가 요청되었습니다." />}
+      <div className="bg-bgGreen border border-mainGreen rounded-xl w-[1000px] mb-5 p-5 h-[200px] flex flex-col">
         <ul className="steps">
           {steps.map((step, index) => (
-            <li key={index} className={`step ${step.completed ? 'step-success' : ''}`}>
+            <li
+              key={index}
+              className={`step ${step.completed ? "step-success" : ""}`}
+            >
               {step.name}
             </li>
           ))}
         </ul>
+        <div className="text-end mt-10" onClick={handleStep}>
+          <DoneButton width={200} height={30} title={buttonTitle} />
+        </div>
       </div>
       <div className="bg-bgGreen border border-mainGreen h-auto rounded-lg p-10 w-[1000px] ">
         <div className="flex justify-between ">
           <span className="text-lg font-bold">{project.title}</span>
           <div onClick={handleReport}>
-            <button className="w-[80px] h-[25px] rounded-md bg-red-400 text-white flex items-center justify-center font-bold text-sm">신고하기</button>
+            <button className="w-[80px] h-[25px] rounded-md bg-red-400 text-white flex items-center justify-center font-bold text-sm">
+              신고하기
+            </button>
           </div>
         </div>
         <span className="text-subTxt">{project.classification}</span>
@@ -192,16 +224,21 @@ const ProjectDetail = () => {
           <div className="flex flex-col">
             <div className="flex items-center">
               <span>{period}</span>
-              <span className="text-xs ml-2 text-red-400">마감 {remainDay}일전</span>
+              <span className="text-xs ml-2 text-red-400">마감 {remainDay}일 전</span>
             </div>
             <span>{workType}</span>
-            {languagesList.length === 0 ? (<span>사용언어 미정</span>) : (<span>{languagesList.join(', ')}</span>)}
-            {frameworksList.length === 0 ? (<span>프레임워크 미정</span>) : (<span>{frameworksList.join(', ')}</span>)}
+            {languagesList.length === 0 ? (
+              <span>사용언어 미정</span>
+            ) : (
+              <span>{languagesList.join(", ")}</span>
+            )}
+            {frameworksList.length === 0 ? (
+              <span>프레임워크 미정</span>
+            ) : (
+              <span>{frameworksList.join(", ")}</span>
+            )}
             <span>{project.requirements}</span>
           </div>
-        </div>
-        <div className="text-end" onClick={handleStep}>
-          <DoneButton width={200} height={30} title={buttonTitle} />
         </div>
 
         <div className="bg-subTxt w-auto h-[1px] flex justify-center my-10"></div>

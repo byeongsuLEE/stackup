@@ -2,7 +2,7 @@ import axios from "axios";
 import DoneButton from "../common/DoneButton";
 import Radios from "../common/Radios";
 import { useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const MitermForm = () => {
   // 상태 변수 설정
@@ -12,6 +12,7 @@ const MitermForm = () => {
   const [responseTimeScore, setResponseTimeScore] = useState<number | null>(null);
   const [reqChangeFreqScore, setReqChangeFreqScore] = useState<number | null>(null);
   const [reqClarityScore, setReqClarityScore] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     // 평가 점수 객체 생성
@@ -42,6 +43,7 @@ const MitermForm = () => {
 
       // 성공 메시지 표시
       alert("평가가 성공적으로 완료되었습니다.");
+      navigate('/transfer')
 
     } catch (error) {
       console.error("Error submitting evaluation:", error);

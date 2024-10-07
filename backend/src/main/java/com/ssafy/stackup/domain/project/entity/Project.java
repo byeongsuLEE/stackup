@@ -63,6 +63,24 @@ public class Project{
        return  this.step;
     }
 
+    /**
+     * 모든 지원자 + 클라이언트가 서명 했는지 확인 메서드!
+     * @ 작성자   : 이병수
+     * @ 작성일   : 2024-10-07
+     * @ 설명     :
+     * @return
+
+     */
+    public boolean isAllFreelancersSigned (){
+        for (FreelancerProject freelancerProject : this.freelancerProjectList) {
+            if (!freelancerProject.checkUsersSignConfirm()) {
+                return false; // 한 명이라도 서명을 하지 않으면 false 반환
+            }
+        }
+        return true; // 모든 프리랜서가 서명을 완료했으면 true 반환
+    }
+
+
     public void finishProjectStep(){
         this.status =  ProjectStatus.FINISH;
     }

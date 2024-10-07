@@ -122,7 +122,7 @@ def buildDockerImage(project, imageName) {
                 // GitHub에 푸시 - 자격 증명 사용
                 withCredentials([usernamePassword(credentialsId: "${GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
                     sh """
-                        git push https://$GIT_USER:$GIT_PASS@github.com/S-Choi-1997/stackupM-manifests.git main
+                        git push https://$GIT_USER:$GIT_PASS@github.com/S-Choi-1997/stackupM.git main
                     """
                 }
 

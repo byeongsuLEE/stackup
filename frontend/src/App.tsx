@@ -1,7 +1,6 @@
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import Test from "./components/NFTPage/NFTMinting";
 import SimplePopup from "./components/common/ChatPopup";
 import Footer from "./components/common/Footer";
 import Navbar from "./components/common/Navbar";
@@ -51,9 +50,9 @@ function App() {
               <Route path="/work/post" element={<PostWork />} />
               <Route path="/work/detail/:boardId" element={<WorkDetail />} />
               <Route path="/work/detail/candidate/:boardId" element={<CandidateCheck />} />
-              <Route path="/work/detail/select/:boardId/:projectId" element={<SelectedCandidate />} />
+              <Route path="/work/detail/select/:boardId" element={<SelectedCandidate />} />
               <Route path="/work/projectgroup/:boardId" element={<ProjectGroup />} />
-              <Route path="/work/detail/contract/:boardId/:projectId/:freelancerProjectId" element={<Contract />} />
+              <Route path="/work/detail/contract/:boardId/:freelancerProjectId" element={<Contract />} />
               <Route path="/project" element={<Project />} />
               <Route path="/project/detail" element={<ProjectDetail />} />
               <Route path="/career" element={<Career />} />

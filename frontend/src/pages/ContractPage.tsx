@@ -11,7 +11,7 @@ interface ContractDetailComponentType {
 }
 
 const Contract = () => {
-  const { projectId, freelancerProjectId } = useParams();
+  const { freelancerProjectId } = useParams();
   const contractDetailRef = useRef<ContractDetailComponentType | null>(null);
   const { signMessage } = MakeSign();
 
@@ -20,10 +20,11 @@ const Contract = () => {
     const data = contractDetailRef.current.getContractData()
     await submitContract(data, freelancerProjectId);
     }
+    
     const sign = await signMessage();
     if (sign) {
       await wallet(sign.address);
-      await signature(sign.signedMessage, projectId);
+      await signature(sign.signedMessage, freelancerProjectId);
     }
     
   };

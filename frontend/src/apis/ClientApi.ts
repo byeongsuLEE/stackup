@@ -13,7 +13,7 @@ export const selectedCandidate = async (boardId?: string): Promise<candidate[]> 
         Authorization: `Bearer ${sessionStorage.getItem('token')}`
       }
     })
-  
+    console.log(response.data)
     return response.data;
   }
 

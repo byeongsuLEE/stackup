@@ -45,7 +45,6 @@ export const submitContract = async (data: any, freelancerProjectId?: string): P
   
   //== 서명 확인 ==//
   export const signature = async (sign?: string, projectId?: string): Promise<void> => {
-    console.log(sign)
     const response = await axios({
       method: 'post',
       url: `${BASE_URL}/${projectId}/contract/sign`,
@@ -53,7 +52,6 @@ export const submitContract = async (data: any, freelancerProjectId?: string): P
         Authorization: `Bearer ${sessionStorage.getItem('token')}`
       },
       data: {
-        "message": "서명완료",
         "signature": sign
       }
     })

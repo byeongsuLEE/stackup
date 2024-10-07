@@ -4,7 +4,7 @@ pipeline {
     environment {
         // Git 리포지토리 설정
         GIT_REPO = 'https://gitlab.com/S-Choi-1997/stackupM.git' // GitLab 소스 코드 리포지토리
-        GIT_CREDENTIALS_ID = 'choho97_2' // Jenkins에 설정한 GitLab 자격 증명 ID (gitlab_token)
+        GIT_CREDENTIALS_ID = 'stackup-gitlab' // Jenkins에 설정한 GitLab 자격 증명 ID (gitlab_token)
 
         // GitHub 리포지토리 설정 (매니페스트)
         GITHUB_REPO = 'https://github.com/S-Choi-1997/stackupM-manifests.git' // GitHub 매니페스트 리포지토리

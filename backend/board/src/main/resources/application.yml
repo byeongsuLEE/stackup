@@ -1,7 +1,7 @@
 server:
   servlet:
     context-path: /api
-
+  port: 8081
 spring:
   datasource:
     url: ${DB_URL} # 데이터베이스 URL (환경 변수 사용)

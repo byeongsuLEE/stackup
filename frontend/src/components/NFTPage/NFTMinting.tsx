@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { pinata, uploadMetadataToPinata } from "../../apis/NftApi";
 import { generateImage, nftInfoProp } from "../../hooks/MakeImage";
 import { handlePrint } from "../../hooks/MakePDF";
-import { CallTest } from "../../hooks/Test";
 import DoneButton from "../common/DoneButton";
 
 // window.ethereum 타입 확장
@@ -21,7 +20,6 @@ const NFTMinting = ({ Minting, isLoading }: NFTMintingProps) => {
   //== pdf 생성 ==//
   const componentRef = useRef<HTMLDivElement>(null);
 
-  // const { Minting, isLoading } = CallTest();
   const ethereum = window.ethereum;
   const [addr, setAddr] = useState("");
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -44,7 +42,6 @@ const NFTMinting = ({ Minting, isLoading }: NFTMintingProps) => {
       console.error("지갑 연결 오류:", error);
     }
   };
-
 
   useEffect(() => {
 
@@ -98,10 +95,11 @@ const NFTMinting = ({ Minting, isLoading }: NFTMintingProps) => {
       <div ref={componentRef}>
         {/* 캔버스 요소 추가 */}
         <canvas ref={canvasRef} style={{ border: "1px solid black", display: "none" }}></canvas>
-      </div>
+      
       <div className="mt-10 text-end"
         onClick={handleMintNFT}
       >
+        </div>
         <DoneButton height={30} width={150} title="제출" />
       </div>
     </div>

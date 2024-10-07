@@ -60,7 +60,7 @@ export const submitContract = async (data: any, freelancerProjectId?: string): P
   }
 
   //== 계약서 정보 ==//
-export const contractData = async (freelancerProjectId?: string): Promise<void> => {
+export const contractData = async (freelancerProjectId?: string): Promise<any> => {
   const response = await axios({
     method: 'get',
     url: `${BASE_URL}/contract/${freelancerProjectId}`,
@@ -70,4 +70,5 @@ export const contractData = async (freelancerProjectId?: string): Promise<void> 
   })
 
   console.log(response.data)
+  return response.data
 }

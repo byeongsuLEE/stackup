@@ -1,18 +1,41 @@
 import DoneButton from "../components/common/DoneButton";
+import { contractData } from "../apis/ContractApi";
+import { useQuery } from "react-query";
+import { handlePrint } from "../hooks/MakePDF";
+import { useRef } from "react";
 
 const SignatureDetail = () => {
   const today = new Date();
+  //== 수정 필요 ==//
+  const freelancerProjectId = sessionStorage.getItem("token");
 
-  
+  //== pdf 생성 ==//
+  const componentRef = useRef<HTMLDivElement>(null);
+
+  const makepdf = async () => {
+    const pdf = await handlePrint(componentRef);
+  }
+
+  // const { data: project, isLoading: isProjectLoading } = useQuery({
+  //   queryKey: ['project', freelancerProjectId],
+  //   queryFn: () => contractData(freelancerProjectId!),
+  //   enabled: !!freelancerProjectId,
+  // });
+
+  // if (isProjectLoading) {
+  //   return <div>Loading...</div>;
+  // }
+
   return (
-    <div className="bg-bgGreen border border-mainGreen h-auto w-auto p-5 mx-20 my-20">
+    <div >
+      <div className="bg-bgGreen border border-mainGreen h-auto w-auto p-5 mx-20 my-20"ref={componentRef}>
       <div className="text-center text-lg font-bold">
         프리랜서 고용 계약서
       </div>
       <div className="flex flex-col">
         <br />
-        <span className="font-bold text-sm">프로젝트명 :</span>
-        <span className="font-bold text-sm">계약기간 :</span>
+        <span className="font-bold text-sm">프로젝트명 : </span>
+        <span className="font-bold text-sm">계약기간 : </span>
         <br />
         <span className="text-sm">//회사명// (이하 “갑” 아리 한다.)와 //프리랜서//(이하 “을” 이라 한다.)는 프로젝트명에 명시된 업무작업을 수향하기 위해 다음과 같이 계약을 체결한다.</span>
         <br />
@@ -65,7 +88,8 @@ const SignatureDetail = () => {
       <div className="text-center my-10 font-bold">
         계약일자 : {today.getFullYear()}년 {today.getMonth() + 1}월 {today.getDate()}일
       </div>
-      <div className="text-end">
+      </div>
+      <div className="text-end" onClick={makepdf}>
         <DoneButton width={100} height={30} title="서명하기" />
       </div>
     </div>

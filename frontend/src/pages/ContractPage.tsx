@@ -7,7 +7,7 @@ import { MakeSign } from "../hooks/MakeSign";
 import { wallet } from "../apis/UserApi";
 
 interface ContractDetailComponentType {
-  getContractData: () => any; // 필요한 타입으로 반환 타입을 변경하세요.
+  getContractData: () => any;
 }
 
 const Contract = () => {

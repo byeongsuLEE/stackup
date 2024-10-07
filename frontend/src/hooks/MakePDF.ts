@@ -8,7 +8,6 @@ import jsPDF from 'jspdf';
  */
 export const handlePrint = async (elementRef: React.RefObject<HTMLDivElement>): Promise<FormData> => {
   const element = elementRef.current;
-
   const formData = new FormData();
 
   try {
@@ -17,7 +16,13 @@ export const handlePrint = async (elementRef: React.RefObject<HTMLDivElement>): 
       return formData;
     }
 
+    // DOM 요소를 PNG로 변환
     const dataUrl = await domtoimage.toPng(element);
+
+    if (!dataUrl) {
+      console.error("PNG 생성 중 문제가 발생했습니다.");
+      return formData;
+    }
 
     const elementWidth = element.offsetWidth;
     const elementHeight = element.offsetHeight;
@@ -35,11 +40,11 @@ export const handlePrint = async (elementRef: React.RefObject<HTMLDivElement>): 
     const imgWidth = elementWidth * scale;
     const imgHeight = elementHeight * scale;
 
-    // PDF에 이미지를 추가 (중앙 정렬)
+    // PDF에 이미지 추가
     pdf.addImage(dataUrl, 'PNG', (pageWidth - imgWidth) / 2, (pageHeight - imgHeight) / 2, imgWidth, imgHeight);
 
+    // Blob 생성 후 FormData에 추가
     const pdfBlob: Blob = pdf.output('blob');
-
     formData.append('file', pdfBlob, 'document.pdf');
 
   } catch (error) {

@@ -26,35 +26,60 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // be/msa 브랜치 체크아웃
-                git branch: 'be/msa', url: "${GIT_REPO}", credentialsId: "${GIT_CREDENTIALS_ID}"
+                // be/cd 브랜치 체크아웃
+                git branch: 'be/cd', url: "${GIT_REPO}", credentialsId: "${GIT_CREDENTIALS_ID}"
             }
         }
 
-        stage('Build User Docker Image') {
-            // when {
-            //     changeset "**/backend/user/**"
-            // }
+        stage('List Files') {
             steps {
-                buildDockerImage('user', "${DOCKER_REGISTRY}/choho97/stackup/user:${IMAGE_TAG}")
+                // 현재 디렉터리의 파일 목록 출력 (디버깅용)
+                sh 'echo "Listing files in the root directory:"'
+                sh 'ls -la'
             }
         }
 
-        stage('Build Board Docker Image') {
-            // when {
-            //     changeset "**/backend/board/**"
-            // }
+        stage('Prepare Gradle Wrapper') {
             steps {
-                buildDockerImage('board', "${DOCKER_REGISTRY}/choho97/stackup/board:${IMAGE_TAG}")
+                // gradlew 파일에 실행 권한 부여
+                sh 'chmod +x gradlew'
             }
         }
 
-        stage('Build Account Docker Image') {
-            // when {
-            //     changeset "**/backend/account/**"
-            // }
+        stage('Build Project') {
             steps {
-                buildDockerImage('account', "${DOCKER_REGISTRY}/choho97/stackup/account:${IMAGE_TAG}")
+                script {
+                    // 전체 프로젝트 루트에서 Gradle 빌드 실행
+                    sh './gradlew clean build -x test --stacktrace'
+                }
+            }
+        }
+
+        stage('Build and Push Docker Images') {
+            parallel {
+                stage('Build User Docker Image') {
+                    steps {
+                        script {
+                            buildDockerImage('user', "choho97/stackup-user:${IMAGE_TAG}")
+                        }
+                    }
+                }
+
+                stage('Build Board Docker Image') {
+                    steps {
+                        script {
+                            buildDockerImage('board', "choho97/stackup-board:${IMAGE_TAG}")
+                        }
+                    }
+                }
+
+                stage('Build Account Docker Image') {
+                    steps {
+                        script {
+                            buildDockerImage('account', "choho97/stackup-account:${IMAGE_TAG}")
+                        }
+                    }
+                }
             }
         }
     }
@@ -72,36 +97,38 @@ pipeline {
 // Docker 이미지 빌드 및 푸시 함수 정의
 def buildDockerImage(project, imageName) {
     script {
-        dir("backend/${project}") { // 프로젝트별 Dockerfile이 위치한 디렉터리로 이동
-            // 디렉터리 내용 출력
-            sh 'ls -la'
-            
-            // Gradle 빌드 실행 (테스트 생략)
-            sh 'chmod +x ./gradlew'
-            sh './gradlew clean build -x test'
-            
-            // 빌드 후 JAR 파일 위치 확인
-            sh 'ls -la build/libs/'
+        withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+            // Docker Hub에 로그인
+            sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
 
-            // Docker 이미지 빌드 및 푸시 (Dockerfile을 명시적으로 참조)
-            sh """
-                docker build -t ${imageName} -f Dockerfile .
-                docker push ${imageName}
-            """
-            
+            dir("backend/${project}") { // 프로젝트별 Dockerfile이 위치한 디렉터리로 이동
+                // 디렉터리 내용 출력 (디버깅용)
+                sh 'echo "Listing files in $(pwd)"'
+                sh 'ls -la'
+
+                sh 'chmod +x ./gradlew'
+                sh './gradlew clean build -x test'
+
+                // Docker 이미지 빌드 및 푸시 (Dockerfile을 명시적으로 참조)
+                sh """
+                    docker build -t ${imageName} -f Dockerfile .
+                    docker push ${imageName}
+                """
+            }
+
             // GitHub 매니페스트 업데이트 및 ArgoCD 동기화
-            dir("../../manifests/${project}") {
+            dir("manifests/${project}") {
                 git branch: 'main', url: "${GITHUB_REPO}", credentialsId: "${GITHUB_CREDENTIALS_ID}"
                 sh """
-                    sed -i 's|image: choho97/stackup/${project}:.*|image: choho97/stackup/${project}:${IMAGE_TAG}|' deployment.yaml
+                    sed -i 's|image: choho97/stackup-${project}:.*|image: choho97/stackup-${project}:${IMAGE_TAG}|' deployment.yaml
                     git config user.email "jenkins@example.com"
                     git config user.name "jenkins"
                     git add deployment.yaml
-                    git commit -m "Update image to choho97/stackup/${project}:${IMAGE_TAG}"
+                    git commit -m "Update image to choho97/stackup-${project}:${IMAGE_TAG}"
                     git push origin main
                 """
             }
-            
+
             // Argo CD Sync
             withCredentials([usernamePassword(credentialsId: "${ARGOCD_CREDENTIALS_ID}", usernameVariable: 'ARGOCD_USER', passwordVariable: 'ARGOCD_PASS')]) {
                 sh """

@@ -31,4 +31,6 @@ public interface UserService {
     UserInfoResponseDto getInfo(User user);
 
     FreelancerLoginResponseDto token(Long user);
+
+    void setSecondPassword(UserInfoResponseDto userRequestInfo);
 }

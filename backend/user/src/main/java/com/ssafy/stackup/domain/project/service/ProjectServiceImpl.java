@@ -12,6 +12,8 @@ import com.ssafy.stackup.domain.board.entity.BoardFramework;
 import com.ssafy.stackup.domain.board.entity.BoardLanguage;
 import com.ssafy.stackup.domain.board.repository.BoardApplicantRepository;
 import com.ssafy.stackup.domain.board.repository.BoardRepository;
+import com.ssafy.stackup.domain.project.dto.ContractInfoResponseDto;
+import com.ssafy.stackup.domain.project.dto.request.ProjectContractInfoRequestDto;
 import com.ssafy.stackup.domain.project.dto.request.SignRequest;
 import com.ssafy.stackup.domain.project.dto.response.ProjectInfoResponseDto;
 import com.ssafy.stackup.domain.project.dto.request.ProjectStartRequestDto;
@@ -28,7 +30,6 @@ import com.ssafy.stackup.domain.user.repository.FreelancerRepository;
 import com.ssafy.stackup.domain.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -36,9 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Service
@@ -58,15 +57,15 @@ public class ProjectServiceImpl implements ProjectService {
     private final BoardApplicantRepository boardApplicantRepository;
 
     @Override
-    @Transactional
     public void registerPreviousProject(MultipartFile certificateFile, String title, Long period) {
 
 
         try {
             String certificateUrl = s3ImageUpLoadService.uploadImage(certificateFile);
             Project project = Project.builder()
+                    .status(ProjectStatus.BEFORE)
                     .title(title)
-                    .period(title)
+                    .period(String.valueOf(period))
                     .certificateUrl(certificateUrl)
                     .build();
 
@@ -86,9 +85,7 @@ public class ProjectServiceImpl implements ProjectService {
      * @ 설명     :프로젝트 모집글에서 진행하기 누를 시 프로젝트 등록하기
      * @return
      */
-
     @Override
-    @Transactional
     public ProjectInfoResponseDto startProject(User user, ProjectStartRequestDto request) {
 
         Board board = boardRepository.findById(request.getBoardId())
@@ -96,31 +93,38 @@ public class ProjectServiceImpl implements ProjectService {
 
         //프로젝트 등록
         Project project = Project.builder()
+                .title(board.getTitle())
+                .period(board.getPeriod())
                 .client(board.getClient())
                 .step(ProjectStep.PLANNING)
                 .board(board)
-                .title(board.getTitle())
-                .period(board.getPeriod())
                 .status(ProjectStatus.PENDING)
                 .build();
 
-        project= projectRepository.save(project);
 
+        project= projectRepository.save(project);
 
         // 지원자의 상태를 합격으로 변경
         for (Long freelancerId : request.getFreelancerIdList()) {
             BoardApplicant applicant = boardApplicantRepository.findByFreelancer_IdAndBoard_BoardId(freelancerId, request.getBoardId());
-            applicant.updateIsPassed();
-            boardApplicantRepository.save(applicant);
+
 
             FreelancerProject freelancerProject = FreelancerProject.builder()
+                    .contractCreated(false)
                     .freelancerSigned(false)
+                    .contractEndDate(board.getDeadline())
+                    .contractStartDate(board.getStartDate())
+                    .contractCompanyName(board.getClient().getBusinessName())
                     .project(project)
                     .freelancer(applicant.getFreelancer())
                     .build();
 
 
-            freelancerProjectRepository.save(freelancerProject);
+            FreelancerProject savedFreelancerProject = freelancerProjectRepository.save(freelancerProject);
+
+            applicant.updateIsPassed();
+            applicant.updateFreelancerProjectId(savedFreelancerProject.getId());
+            boardApplicantRepository.save(applicant);
         }
 
         ProjectInfoResponseDto response = ProjectInfoResponseDto.builder()
@@ -136,7 +140,6 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public ProjectInfoResponseDto getProjectInfo(Long projectId) {
         Project project = projectRepository.findById(projectId)
                 .orElseThrow(()-> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
@@ -167,6 +170,7 @@ public class ProjectServiceImpl implements ProjectService {
                 .worktype(board.getWorktype())
                 .applicants(board.getApplicants())
                 .upload(board.getUpload())
+                .certificateUrl(project.getCertificateUrl())
                 .freelancerStepConfirmed(project.isFreelancerStepConfirmed())
                 .clientStepConfirmed(project.isClientStepConfirmed())
                 .build();
@@ -177,7 +181,6 @@ public class ProjectServiceImpl implements ProjectService {
 
 
     @Override
-    @Transactional
     public ResponseEntity<ApiResponse<Boolean>> verifySignature(Long projectId, SignRequest signRequest, User user) {
         Project project = projectRepository.findById(projectId).orElse(null);
         Long userId = user.getId();
@@ -223,7 +226,6 @@ public class ProjectServiceImpl implements ProjectService {
      * @param user
      */
     @Override
-    @Transactional
     public ProjectStepCheckResponseDto projectStepCheck(Long projectId, User user) {
 
         Project project = projectRepository.findById(projectId)
@@ -231,6 +233,58 @@ public class ProjectServiceImpl implements ProjectService {
 
         boolean isUserAllStepChecked = isUserAllStepChecked(projectId,user,project);
         return changeProjectStep(project.getStep(), isUserAllStepChecked, project);
+    }
+
+    /**
+     * 계약서 작성
+     * @ 작성자   : 이병수
+     * @ 작성일   : 2024-10-01
+     * @ 설명     :
+     * @param requestDto
+     */
+    @Override
+    public void contractSubmit(ProjectContractInfoRequestDto requestDto) {
+        FreelancerProject freelancerProject = freelancerProjectRepository.findById(requestDto.getFreelancerProjectId())
+                .orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
+
+        freelancerProject.updateContractCreated(true);
+        freelancerProject.updateContractStartDate(requestDto.getContractStartDate());
+        freelancerProject.updateContractEndDate(requestDto.getContractEndDate());
+        freelancerProject.updateContractDownPayment(requestDto.getContractDownPayment());
+        freelancerProject.updateContractFinalPayment(requestDto.getContractFinalPayment());
+        freelancerProject.updateContractCompanyName(requestDto.getContractCompanyName());
+        freelancerProject.updateContractAdditionalTerms(requestDto.getContractAdditionalTerms());
+        freelancerProject.updateContractTotalAmount(requestDto.getContractTotalAmount());
+        freelancerProject.updateContractConfidentialityClause(requestDto.getContractConfidentialityClause());
+
+        freelancerProjectRepository.save(freelancerProject);
+
+    }
+
+
+
+    @Transactional(readOnly = true)
+    @Override
+    public ContractInfoResponseDto getContractInfo(Long freelancerProjectId, Long userId) {
+
+        FreelancerProject freelancerProject = freelancerProjectRepository.findById(freelancerProjectId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
+
+        ContractInfoResponseDto contractInfoResponseDto = ContractInfoResponseDto.builder()
+                .contractAdditionalTerms(freelancerProject.getContractAdditionalTerms())
+                .contractConfidentialityClause(freelancerProject.getContractConfidentialityClause())
+                .contractCompanyName(freelancerProject.getContractCompanyName())
+                .contractDownPayment(freelancerProject.getContractDownPayment())
+                .contractEndDate(freelancerProject.getContractEndDate())
+                .contractCreated(freelancerProject.isContractCreated())
+                .freelancerProjectId(freelancerProjectId)
+                .contractStartDate(freelancerProject.getContractStartDate())
+                .contractFinalPayment(freelancerProject.getContractFinalPayment())
+                .contractTotalAmount(freelancerProject.getContractTotalAmount())
+                .build();
+
+
+        return contractInfoResponseDto;
     }
 
 
@@ -283,39 +337,58 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     /**
-     *
+     * @param user
+     * @param projectType
+     * @return
      * @ 작성자   : 이병수
      * @ 작성일   : 2024-09-21
      * @ 설명     : 나의 페이지에서 사용할 프로젝트들 가져오기
-     * @param user
-     * @return
      */
     @Override
-    @Transactional(readOnly = true)
-    public List<ProjectInfoResponseDto> getAllProjects(User user) {
+    public List<ProjectInfoResponseDto> getAllProjects(User user, String projectType) {
 
         Freelancer freelancer = freelancerRepository.findById(user.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-        Set<FreelancerProject> freelancerProjects = freelancer.getFreelancerProjects();
-        List<Project> projects = UserUtil.getProjects(freelancerProjects);
 
+        List<Project> projects = new ArrayList<>();
         List<ProjectInfoResponseDto> projectInfoResponseDtos = new ArrayList<>();
+        if(projectType.equals("BEFORE")){
+            ProjectStatus projectStatus = ProjectStatus.valueOf(projectType.toUpperCase());
+            projects = projectRepository.findByStatus(projectStatus);
+            for(Project project : projects) {
+                ProjectInfoResponseDto projectInfoResponseDto= ProjectInfoResponseDto.builder()
+                        .status(ProjectStatus.BEFORE)
+                        .title(project.getTitle())
+                        .period(project.getPeriod())
+                        .certificateUrl(project.getCertificateUrl())
+                        .build();
 
-        for(Project project : projects) {
-            ProjectInfoResponseDto projectInfoResponseDto= ProjectInfoResponseDto.builder()
-                    .projectId(project.getId())
-                    .status(project.getStatus())
-                    .title(project.getTitle())
-                    .startDate(project.getBoard().getStartDate())
-                    .period(project.getBoard().getPeriod())
-                    .classification(project.getBoard().getClassification())
-                    .build();
+                projectInfoResponseDtos.add(projectInfoResponseDto);
 
-            projectInfoResponseDtos.add(projectInfoResponseDto);
-            //sdfdsfsdfsfdsfdsdsasdadsadsaddsafdsa
+            }
+            return projectInfoResponseDtos;
         }
-        return projectInfoResponseDtos;
+        else{
+            Set<FreelancerProject> freelancerProjects = freelancer.getFreelancerProjects();
+            projects = UserUtil.getProjects(freelancerProjects);
+            for(Project project : projects) {
+                if(!project.getStatus().name().equals(projectType)) continue;
+                ProjectInfoResponseDto projectInfoResponseDto= ProjectInfoResponseDto.builder()
+                        .projectId(project.getId())
+                        .status(project.getStatus())
+                        .title(project.getTitle())
+                        .startDate(project.getBoard().getStartDate())
+                        .period(project.getBoard().getPeriod())
+                        .classification(project.getBoard().getClassification())
+                        .build();
+
+                projectInfoResponseDtos.add(projectInfoResponseDto);
+
+            }
+            return projectInfoResponseDtos;
+        }
+
     }
 
     private ProjectStepCheckResponseDto changeProjectStep(ProjectStep currentStep, boolean isUserAllStepChecked, Project project) {

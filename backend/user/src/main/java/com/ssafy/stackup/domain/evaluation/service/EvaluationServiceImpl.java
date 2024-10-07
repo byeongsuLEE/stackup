@@ -12,7 +12,6 @@ import com.ssafy.stackup.domain.user.entity.User;
 import com.ssafy.stackup.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 작성자   : user
@@ -37,7 +36,6 @@ public class EvaluationServiceImpl implements EvaluationService{
      * @param evaluator 평가하는사람
      */
     @Override
-    @Transactional
     public void addEvaluation(EvaluationRequestDto evaluationRequestDto, User evaluator) {
 
         User user = userRepository.findById(evaluationRequestDto.getUserId())

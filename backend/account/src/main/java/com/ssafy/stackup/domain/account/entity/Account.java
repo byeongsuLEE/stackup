@@ -1,6 +1,7 @@
 package com.ssafy.stackup.domain.account.entity;
 
-import com.ssafy.stackup.domain.user.entity.User;
+
+import com.ssafy.stackup.domain.account.dto.User;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -20,7 +21,9 @@ public class Account {
     private String accountNum;
     private Long balance;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id") // 외래 키 컬럼명
-    private User user; // 계좌의 주인
+    private Long userId;
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "user_id") // 외래 키 컬럼명
+//    private User user; // 계좌의 주인
 }

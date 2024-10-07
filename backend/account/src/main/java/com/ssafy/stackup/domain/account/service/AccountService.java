@@ -1,24 +1,33 @@
 package com.ssafy.stackup.domain.account.service;
 
+import com.ssafy.stackup.common.exception.CustomException;
+import com.ssafy.stackup.common.exception.ResourceNotFoundException;
+import com.ssafy.stackup.common.jwt.TokenProvider;
+import com.ssafy.stackup.common.response.ApiResponse;
 import com.ssafy.stackup.domain.account.dto.EncryptionUtil;
+import com.ssafy.stackup.domain.account.dto.User;
 import com.ssafy.stackup.domain.account.entity.Account;
 import com.ssafy.stackup.domain.account.repository.AccountRepository;
 import com.ssafy.stackup.domain.account.util.SecondUtil;
-import com.ssafy.stackup.domain.user.entity.User;
-import com.ssafy.stackup.domain.user.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.security.SecureRandom;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static com.ssafy.stackup.common.response.ErrorCode.USER_NOT_FOUND;
+import static com.ssafy.stackup.common.response.ErrorCode.USER_NOT_SET_SECOND_PASSWORD;
 
 @Service
 public class AccountService {
@@ -28,30 +37,95 @@ public class AccountService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
+
+    @Value("${USER_SERVICE_URL}")
+    private String USER_SERVICE_URL; // User 서비스의 API URL
     // 난수 생성기 설정
     private static final SecureRandom random = new SecureRandom();
-    @Autowired
-    private UserRepository userRepository;
+    private TokenProvider tokenProvider;
 
-    public void fetchAndStoreAccountData(Long userId) {
+
+//    private String apikey = "13d8a1c9199348928f01b0591c325460";
+
+    @Transactional(readOnly = true)
+    public List<Account> getAccountsByUserId(Long userId, HttpServletRequest request) {
+        //        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Map.class);
+        User userDto = getDetailUserInfo(userId, request);
+        return accountRepository.findByUserId(userDto.getId());
+    }
+
+    public User getDetailUserInfo(Long userId, HttpServletRequest request) {
+        HttpHeaders headers = createHeaders(request);
+        HttpEntity<?> httpEntity = new HttpEntity<>(headers);
+
+        System.out.println("Request URL: " + USER_SERVICE_URL);
+        System.out.println("Authorization Header: " + headers.get("Authorization"));
+        ResponseEntity<ApiResponse<User>> response = restTemplate.exchange(USER_SERVICE_URL + "info", HttpMethod.GET, httpEntity, new ParameterizedTypeReference<ApiResponse<User>>() {
+        });
+        if (response.getStatusCode().is2xxSuccessful()) {
+            ApiResponse<User> apiResponse = response.getBody();
+            User user = apiResponse.getData(); // ApiResponse 내부의 데이터를 꺼냄
+            return user;
+        } else {
+            throw new ResourceNotFoundException("user를 가져올 수 없습니다.");
+        }
+    }
+
+
+    public String getApikey() {
+        String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/app/reIssuedApiKey";
+
+        // JSON 본문 생성
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("managerId", "choho97@naver.com");
+
+        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody);
+
+        // POST 요청 보내기
+        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Map.class);
+
+//        String key = response.getBody().get("apikey").toString();
+        // 응답 본문에서 apiKey 추출
+        if (response.getBody() != null && response.getBody().containsKey("apiKey")) {
+            String key = response.getBody().get("apiKey").toString();
+            System.out.println("api : " + key);
+            return key;
+        }
+
+        return null;
+    }
+
+    private String apikey;
+
+    public void fetchAndStoreAccountData(User user, HttpServletRequest request) {
         String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit/inquireDemandDepositAccountList";
 
-        User user = userRepository.findById(userId).orElse(null);
+        apikey = getApikey();
 
         String accountKey = user.getAccountKey();
         String email = user.getEmail();
-        System.out.println("//////////////////////email :" +email);
+        System.out.println("//////////////////////email :" + email);
 
         if (accountKey == null) {
             System.out.println("accountKey 없음");
             // account_key가 없으면 새로운 key를 발급받아 저장
             accountKey = searchAccountKey(email);
             user.setAccountKey(accountKey);
-            userRepository.save(user);
+
+
+            HttpHeaders headers = createHeaders(request);
+            HttpEntity<User> requestEntity = new HttpEntity<>(user, headers);
+
+            // POST 요청 보내기 (응답을 Map으로 받음)
+            ResponseEntity<String> response = restTemplate.exchange(USER_SERVICE_URL+"/accountKey", HttpMethod.PATCH, requestEntity, String.class);
+            if(response.getStatusCode() != HttpStatus.OK) {
+                throw new CustomException(USER_NOT_FOUND);
+            }
+
         }
 
         // 현재 날짜와 시간 가져오기
-        String transmissionDate = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
+        String transmissionDate = LocalTime.now().format(DateTimeFormatter.BASIC_ISO_DATE);
         String transmissionTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HHmmss"));
 
         // 난수 생성
@@ -67,7 +141,7 @@ public class AccountService {
         headers.set("fintechAppNo", "001");
         headers.set("apiServiceCode", "inquireDemandDepositAccountList");
         headers.set("institutionTransactionUniqueNo", institutionTransactionUniqueNo);
-        headers.set("apiKey", "ef9d38e608d64bc1817e0ab47aa757ba");
+        headers.set("apiKey", apikey);
         headers.set("userKey", accountKey);
 
         // JSON 본문 생성
@@ -80,7 +154,7 @@ public class AccountService {
                 "fintechAppNo", "001",
                 "apiServiceCode", "inquireDemandDepositAccountList",
                 "institutionTransactionUniqueNo", institutionTransactionUniqueNo,
-                "apiKey", "ef9d38e608d64bc1817e0ab47aa757ba",
+                "apiKey", apikey,
                 "userKey", accountKey
         ));
         requestBody.put("REC", Collections.emptyList()); // 필요한 경우 적절한 REC 필드 값을 추가
@@ -119,7 +193,7 @@ public class AccountService {
                         existingAccount.setBalance(0L); // 변환 실패 시 기본값 설정
                     }
 
-                    existingAccount.setUser(user);
+                    existingAccount.setUserId(user.getId());
                     accountRepository.save(existingAccount);
                 } else {
                     // 중복 계좌가 없을 경우 새 계좌 저장
@@ -141,7 +215,7 @@ public class AccountService {
                         newAccount.setBalance(0L); // 변환 실패 시 기본값 설정
                     }
 
-                    newAccount.setUser(user);
+                    newAccount.setUserId(user.getId());
                     accountRepository.save(newAccount);
                 }
             } catch (Exception e) {
@@ -158,10 +232,12 @@ public class AccountService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
+        apikey = getApikey();
+
         // JSON 본문 생성
         Map<String, String> requestBody = new HashMap<>();
 
-        requestBody.put("apiKey", "ef9d38e608d64bc1817e0ab47aa757ba");
+        requestBody.put("apiKey", apikey);
         requestBody.put("userId", email);
 
         // 요청 엔터티 생성 (헤더 + 바디)
@@ -187,8 +263,11 @@ public class AccountService {
 
         // JSON 본문 생성
         Map<String, String> requestBody = new HashMap<>();
+        apikey = getApikey();
 
-        requestBody.put("apiKey", "ef9d38e608d64bc1817e0ab47aa757ba");
+        System.out.println(apikey);
+
+        requestBody.put("apiKey", apikey);
         requestBody.put("userId", email);
 
         // 요청 엔터티 생성 (헤더 + 바디)
@@ -204,14 +283,6 @@ public class AccountService {
         }
 
         return null; // userKey가 없을 경우
-    }
-
-    public List<Account> getAccountsByUserId(Long userId) {
-        User user = userRepository.findById(userId).orElse(null);
-        if (user == null) {
-            return null;
-        }
-        return accountRepository.findByUserId(userId);
     }
 
 
@@ -248,24 +319,51 @@ public class AccountService {
     }
 
     // 2차 비밀번호 저장
-    public void setSecondPassword(Long userId, String secondPassword) {
-        User user = userRepository.findById(userId).orElse(null);
-        if (user != null) {
+    public void setSecondPassword(User user, String secondPassword , HttpServletRequest request) {
             String encryptedPassword = SecondUtil.encrypt(secondPassword);
             user.setSecondPassword(encryptedPassword);
-            userRepository.save(user);
-        } else {
-            System.out.println("사용자를 찾을 수 없습니다.");
-        }
+            // 요청 엔터티 생성 (헤더 + 바디)
+        HttpHeaders headers = createHeaders(request);
+        HttpEntity<User> requestEntity = new HttpEntity<>(user, headers);
+
+            // POST 요청 보내기 (응답을 Map으로 받음)
+            ResponseEntity<String> response = restTemplate.exchange(USER_SERVICE_URL+"/info/second-password", HttpMethod.PATCH, requestEntity, String.class);
+            if(response.getStatusCode() != HttpStatus.OK) {
+
+
+                throw new CustomException(USER_NOT_SET_SECOND_PASSWORD);
+            }
+
     }
 
     // 2차 비밀번호 확인
-    public boolean checkSecondPassword(Long userId, String rawPassword) {
-        User user = userRepository.findById(userId).orElse(null);
+    public boolean checkSecondPassword(User user, String rawPassword) {
         if (user != null) {
             String encodedPassword = user.getSecondPassword();
             return SecondUtil.matches(rawPassword, encodedPassword);
         }
         return false; // 사용자를 찾을 수 없거나 비밀번호 불일치 시 false 반환
     }
+
+    @Transactional
+    public void setMainAccount(Long accountId, User user) throws Exception {
+        Account account = getAccount(accountId);
+        String accountNo = EncryptionUtil.decrypt(account.getAccountNum());
+
+        user.setMainAccount(EncryptionUtil.encrypt(accountNo));
+
+
+
+    }
+
+    public static HttpHeaders createHeaders(HttpServletRequest request) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", request.getHeader("Authorization"));
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return headers;
+    }
+
 }
+
+
+

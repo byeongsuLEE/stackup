@@ -30,7 +30,7 @@ public class Project{
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private ProjectStatus status; // 프로젝트 상태 (pending, progress, finished 등)
+    private ProjectStatus status; // 프로젝트 상태 (before,pending, progress, finished 등)
 
 
     @Column

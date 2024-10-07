@@ -18,6 +18,7 @@ public class BoardApplicantRequest {
     private Integer reportedCount;
     private Boolean isPassed;
     private String portfolioUrl;
+    private Long freelancerProjectId;
     public BoardApplicantRequest(BoardApplicant boardApplicant) {
         Freelancer freelancer = boardApplicant.getFreelancer();
         this.id = freelancer.getId();
@@ -29,5 +30,6 @@ public class BoardApplicantRequest {
 //        boardApplicant.get
         this.isPassed = boardApplicant.getIsPassed(); // BoardApplicant에서 isPassed 가져오기
         this.portfolioUrl = freelancer.getPortfolioUrl();
+        this.freelancerProjectId = boardApplicant.getFreelancerProjectId();
     }
 }

@@ -4,6 +4,7 @@ import { recommend } from "../../apis/Board.type";
 import { useNavigate } from "react-router-dom";
 import RecommendWork from "./RecommendWork";
 import { freelanceStore } from "../../store/FreelanceStore";
+import { freelanceMypage } from "../../apis/UserApi";
 
 const RecommendList = () => {
   const navigate = useNavigate();
@@ -21,13 +22,18 @@ const RecommendList = () => {
 
   useEffect(() => {
     update();
+    freelanceMypage();
   }, [])
 
   const name = freelanceStore((state) => state.name); 
-
+  
   return (
     <div>
-      <span className="text-start">{name}님을 위한 추천 프로젝트</span>
+      <span className="text-start">
+        <span className="font-bold text-subGreen1">
+          {name}
+          </span>
+          님을 위한 추천 프로젝트</span>
       <div className="flex flex-row flex-wrap gap-4">
         {recommendList?.map((recommend: recommend, index: number) => (
           <div

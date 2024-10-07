@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { pinata, uploadMetadataToPinata } from "../../apis/NftApi";
-import { generateImage, nftInfoProp } from "../../hooks/MakeImage";
+import { generateImage } from "../../hooks/MakeImage";
 import DoneButton from "../common/DoneButton";
 import { contractProp } from "../../apis/Contract.type";
 

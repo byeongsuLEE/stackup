@@ -4,7 +4,6 @@ import { handlePrint } from "../hooks/MakePDF";
 import { useEffect, useRef, useState } from "react";
 import { MakeSign } from "../hooks/MakeSign";
 import { useParams } from "react-router-dom";
-import { generateImage } from "../hooks/MakeImage";
 import { CallTest } from "../hooks/Test";
 import NFTMinting from "../components/NFTPage/NFTMinting";
 import NFTLoading from "./NFTLoadingPage";
@@ -14,18 +13,8 @@ const SignatureDetail = () => {
   const { signMessage } = MakeSign();
   const { freelancerProjectId } = useParams();
   const [ pdf, setPdf ] = useState<any>();
-
   const { Minting, isLoading } = CallTest(); // Minting 함수 가져옴
-    // useEffect를 사용하여 isLoading 상태가 변경될 때마다 작업을 처리
-    useEffect(() => {
-      if (isLoading) {
-        console.log("로딩 중입니다...");
-      } else {
-        console.log("로딩이 완료되었습니다.");
-      }
-    }, [isLoading]); // isLoading 상태가 변경될 때마다 실행
-
-
+    
   //== pdf 생성 ==//
   const componentRef = useRef<HTMLDivElement>(null);
 
@@ -33,13 +22,6 @@ const SignatureDetail = () => {
     //== 전자 서명 ==//
     const data = await signMessage();
     signature(data?.signedMessage, freelancerProjectId);
-
-    //== pdf 생성 ==//
-    const pdfData = await handlePrint(componentRef);
-    setPdf(pdfData)
-
-    //== nft 표지 생성 ==//
-    const image = await generateImage(canvasRef, testdata);
   }
 
   const { data: contract, isLoading: isProjectLoading } = useQuery({
@@ -47,6 +29,22 @@ const SignatureDetail = () => {
     queryFn: () => contractData(freelancerProjectId!),
     enabled: !!freelancerProjectId,
   });
+  
+  useEffect(() => {
+    if (isLoading) {
+      console.log("로딩 중입니다...");
+    } else {
+      console.log("로딩이 완료되었습니다.");
+    }
+
+    //== pdf 생성 ==//
+    const MakePDF = async () => {
+      const pdfData = await handlePrint(componentRef);
+      setPdf(pdfData)
+    }
+
+    MakePDF();
+  }, [isLoading, contract]);
   
   const formattedStart = contract?.contractStartDate?.split('T')[0];
   const formattedEnd = contract?.contractEndDate?.split('T')[0];
@@ -122,9 +120,6 @@ const SignatureDetail = () => {
         계약일자 : {today.getFullYear()}년 {today.getMonth() + 1}월 {today.getDate()}일
       </div>
       </div>
-      {/* <div className="text-end" onClick={handleSubmit}>
-        <DoneButton width={100} height={30} title="서명하기" />
-      </div> */}
       </div>
       )}
       <div onClick={handleSubmit}>

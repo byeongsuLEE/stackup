@@ -118,10 +118,12 @@ def buildDockerImage(project, imageName) {
                 sh "docker push ${imageName}"
             }
 
-            // GitHub 리포지토리 체크아웃 및 이미지 태그 업데이트
-            dir("spring-${project}") {
-                git branch: 'main', url: "${GITHUB_REPO}", credentialsId: "${GITHUB_CREDENTIALS_ID}"
+            // GitHub 리포지토리 체크아웃
+            git branch: 'main', url: "${GITHUB_REPO}", credentialsId: "${GITHUB_CREDENTIALS_ID}"
 
+            // spring-${project} 디렉터리로 이동해서 작업
+            dir("spring-${project}") {
+                // 이미지 태그 업데이트 및 기타 작업 수행
                 sh """
                     sed -i 's|image: choho97/stackup-${project}:.*|image: choho97/stackup-${project}:${IMAGE_TAG}|' deployment.yaml
                     git config user.email "jenkins@example.com"
@@ -129,11 +131,13 @@ def buildDockerImage(project, imageName) {
                     git add deployment.yaml kustomization.yaml service.yaml
                     git commit -m "Update image to choho97/stackup-${project}:${IMAGE_TAG}" || echo "No changes to commit"
                 """
-
+                
+                // GitHub에 푸시
                 withCredentials([usernamePassword(credentialsId: "${GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
                     sh 'git push https://$GIT_USER:$GIT_PASS@github.com/S-Choi-1997/stackupM.git main --force'
                 }
             }
+
 
             // Argo CD Sync
             def appName = "spring-${project}"

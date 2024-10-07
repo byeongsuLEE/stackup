@@ -3,7 +3,6 @@ import { addDays, differenceInDays, format, isValid } from "date-fns";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { project, projectBasic } from "../apis/Board.type";
-import { projectDetail } from "../apis/BoardApi";
 import { contractProjectDetail, projectStep } from "../apis/ProjectApi";
 import InfoBox from "../components/WorkPage/InfoBox";
 import DoneButton from "../components/common/DoneButton";
@@ -49,37 +48,43 @@ const ProjectDetail = () => {
 
   const navigate = useNavigate(); // navigate 훅 초기화
   const userId = 15; // 임시 userId
-  const { projectId } = useParams();  // URL 파라미터에서 projectId 가져오기
-  const numericProjectId = parseInt(projectId, 10);  // projectId를 숫자로 변환
+  const { projectId } = useParams<{ projectId: string }>(); 
+  const numericProjectId = projectId ? parseInt(projectId, 10) : undefined;
+
   const [project, setProject] = useState<project>(projectBasic);  // 프로젝트 기본 상태 설정
   const [workType, setWorkType] = useState("");  // 근무 형태 상태 설정
   const [stepResponse, setStepResponse] = useState<string | null>(null);
 
   useEffect(() => {
-    // 프로젝트 단계 확인
-    const fetchStepResponse = async () => {
-      try {
-        const response = await projectStep(numericProjectId); // 비동기 처리
-        setStepResponse(response.data.currentStep);  // 상태 업데이트
-      } catch (error) {
-        console.error("Failed to fetch project step", error);
-      }
-    };
-
-    const fetchProjectDetail = async () => {
-      try {
-        const data = await contractProjectDetail(numericProjectId, 4); // 비동기 처리
-        // console.log(data);
-        setProject(data);  // 프로젝트 상태 업데이트
-        setWorkType(data.worktype ? '재택' : '통근'); // 프로젝트 정보에 따라 workType 업데이트
-      } catch (error) {
-        console.error("Failed to fetch project details", error);
-      }
-    };
-
-    fetchStepResponse();  // 단계 값 불러오기
-    fetchProjectDetail();  // 프로젝트 상세 정보 불러오기
-  }, [projectId]);  // project.worktype 대신 projectId로 종속성 설정
+    // numericProjectId가 유효한 경우에만 비동기 처리 실행
+    if (numericProjectId !== undefined) {
+      // 프로젝트 단계 확인
+      const fetchStepResponse = async () => {
+        try {
+          const response = await projectStep(numericProjectId); // 비동기 처리
+          setStepResponse(response.data.currentStep);  // 상태 업데이트
+        } catch (error) {
+          console.error("Failed to fetch project step", error);
+        }
+      };
+  
+      // 프로젝트 상세 정보 불러오기
+      const fetchProjectDetail = async () => {
+        try {
+          const data = await contractProjectDetail(numericProjectId);
+          setProject(data);  // 프로젝트 상태 업데이트
+          setWorkType(data.worktype ? '재택' : '통근'); // 프로젝트 정보에 따라 workType 업데이트
+        } catch (error) {
+          console.error("Failed to fetch project details", error);
+        }
+      };
+  
+      fetchStepResponse();  // 단계 값 불러오기
+      fetchProjectDetail();  // 프로젝트 상세 정보 불러오기
+    } else {
+      console.error("numericProjectId가 정의되지 않았습니다.");
+    }
+  }, [numericProjectId]);  // numericProjectId를 종속성으로 설정
   updateSteps(stepResponse as Status);
 
 
@@ -106,17 +111,29 @@ const ProjectDetail = () => {
 
   // 중간 평가 이동
   const handleNavigateToMitermForm = () => {
-    console.log("이동");
-    navigate(`/evaluate/final/${boardId}`, { state: { userId } }); // MitermForm으로 이동
+    navigate(`/evaluate/miterm/${projectId}`, { state: { userId } }); // MitermForm으로 이동
   };
+  // 최종 평가 이동
+  const handleNavigateToFinalForm = () => {
+    navigate(`/evaluate/final/${projectId}`, { state: { userId } }); // FinalForm으로 이동
+  }
 
   const handleStep = async () => {
-    console.log(stepResponse);  // 현재 stepResponse 값 확인
-    console.log(projectId)
+    console.log(numericProjectId)
     try {
       if (stepResponse) {  // stepResponse가 존재하는지 확인
-        const result = await projectStep(80, stepResponse, true);
-        console.log('프로젝트 단계가 성공적으로 변경되었습니다:', result);
+        const result = await projectStep(numericProjectId, stepResponse, true);
+        console.log(result);
+  
+        if (stepResponse === "DEVELOPMENT") {
+          handleNavigateToMitermForm();
+        }
+
+        else if (stepResponse === "DEPLOYMENT") {
+          handleNavigateToFinalForm();
+        }
+      } else {
+        console.warn("stepResponse 값이 없습니다.");
       }
     } catch (error) {
       console.error('프로젝트 단계 변경 중 오류가 발생했습니다:', error);

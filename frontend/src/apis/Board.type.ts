@@ -40,7 +40,10 @@ export interface project {
     upload: Date,
     client: clientInfo,
     projectId: number,
-    freelancerProjectId: number
+    freelancerProjectId: number,
+    applicantList:Array<projectApplicantProps>
+
+    
 }
 
 const clientBasic = {
@@ -79,7 +82,10 @@ export const projectBasic = {
     address: '',
     deadline: new Date(),
     upload: new Date(),
-    client: clientBasic
+    client: clientBasic,
+    projectId: 0, 
+    freelancerProjectId: 0 ,
+    applicantList: []   
 }
 
 //== 프로젝트 filter ==//

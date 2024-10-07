@@ -26,11 +26,14 @@ const SignList = () => {
           </div>
         ))
       ) : (
-        signList.map((sign: project) => (
+        <>
+        {signList?.length === 0 && <div className="flex items-center">계약 진행중인 프로젝트가 없습니다.</div>}
+        {signList?.map((sign: project) => (
           <div className="w-[1000px]" key={sign.projectId}>
             <SignListBox {...sign} />
           </div>
-        ))
+        ))}
+        </>
       )}
       
     </div>

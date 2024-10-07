@@ -93,7 +93,7 @@ export const projectStep = async (
 };
 
 // 프로젝트 상세 정보 가져오기
-export const contractProjectDetail = async (projectId: number): Promise<void> => {
+export const contractProjectDetail = async (projectId: number): Promise<any> => {
   try {
     const response = await axios({
       method: 'get',
@@ -103,8 +103,7 @@ export const contractProjectDetail = async (projectId: number): Promise<void> =>
       },
     });
 
-    console.log(response.data); // 응답 확인용 로그
-    // 서버에서 데이터 구조 확인 후 수정
+    console.log(response.data); 
     return response.data?.data || response.data; // data에 있는 값이 없는 경우 처리
   } catch (error) {
     console.error('Error fetching project details:', error);

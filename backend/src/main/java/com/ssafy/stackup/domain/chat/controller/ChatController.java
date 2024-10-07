@@ -28,6 +28,7 @@ public class ChatController {
 
     @MessageMapping("/message")
     public ResponseEntity<ApiResponse<ChatDto>> sendChat(@Payload ChatDto chatDto, @Header(name = "Authorization") String token) {
+        log.info("in");
         template.convertAndSend("/sub/chatroom/" + chatDto.getChatroomId(), chatDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ApiResponse.success(chatService.saveChat(chatDto,token.substring(7))));

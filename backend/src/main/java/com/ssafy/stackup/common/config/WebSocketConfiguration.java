@@ -18,7 +18,7 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
         // chatting 소켓 엔드포인트
         registry.addEndpoint("/ws") // 웹소켓 엔드포인트
                 .setAllowedOriginPatterns("*"); // CORS 허용
-//                .withSockJS();
+//               .withSockJS();
     }
 
     @Override

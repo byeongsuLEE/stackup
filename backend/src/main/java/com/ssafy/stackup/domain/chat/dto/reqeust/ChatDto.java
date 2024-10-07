@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ChatDto {
     private Long chatroomId;
-    private String name;
+    private Long sendId;
+    private Long receiverId;
     private String registTime;
     private String message;
 }

@@ -7,7 +7,7 @@ pipeline {
         GIT_CREDENTIALS_ID = 'stackup-gitlab' // Jenkins에 설정한 GitLab 자격 증명 ID (gitlab_token)
 
         // GitHub 리포지토리 설정 (매니페스트)
-        GITHUB_REPO = 'https://github.com/S-Choi-1997/stackupM-manifests.git' // GitHub 매니페스트 리포지토리
+        GITHUB_REPO = 'https://github.com/S-Choi-1997/stackupM.git' // GitHub 매니페스트 리포지토리
         GITHUB_CREDENTIALS_ID = 'stackup_github' // Jenkins에 설정한 GitHub 자격 증명 ID (stackupM-github)
 
         // Docker Hub 설정

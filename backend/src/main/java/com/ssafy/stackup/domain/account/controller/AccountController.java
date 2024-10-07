@@ -1,5 +1,6 @@
 package com.ssafy.stackup.domain.account.controller;
 
+import com.ssafy.stackup.common.exception.ResourceNotFoundException;
 import com.ssafy.stackup.domain.account.dto.*;
 import com.ssafy.stackup.domain.account.entity.Account;
 import com.ssafy.stackup.domain.account.service.AccountService;
@@ -108,15 +109,33 @@ public class AccountController {
         return transactionsService.fetchTransactions(accountId, accountNo, userId);
     }
 
-    @PostMapping("/{accountId}/transfer")
-    public void accountTransfer(@RequestBody TransferRequest request, @PathVariable Long accountId,@AuthUser User user) throws Exception {
-        Long userId = user.getId();
-        Account account = accountService.getAccount(accountId);
-        String accountNo = EncryptionUtil.decrypt(account.getAccountNum());
-        System.out.println(accountNo);
-        System.out.println(request.getDepositAccount());
-        System.out.println(request.getTransactionBalance());
-        transferService.fetchTransfer(request.getDepositAccount(), accountNo, request.getTransactionBalance(), userId);
+//    @PostMapping("/{accountId}/transfer")
+//    public void accountTransfer(@RequestBody TransferRequest request, @PathVariable Long accountId,@AuthUser User user) throws Exception {
+//        Long userId = user.getId();
+//        Account account = accountService.getAccount(accountId);
+//        String accountNo = EncryptionUtil.decrypt(account.getAccountNum());
+//        System.out.println(accountNo);
+//        System.out.println(request.getDepositAccount());
+//        System.out.println(request.getTransactionBalance());
+//        transferService.fetchTransfer(request.getDepositAccount(), accountNo, request.getTransactionBalance(), userId);
+//    }
+
+    @PostMapping("/transfer")
+    public void accountTrans(@RequestBody TransferRequest request, @AuthUser User user) throws Exception {
+        Long freelancerId = request.getFreelancerId();
+        User client = userRepository.findById(user.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("클라이언트가 존재하지 않음"));
+        User freelancer = userRepository.findById(freelancerId)
+                .orElseThrow(()-> new ResourceNotFoundException("프리랜서가 존재하지 않음"));
+        if (freelancer.getMainAccount() == null) {
+            throw new IllegalArgumentException("프리랜서 계좌 번호가 존재하지 않습니다.");
+        }
+        if (client.getMainAccount() == null) {
+            throw new IllegalArgumentException("클라이언트 계좌 번호가 존재하지 않습니다.");
+        }
+        String freelancerAccountNo = EncryptionUtil.decrypt(freelancer.getMainAccount());
+        String clientAccountNo = EncryptionUtil.decrypt(client.getMainAccount());
+        transferService.fetchTransfer(freelancerAccountNo, clientAccountNo, request.getTransactionBalance(), client.getId());
     }
 
     @PostMapping("/auth/{accountId}")

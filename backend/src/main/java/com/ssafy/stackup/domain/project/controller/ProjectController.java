@@ -78,6 +78,16 @@ public class ProjectController {
                 .body(ApiResponse.success(projects));
     }
 
+
+    @GetMapping("/info/{projectId}")
+    public ResponseEntity<ApiResponse<ProjectInfoResponseDto>> getProject(@PathVariable Long projectId) {
+       ProjectInfoResponseDto projectInfoResponseDto  = projectService.getProjectInfo(projectId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(projectInfoResponseDto));
+    }
+
+
     /**
      * 프로젝트 등록
      * @ 작성자   : 이병수
@@ -120,6 +130,8 @@ public class ProjectController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(projectStepCheckResponseDto,message));
     }
+
+
 
 
 

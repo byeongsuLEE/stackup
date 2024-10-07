@@ -143,11 +143,14 @@ def buildDockerImage(project, imageName) {
                     git commit -m "Update image to choho97/stackup-${project}:${IMAGE_TAG}" || echo "No changes to commit"
                 """
                 
-                // GitHub에 푸시
-                withCredentials([usernamePassword(credentialsId: "${GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
-                    sh 'git push https://$GIT_USER:$GIT_PASS@github.com/S-Choi-1997/stackupM.git main --force'
+                // 한 단계 상위 디렉토리로 이동 후 GitHub에 푸시
+                dir('..') {
+                    withCredentials([usernamePassword(credentialsId: "${GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+                        sh 'git push https://$GIT_USER:$GIT_PASS@github.com/S-Choi-1997/stackupM.git main --force'
+                    }
                 }
             }
+
 
 
             // Argo CD Sync

@@ -1,6 +1,7 @@
 package com.ssafy.stackup.domain.board.entity;
 
 import com.ssafy.stackup.domain.user.entity.Freelancer;
+import com.ssafy.stackup.domain.user.entity.FreelancerProject;
 import jakarta.persistence.*;
 import lombok.*;
 

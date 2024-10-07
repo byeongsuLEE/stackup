@@ -3,16 +3,15 @@ package com.ssafy.stackup.domain.project.controller;
 import com.ssafy.stackup.common.response.ApiResponse;
 import com.ssafy.stackup.domain.project.dto.ContractInfoResponseDto;
 import com.ssafy.stackup.domain.project.dto.request.ProjectContractInfoRequestDto;
+import com.ssafy.stackup.domain.project.dto.response.ProjectInfoResponseDto;
 import com.ssafy.stackup.domain.project.dto.request.ProjectStartRequestDto;
 import com.ssafy.stackup.domain.project.dto.request.SignRequest;
-import com.ssafy.stackup.domain.project.dto.response.ProjectInfoResponseDto;
 import com.ssafy.stackup.domain.project.dto.response.ProjectStepCheckResponseDto;
 import com.ssafy.stackup.domain.project.repository.ProjectRepository;
 import com.ssafy.stackup.domain.project.service.ProjectService;
 import com.ssafy.stackup.domain.project.service.SignatureService;
-import com.ssafy.stackup.domain.user.entity.AuthUser;
-import com.ssafy.stackup.domain.user.entity.User;
-//import com.ssafy.stackup.domain.user.service.UserServiceImpl;
+import com.ssafy.stackup.domain.user.entity.*;
+import com.ssafy.stackup.domain.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,7 +27,7 @@ public class ProjectController {
 
     private final ProjectService projectService;
     private final SignatureService signatureService;
-//    private final UserServiceImpl userService;
+    private final UserServiceImpl userService;
     private final ProjectRepository projectRepository;
 
 

@@ -56,7 +56,6 @@ public class CustomOauth2SuccessHandler extends SimpleUrlAuthenticationSuccessHa
         redisUtil.setData(githubId, tokenDto.refreshToken(), tokenDto.refreshTokenExpiresIn());
 
         //회원정보가 있다면 메인으로 이동시켜봅시다..
-        //회원정보가 있다면 메인으로 이동시켜봅시다..
         getRedirectStrategy().sendRedirect(request, response, redirectCallback+"?userId="+authentication.getName());
 
     }

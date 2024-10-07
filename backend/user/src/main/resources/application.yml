@@ -1,6 +1,7 @@
 server:
   servlet:
     context-path: /api
+  port: 8080
 
 spring:
   datasource:
@@ -34,9 +35,10 @@ spring:
       repositories:
         enabled: true
   elasticsearch:
-    uris: http://localhost:9200
+    uris: ${ELASTIC_URL}
     connection-timeout: 3000
     socket-timeout: 3000
+  #    password:
 
 
 
@@ -55,7 +57,7 @@ spring:
             token-uri: https://github.com/login/oauth/access_token
             user-info-uri: https://api.github.com/user
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: 34.64.190.133:9092
     consumer:
       group-id: my-group
       auto-offset-reset: earliest
@@ -72,8 +74,8 @@ jwt:
 
 logging:
   level:
-#    root: info # 루트 로깅 레벨 설정
-#    com.ssafy: debug # com.wava 패키지 로깅 레벨 설정
+    #    root: info # 루트 로깅 레벨 설정
+    #    com.ssafy: debug # com.wava 패키지 로깅 레벨 설정
     org:
       springframework:
         data:

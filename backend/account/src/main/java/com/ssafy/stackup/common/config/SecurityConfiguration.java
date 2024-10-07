@@ -2,8 +2,6 @@ package com.ssafy.stackup.common.config;
 
 
 import com.ssafy.stackup.common.jwt.*;
-import com.ssafy.stackup.common.oauth2.CustomOauth2SuccessHandler;
-import com.ssafy.stackup.common.oauth2.service.CustomOAuth2UserService;
 import com.ssafy.stackup.common.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -31,7 +29,6 @@ public class SecurityConfiguration {
 
     private final   TokenProvider tokenProvider;
     private final RedisUtil redisUtil;
-    private final CustomOAuth2UserService customOAuth2UserService; // CustomOAuth2UserService 주입
 
     private final String[] PERMIT_ALL_ARRAY = { // 허용할 API
             "/","/user/client/signup", "/user/login","/**","/login/**", "/oauth2/**", "/user/token"
@@ -46,7 +43,7 @@ public class SecurityConfiguration {
     };
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, CustomOauth2SuccessHandler customOauth2SuccessHandler) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 // CSRF 보호 비활성화
                 .csrf(AbstractHttpConfigurer::disable)
@@ -73,26 +70,12 @@ public class SecurityConfiguration {
 
                 )
 
-                // OAuth2 로그인 설정
-                .oauth2Login(oauth2 -> oauth2
-                        .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
-                                .userService(customOAuth2UserService))
-                        .successHandler(customOauth2SuccessHandler)
-                ) // CustomOAuth2UserService 설정
-
-
-
                 // UsernamePasswordAuthenticationFilter 전에 AuthenticationFilter 추가
                 .addFilterBefore(new AuthenticationFilter(tokenProvider,redisUtil), UsernamePasswordAuthenticationFilter.class)
                 // AuthenticationFilter 전에 JwtExceptionFilter 추가
                 .addFilterBefore(new JwtExceptionFilter(tokenProvider, redisUtil), AuthenticationFilter.class)
                 // 예외 처리 설정
-                .exceptionHandling(e -> {
-                    // 인증 실패 시 CustomAuthenticationEntryPoint 사용
-                    e.authenticationEntryPoint(new CustomAuthenticationEntryPoint());
-                    // 접근 거부 시 CustomAccessDeniedHandler 사용
-                    e.accessDeniedHandler(new CustomAccessDeniedHandler());
-                })
+
                 // SecurityFilterChain 객체 빌드 및 반환
                 .build();
     }

@@ -1,7 +1,7 @@
 server:
   servlet:
     context-path: /api
-
+  port: 8082
 spring:
   datasource:
     url: ${DB_URL} # 데이터베이스 URL (환경 변수 사용)
@@ -34,9 +34,10 @@ spring:
       repositories:
         enabled: true
   elasticsearch:
-    uris: http://localhost:9200
+    uris: ${ELASTIC_URL}
     connection-timeout: 3000
     socket-timeout: 3000
+  #    password:
 
 
 
@@ -55,7 +56,7 @@ spring:
             token-uri: https://github.com/login/oauth/access_token
             user-info-uri: https://api.github.com/user
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: 34.64.190.133:9092
     consumer:
       group-id: my-group
       auto-offset-reset: earliest
@@ -72,8 +73,8 @@ jwt:
 
 logging:
   level:
-#    root: info # 루트 로깅 레벨 설정
-#    com.ssafy: debug # com.wava 패키지 로깅 레벨 설정
+    #    root: info # 루트 로깅 레벨 설정
+    #    com.ssafy: debug # com.wava 패키지 로깅 레벨 설정
     org:
       springframework:
         data:
@@ -112,7 +113,7 @@ portone:
   api-secret: QuEDNv6I2IkSg2hqbpqAr31vy0fQK2DoqFYbMtE0GnG5eEdB9MSR6gHqkdhVx8xXoe8JqXSFN5pFR3Uv
 
 
-
+USER_SERVICE_URL: http://localhost:8080/api/user/
 
 default:
   image: https://raw.githubusercontent.com/tailwindlabs/heroicons/56c073c2c9a66d2e51adb93d8e87e2e941d5b6db/src/20/solid/user-circle.svg

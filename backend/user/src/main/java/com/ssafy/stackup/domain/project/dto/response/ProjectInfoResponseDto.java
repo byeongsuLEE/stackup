@@ -27,7 +27,7 @@ public class ProjectInfoResponseDto {
     private Long deposit;
     private List<String> frameworks;
     private List<String> languages;
-
+    private String certificateUrl;
     private Long recruits;  //모집인원
 
     private Boolean isCharged;

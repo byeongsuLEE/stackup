@@ -1,6 +1,8 @@
 package com.ssafy.stackup.domain.project.controller;
 
 import com.ssafy.stackup.common.response.ApiResponse;
+import com.ssafy.stackup.domain.project.dto.ContractInfoResponseDto;
+import com.ssafy.stackup.domain.project.dto.request.ProjectContractInfoRequestDto;
 import com.ssafy.stackup.domain.project.dto.response.ProjectInfoResponseDto;
 import com.ssafy.stackup.domain.project.dto.request.ProjectStartRequestDto;
 import com.ssafy.stackup.domain.project.dto.request.SignRequest;
@@ -27,6 +29,35 @@ public class ProjectController {
     private final SignatureService signatureService;
     private final UserServiceImpl userService;
     private final ProjectRepository projectRepository;
+
+
+
+    @GetMapping("/contract/{freelancerProjectId}")
+    public ResponseEntity<ApiResponse<ContractInfoResponseDto>> getContractInfo(@PathVariable Long freelancerProjectId, @AuthUser User user) {
+        ContractInfoResponseDto contractInfoResponseDto =   projectService.getContractInfo(freelancerProjectId,user.getId());
+
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(contractInfoResponseDto));
+    }
+
+    /**
+     * 프로젝트 계약서 작성 - 클라이언트
+     * @ 작성자   : 이병수
+     * @ 작성일   : 2024-10-01
+     * @ 설명     :
+     * @param projectContractInfoRequestDto
+     * @return
+
+     */
+    @PatchMapping("/contract/submit")
+    public ResponseEntity<ApiResponse<String>> contractSubmit(@RequestBody ProjectContractInfoRequestDto projectContractInfoRequestDto) {
+
+        projectService.contractSubmit(projectContractInfoRequestDto);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success("계약서가 작성 되었습니다."));
+    }
+
+
     //등록
     @PostMapping("/previous-project")
     public ResponseEntity<ApiResponse<String>> registerPreviousProject(            @RequestParam(value = "certificateFile") MultipartFile certificateFile,
@@ -40,8 +71,8 @@ public class ProjectController {
 
 
     @GetMapping("/info")
-    public ResponseEntity<ApiResponse<List<ProjectInfoResponseDto>>> getAllProjects(@AuthUser User user) {
-        List<ProjectInfoResponseDto> projects  = projectService.getAllProjects(user);
+    public ResponseEntity<ApiResponse<List<ProjectInfoResponseDto>>> getAllProjects(@RequestParam String projectType, @AuthUser User user) {
+        List<ProjectInfoResponseDto> projects  = projectService.getAllProjects(user,projectType);
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(projects));

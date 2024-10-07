@@ -6,12 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="770a738c-7cff-4cbe-947d-9fe8c12c7597" name="Changes" comment="init : msa 기본구조">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/config/ElasticSearchConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/config/ElasticSearchConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/user/dto/response/UserInfoResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/user/dto/response/UserInfoResponseDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/user/service/UserService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/user/service/UserServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/common/config/ElasticSearchConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/common/config/ElasticSearchConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/dto/response/UserInfoResponseDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/dto/response/UserInfoResponseDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/jwt/AuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/jwt/AuthenticationFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/response/ErrorCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/response/ErrorCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/controller/AccountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/controller/AccountController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/service/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/service/AccountService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/service/TransactionsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/service/TransactionsService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/service/TransferService.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/service/TransferService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/service/WonAuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/service/WonAuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/controller/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/service/UserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/service/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/service/UserServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -77,33 +80,33 @@
     <option name="autoscrollToSource" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Gradle.Build backend.executor": "Run",
-    "Gradle.Download Sources.executor": "Run",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "Spring Boot.StackUpApplication.executor": "Run",
-    "git-widget-placeholder": "be/msa",
-    "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/user/OneDrive/바탕 화면/special/S11P21C103/backend/board/src/main/java/com/ssafy/stackup/domain",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "fileTemplates",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Gradle.Build backend.executor&quot;: &quot;Run&quot;,
+    &quot;Gradle.Download Sources.executor&quot;: &quot;Run&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;Spring Boot.StackUpApplication.executor&quot;: &quot;Run&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;be/msa-user&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/SSAFY/Desktop/stackup/S11P21C103/backend/account&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;fileTemplates&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "mysql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;mysql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -185,6 +188,7 @@
       <workItem from="1727309685358" duration="13678000" />
       <workItem from="1727338437542" duration="252000" />
       <workItem from="1727758712646" duration="734000" />
+      <workItem from="1728189744624" duration="7846000" />
     </task>
     <task id="LOCAL-00001" summary="test : pull 오류로 test">
       <option name="closed" value="true" />
@@ -397,9 +401,9 @@
     <MESSAGE value="fix :  error level;" />
     <MESSAGE value="fix : merge error 수정" />
     <MESSAGE value="fix : 머지 오류수정" />
-    <MESSAGE value="init : msa 기본구조" />
     <MESSAGE value="feat : &quot;보드 분리 중&quot;" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat : &quot;보드 분리 중&quot;" />
+    <MESSAGE value="init : msa 기본구조" />
+    <option name="LAST_COMMIT_MESSAGE" value="init : msa 기본구조" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

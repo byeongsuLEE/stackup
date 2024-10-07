@@ -11,7 +11,7 @@ pipeline {
         GITHUB_CREDENTIALS_ID = 'stackup_github' // Jenkins에 설정한 GitHub 자격 증명 ID (stackupM-github)
 
         // Docker Hub 설정
-        DOCKER_HUB_CREDENTIALS_ID = 'docker-hub-token' // Jenkins에 설정한 Docker Hub 자격 증명 ID (stackup-docker)
+        DOCKER_HUB_CREDENTIALS_ID = 'stackup_docker' // Jenkins에 설정한 Docker Hub 자격 증명 ID (stackup-docker)
         DOCKER_REGISTRY = 'docker.io'
         IMAGE_TAG = "${env.BUILD_NUMBER}" // 빌드 번호를 이미지 태그로 사용
 

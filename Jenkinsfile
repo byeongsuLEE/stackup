@@ -136,10 +136,11 @@ def buildDockerImage(project, imageName) {
             }
 
             // Argo CD Sync
+            def appName = "spring-${project}"
             withCredentials([usernamePassword(credentialsId: "${ARGOCD_CREDENTIALS_ID}", usernameVariable: 'ARGOCD_USER', passwordVariable: 'ARGOCD_PASS')]) {
                 sh """
-                    echo y | argocd login ${ARGOCD_SERVER} --username ${ARGOCD_USER} --password ${ARGOCD_PASS} --insecure
-                    argocd app sync spring-${project}
+                    echo y | ./argocd login ${ARGOCD_SERVER} --username ${ARGOCD_USER} --password ${ARGOCD_PASS} --insecure
+                    ./argocd app sync ${appName}
                 """
             }
         }

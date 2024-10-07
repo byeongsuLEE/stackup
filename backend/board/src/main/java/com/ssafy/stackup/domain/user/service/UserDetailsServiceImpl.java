@@ -42,7 +42,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String identifier) throws UsernameNotFoundException {
 
         User user = userRepository.findById(Long.parseLong(identifier)).orElseThrow(() ->
-                new CustomException(ErrorCode.USER_NOT_FOUND));;
+           new CustomException(ErrorCode.USER_NOT_FOUND));;
 
 
 

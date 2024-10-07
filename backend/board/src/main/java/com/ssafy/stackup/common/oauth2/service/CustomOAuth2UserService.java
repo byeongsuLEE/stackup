@@ -62,6 +62,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                         .reportedCount(0)
                         .totalScore(0.0)
                         .careerYear(0)
+                        .evaluatedCount(0)
                         .build();
 
 

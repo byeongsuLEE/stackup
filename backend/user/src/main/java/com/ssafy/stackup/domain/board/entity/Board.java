@@ -2,13 +2,12 @@ package com.ssafy.stackup.domain.board.entity;
 
 import com.ssafy.stackup.domain.project.entity.Project;
 import com.ssafy.stackup.domain.user.entity.Client;
-import com.ssafy.stackup.domain.user.entity.Freelancer;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import net.minidev.json.annotate.JsonIgnore;
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.util.ArrayList;
 import java.util.Date;

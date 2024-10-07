@@ -2,7 +2,10 @@ package com.ssafy.stackup.domain.board.entity;
 
 import com.ssafy.stackup.domain.language.entity.Language;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "board_language")

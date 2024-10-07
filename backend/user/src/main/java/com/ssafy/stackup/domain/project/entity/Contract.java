@@ -3,7 +3,6 @@ package com.ssafy.stackup.domain.project.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Entity
 @Getter

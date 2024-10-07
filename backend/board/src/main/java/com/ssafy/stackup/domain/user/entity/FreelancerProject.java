@@ -34,6 +34,12 @@ public class FreelancerProject {
     @Column (name = "client_signed")
     private boolean clientSigned;
 
+    @Column (name = "freelancer_signatrue_value")
+    private String freelancerSignatureValue;
+
+    @Column (name = "client_signature_value")
+    private String clientSignatureValue;
+
     @Column(name = "nft_contract_url")
     private String nftContractUrl;
 
@@ -73,6 +79,24 @@ public class FreelancerProject {
 
     @Column(name = "contract_additional_terms", columnDefinition = "TEXT")
     private String contractAdditionalTerms; // 추가 특약 사항
+
+    private String period;
+
+    private String candidateName;
+
+    private String projectName;
+
+
+    public void updatePeriod(String period) {
+        this.period = period;
+    }
+
+    public void updateCandidateName(String candidateName) {
+        this.candidateName = candidateName;
+    }
+    public void updateProjectName(String projectName) {
+        this.projectName = projectName;
+    }
 
     // 클라이언트가 계약서 작성
 // 계약 시작일 업데이트
@@ -130,12 +154,20 @@ public class FreelancerProject {
     }
 
 
-    void updateFreelancerSigned(boolean freelancerSigned) {
+    public  void updateFreelancerSigned() {
         this.freelancerSigned = true;
     }
 
-    void updateClientSigned(boolean clientSigned) {
+    public void updateClientSigned() {
         this.clientSigned = true;
+    }
+
+    public void updateClientSignatureValue(String clientSignatureValue) {
+        this.clientSignatureValue = clientSignatureValue;
+    }
+
+    public void updateFreelancerSignatureValue(String freelancerSignatureValue) {
+        this.freelancerSignatureValue = freelancerSignatureValue;
     }
 
     /**
@@ -145,7 +177,7 @@ public class FreelancerProject {
      * @ 설명     :
      * @return
      */
-    boolean checkUsersSignConfirm(){
+    public boolean checkUsersSignConfirm(){
         return this.freelancerSigned && this.clientSigned;
     }
 

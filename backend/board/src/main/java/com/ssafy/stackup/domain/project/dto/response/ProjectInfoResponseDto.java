@@ -21,6 +21,7 @@ import java.util.List;
 @Getter
 public class ProjectInfoResponseDto {
     private Long projectId;
+    private Long freelancerProjectId;
     private ProjectStatus status;
     private ProjectStep step;
     private String title;
@@ -42,6 +43,7 @@ public class ProjectInfoResponseDto {
     private boolean clientStepConfirmed;
     private boolean freelancerStepConfirmed;
     private ClientResponseDto client;
+    private Long boardId;
 
 
     public void updateClient (Project project)

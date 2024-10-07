@@ -115,7 +115,7 @@ def buildDockerImage(project, imageName) {
                 sh 'chmod +x ./gradlew'
                 sh './gradlew clean build -x test --stacktrace'
                 sh "docker build -t ${imageName} -f Dockerfile ."
-                sh 'docker push ${imageName}'
+                sh "docker push ${imageName}"
             }
 
             // GitHub 리포지토리 체크아웃 및 이미지 태그 업데이트

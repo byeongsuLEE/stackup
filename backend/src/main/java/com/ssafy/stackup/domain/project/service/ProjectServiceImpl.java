@@ -224,8 +224,9 @@ public class ProjectServiceImpl implements ProjectService {
         if(project.isAllFreelancersSigned()){
             project.updateStatus(PROGRESS);
             projectRepository.save(project);
+            return  ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(" 모든 지원자 및 클라이언트가 서명 완료되었습니다."));
         }
-        return  ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(" 서명완료"));
+        return  ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("해당 유저 서명 완료, 모든 서명이 완료되지 않았습니다."));
     }
 
 

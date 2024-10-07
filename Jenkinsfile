@@ -100,7 +100,15 @@ pipeline {
         failure {
             echo 'Build or deployment process failed.'
         }
+        // 빌드 후 임시 파일 정리
+        cleanup {
+            sh 'rm -rf spring-user@tmp/'
+            sh 'rm -rf spring-frontend@tmp/'
+            sh 'rm -rf spring-board@tmp/'
+            echo 'Temporary files cleaned up.'
+        }
     }
+    
 }
 
 // Docker 이미지 빌드 및 푸시 함수 정의

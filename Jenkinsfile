@@ -19,7 +19,7 @@ pipeline {
         K8S_NAMESPACE = 'default'
 
         // Argo CD 설정
-        ARGOCD_SERVER = 'http://34.64.46.226:30081'
+        ARGOCD_SERVER = '34.64.46.226:30081'
         ARGOCD_CREDENTIALS_ID = 'stackup_argo'
 
         // 추가한 환경변수들

@@ -32,27 +32,27 @@ pipeline {
         }
 
         stage('Build User Docker Image') {
-            when {
-                changeset "**/backend/user/**"
-            }
+            // when {
+            //     changeset "**/backend/user/**"
+            // }
             steps {
                 buildDockerImage('user', "${DOCKER_REGISTRY}/choho97/stackup/user:${IMAGE_TAG}")
             }
         }
 
         stage('Build Board Docker Image') {
-            when {
-                changeset "**/backend/board/**"
-            }
+            // when {
+            //     changeset "**/backend/board/**"
+            // }
             steps {
                 buildDockerImage('board', "${DOCKER_REGISTRY}/choho97/stackup/board:${IMAGE_TAG}")
             }
         }
 
         stage('Build Account Docker Image') {
-            when {
-                changeset "**/backend/account/**"
-            }
+            // when {
+            //     changeset "**/backend/account/**"
+            // }
             steps {
                 buildDockerImage('account', "${DOCKER_REGISTRY}/choho97/stackup/account:${IMAGE_TAG}")
             }

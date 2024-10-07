@@ -1,5 +1,5 @@
 import { differenceInDays, format } from "date-fns";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { project as ProjectType } from "../../apis/Board.type";
 import { projectApply } from "../../apis/FreelancerApi";
@@ -24,8 +24,10 @@ const Detail = ({ project, clientId }: DetailProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isAnomaly, setIsAnomaly] = useState<boolean | null>(null); // is_anomaly 상태
   const [loading, setLoading] = useState(true); // 로딩 상태
-
+  
   const boardId = project.boardId;
+
+
   const navigate = useNavigate();
 
   // 프로젝트 삭제
@@ -97,7 +99,7 @@ const Detail = ({ project, clientId }: DetailProps) => {
    useEffect(() => {
     const checkAnomaly = async () => {
       try {
-        const response = await axios.get(`${svURL}/detect/illegal/${boardId}`);
+        const response = await axios.get(`${svURL}/detect/illegal/${project.boardId}`);
         setIsAnomaly(response.data.is_anomaly[0]);
       } catch (error) {
         console.error("Error fetching anomaly data:", error);
@@ -107,7 +109,7 @@ const Detail = ({ project, clientId }: DetailProps) => {
     };
 
     checkAnomaly();
-  }, [boardId]);
+  }, []);
 
   if (!isLoaded || loading) {
     // 데이터가 아직 로드되지 않았다면 로딩 화면 표시

@@ -330,11 +330,13 @@ export default function SimplePopup() {
   const sendMessage = () => {
     if (stompClient.current && inputValue && activeFreelancerId) {
       const messageObj = {
-        senderId: clientId, // 메시지를 보낸 사람 (로그인한 사용자)
+        sendId: clientId, // 메시지를 보낸 사람 (로그인한 사용자)
         receiverId: activeFreelancerId, // 메시지를 받을 사람 (프리랜서)
-        chatRoomId: activeChatId, // 해당 채팅방 ID
-        content: inputValue, // 메시지 내용
+        chatroomId: activeChatId, // 해당 채팅방 ID
+        message: inputValue, // 메시지 내용
+        registTime: new Date().toISOString() // 
       };
+
 
       // 메시지 전송
       stompClient.current.send(

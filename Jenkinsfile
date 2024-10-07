@@ -123,6 +123,11 @@ def buildDockerImage(project, imageName) {
 
             // spring-${project} 디렉터리로 이동해서 작업
             dir("spring-${project}") {
+                // 먼저 풀 받기
+                withCredentials([usernamePassword(credentialsId: "${GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+                    sh 'git pull https://$GIT_USER:$GIT_PASS@github.com/S-Choi-1997/stackupM.git main'
+                }
+
                 // 이미지 태그 업데이트 및 기타 작업 수행
                 sh """
                     sed -i 's|image: choho97/stackup-${project}:.*|image: choho97/stackup-${project}:${IMAGE_TAG}|' deployment.yaml

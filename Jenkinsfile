@@ -145,6 +145,7 @@ def buildDockerImage(project, imageName) {
                 
                 // 한 단계 상위 디렉토리로 이동 후 GitHub에 푸시
                 dir('..') {
+                    sh "pwd"
                     withCredentials([usernamePassword(credentialsId: "${GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
                         sh 'git push https://$GIT_USER:$GIT_PASS@github.com/S-Choi-1997/stackupM.git main --force'
                     }

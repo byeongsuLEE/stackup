@@ -55,6 +55,16 @@ pipeline {
                 sh 'ls -la'
             }
         }
+        // 아르고cd cli 설치
+        stage('Install ArgoCD CLI') {
+            steps {
+                sh """
+                    curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+                    chmod +x argocd-linux-amd64
+                    sudo mv argocd-linux-amd64 /usr/local/bin/argocd
+                """
+            }
+        }
 
         stage('Build and Push Docker Images') {
             parallel {

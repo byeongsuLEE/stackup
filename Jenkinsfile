@@ -123,10 +123,14 @@ def buildDockerImage(project, imageName) {
 
             // spring-${project} 디렉터리로 이동해서 작업
             dir("spring-${project}") {
-                
+
                 // 먼저 원격 저장소에서 변경 사항을 가져옴 (rebase 사용)
                 withCredentials([usernamePassword(credentialsId: "${GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
-                    sh 'git pull --rebase https://$GIT_USER:$GIT_PASS@github.com/S-Choi-1997/stackupM.git main'
+                    sh """
+                        git stash
+                        git pull --rebase https://$GIT_USER:$GIT_PASS@github.com/S-Choi-1997/stackupM.git main
+                        git stash pop || echo "No stash to apply"
+                    """
                 }
 
                 // 이미지 태그 업데이트 및 기타 작업 수행

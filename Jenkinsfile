@@ -134,7 +134,7 @@ def buildDockerImage(project, imageName) {
 
                  // 로컬 변경 사항을 커밋 또는 스태시
                 sh """
-                    git add -A
+                    git add .
                     git commit -m "Auto-commit before pulling changes" || echo "No changes to commit"
                 """
 

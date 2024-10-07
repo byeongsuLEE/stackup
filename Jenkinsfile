@@ -26,7 +26,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // be/msa 브랜치 체크아웃
+                // be/cd 브랜치 체크아웃
                 git branch: 'be/cd', url: "${GIT_REPO}", credentialsId: "${GIT_CREDENTIALS_ID}"
             }
         }
@@ -41,29 +41,27 @@ pipeline {
         }
 
         stage('Build and Push Docker Images') {
-            steps {
-                parallel {
-                    stage('Build User Docker Image') {
-                        steps {
-                            script {
-                                buildDockerImage('user', "choho97/stackup-user:${IMAGE_TAG}")
-                            }
+            parallel {
+                stage('Build User Docker Image') {
+                    steps {
+                        script {
+                            buildDockerImage('user', "choho97/stackup-user:${IMAGE_TAG}")
                         }
                     }
+                }
 
-                    stage('Build Board Docker Image') {
-                        steps {
-                            script {
-                                buildDockerImage('board', "choho97/stackup-board:${IMAGE_TAG}")
-                            }
+                stage('Build Board Docker Image') {
+                    steps {
+                        script {
+                            buildDockerImage('board', "choho97/stackup-board:${IMAGE_TAG}")
                         }
                     }
+                }
 
-                    stage('Build Account Docker Image') {
-                        steps {
-                            script {
-                                buildDockerImage('account', "choho97/stackup-account:${IMAGE_TAG}")
-                            }
+                stage('Build Account Docker Image') {
+                    steps {
+                        script {
+                            buildDockerImage('account', "choho97/stackup-account:${IMAGE_TAG}")
                         }
                     }
                 }

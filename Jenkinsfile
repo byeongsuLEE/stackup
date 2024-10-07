@@ -27,7 +27,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // be/msa 브랜치 체크아웃
-                git branch: 'be/msa', url: "${GIT_REPO}", credentialsId: "${GIT_CREDENTIALS_ID}"
+                git branch: 'be/cd', url: "${GIT_REPO}", credentialsId: "${GIT_CREDENTIALS_ID}"
             }
         }
 

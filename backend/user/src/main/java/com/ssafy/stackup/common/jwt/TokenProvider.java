@@ -96,7 +96,7 @@ public class TokenProvider {
      */
     public Authentication getAuthentication(String accessToken) throws RuntimeException {
         Claims claims = parseClaims(accessToken);
-        UserDetails userDetails = userDetailsServiceImpl.   loadUserByUsername(claims.getSubject());
+        UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(claims.getSubject());
 
         return new UsernamePasswordAuthenticationToken(userDetails, accessToken, userDetails.getAuthorities());
     }

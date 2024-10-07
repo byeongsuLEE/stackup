@@ -1,5 +1,7 @@
 package com.ssafy.stackup.domain.project.service;
 
+import com.ssafy.stackup.common.exception.CustomException;
+import com.ssafy.stackup.common.response.ErrorCode;
 import com.ssafy.stackup.domain.user.entity.User;
 import com.ssafy.stackup.domain.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +39,8 @@ public class SignatureService {
 
     private PublicKey getPublicKeyFromAddress(String userAddress) throws NoSuchAlgorithmException, InvalidKeySpecException {
         // 사용자 주소를 기반으로 공개키를 가져오는 로직
-        User user = userRepository.findByUserAddress(userAddress);
+        User user = userRepository.findByUserAddress(userAddress)
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
         if (user != null && user.getPublicKey() != null) {
             // Base64로 인코딩된 공개키를 디코딩하여 PublicKey 객체 생성
             byte[] keyBytes = Base64.getDecoder().decode(user.getPublicKey());
@@ -45,7 +48,7 @@ public class SignatureService {
             KeyFactory keyFactory = KeyFactory.getInstance("ECDSA");
             return keyFactory.generatePublic(spec);
         }
-        return null; // 사용자 없거나 공개키가 없으면 null 반환
+        return null; // 사용자 없거나 공개키가 없으면 null 0반환
     }
 
 

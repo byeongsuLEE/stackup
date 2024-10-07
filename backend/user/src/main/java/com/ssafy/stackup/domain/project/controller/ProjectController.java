@@ -3,14 +3,15 @@ package com.ssafy.stackup.domain.project.controller;
 import com.ssafy.stackup.common.response.ApiResponse;
 import com.ssafy.stackup.domain.project.dto.ContractInfoResponseDto;
 import com.ssafy.stackup.domain.project.dto.request.ProjectContractInfoRequestDto;
-import com.ssafy.stackup.domain.project.dto.response.ProjectInfoResponseDto;
 import com.ssafy.stackup.domain.project.dto.request.ProjectStartRequestDto;
 import com.ssafy.stackup.domain.project.dto.request.SignRequest;
+import com.ssafy.stackup.domain.project.dto.response.ProjectInfoResponseDto;
 import com.ssafy.stackup.domain.project.dto.response.ProjectStepCheckResponseDto;
 import com.ssafy.stackup.domain.project.repository.ProjectRepository;
 import com.ssafy.stackup.domain.project.service.ProjectService;
 import com.ssafy.stackup.domain.project.service.SignatureService;
-import com.ssafy.stackup.domain.user.entity.*;
+import com.ssafy.stackup.domain.user.entity.AuthUser;
+import com.ssafy.stackup.domain.user.entity.User;
 import com.ssafy.stackup.domain.user.service.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -37,6 +38,15 @@ public class ProjectController {
         ContractInfoResponseDto contractInfoResponseDto =   projectService.getContractInfo(freelancerProjectId,user.getId());
 
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(contractInfoResponseDto));
+    }
+
+
+    @GetMapping("/info/{projectId}")
+    public ResponseEntity<ApiResponse<ProjectInfoResponseDto>> getProject(@PathVariable Long projectId) {
+        ProjectInfoResponseDto projectInfoResponseDto  = projectService.getProjectInfo(projectId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(projectInfoResponseDto));
     }
 
     /**
@@ -105,9 +115,9 @@ public class ProjectController {
      * @return
      */
     @PostMapping("/{projectId}/contract/sign")
-    public ResponseEntity<ApiResponse<Boolean>> verifySignature(@PathVariable Long projectId, @RequestBody SignRequest signRequest, @AuthUser User user){
+    public ResponseEntity<ApiResponse<String>> saveSignature(@PathVariable Long projectId, @RequestBody SignRequest signRequest, @AuthUser User user){
 
-        return projectService.verifySignature(projectId,signRequest,user);
+        return projectService.saveSignature(projectId,signRequest,user);
     }
 
 

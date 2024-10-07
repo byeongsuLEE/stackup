@@ -1,10 +1,13 @@
 package com.ssafy.stackup.domain.project.dto.response;
 
+import com.ssafy.stackup.domain.board.entity.Board;
 import com.ssafy.stackup.domain.board.entity.Level;
-
+import com.ssafy.stackup.domain.project.entity.Project;
 import com.ssafy.stackup.domain.project.entity.ProjectStatus;
 import com.ssafy.stackup.domain.project.entity.ProjectStep;
-import lombok.*;
+import com.ssafy.stackup.domain.user.dto.response.ClientResponseDto;
+import lombok.Builder;
+import lombok.Getter;
 
 import java.util.Date;
 import java.util.List;
@@ -18,6 +21,7 @@ import java.util.List;
 @Getter
 public class ProjectInfoResponseDto {
     private Long projectId;
+    private Long freelancerProjectId;
     private ProjectStatus status;
     private ProjectStep step;
     private String title;
@@ -38,5 +42,32 @@ public class ProjectInfoResponseDto {
     private Level level;
     private boolean clientStepConfirmed;
     private boolean freelancerStepConfirmed;
+    private ClientResponseDto client;
+    private Long boardId;
+
+
+    public void updateClient (Project project)
+    {
+        if(project.getClient() !=null){
+            Board board = project.getBoard();
+                this.client = ClientResponseDto.builder()
+                        .id(board.getClient().getId())
+                        .name(board.getClient().getName())
+                        .email(board.getClient().getEmail())
+                        .phone(board.getClient().getPhone())
+                        .secondPassword(board.getClient().getSecondPassword())
+                        .accountKey(board.getClient().getAccountKey())
+                        .mainAccount(board.getClient().getMainAccount())
+                        .totalScore(board.getClient().getTotalScore())
+                        .reportedCount(board.getClient().getReportedCount())
+                        .roles(board.getClient().getRoles())
+                        .businessRegistrationNumber(board.getClient().getBusinessRegistrationNumber())
+                        .businessName(board.getClient().getBusinessName())
+                        .build();
+
+        }
+    }
+
+
 
 }

@@ -2,7 +2,6 @@ package com.ssafy.stackup.common.exception;
 
 import com.ssafy.stackup.common.response.ApiResponse;
 import com.ssafy.stackup.common.response.ErrorCode;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

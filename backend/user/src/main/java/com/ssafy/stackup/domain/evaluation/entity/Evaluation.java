@@ -70,7 +70,7 @@ public class Evaluation {
     private Double legalTermsScore;
 
     // 한줄 평
-    @Column(name = "short_review", length = 20, nullable = true)
+    @Column(name = "short_review", nullable = true)
     private String shortReview;
 
     // 평가 타입 (중간 평가, 최종 평가)

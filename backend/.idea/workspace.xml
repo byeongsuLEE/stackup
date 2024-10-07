@@ -4,19 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="770a738c-7cff-4cbe-947d-9fe8c12c7597" name="Changes" comment="init : msa 기본구조">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/jwt/AuthenticationFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/jwt/AuthenticationFilter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/response/ErrorCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/response/ErrorCode.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/controller/AccountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/controller/AccountController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/service/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/service/AccountService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/service/TransactionsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/service/TransactionsService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/service/TransferService.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/service/TransferService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/service/WonAuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/domain/account/service/WonAuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/controller/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/controller/UserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/service/UserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/service/UserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/service/UserServiceImpl.java" afterDir="false" />
-    </list>
+    <list default="true" id="770a738c-7cff-4cbe-947d-9fe8c12c7597" name="Changes" comment="init : msa 기본구조" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

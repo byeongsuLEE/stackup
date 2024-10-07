@@ -73,7 +73,9 @@ pipeline {
 def buildDockerImage(project, imageName) {
     script {
         dir("backend/${project}") { // 정확한 디렉토리 경로로 수정
-            // Gradle 빌드
+            // gradlew 파일에 실행 권한 부여
+            sh 'chmod +x ./gradlew'
+            // Gradle 빌드 실행
             sh './gradlew clean build -x test'
 
             // Docker 이미지 빌드 및 푸시

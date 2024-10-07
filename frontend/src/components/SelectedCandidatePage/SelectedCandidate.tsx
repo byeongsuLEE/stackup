@@ -4,10 +4,10 @@ import DoneButton from "../common/DoneButton";
 
 const SelectedCandidate = ({ name,  portfolioUrl, totalScore, freelancerProjectId }: candidate) => {
   const navigate = useNavigate();
-  const { boardId } = useParams();
+  const { boardId, projectId } = useParams();
 
   const handleContract = () => {
-    navigate(`/work/detail/contract/${boardId}/${freelancerProjectId}`)
+    navigate(`/work/detail/contract/${boardId}/${projectId}/${freelancerProjectId}`)
   }
 
   return (

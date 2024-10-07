@@ -31,7 +31,7 @@ export const submitContract = async (data: any, freelancerProjectId?: string): P
   
   //== 계약서 정보 불러오기 ==//
   export const getContract = async (freelancerProjectId: string): Promise<void> => {
-    const response = await axios({
+    await axios({
       method: 'get',
       url: `${BASE_URL}/contract/${freelancerProjectId}`,
       headers: {
@@ -41,11 +41,8 @@ export const submitContract = async (data: any, freelancerProjectId?: string): P
         freelancerProjectId : "1"
       }
     })
-  
-     console.log(response.data)
   }
-  
-  
+
   //== 서명 확인 ==//
   export const signature = async (sign?: string, freelancerProjectId?: string): Promise<void> => {
     const response = await axios({

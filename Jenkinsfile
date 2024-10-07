@@ -109,6 +109,8 @@ def buildDockerImage(project, imageName) {
         withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
             sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
 
+            echo "Image name: ${imageName}"
+
             dir("backend/${project}") {
                 sh 'chmod +x ./gradlew'
                 sh './gradlew clean build -x test --stacktrace'

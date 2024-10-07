@@ -137,6 +137,7 @@ def buildDockerImage(project, imageName) {
                 // 이미지 태그 업데이트 및 기타 작업 수행
                 sh """
                     sed -i 's|image: choho97/stackup-${project}:.*|image: choho97/stackup-${project}:${IMAGE_TAG}|' deployment.yaml
+                    cat deployment.yaml
                     git config user.email "jenkins@example.com"
                     git config user.name "jenkins"
                     git add deployment.yaml kustomization.yaml service.yaml

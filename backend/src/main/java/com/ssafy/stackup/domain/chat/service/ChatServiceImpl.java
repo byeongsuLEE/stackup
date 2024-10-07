@@ -56,6 +56,7 @@ public class ChatServiceImpl implements ChatService {
                 .user(userOpt)
                 .chatRoom(chatRoom)
                 .message(chatDto.getMessage())
+                .registTime(chatDto.getRegistTime())
                 .build();
 
         chatRepository.save(chat);

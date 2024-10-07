@@ -31,11 +31,25 @@ pipeline {
             }
         }
 
+        stage('List Files') {
+            steps {
+                // 현재 디렉터리의 파일 목록 출력 (디버깅용)
+                sh 'echo "Listing files in the root directory:"'
+                sh 'ls -la'
+            }
+        }
+
+        stage('Prepare Gradle Wrapper') {
+            steps {
+                // gradlew 파일에 실행 권한 부여
+                sh 'chmod +x gradlew'
+            }
+        }
+
         stage('Build Project') {
             steps {
                 script {
                     // 전체 프로젝트 루트에서 Gradle 빌드 실행
-                    sh 'chmod +x ./gradlew' // gradlew 실행 권한 부여
                     sh './gradlew clean build -x test --stacktrace'
                 }
             }

@@ -150,6 +150,7 @@ def buildDockerImage(project, imageName) {
                 
                 // 한 단계 상위 디렉토리로 이동 후 GitHub에 푸시
                 dir('..') {
+                    sh "git diff"
                     sh "pwd"
                     sh "ls"
                     withCredentials([usernamePassword(credentialsId: "${GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {

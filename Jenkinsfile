@@ -114,7 +114,7 @@ def buildDockerImage(project, imageName) {
             dir("backend/${project}") {
                 sh 'chmod +x ./gradlew'
                 sh './gradlew clean build -x test --stacktrace'
-                sh 'docker build -t ${imageName} -f Dockerfile .'
+                sh "docker build -t ${imageName} -f Dockerfile ."
                 sh 'docker push ${imageName}'
             }
 

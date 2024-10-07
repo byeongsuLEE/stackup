@@ -103,12 +103,10 @@ def buildDockerImage(project, imageName) {
                     docker push ${imageName}
                 """
             }
-
+            // GitHub 리포지토리 체크아웃
+            git branch: 'main', url: "${GITHUB_REPO}", credentialsId: "${GITHUB_CREDENTIALS_ID}"
             // GitHub 매니페스트 업데이트 및 ArgoCD 동기화
             dir("spring-${project}") { //
-                // GitHub 리포지토리 체크아웃
-                git branch: 'main', url: "${GITHUB_REPO}", credentialsId: "${GITHUB_CREDENTIALS_ID}"
-                
                 // 이미지 태그 업데이트
                 sh """
                     sed -i 's|image: choho97/stackup-${project}:.*|image: choho97/stackup-${project}:${IMAGE_TAG}|' deployment.yaml

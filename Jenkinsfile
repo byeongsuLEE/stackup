@@ -105,7 +105,7 @@ def buildDockerImage(project, imageName) {
             }
 
             // GitHub 매니페스트 업데이트 및 ArgoCD 동기화
-            dir("manifests/${project}") { // GitHub manifests 리포지토리로 이동
+            dir("spring-${project}") { //
                 // GitHub 리포지토리 체크아웃
                 git branch: 'main', url: "${GITHUB_REPO}", credentialsId: "${GITHUB_CREDENTIALS_ID}"
                 

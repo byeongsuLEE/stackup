@@ -1,6 +1,6 @@
-import axios from "axios"
-import { projectData } from "./Project.type"
+import axios from "axios";
 import { project } from "./Board.type";
+import { projectData } from "./Project.type";
 
 const BASE_URL: string = "http://localhost:8080/api/project"
 
@@ -32,9 +32,9 @@ export const previousProject = async (data: projectData): Promise<void> => {
 };
 
 //== 프로젝트 가져오기 ==//
-export const getProject =  async (type: string): Promise<project[]> => {
+export const getProject = async (type: string): Promise<project[]> => {
   const response = await axios({
-    method:'get',
+    method: 'get',
     url: `${BASE_URL}/info`,
     params: {
       'projectType': type
@@ -43,12 +43,12 @@ export const getProject =  async (type: string): Promise<project[]> => {
       Authorization: `Bearer ${sessionStorage.getItem("token")}`
     }
   })
-  console.log(response.data.data)
+  // console.log(response.data.data)
   return response.data.data
 }
 
 // 프로젝트 시작하기
-export const startProject = async (checkedList: Number[], boardId: string): Promise<void> => {
+export const startProject = async (checkedList: number[], boardId: string): Promise<void> => {
   const response = await axios({
     method: 'post',
     url: `${BASE_URL}/start`,
@@ -56,8 +56,8 @@ export const startProject = async (checkedList: Number[], boardId: string): Prom
       Authorization: `Bearer ${sessionStorage.getItem("token")}`
     },
     data: {
-      "freelancerIdList" : checkedList,
-      "boardId" : boardId
+      "freelancerIdList": checkedList,
+      "boardId": boardId
     }
   })
 
@@ -66,13 +66,49 @@ export const startProject = async (checkedList: Number[], boardId: string): Prom
 
 
 //프로젝트 단계 확인 및 변경
-export const projectStep = async (boardId: string,): Promise<void> => {
-  await axios({
-      method: 'put',
-      url: `${BASE_URL}/${boardId}/step/check`,
+export const projectStep = async (
+  projectId?: number,
+  currentStep?: string,
+  isChangeProjectStep?: boolean
+): Promise<any> => {
+  try {
+    const response = await axios({
+      method: 'patch',
+      url: `${BASE_URL}/${projectId}/step/check`,
       headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`
-          
-      }
-  })
-}
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+        'Content-Type': 'application/json',  // 'ContentType'을 'Content-Type'으로 수정
+      },
+      data: {
+        currentStep: currentStep,  // 단계 변경 정보
+        isChangeProjectStep: isChangeProjectStep,  // 단계 변경 여부
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Error updating project step:', error);
+    throw error;  // 에러가 발생한 경우 예외를 다시 던짐
+  }
+};
+
+// 프로젝트 상세 정보 가져오기
+export const contractProjectDetail = async (projectId: number): Promise<void> => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${BASE_URL}/info/${projectId}`,
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+      },
+    });
+
+    console.log(response.data); // 응답 확인용 로그
+    // 서버에서 데이터 구조 확인 후 수정
+    return response.data?.data || response.data; // data에 있는 값이 없는 경우 처리
+  } catch (error) {
+    console.error('Error fetching project details:', error);
+    throw error; // 오류 처리
+  }
+
+};

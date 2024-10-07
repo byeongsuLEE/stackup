@@ -174,8 +174,8 @@ const Detail = ({ project, clientId }: DetailProps) => {
             <span>{project.startDate.toString()}</span>
             <span>{workType}</span>
 
-            <span>{languagesList.join(', ')}</span>
-            <span>{frameworksList.join(', ')}</span>
+            {languagesList.length === 0 ?( <span>사용언어 미정</span>):(<span>{languagesList.join(', ')}</span>)}
+            {frameworksList.length === 0 ?( <span>프레임워크 미정</span>):(<span>{frameworksList.join(', ')}</span>)}
             <span>{project.requirements}</span>
           </div>
         </div>

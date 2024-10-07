@@ -20,7 +20,10 @@ export const submitContract = async (data: any, freelancerProjectId?: string): P
         "contractFinalPayment": data.finalPayment,
         "contractCompanyName": data.clientName,
         "contractConfidentialityClause": "All parties agree to confidentiality.",
-        "contractAdditionalTerms": data.condition
+        "contractAdditionalTerms": data.condition,
+        "candidateName": data.candidateName,
+        "period" : data.period,
+        "projectName": data.projectName
       }
     })
     console.log(response.data)
@@ -68,7 +71,6 @@ export const contractData = async (freelancerProjectId?: string): Promise<any> =
       Authorization: `Bearer ${sessionStorage.getItem('token')}`
     }
   })
-
-  console.log(response.data)
-  return response.data
+  console.log(response.data.data)
+  return response.data.data
 }

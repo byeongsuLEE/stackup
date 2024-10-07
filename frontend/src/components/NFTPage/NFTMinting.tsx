@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { pinata, uploadMetadataToPinata } from "../../apis/NftApi";
 import { generateImage, nftInfoProp } from "../../hooks/MakeImage";
-import { handlePrint } from "../../hooks/MakePDF";
 import DoneButton from "../common/DoneButton";
+import { contractProp } from "../../apis/Contract.type";
 
 // window.ethereum 타입 확장
 declare global {
@@ -14,23 +14,17 @@ declare global {
 interface NFTMintingProps {
   Minting: (cid: string) => Promise<void>; // 부모 컴포넌트에서 전달받는 Minting 함수의 타입
   isLoading: boolean; // 부모 컴포넌트에서 전달받는 로딩 상태
+  pdf: any;
+  contractData: contractProp;
 }
 
-const NFTMinting = ({ Minting, isLoading }: NFTMintingProps) => {
+const NFTMinting = ({ Minting, isLoading, pdf, contractData }: NFTMintingProps) => {
   //== pdf 생성 ==//
   const componentRef = useRef<HTMLDivElement>(null);
 
   const ethereum = window.ethereum;
   const [addr, setAddr] = useState("");
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-  //== 데이터 임시 값 ==//
-  const defaultNftInfo: nftInfoProp = {
-    projectName: "Default Project",
-    companyName: "Default Company",
-    period: "2024.01.01 ~ 2024.12.31",
-    name: "Default Name"
-  };
 
   // 지갑 연결 함수
   const handleGetAccount = async () => {
@@ -67,14 +61,12 @@ const NFTMinting = ({ Minting, isLoading }: NFTMintingProps) => {
   const handleMintNFT = async () => {
 
     try {
-
-      const image = await generateImage(canvasRef, testdata);
-      const pdf = await handlePrint(componentRef);
+      const image = await generateImage(canvasRef, contractData);
 
       const imageHash = await pinata(image);
       const pdfHash = await pinata(pdf);
 
-      const cid = await uploadMetadataToPinata(imageHash, pdfHash, defaultNftInfo);
+      const cid = await uploadMetadataToPinata(imageHash, pdfHash, contractData);
 
       // NFT 발행
       await Minting(cid);

@@ -1,3 +1,5 @@
+import { contractProp } from "../apis/Contract.type";
+
 //== nft 생성 info ==//
 export interface nftInfoProp {
   projectName: string,
@@ -46,7 +48,7 @@ export const defaultNftInfo: nftInfoProp = {
 };
 
 // 캔버스에서 이미지를 생성하고 FormData로 반환하는 함수
-export const generateImage = async (canvasRef: React.RefObject<HTMLCanvasElement>, data: nftInfoProp): Promise<FormData> => {
+export const generateImage = async (canvasRef: React.RefObject<HTMLCanvasElement>, data: contractProp): Promise<FormData> => {
   const canvas = canvasRef.current;
 
   if (canvas) {

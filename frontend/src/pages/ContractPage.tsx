@@ -4,7 +4,6 @@ import DoneButton from "../components/common/DoneButton";
 import { signature, submitContract } from "../apis/ContractApi";
 import { useParams } from "react-router-dom";
 import { MakeSign } from "../hooks/MakeSign";
-import { wallet } from "../apis/UserApi";
 
 interface ContractDetailComponentType {
   getContractData: () => any;

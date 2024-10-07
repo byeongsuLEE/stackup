@@ -1,17 +1,30 @@
-import DoneButton from "../components/common/DoneButton";
 import { contractData, signature } from "../apis/ContractApi";
 import { useQuery } from "react-query";
 import { handlePrint } from "../hooks/MakePDF";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MakeSign } from "../hooks/MakeSign";
 import { useParams } from "react-router-dom";
+import { generateImage } from "../hooks/MakeImage";
+import { CallTest } from "../hooks/Test";
+import NFTMinting from "../components/NFTPage/NFTMinting";
+import NFTLoading from "./NFTLoadingPage";
 
 const SignatureDetail = () => {
   const today = new Date();
   const { signMessage } = MakeSign();
-
-  //== 수정 필요 ==//
   const { freelancerProjectId } = useParams();
+  const [ pdf, setPdf ] = useState<any>();
+
+  const { Minting, isLoading } = CallTest(); // Minting 함수 가져옴
+    // useEffect를 사용하여 isLoading 상태가 변경될 때마다 작업을 처리
+    useEffect(() => {
+      if (isLoading) {
+        console.log("로딩 중입니다...");
+      } else {
+        console.log("로딩이 완료되었습니다.");
+      }
+    }, [isLoading]); // isLoading 상태가 변경될 때마다 실행
+
 
   //== pdf 생성 ==//
   const componentRef = useRef<HTMLDivElement>(null);
@@ -22,44 +35,52 @@ const SignatureDetail = () => {
     signature(data?.signedMessage, freelancerProjectId);
 
     //== pdf 생성 ==//
-    const pdf = await handlePrint(componentRef);
+    const pdfData = await handlePrint(componentRef);
+    setPdf(pdfData)
 
     //== nft 표지 생성 ==//
-
+    const image = await generateImage(canvasRef, testdata);
   }
 
-  // const { data: project, isLoading: isProjectLoading } = useQuery({
-  //   queryKey: ['project', freelancerProjectId],
-  //   queryFn: () => contractData(freelancerProjectId!),
-  //   enabled: !!freelancerProjectId,
-  // });
-
-  // if (isProjectLoading) {
-  //   return <div>Loading...</div>;
-  // }
+  const { data: contract, isLoading: isProjectLoading } = useQuery({
+    queryKey: ['contract', freelancerProjectId],
+    queryFn: () => contractData(freelancerProjectId!),
+    enabled: !!freelancerProjectId,
+  });
+  
+  const formattedStart = contract?.contractStartDate?.split('T')[0];
+  const formattedEnd = contract?.contractEndDate?.split('T')[0];
+  if (isProjectLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div >
+       
+      {isLoading?(
+        <NFTLoading/>
+      ):(
+        <div>
       <div className="bg-bgGreen border border-mainGreen h-auto w-auto p-5 mx-20 my-20"ref={componentRef}>
       <div className="text-center text-lg font-bold">
         프리랜서 고용 계약서
       </div>
       <div className="flex flex-col">
         <br />
-        <span className="font-bold text-sm">프로젝트명 : </span>
-        <span className="font-bold text-sm">계약기간 : </span>
+        <span className="font-bold text-sm">프로젝트명 : {contract.projectName}</span>
+        <span className="font-bold text-sm">계약기간 : {contract.period}</span>
         <br />
-        <span className="text-sm">//회사명// (이하 “갑” 아리 한다.)와 //프리랜서//(이하 “을” 이라 한다.)는 프로젝트명에 명시된 업무작업을 수향하기 위해 다음과 같이 계약을 체결한다.</span>
+        <span className="text-sm">{contract.contractCompanyName} (이하 “갑” 아리 한다.)와 {contract.candidateName}(이하 “을” 이라 한다.)는 프로젝트명에 명시된 업무작업을 수향하기 위해 다음과 같이 계약을 체결한다.</span>
         <br />
         <span className="font-bold text-sm">제 1조[목적]</span>
         <span className="text-sm">본 계약을 “갑”이 “을”에게 의뢰한 업무를 “갑”에게 공급함에 있어 “갑”과 “ 사이에 필요한 사항을 정하는 것을 목적으로 한다.</span>
         <br />
         <span className="font-bold text-sm">제 2조 [계약기간]</span>
-        <span className="text-sm">계약 기간은 //2024년 10월 01//일 까지로 하며, 갑과 을의 합의 하에 본 계약기간은 연장 될 수 있다.</span>
+        <span className="text-sm">계약 기간은 {formattedStart}일 부터 {formattedEnd}일 까지로 하며, 갑과 을의 합의 하에 본 계약기간은 연장 될 수 있다.</span>
         <br />
         <span className="font-bold text-sm">제 3조 [계약금액]</span>
-        <span className="text-sm">총 계약금액은 //1500//만원으로 하며, 계약금액 중 //500만원//은 착수시점에 지급하고,
-          잔금 //1000//만원은 작업 완료 시 작업완료납품과 동시에 “갑”은 “을”에게 지급하기로
+        <span className="text-sm">총 계약금액은 {contract.contractTotalAmount}만원으로 하며, 계약금액 중 {contract.contractDownPayment}은 착수시점에 지급하고,
+          잔금 {contract.contractFinalPayment}만원은 작업 완료 시 작업완료납품과 동시에 “갑”은 “을”에게 지급하기로
           한다.
           단, 회사업무 수행을 위한 출장 등이 발생할 경우에는 “갑”이 그 비용을 지급하고,
           식대 등은 “을”의 비용으로 한다.</span>
@@ -95,14 +116,19 @@ const SignatureDetail = () => {
         <span className="text-sm">각 당사자는 위 계약을 증명하기 위하여 본 계약서 2통을 작성하여 각각 서명(또는 기명)날인 후 “갑”과 “을”이 각각 1통씩 보관한다.</span>
         <br />
         <label htmlFor="condition" className="font-bold text-sm">추가 특약사항</label>
-        <span className="text-sm">특약사항1</span>
+        <span className="text-sm">{contract.contractAdditionalTerms}</span>
       </div>
       <div className="text-center my-10 font-bold">
         계약일자 : {today.getFullYear()}년 {today.getMonth() + 1}월 {today.getDate()}일
       </div>
       </div>
-      <div className="text-end" onClick={handleSubmit}>
+      {/* <div className="text-end" onClick={handleSubmit}>
         <DoneButton width={100} height={30} title="서명하기" />
+      </div> */}
+      </div>
+      )}
+      <div onClick={handleSubmit}>
+      <NFTMinting Minting={Minting} isLoading={isLoading} pdf={pdf} contractData={contract}/>
       </div>
     </div>
   )

@@ -88,7 +88,7 @@ const Detail = ({ project, clientId }: DetailProps) => {
   // 클라이언트 ID와 세션 ID 비교하는 비동기 처리
   useEffect(() => {
     const fetchSessionClientId = async () => {
-      const storedClientId = window.sessionStorage.getItem("clientId");
+      const storedClientId = window.sessionStorage.getItem("userId");
       setSessionClientId(storedClientId);
       setIsLoaded(true); // 데이터가 모두 로드되었음을 나타냄
     };

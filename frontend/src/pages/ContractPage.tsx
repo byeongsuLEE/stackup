@@ -4,14 +4,13 @@ import DoneButton from "../components/common/DoneButton";
 import { signature, submitContract } from "../apis/ContractApi";
 import { useParams } from "react-router-dom";
 import { MakeSign } from "../hooks/MakeSign";
-import { wallet } from "../apis/UserApi";
 
 interface ContractDetailComponentType {
-  getContractData: () => any; // 필요한 타입으로 반환 타입을 변경하세요.
+  getContractData: () => any;
 }
 
 const Contract = () => {
-  const { projectId, freelancerProjectId } = useParams();
+  const { freelancerProjectId } = useParams();
   const contractDetailRef = useRef<ContractDetailComponentType | null>(null);
   const { signMessage } = MakeSign();
 
@@ -20,10 +19,10 @@ const Contract = () => {
     const data = contractDetailRef.current.getContractData()
     await submitContract(data, freelancerProjectId);
     }
+    
     const sign = await signMessage();
     if (sign) {
-      await wallet(sign.address);
-      await signature(sign.signedMessage, projectId);
+      await signature(sign.signedMessage, freelancerProjectId);
     }
     
   };

@@ -4,7 +4,6 @@ import DoneButton from "../components/common/DoneButton";
 import CandidateIcon from "../icons/CandidateIcon";
 import PeriodIcon from "../icons/PeriodIcon";
 import PriceIcon from "../icons/PriceIcon";
-import WebIcon from "../icons/WebIcon";
 import { useNavigate } from "react-router-dom";
 
 const svURL = import.meta.env.VITE_SERVER_URL;

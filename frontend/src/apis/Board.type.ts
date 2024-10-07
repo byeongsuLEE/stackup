@@ -39,7 +39,8 @@ export interface project {
     deadline: Date,
     upload: Date,
     client: clientInfo,
-    projectId: number
+    projectId: number,
+    freelancerProjectId: number
 }
 
 const clientBasic = {

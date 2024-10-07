@@ -6,10 +6,10 @@ const ClientSignListBox = (sign: project) => {
   const navigate = useNavigate();
 
   const boardId = sign.boardId
-  const projectId = sign.projectId
+  // const projectId = sign.projectId
 
   const goToTargetPage = () => {
-    navigate(`/work/detail/select/${boardId}/${projectId}`)
+    navigate(`/work/detail/select/${boardId}`)
   }
 
   return (

@@ -20,7 +20,10 @@ export const submitContract = async (data: any, freelancerProjectId?: string): P
         "contractFinalPayment": data.finalPayment,
         "contractCompanyName": data.clientName,
         "contractConfidentialityClause": "All parties agree to confidentiality.",
-        "contractAdditionalTerms": data.condition
+        "contractAdditionalTerms": data.condition,
+        "candidateName": data.candidateName,
+        "period" : data.period,
+        "projectName": data.projectName
       }
     })
     console.log(response.data)
@@ -44,19 +47,30 @@ export const submitContract = async (data: any, freelancerProjectId?: string): P
   
   
   //== 서명 확인 ==//
-  export const signature = async (sign?: string, projectId?: string): Promise<void> => {
-    console.log(sign)
+  export const signature = async (sign?: string, freelancerProjectId?: string): Promise<void> => {
     const response = await axios({
       method: 'post',
-      url: `${BASE_URL}/${projectId}/contract/sign`,
+      url: `${BASE_URL}/${freelancerProjectId}/contract/sign`,
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem('token')}`
       },
       data: {
-        "message": "서명완료",
         "signature": sign
       }
     })
 
     console.log(response.data)
   }
+
+  //== 계약서 정보 ==//
+export const contractData = async (freelancerProjectId?: string): Promise<any> => {
+  const response = await axios({
+    method: 'get',
+    url: `${BASE_URL}/contract/${freelancerProjectId}`,
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem('token')}`
+    }
+  })
+  console.log(response.data.data)
+  return response.data.data
+}

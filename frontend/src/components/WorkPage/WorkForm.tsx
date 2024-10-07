@@ -77,10 +77,10 @@ const WorkForm = () => {
       // 선택된 값을 업데이트
       setValue("classification", res.data.classification);
       console.log(res.data.classification)
-      const languageIds: string[] = res.data.languages.map((language : Language) => language.languageId.toString())
+      const languageIds: string[] = res.data.languages.map((language: Language) => language.languageId.toString())
       setValue("languages", languageIds);
       // res.data.frameworks에서 frameworkId만 추출하여 설정
-      const frameworkIds: string[] = res.data.frameworks.map((framework : Framework) => framework.frameworkId.toString());
+      const frameworkIds: string[] = res.data.frameworks.map((framework: Framework) => framework.frameworkId.toString());
       setValue('frameworks', frameworkIds);
     } catch (error) {
       console.error('Error:', error);
@@ -164,7 +164,7 @@ const WorkForm = () => {
               // name='projectPeriod' 
               className='border border-slate-300 rounded-lg w-96 mt-3 text-end px-2'
               type="text"
-              defaultValue="일"
+              placeholder="일"
               {...register("period", { required: "프로젝트 기간을 입력해주세요." })}
             />
 
@@ -218,7 +218,7 @@ const WorkForm = () => {
                 <Major major={MobileIcon} title="모바일" category='classification' name="mobile" value="mobile" checked={value === "mobile"} onChange={onChange} />
                 <Major major={PublisherIcon} title="퍼블리셔" category='classification' name="publisher" value="publisher" checked={value === "publisher"} onChange={onChange} />
                 <Major major={AIIcon} title="AI" category='classification' name="ai" value="ai" checked={value === "ai"} onChange={onChange} />
-                <Major major={DBIcon} title="DB" category='classification' name="db" value="db" checked={value ==="db"} onChange={onChange} />
+                <Major major={DBIcon} title="DB" category='classification' name="db" value="db" checked={value === "db"} onChange={onChange} />
               </div>
             )}
           />
@@ -226,11 +226,11 @@ const WorkForm = () => {
           <Controller
             name="level"
             control={control}
-            render={({ field: { onChange } }) => (
-              <div className="flex" onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange(e.target.value)}>
-                <Major category='level' major={JuniorIcon} title="주니어" name="junior" value="JUNIOR" />
-                <Major category='level' major={MidIcon} title="미드" name="mid" value="MID" />
-                <Major category='level' major={SeniorIcon} title="시니어" name="senior" value="SENIOR" />
+            render={({ field: { onChange, value } }) => (
+              <div className="flex">
+                <Major category='level' major={JuniorIcon} title="주니어" name="junior" value="JUNIOR" checked={value === "JUNIOR"} onChange={() => onChange("JUNIOR")} />
+                <Major category='level' major={MidIcon} title="미드" name="mid" value="MID" checked={value === "MID"} onChange={() => onChange("MID")} />
+                <Major category='level' major={SeniorIcon} title="시니어" name="senior" value="SENIOR" checked={value === "SENIOR"} onChange={() => onChange("SENIOR")} />
               </div>
             )}
           />

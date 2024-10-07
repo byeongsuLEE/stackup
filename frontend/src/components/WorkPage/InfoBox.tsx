@@ -2,10 +2,11 @@ interface InfoBoxProps {
   title: string;
   content?: any;
   category: string;
+  isAnomaly?: boolean;
   info:React.ComponentType<{ w: number; h: number; }>
 }
 
-const InfoBox: React.FC<InfoBoxProps> = ({title, category, content, info:InfoIcon})=>{
+const InfoBox: React.FC<InfoBoxProps> = ({title, category, content, info:InfoIcon, isAnomaly})=>{
 
   if (content == undefined && category === "applicants") {
     content = "0명"
@@ -22,7 +23,14 @@ const InfoBox: React.FC<InfoBoxProps> = ({title, category, content, info:InfoIco
       <InfoIcon w={20} h={20} />
       <span className="ml-3">{title}</span>
       </div>
-      <span className="" >{content}</span>
+      <div className="flex items-center">
+        <span>{content}</span>
+        {category === "deposit" && isAnomaly !== null && (
+          <span className={`ml-2 ${isAnomaly ? "text-red-500" : "text-green-500"}`}>
+            {isAnomaly ? "⚠️" : "✅"}
+          </span>
+        )}
+      </div>
       {/* </div> */}
     </div>
   )

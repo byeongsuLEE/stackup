@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import { nftInfoProp } from '../hooks/MakeImage';
+import { contractProp } from './Contract.type';
 
 // FormData를 Pinata에 업로드하는 함수
 export const pinata = async (formData: FormData): Promise<string> => {
@@ -23,7 +23,7 @@ export const pinata = async (formData: FormData): Promise<string> => {
 };
 
 // 이미지 CID를 사용하여 JSON 메타데이터 생성 및 Pinata에 업로드
-export const uploadMetadataToPinata = async (imageCID: string, pdfCID: string, data: nftInfoProp): Promise<string> => {
+export const uploadMetadataToPinata = async (imageCID: string, pdfCID: string, data: contractProp): Promise<string> => {
   const metadata = {
     name: "My NFT",
     description: "This NFT includes a cover image and a document as content",

@@ -1,7 +1,7 @@
 interface InfoBoxProps {
   title: string;
   content?: any;
-  category: string;
+  category?: string;
   isAnomaly?: boolean;
   info:React.ComponentType<{ w: number; h: number; }>
 }

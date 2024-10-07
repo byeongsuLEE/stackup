@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { project } from "../../apis/Board.type";
 import { projectStep } from "../../apis/ProjectApi";
+import { useNavigate } from "react-router-dom";
 
 interface Step {
   name: string;
@@ -8,7 +9,7 @@ interface Step {
 }
 
 
-const ContractDoneBox = ({title, period, projectId, boardId}:project) => {
+const ContractDoneBox = ({ title, period, projectId }: project) => {
   const steps: Step[] = [
     { name: '기획 및 설계', completed: false },
     { name: '퍼블리셔 및 디자인', completed: false },
@@ -54,10 +55,17 @@ const ContractDoneBox = ({title, period, projectId, boardId}:project) => {
   }, []);  // project.worktype 대신 projectId로 종속성 설정
   updateSteps(stepResponse as Status);
 
+  const navigate = useNavigate();
+  const toDetail = () => {  
+    navigate(`/project/detail/${projectId}`);
+  } 
+
   return (
     <>
-    <div className="bg-bgGreen border border-mainGreen rounded-xl w-[1000px] mb-5 pt-10 px-5 h-[200px] flex flex-col">
-    <ul className="steps">
+      <div
+      onClick={toDetail} 
+      className="bg-bgGreen border border-mainGreen rounded-xl w-[1000px] mb-5 pt-10 px-5 h-[200px] flex flex-col">
+        <ul className="steps">
           {steps.map((step, index) => (
             <li
               key={index}
@@ -65,11 +73,11 @@ const ContractDoneBox = ({title, period, projectId, boardId}:project) => {
               {/* {step.name} */}
             </li>))}
         </ul>
-      <div className="flex flex-col ml-5 mt-6">
-        <span className="text-lg">프로젝트명 : {title}</span>
-        <span className="text-sm text-subTxt my-2">기간 : {period}</span>
+        <div className="flex flex-col ml-5 mt-6">
+          <span className="text-lg">프로젝트명 : {title}</span>
+          <span className="text-sm text-subTxt my-2">기간 : {period}</span>
+        </div>
       </div>
-    </div>
     </>
   )
 }

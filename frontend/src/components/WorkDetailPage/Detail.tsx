@@ -1,16 +1,16 @@
+import axios from "axios";
 import { differenceInDays, format } from "date-fns";
-import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { project as ProjectType } from "../../apis/Board.type";
+import { projectDelete } from "../../apis/BoardApi";
 import { projectApply } from "../../apis/FreelancerApi";
 import CandidateIcon from "../../icons/CandidateIcon";
 import PeriodIcon from "../../icons/PeriodIcon";
 import PriceIcon from "../../icons/PriceIcon";
+import Payment from "../../pages/PullupPage";
 import InfoBox from "../WorkPage/InfoBox";
 import DoneButton from "../common/DoneButton";
-import { projectDelete } from "../../apis/BoardApi";
-import Payment from "../../pages/PullupPage";
-import axios from "axios";
 
 const svURL = import.meta.env.VITE_SERVER_URL;
 
@@ -24,9 +24,9 @@ const Detail = ({ project, clientId }: DetailProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [isAnomaly, setIsAnomaly] = useState<boolean | null>(null); // is_anomaly 상태
   const [loading, setLoading] = useState(true); // 로딩 상태
-  
+
   const boardId = project.boardId;
-  const { pathId } = useParams();
+  // const { pathId } = useParams();
 
 
   const navigate = useNavigate();
@@ -68,20 +68,9 @@ const Detail = ({ project, clientId }: DetailProps) => {
     try {
       await projectApply(boardId);
       alert("지원이 완료되었습니다.");
-    } catch (error: any) {
-      if (error.response) {
-        // 서버에서 받은 응답이 있는 경우
-        console.error("Error response:", error.response.data);
-        alert(`지원 실패: ${error.response.status} - ${error.response.data.message}`);
-      } else if (error.request) {
-        // 요청이 서버에 도달하지 못한 경우
-        console.error("Error request:", error.request);
-        alert("지원 실패: 서버와의 통신에 문제가 발생했습니다.");
-      } else {
-        // 기타 에러
-        console.error("Error:", error.message);
-        alert("지원 실패: 알 수 없는 오류가 발생했습니다.");
-      }
+      location.reload(); 
+    } catch (error) {
+      console.error("Error applying project:", error);
     }
   };
 
@@ -96,10 +85,8 @@ const Detail = ({ project, clientId }: DetailProps) => {
     fetchSessionClientId();
   }, []); // 빈 배열로 설정하면 컴포넌트가 마운트될 때 한 번만 실행
 
-   // boardId를 이용해 anomaly 확인
-   useEffect(() => {
-    console.log(project)
-    console.log(project.boardId)
+  // boardId를 이용해 anomaly 확인
+  useEffect(() => {
     const checkAnomaly = async () => {
       try {
         const response = await axios.get(`${svURL}/api/detect/illegal/${project.boardId}`);
@@ -120,6 +107,13 @@ const Detail = ({ project, clientId }: DetailProps) => {
     return <div>Loading...</div>;
   }
 
+  const sessionFreelancerId = window.sessionStorage.getItem("freelancerId");
+
+  const hasApplied = project.applicantList.some(
+    (applicant) => applicant.id.toString() === sessionFreelancerId
+  );
+  
+
   return (
     <>
       <div className="bg-bgGreen border border-mainGreen h-auto rounded-lg p-10 w-[1000px]] my-20 mx-10">
@@ -129,9 +123,17 @@ const Detail = ({ project, clientId }: DetailProps) => {
         </div>
         <div className="flex justify-end">
           {window.sessionStorage.getItem("userType") === "freelancer" ? (
-            <div onClick={projectApplyHandler}>
-              <DoneButton width={100} height={25} title="지원하기" />
-            </div>
+              <>
+              {!hasApplied ? (
+                <div onClick={projectApplyHandler}>
+                  <DoneButton width={100} height={25} title="지원하기" />
+                </div>
+              ) : (
+                <div>
+                  <button className="bg-subGreen1 text-white rounded-lg px-2 font-bold text-sm w-[100px] h-[25px]" >지원완료</button>
+                </div>
+              )}
+            </>
           ) : sessionClientId == clientId && (
             <div className="flex">
               <div onClick={toCandidate}>
@@ -149,7 +151,7 @@ const Detail = ({ project, clientId }: DetailProps) => {
         <div className="bg-subTxt w-auto h-[1px] flex justify-center my-10"></div>
 
         <div className="flex justify-center mb-10">
-          <InfoBox title="예상 금액" category="deposit" content={project.deposit} info={PriceIcon} isAnomaly={isAnomaly}/>
+          <InfoBox title="예상 금액" category="deposit" content={project.deposit} info={PriceIcon} isAnomaly={isAnomaly} />
           <InfoBox title="예상 기간" category="period" content={project.period} info={PeriodIcon} />
           <InfoBox title="지원자 수" category="applicants" content={project.applicants} info={CandidateIcon} />
         </div>
@@ -174,21 +176,21 @@ const Detail = ({ project, clientId }: DetailProps) => {
             <span>{project.startDate.toString()}</span>
             <span>{workType}</span>
 
-            {languagesList.length === 0 ?( <span>사용언어 미정</span>):(<span>{languagesList.join(', ')}</span>)}
-            {frameworksList.length === 0 ?( <span>프레임워크 미정</span>):(<span>{frameworksList.join(', ')}</span>)}
+            {languagesList.length === 0 ? (<span>사용언어 미정</span>) : (<span>{languagesList.join(', ')}</span>)}
+            {frameworksList.length === 0 ? (<span>프레임워크 미정</span>) : (<span>{frameworksList.join(', ')}</span>)}
             <span>{project.requirements}</span>
           </div>
         </div>
 
-          <div className="bg-subTxt w-auto h-[1px] flex justify-center my-10"></div>
-          <div>
-            <div className="font-bold text-lg mb-2">업무 내용</div>
-            <br />
-            <span><pre>{project.description}</pre></span>
-          </div>
+        <div className="bg-subTxt w-auto h-[1px] flex justify-center my-10"></div>
+        <div>
+          <div className="font-bold text-lg mb-2">업무 내용</div>
+          <br />
+          <span><pre>{project.description}</pre></span>
         </div>
+      </div>
 
-        
+
 
     </>
   );

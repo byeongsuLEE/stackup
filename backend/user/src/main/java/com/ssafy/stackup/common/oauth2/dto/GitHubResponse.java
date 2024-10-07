@@ -2,7 +2,6 @@ package com.ssafy.stackup.common.oauth2.dto;
 
 import lombok.Getter;
 
-import java.io.Serializable;
 import java.util.Map;
 
 /**

@@ -264,11 +264,14 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 내 상세 정보 조회
-     * @param user
+     * @param
      * @return
      */
     @Override
-    public UserInfoResponseDto getInfo(User user) {
+    public UserInfoResponseDto getInfo(Long userId) {
+
+        User user = userRepository.findById(userId).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+
 
         if(user.getRoles().contains("ROLE_FREELANCER")) {
             Freelancer freelancer = freelancerRepository.findById(user.getId()).orElseThrow(
@@ -297,12 +300,6 @@ public class UserServiceImpl implements UserService {
                     .classification(freelancer.getClassification())
                     .githubId(freelancer.getGithubId())
                     .address(freelancer.getAddress())
-                    .userType("freelancer")
-                    .userAddress(user.getUserAddress())
-                    .evaluatedCount(user.getEvaluatedCount())
-                    .publicKey(user.getPublicKey())
-                    .secondPassword(user.getSecondPassword())
-                    .reportedCount(user.getReportedCount())
                     .build();
             return freelancerResponseDto;
 
@@ -324,12 +321,6 @@ public class UserServiceImpl implements UserService {
                     .businessName(client.getBusinessName())
                     .reportedCount(client.getReportedCount())
                     .totalScore(client.getTotalScore())
-                    .userType("client")
-                    .userAddress(user.getUserAddress())
-                    .evaluatedCount(user.getEvaluatedCount())
-                    .publicKey(user.getPublicKey())
-                    .secondPassword(user.getSecondPassword())
-                    .reportedCount(user.getReportedCount())
                     .build();
 
             return clientResponseDto;
@@ -366,16 +357,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void setSecondPassword(UserInfoResponseDto userRequestInfo) {
-        User user = userRepository.findById(userRequestInfo.getId())
-                .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
-
-        user.updateSecondPassword(userRequestInfo.getSecondPassword());
-
+    public void setAddress(Long userId, String address) {
+        User user = userRepository.findById(userId).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+        user.updateAddress(address);
         userRepository.save(user);
-
-
-
     }
 
     /**

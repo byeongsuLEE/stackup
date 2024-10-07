@@ -2,7 +2,6 @@ package com.ssafy.stackup.domain.board.service;
 
 import com.ssafy.stackup.common.exception.ResourceNotFoundException;
 import com.ssafy.stackup.domain.board.dto.BoardApplicantRequest;
-import com.ssafy.stackup.domain.board.dto.BoardCreateRequest;
 import com.ssafy.stackup.domain.board.dto.BoardFindAllResponse;
 import com.ssafy.stackup.domain.board.dto.BoardSearchResponse;
 import com.ssafy.stackup.domain.board.entity.Board;
@@ -40,9 +39,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
-import javax.swing.text.html.Option;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -172,7 +173,7 @@ public class BoardService {
                     .build();
             frameworks.add(boardFramework);
         }
-        board.setBoardFrameworks(frameworks);
+       board.setBoardFrameworks(frameworks);
 
 //        List<String> languageNames = new ArrayList<>();
 
@@ -284,10 +285,10 @@ public class BoardService {
 
     public List<BoardApplicantRequest> getSelectedApplicantListByBoardId(Long boardId) {
 
-        List<BoardApplicant> applicants = boardApplicantRepository.findByBoard_BoardIdAndIsPassedTrue(boardId);
-        return applicants.stream()
-                .map(BoardApplicantRequest::new)
-                .collect(Collectors.toList());
+            List<BoardApplicant> applicants = boardApplicantRepository.findByBoard_BoardIdAndIsPassedTrue(boardId);
+            return applicants.stream()
+                    .map(BoardApplicantRequest::new)
+                    .collect(Collectors.toList());
 
     }
 }

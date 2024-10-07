@@ -60,7 +60,7 @@ public class AccountService {
 
         System.out.println("Request URL: " + USER_SERVICE_URL);
         System.out.println("Authorization Header: " + headers.get("Authorization"));
-        ResponseEntity<ApiResponse<User>> response = restTemplate.exchange(USER_SERVICE_URL + "info", HttpMethod.GET, httpEntity, new ParameterizedTypeReference<ApiResponse<User>>() {
+        ResponseEntity<ApiResponse<User>> response = restTemplate.exchange(USER_SERVICE_URL + "info"+ " {" +userId+ " }", HttpMethod.GET, httpEntity, new ParameterizedTypeReference<ApiResponse<User>>() {
         });
         if (response.getStatusCode().is2xxSuccessful()) {
             ApiResponse<User> apiResponse = response.getBody();

@@ -15,10 +15,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.apache.kafka.shaded.com.google.protobuf.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -49,8 +50,8 @@ public class UserController {
     }
 
     @GetMapping("/info")
-    ResponseEntity<ApiResponse<UserInfoResponseDto>> getInfo(@AuthUser User user) {
-        UserInfoResponseDto userInfoResponseDto=   userService.getInfo(user);
+    ResponseEntity<ApiResponse<?>> getInfo(@AuthUser User user) {
+        UserInfoResponseDto userInfoResponseDto=   userService.getInfo(user.getId());
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(userInfoResponseDto));
@@ -119,15 +120,20 @@ public class UserController {
     }
 
 
-    @PatchMapping("/info/second-password")
-    public ResponseEntity<ApiResponse<String>> setSecondPassword(@RequestBody UserInfoResponseDto userRequestInfo){
-           userService.setSecondPassword(userRequestInfo);
-
-
-           return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("2차 비밀번호 저장 완료"));
-           
+    @PatchMapping("/{userId}/address")
+    public ResponseEntity<ApiResponse<String>> setAddress (@PathVariable Long userId, @RequestBody Map<String, String> requestBody){
+        String address = requestBody.get("address");
+        userService.setAddress(userId,address);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("주소 등록완료"));
     }
 
+    @GetMapping("/info/{applicantId}")
+    public ResponseEntity<ApiResponse<?>> getApplicantInfo (@PathVariable Long applicantId){
+        UserInfoResponseDto userInfoResponseDto=   userService.getInfo(applicantId);
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success(userInfoResponseDto));
+    }
 
 
 

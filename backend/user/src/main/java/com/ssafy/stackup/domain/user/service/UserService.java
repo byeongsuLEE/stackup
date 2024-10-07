@@ -28,9 +28,9 @@ public interface UserService {
 
     Double grade(User user);
 
-    UserInfoResponseDto getInfo(User user);
+    UserInfoResponseDto getInfo(Long userId);
 
     FreelancerLoginResponseDto token(Long user);
 
-    void setSecondPassword(UserInfoResponseDto userRequestInfo);
+    void setAddress(Long userId, String address);
 }

@@ -14,17 +14,18 @@ import com.ssafy.stackup.domain.board.repository.BoardApplicantRepository;
 import com.ssafy.stackup.domain.board.repository.BoardRepository;
 import com.ssafy.stackup.domain.project.dto.ContractInfoResponseDto;
 import com.ssafy.stackup.domain.project.dto.request.ProjectContractInfoRequestDto;
+import com.ssafy.stackup.domain.project.dto.request.ProjectStartRequestDto;
 import com.ssafy.stackup.domain.project.dto.request.SignRequest;
 import com.ssafy.stackup.domain.project.dto.response.ProjectInfoResponseDto;
-import com.ssafy.stackup.domain.project.dto.request.ProjectStartRequestDto;
 import com.ssafy.stackup.domain.project.dto.response.ProjectStepCheckResponseDto;
 import com.ssafy.stackup.domain.project.entity.Project;
 import com.ssafy.stackup.domain.project.entity.ProjectStatus;
 import com.ssafy.stackup.domain.project.entity.ProjectStep;
 import com.ssafy.stackup.domain.project.repository.ProjectRepository;
 import com.ssafy.stackup.domain.user.entity.Freelancer;
-import com.ssafy.stackup.domain.user.entity.User;
 import com.ssafy.stackup.domain.user.entity.FreelancerProject;
+import com.ssafy.stackup.domain.user.entity.User;
+import com.ssafy.stackup.domain.user.repository.ClientRepository;
 import com.ssafy.stackup.domain.user.repository.FreelancerProjectRepository;
 import com.ssafy.stackup.domain.user.repository.FreelancerRepository;
 import com.ssafy.stackup.domain.user.service.UserServiceImpl;
@@ -38,11 +39,13 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
@@ -55,6 +58,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final BoardRepository boardRepository;
     private final BoardApplicantRepository boardApplicantRepository;
+    private final ClientRepository clientRepository;
 
     @Override
     public void registerPreviousProject(MultipartFile certificateFile, String title, Long period) {
@@ -90,6 +94,10 @@ public class ProjectServiceImpl implements ProjectService {
 
         Board board = boardRepository.findById(request.getBoardId())
                 .orElseThrow(()-> new CustomException(ErrorCode.BOARD_NOT_FOUND));
+
+        if (board.getProject() != null) {
+            throw new CustomException(ErrorCode.PROJECT_ALREADY_EXISTS);
+        }
 
         //프로젝트 등록
         Project project = Project.builder()
@@ -179,40 +187,72 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
 
-
+    /**
+     * 서명 하기
+     * @ 작성자   : 이병수
+     * @ 작성일   : 2024-10-07
+     * @ 설명     : 서명값 저장 후 클라이언트
+     * @param freelancerProjectId
+     * @param signRequest
+     * @param user
+     * @return
+     */
     @Override
-    public ResponseEntity<ApiResponse<Boolean>> verifySignature(Long projectId, SignRequest signRequest, User user) {
-        Project project = projectRepository.findById(projectId).orElse(null);
-        Long userId = user.getId();
-        try{
-            String loggedInUserAddress = userService.getUserAddress(userId);
+    public ResponseEntity<ApiResponse<String>> saveSignature(Long freelancerProjectId, SignRequest signRequest, User user) {
 
-            // 요청에서 서명한 지갑 주소와 로그인한 사용자의 지갑 주소 비교
-            if (!user.getUserAddress().equalsIgnoreCase(loggedInUserAddress)) {
-                return ResponseEntity.badRequest().body(ApiResponse.error(HttpStatus.BAD_REQUEST,false,"지갑 주소가 일치하지 않습니다."));
-            }
-            // 서명 검증
-            boolean isValid = signatureService.verifySignature(
-                    signRequest.getMessage(),
-                    signRequest.getSignature(),
-                    user.getUserAddress()
-            );
-            if (isValid) {
-                // 프로젝트 ID를 가져와서 해당 프로젝트의 서명 상태를 업데이트
-                boolean isAllSigned = updateProjectSignatureStatus(projectId, user);
 
-                //모두 서명이 완료 되었으면 true 보내주기
-                if(isAllSigned) return ResponseEntity.ok(ApiResponse.success(true,"서명이 유효하고 모든 서명이 완료 되었습니다."));
-                return ResponseEntity.ok(ApiResponse.success(false,"서명이 유효합니다."));
-            } else {
-                return ResponseEntity.badRequest().body(ApiResponse.error(HttpStatus.BAD_REQUEST,false,"유효하지 않은 서명입니다."));
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR,"Error verifying signature: " + e.getMessage()));
+        FreelancerProject freelancerProject = freelancerProjectRepository.findById(freelancerProjectId)
+                .orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
 
+        if( user.isClient()){
+            freelancerProject.updateClientSigned();
+            freelancerProject.updateClientSignatureValue(signRequest.getSignature());
+        }else{
+            freelancerProject.updateFreelancerSigned();
+            freelancerProject.updateFreelancerSignatureValue(signRequest.getSignature());
         }
+
+        freelancerProjectRepository.save(freelancerProject);
+
+        return  ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(" 서명완료"));
     }
+
+
+
+//        try{
+//            String loggedInUserAddress = userService.getUserAddress(userId);
+//
+//            if(loggedInUserAddress ==null  || user.getUserAddress() == null){
+//                throw new CustomException(ErrorCode.ADDRESS_NOT_REGISTER);
+//            }
+//
+//
+//            // 요청에서 서명한 지갑 주소와 로그인한 사용자의 지갑 주소 비교  ==> 나중에 추가해야함!!@
+//            if (!user.getUserAddress().equalsIgnoreCase(loggedInUserAddress)) {
+//                return ResponseEntity.badRequest().body(ApiResponse.error(HttpStatus.BAD_REQUEST,false,"지갑 주소가 일치하지 않습니다."));
+//            }
+//            // 서명 검증
+//            boolean isValid = signatureService.verifySignature(
+//                    signRequest.getMessage(),
+//                    signRequest.getSignature(),
+//                    user.getUserAddress()
+//            );
+//            if (isValid) {
+//                // 프로젝트 ID를 가져와서 해당 프로젝트의 서명 상태를 업데이트
+//                boolean isAllSigned = updateProjectSignatureStatus(projectId, user);
+//
+//                //모두 서명이 완료 되었으면 true 보내주기
+//                if(isAllSigned) return ResponseEntity.ok(ApiResponse.success(true,"서명이 유효하고 모든 서명이 완료 되었습니다."));
+//                return ResponseEntity.ok(ApiResponse.success(false,"서명이 유효합니다."));
+//            } else {
+//                return ResponseEntity.badRequest().body(ApiResponse.error(HttpStatus.BAD_REQUEST,false,"유효하지 않은 서명입니다."));
+//            }
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body(ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR,"Error verifying signature: " + e.getMessage()));
+//
+//        }
+
 
     /**
      * 프로젝트 단계 확인
@@ -257,6 +297,9 @@ public class ProjectServiceImpl implements ProjectService {
         freelancerProject.updateContractTotalAmount(requestDto.getContractTotalAmount());
         freelancerProject.updateContractConfidentialityClause(requestDto.getContractConfidentialityClause());
 
+        freelancerProject.updatePeriod(requestDto.getPeriod());
+        freelancerProject.updateCandidateName(requestDto.getCandidateName());
+        freelancerProject.updateProjectName(requestDto.getProjectName());
         freelancerProjectRepository.save(freelancerProject);
 
     }
@@ -281,6 +324,9 @@ public class ProjectServiceImpl implements ProjectService {
                 .contractStartDate(freelancerProject.getContractStartDate())
                 .contractFinalPayment(freelancerProject.getContractFinalPayment())
                 .contractTotalAmount(freelancerProject.getContractTotalAmount())
+                .projectName(freelancerProject.getProjectName())
+                .candidateName(freelancerProject.getCandidateName())
+                .period(freelancerProject.getPeriod())
                 .build();
 
 
@@ -347,6 +393,44 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<ProjectInfoResponseDto> getAllProjects(User user, String projectType) {
 
+
+        if(user.isClient()){
+
+            List<Board> clientBoardList = boardRepository.findByClient_Id(user.getId());
+            List<ProjectInfoResponseDto> projectInfoResponseDtos = new ArrayList<>();
+
+            List<Project> clientProjectList = clientBoardList.stream()
+                            .map(Board::getProject)
+                    .filter(Objects::nonNull)
+                    .filter(project -> project.getStatus().equals(ProjectStatus.valueOf(projectType.toUpperCase())))
+                    .collect(Collectors.toList());
+
+
+            for(Project project : clientProjectList) {
+                if(!project.getStatus().name().equals(projectType)) continue;
+                ProjectInfoResponseDto projectInfoResponseDto= ProjectInfoResponseDto.builder()
+                        .projectId(project.getId())
+                        .status(project.getStatus())
+                        .step(project.getStep())
+                        .title(project.getTitle())
+                        .startDate(project.getBoard().getStartDate())
+                        .period(project.getBoard().getPeriod())
+                        .deadline(project.getBoard().getDeadline())
+                        .upload(project.getBoard().getUpload())
+                        .classification(project.getBoard().getClassification())
+                        .boardId(project.getBoard().getBoardId())
+                        .build();
+
+
+                projectInfoResponseDto.updateClient(project);
+                projectInfoResponseDtos.add(projectInfoResponseDto);
+
+            }
+            return projectInfoResponseDtos;
+        }
+
+
+        // 프리랜서일 경우
         Freelancer freelancer = freelancerRepository.findById(user.getId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -371,18 +455,34 @@ public class ProjectServiceImpl implements ProjectService {
         }
         else{
             Set<FreelancerProject> freelancerProjects = freelancer.getFreelancerProjects();
+
             projects = UserUtil.getProjects(freelancerProjects);
             for(Project project : projects) {
                 if(!project.getStatus().name().equals(projectType)) continue;
+
+
+                Long freelancerProjectId = freelancerProjects.stream()
+                        .filter(fp -> fp.getProject().getId().equals(project.getId())
+                                && fp.getFreelancer().getId().equals(user.getId()))
+                        .map(FreelancerProject::getId)
+                        .findFirst()
+                        .orElse(null);
+
+
+
                 ProjectInfoResponseDto projectInfoResponseDto= ProjectInfoResponseDto.builder()
+                        .freelancerProjectId(freelancerProjectId)
                         .projectId(project.getId())
                         .status(project.getStatus())
                         .title(project.getTitle())
                         .startDate(project.getBoard().getStartDate())
                         .period(project.getBoard().getPeriod())
+                        .deadline(project.getBoard().getDeadline())
+                        .upload(project.getBoard().getUpload())
                         .classification(project.getBoard().getClassification())
                         .build();
 
+                projectInfoResponseDto.updateClient(project);
                 projectInfoResponseDtos.add(projectInfoResponseDto);
 
             }
@@ -412,5 +512,19 @@ public class ProjectServiceImpl implements ProjectService {
             project.updateIsFreelancerConfirmed();
         }
         return project.checkUsersConfirm();
+    }
+
+
+    public List<Long> getFreelancerProjectIds(Project project) {
+        // freelancerProjectList가 null인지 확인하고, null이면 빈 리스트를 반환
+        if (project.getFreelancerProjectList() == null) {
+            return Collections.emptyList();
+        }
+
+        // freelancerProjectList에서 null 값도 처리하여 안전하게 ID 추출
+        return project.getFreelancerProjectList().stream()
+                .filter(Objects::nonNull) // null인 FreelancerProject 제외
+                .map(FreelancerProject::getId) // FreelancerProject의 id 추출
+                .collect(Collectors.toList()); // 리스트로 변환
     }
 }

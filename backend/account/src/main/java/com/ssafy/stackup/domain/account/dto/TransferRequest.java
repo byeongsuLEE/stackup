@@ -4,6 +4,6 @@ import lombok.Data;
 
 @Data
 public class TransferRequest {
-    private String depositAccount;
+    private Long freelancerId;
     private String transactionBalance;
 }

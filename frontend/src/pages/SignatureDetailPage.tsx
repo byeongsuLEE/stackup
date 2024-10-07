@@ -80,10 +80,8 @@ const SignatureDetail = () => {
               <br />
               <span className="font-bold text-sm">제 3조 [계약금액]</span>
               <span className="text-sm">총 계약금액은 {contract.contractTotalAmount}만원으로 하며, 계약금액 중 {contract.contractDownPayment}은 착수시점에 지급하고,
-                잔금 {contract.contractFinalPayment}만원은 작업 완료 시 작업완료납품과 동시에 “갑”은 “을”에게 지급하기로
-                한다.
-                단, 회사업무 수행을 위한 출장 등이 발생할 경우에는 “갑”이 그 비용을 지급하고,
-                식대 등은 “을”의 비용으로 한다.</span>
+                잔금 {contract.contractFinalPayment}만원은 작업 완료 시 작업완료납품과 동시에 “갑”은 “을”에게 지급하기로 한다.
+                단, 회사업무 수행을 위한 출장 등이 발생할 경우에는 “갑”이 그 비용을 지급하고, 식대 등은 “을”의 비용으로 한다.</span>
               <br />
               <span className="font-bold text-sm">제 4조 [납품]</span>
               <span className="text-sm">“을”은 작업 진행중 중간 완료된 셩과물을 1회에 걸쳐 중간 납품을 하며, 최종 자료는 검토 및 수정 후 완성품으로 납품하기로 한다.</span>
@@ -117,16 +115,14 @@ const SignatureDetail = () => {
               <br />
               <label htmlFor="condition" className="font-bold text-sm">추가 특약사항</label>
               <span className="text-sm">{contract.contractAdditionalTerms}</span>
-
-              
-              <div className="text-center my-10 font-bold">
-              계약일자 : {today.getFullYear()}년 {today.getMonth() + 1}월 {today.getDate()}일
             </div>
+            <div className="text-center my-10 font-bold">
+              계약일자 : {today.getFullYear()}년 {today.getMonth() + 1}월 {today.getDate()}일
             </div>
           </div>
           <div onClick={handleSubmit}>
             <NFTMinting Minting={Minting} isLoading={isLoading} pdf={pdf} contractData={contract}/>
-            </div>
+          </div>
         </div>
         )}
         

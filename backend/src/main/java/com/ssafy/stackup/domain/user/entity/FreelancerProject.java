@@ -80,6 +80,24 @@ public class FreelancerProject {
     @Column(name = "contract_additional_terms", columnDefinition = "TEXT")
     private String contractAdditionalTerms; // 추가 특약 사항
 
+    private String period;
+
+    private String candidateName;
+
+    private String projectName;
+
+
+    public void updatePeriod(String period) {
+        this.period = period;
+    }
+
+    public void updateCandidateName(String candidateName) {
+        this.candidateName = candidateName;
+    }
+    public void updateProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
     // 클라이언트가 계약서 작성
 // 계약 시작일 업데이트
     public void updateContractStartDate(Date contractStartDate) {

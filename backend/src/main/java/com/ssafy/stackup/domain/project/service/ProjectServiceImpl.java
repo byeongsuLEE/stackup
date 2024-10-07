@@ -299,6 +299,9 @@ public class ProjectServiceImpl implements ProjectService {
         freelancerProject.updateContractTotalAmount(requestDto.getContractTotalAmount());
         freelancerProject.updateContractConfidentialityClause(requestDto.getContractConfidentialityClause());
 
+        freelancerProject.updatePeriod(requestDto.getPeriod());
+        freelancerProject.updateCandidateName(requestDto.getCandidateName());
+        freelancerProject.updateProjectName(requestDto.getProjectName());
         freelancerProjectRepository.save(freelancerProject);
 
     }
@@ -323,6 +326,9 @@ public class ProjectServiceImpl implements ProjectService {
                 .contractStartDate(freelancerProject.getContractStartDate())
                 .contractFinalPayment(freelancerProject.getContractFinalPayment())
                 .contractTotalAmount(freelancerProject.getContractTotalAmount())
+                .projectName(freelancerProject.getProjectName())
+                .candidateName(freelancerProject.getCandidateName())
+                .period(freelancerProject.getPeriod())
                 .build();
 
 

@@ -5,53 +5,97 @@
 // import ChatListItem from "../chat/ChatListItem";
 // import { useChatStore } from "../../store/ChatStore";
 // import { FaArrowLeft } from "react-icons/fa";
-// import { useUserStore } from "../../store/UserStore"; // 로그인한 유저 정보 불러오기
-
-// import MyMessageComponent from "../chat/MyMessageComponent"; // 내가 보낸 메시지 컴포넌트
-// import OtherMessageComponent from "../chat/OtherMessageComponent"; // 상대방이 보낸 메시지 컴포넌트
-// import MessageDateComponent from "../chat/MessageDateComponent"; // 메시지 날짜 컴포넌트
-// import ChatInputComponent from "../chat/ChatInputComponent"; // 채팅 입력창 컴포넌트
+// import { useUserStore } from "../../store/UserStore";
+// import { Stomp } from "@stomp/stompjs";
+// import MyMessageComponent from "../chat/MyMessageComponent";
+// import OtherMessageComponent from "../chat/OtherMessageComponent";
+// import MessageDateComponent from "../chat/MessageDateComponent";
+// import ChatInputComponent from "../chat/ChatInputComponent";
 
 // export default function SimplePopup() {
 //   const [anchor, setAnchor] = React.useState<null | HTMLElement>(null);
-//   const [activeChatId, setActiveChatId] = React.useState<string | null>(null); // 활성화된 채팅방 ID 상태
-//   const [newMessages, setNewMessages] = React.useState<boolean>(true); // 새 메시지 여부
+//   const [activeChatId, setActiveChatId] = React.useState<
+//     number | string | null
+//   >(null);
+//   const [newMessages, setNewMessages] = React.useState<boolean>(true);
+//   const [messages, setMessages] = React.useState<any[]>([]);
+//   const [inputValue, setInputValue] = React.useState("");
+//   const stompClient = React.useRef<any>(null);
 
 //   const loadChats = useChatStore((state) => state.loadChats);
 //   const chats = useChatStore((state) => state.chats);
 
 //   const { clientId, freelancerId } = useUserStore((state) => ({
-//     clientId: state.clientId,
+//     clientId: Number(state.clientId),
 //     freelancerId: state.freelancerId,
-//   })); // 로그인한 유저 정보 가져오기
+//   }));
+
+//   const token = sessionStorage.getItem("token");
 
 //   React.useEffect(() => {
-//     loadChats(); // 컴포넌트가 마운트될 때 채팅 데이터를 불러옴
-//     setNewMessages(true); // 새로운 메시지 감지 (여기서는 테스트용으로 true로 설정, 실제로는 메시지 수신 로직 추가)
-//   }, [loadChats]);
+//     if (clientId && token) {
+//       loadChats(clientId, token); // clientId와 token을 전달
+//     }
+//   }, [clientId, token, loadChats]);
 
 //   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
 //     setAnchor(anchor ? null : event.currentTarget);
-//     setNewMessages(false); // 메시지 창이 열리면 새 메시지 배지를 숨김
+//     setNewMessages(false);
 //   };
 
 //   const open = Boolean(anchor);
 //   const id = open ? "simple-popup" : undefined;
 
-//   const handleChatClick = (chatId: string) => {
-//     setActiveChatId(chatId); // 채팅방을 클릭했을 때 해당 채팅방의 내용을 활성화
-//     console.log(`ClientId: ${clientId}, FreelancerId: ${freelancerId}`);
+//   const connectWebSocket = (chatRoomId: number) => {
+//     const socketFactory = () => new WebSocket("ws://localhost:8080/api/ws");
+//     stompClient.current = Stomp.over(socketFactory);
+
+//     stompClient.current.connect(
+//       { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
+//       function (frame: any) {
+//         console.log("Connected: " + frame);
+
+//         stompClient.current.subscribe(
+//           `/sub/chatroom/${chatRoomId}`,
+//           function (messageOutput: any) {
+//             const message = JSON.parse(messageOutput.body);
+//             console.log("수신된 메시지:", message);
+//             setMessages((prevMessages) => [...prevMessages, message]);
+//           },
+//           { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
+//         );
+//       },
+//       function (error: any) {
+//         console.error("WebSocket 연결 실패:", error);
+//       }
+//     );
 //   };
 
-//   const activeChat = chats.find((chat) => chat.chatId === activeChatId);
+//   const sendMessage = () => {
+//     if (stompClient.current && inputValue) {
+//       const messageObj = {
+//         senderId: clientId,
+//         receiverId: freelancerId,
+//         chatRoomId: activeChatId,
+//         content: inputValue,
+//       };
+//       stompClient.current.send(
+//         "/pub/message",
+//         {
+//           Authorization: `Bearer ${sessionStorage.getItem("token")}`, // 헤더에 JWT 토큰 포함
+//         },
+//         JSON.stringify(messageObj)
+//       );
+//       setInputValue("");
+//     }
+//   };
 
-//   // 날짜가 변할 때만 표시
 //   const shouldDisplayDate = (
 //     currentDate: string,
 //     index: number,
 //     messages: any[]
 //   ) => {
-//     if (index === 0) return true; // 첫 번째 메시지에는 날짜 표시
+//     if (index === 0) return true;
 //     const previousMessage = messages[index - 1];
 //     return currentDate !== previousMessage.date;
 //   };
@@ -81,16 +125,12 @@
 //           >
 //             New
 //           </span>
-//         )}{" "}
-//         {/* 새 메시지 배지 */}
+//         )}
 //       </button>
 //       <BasePopup id={id} open={open} anchor={anchor}>
 //         <PopupBody>
-//           {/* 활성화된 채팅방이 없다면 채팅 리스트를 표시 */}
 //           {!activeChatId && (
 //             <div className="overflow-y-auto max-h-full">
-//               {" "}
-//               {/* 스크롤 추가 */}
 //               {chats.map((chat) => (
 //                 <ChatListItem
 //                   key={chat.chatId}
@@ -99,16 +139,17 @@
 //                   timestamp={chat.timestamp}
 //                   chatId={chat.chatId}
 //                   unreadCount={chat.unreadCount}
-//                   onClick={() => handleChatClick(chat.chatId)} // 클릭 시 채팅방 활성화
+//                   onClick={() => {
+//                     setActiveChatId(chat.chatId);
+//                     connectWebSocket(Number(chat.chatId));
+//                   }}
 //                 />
 //               ))}
 //             </div>
 //           )}
 
-//           {/* 활성화된 채팅방이 있다면 해당 채팅방의 내용을 표시 */}
-//           {activeChatId && activeChat && (
+//           {activeChatId && (
 //             <div className="flex flex-col h-full">
-//               {/* 제목과 뒤로가기 버튼을 한 줄로 표시 */}
 //               <div className="flex items-center mb-4">
 //                 <button
 //                   onClick={() => setActiveChatId(null)}
@@ -116,37 +157,31 @@
 //                 >
 //                   <FaArrowLeft />
 //                 </button>
-//                 <h2 className="text-lg font-bold ml-2">{activeChat.name}</h2>
+//                 <h2 className="text-lg font-bold ml-2">
+//                   채팅방 {activeChatId}
+//                 </h2>
 //               </div>
 
-//               {/* 채팅 내용 표시 및 스크롤 영역 */}
 //               <div className="flex-grow overflow-y-auto p-4 max-h-96">
-//                 {activeChat.messages.map((message, index) => (
+//                 {messages.map((message, index) => (
 //                   <div key={index}>
-//                     {shouldDisplayDate(
-//                       message.date,
-//                       index,
-//                       activeChat.messages
-//                     ) && <MessageDateComponent date={message.date} />}
-//                     {message.senderId === activeChatId ? (
-//                       // MyMessageComponent: 내가 보낸 메시지
+//                     {shouldDisplayDate(message.timestamp, index, messages) && (
+//                       <MessageDateComponent date={message.timestamp} />
+//                     )}
+//                     {message.senderId === clientId ? (
 //                       <MyMessageComponent message={message.content} />
 //                     ) : (
-//                       // OtherMessageComponent: 상대방이 보낸 메시지
 //                       <OtherMessageComponent message={message.content} />
 //                     )}
 //                   </div>
 //                 ))}
 //               </div>
 
-//               {/* 채팅 입력창 - 항상 하단에 고정 */}
 //               <div className="mt-4">
 //                 <ChatInputComponent
-//                   onSendMessage={(content) => {
-//                     // 메시지를 전송하는 로직 추가
-//                     console.log("Message sent:", content);
-//                     // 서버로 전송하는 로직 추가 가능 (예: stomp.js를 사용하거나 API 호출)
-//                   }}
+//                   value={inputValue}
+//                   onChange={(e) => setInputValue(e.target.value)}
+//                   onSend={sendMessage}
 //                 />
 //               </div>
 //             </div>
@@ -183,8 +218,8 @@
 //   background-color: ${theme.palette.mode === "dark" ? grey[900] : "#fff"};
 //   box-shadow: ${
 //     theme.palette.mode === "dark"
-//       ? `0px 4px 8px rgb(0 0 0 / 0.7)`
-//       : `0px 4px 8px rgb(0 0 0 / 0.1)`
+//       ? "0px 4px 8px rgb(0 0 0 / 0.7)"
+//       : "0px 4px 8px rgb(0 0 0 / 0.1)"
 //   };
 //   font-family: 'IBM Plex Sans', sans-serif;
 //   font-weight: 500;
@@ -193,6 +228,7 @@
 // `
 // );
 
+// ㅔ제발,,,
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
 import { styled } from "@mui/system";
 import * as React from "react";
@@ -212,6 +248,9 @@ export default function SimplePopup() {
   const [activeChatId, setActiveChatId] = React.useState<
     number | string | null
   >(null);
+  const [activeFreelancerId, setActiveFreelancerId] = React.useState<
+    number | null
+  >(null); // 프리랜서 ID 상태 추가
   const [newMessages, setNewMessages] = React.useState<boolean>(true);
   const [messages, setMessages] = React.useState<any[]>([]);
   const [inputValue, setInputValue] = React.useState("");
@@ -220,16 +259,21 @@ export default function SimplePopup() {
   const loadChats = useChatStore((state) => state.loadChats);
   const chats = useChatStore((state) => state.chats);
 
-  const { clientId, freelancerId } = useUserStore((state) => ({
-    clientId: state.clientId,
-    freelancerId: state.freelancerId,
+  const { clientId } = useUserStore((state) => ({
+    clientId: Number(state.clientId),
   }));
 
-  React.useEffect(() => {
-    loadChats();
-    setNewMessages(true);
-  }, [loadChats]);
+  const token = sessionStorage.getItem("token");
 
+  // 채팅방 목록 로딩
+  React.useEffect(() => {
+    if (clientId && token) {
+      console.log("Loading chats for clientId:", clientId);
+      loadChats(clientId, token); // clientId와 token을 전달
+    }
+  }, [clientId, token, loadChats]);
+
+  // 버튼 클릭 핸들러
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchor(anchor ? null : event.currentTarget);
     setNewMessages(false);
@@ -238,83 +282,75 @@ export default function SimplePopup() {
   const open = Boolean(anchor);
   const id = open ? "simple-popup" : undefined;
 
-  const handleChatClick = async () => {
-    console.log("handleChatClick 함수가 호출되었습니다.");
-
-    try {
-      const response = await fetch("/api/chatroom/start", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
-          clientId: clientId,
-          freelancerId: freelancerId,
-        }),
-      });
-
-      console.log("서버 응답:", response);
-
-      if (!response.ok) {
-        throw new Error(`Failed to start chat. Status: ${response.status}`);
-      }
-
-      const result = await response.json();
-      console.log("채팅방 생성 결과:", result);
-
-      const chatRoomId = Number(result.data.chatRoomId); // 채팅방 ID를 숫자로 변환
-      setActiveChatId(chatRoomId);
-      console.log("채팅방 ID 설정 완료:", chatRoomId);
-
-      // WebSocket 구독
-      connectWebSocket(chatRoomId);
-    } catch (error) {
-      console.error("채팅방 생성 중 오류 발생:", error);
-    }
-  };
-
+  // WebSocket 연결 함수
   const connectWebSocket = (chatRoomId: number) => {
-    const socket = new WebSocket("ws://localhost:8080/ws");
-    stompClient.current = Stomp.over(socket);
+    if (!chatRoomId) {
+      console.error("Invalid chatRoomId:", chatRoomId);
+      return;
+    }
 
+    // WebSocket 연결 설정
+    const socketFactory = () => new WebSocket("ws://localhost:8080/api/ws");
+    stompClient.current = Stomp.over(socketFactory);
+
+    // WebSocket 연결
     stompClient.current.connect(
-      { Authorization: `Bearer ${sessionStorage.getItem("accessToken")}` },
+      { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
       function (frame: any) {
         console.log("Connected: " + frame);
 
+        // 서버에서 메시지 수신
         stompClient.current.subscribe(
           `/sub/chatroom/${chatRoomId}`,
           function (messageOutput: any) {
             const message = JSON.parse(messageOutput.body);
-            setMessages((prevMessages) => [...prevMessages, message]);
+            console.log("Received message:", message);
+
+            // 수신된 메시지를 로그로 출력하고 messages 배열에 추가
+            setMessages((prevMessages) => {
+              console.log("현재 메시지 배열:", [...prevMessages, message]);
+              return [...prevMessages, message];
+            });
           },
-          { Authorization: `Bearer ${sessionStorage.getItem("accessToken")}` }
+          { Authorization: `Bearer ${sessionStorage.getItem("token")}` }
         );
       },
       function (error: any) {
-        console.error("WebSocket 연결 실패:", error);
+        console.error("WebSocket connection failed:", error);
       }
     );
+
+    // WebSocket 연결 끊김 감지
+    stompClient.current.onclose = function () {
+      console.error("WebSocket 연결이 끊어졌습니다.");
+    };
   };
 
+  // 메시지 전송 함수
   const sendMessage = () => {
-    if (stompClient.current && inputValue) {
+    if (stompClient.current && inputValue && activeFreelancerId) {
       const messageObj = {
-        senderId: clientId,
-        receiverId: freelancerId,
-        chatRoomId: activeChatId,
-        content: inputValue,
+        senderId: clientId, // 메시지를 보낸 사람 (로그인한 사용자)
+        receiverId: activeFreelancerId, // 메시지를 받을 사람 (프리랜서)
+        chatRoomId: activeChatId, // 해당 채팅방 ID
+        content: inputValue, // 메시지 내용
       };
+
+      // 메시지 전송
       stompClient.current.send(
-        "/api/pub/chatroom",
-        {},
+        "/pub/message",
+        {
+          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        },
         JSON.stringify(messageObj)
       );
-      setInputValue("");
+
+      console.log("전송된 메시지:", messageObj); // 전송된 메시지 로그 출력
+      setInputValue(""); // 입력 필드 초기화
     }
   };
 
+  // 메시지 날짜 표시 여부 확인
   const shouldDisplayDate = (
     currentDate: string,
     index: number,
@@ -358,13 +394,17 @@ export default function SimplePopup() {
             <div className="overflow-y-auto max-h-full">
               {chats.map((chat) => (
                 <ChatListItem
-                  key={chat.chatId}
+                  key={chat.chatId || `${chat.clientId}-${chat.freelancerId}`} // 고유한 chatRoomId를 key로 사용
                   name={chat.name}
                   messagePreview={chat.messagePreview}
                   timestamp={chat.timestamp}
                   chatId={chat.chatId}
                   unreadCount={chat.unreadCount}
-                  onClick={handleChatClick}
+                  onClick={() => {
+                    setActiveChatId(chat.chatId);
+                    setActiveFreelancerId(Number(chat.freelancerId)); // 클릭 시 프리랜서 ID 설정
+                    connectWebSocket(Number(chat.chatId));
+                  }}
                 />
               ))}
             </div>
@@ -414,6 +454,7 @@ export default function SimplePopup() {
   );
 }
 
+// 스타일 정의
 const grey = {
   50: "#F3F6F9",
   100: "#E5EAF2",

@@ -35,6 +35,7 @@ pipeline {
             steps {
                 script {
                     // 전체 프로젝트 루트에서 Gradle 빌드 실행
+                    sh 'chmod +x ./gradlew' // gradlew 실행 권한 부여
                     sh './gradlew clean build -x test --stacktrace'
                 }
             }

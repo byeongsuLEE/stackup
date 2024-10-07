@@ -7,8 +7,8 @@ WORKDIR /app
 # ml 디렉토리에 있는 requirements.txt 파일 복사
 COPY ml/requirements.txt . 
 
-# 필요 라이브러리 설치
-RUN pip install --no-cache-dir -r requirements.txt
+# pip 업그레이드 후 필요 라이브러리 설치
+RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
 # Flask 애플리케이션 코드 복사
 COPY . .

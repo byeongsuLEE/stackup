@@ -96,11 +96,9 @@ const NFTMinting = ({ Minting, isLoading }: NFTMintingProps) => {
         {/* 캔버스 요소 추가 */}
         <canvas ref={canvasRef} style={{ border: "1px solid black", display: "none" }}></canvas>
       
-      <div className="mt-10 text-end"
-        onClick={handleMintNFT}
-      >
-        </div>
+      <div className="mt-10 text-end" onClick={handleMintNFT}>
         <DoneButton height={30} width={150} title="제출" />
+        </div>
       </div>
     </div>
   )}

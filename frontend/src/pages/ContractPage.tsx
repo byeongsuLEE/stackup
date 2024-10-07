@@ -23,7 +23,6 @@ const Contract = () => {
     
     const sign = await signMessage();
     if (sign) {
-      await wallet(sign.address);
       await signature(sign.signedMessage, freelancerProjectId);
     }
     

@@ -1,19 +1,31 @@
 import DoneButton from "../components/common/DoneButton";
-import { contractData } from "../apis/ContractApi";
+import { contractData, signature } from "../apis/ContractApi";
 import { useQuery } from "react-query";
 import { handlePrint } from "../hooks/MakePDF";
 import { useRef } from "react";
+import { MakeSign } from "../hooks/MakeSign";
+import { useParams } from "react-router-dom";
 
 const SignatureDetail = () => {
   const today = new Date();
+  const { signMessage } = MakeSign();
+
   //== 수정 필요 ==//
-  const freelancerProjectId = sessionStorage.getItem("token");
+  const { freelancerProjectId } = useParams();
 
   //== pdf 생성 ==//
   const componentRef = useRef<HTMLDivElement>(null);
 
-  const makepdf = async () => {
+  const handleSubmit = async () => {
+    //== 전자 서명 ==//
+    const data = await signMessage();
+    signature(data?.signedMessage, freelancerProjectId);
+
+    //== pdf 생성 ==//
     const pdf = await handlePrint(componentRef);
+
+    //== nft 표지 생성 ==//
+
   }
 
   // const { data: project, isLoading: isProjectLoading } = useQuery({
@@ -89,7 +101,7 @@ const SignatureDetail = () => {
         계약일자 : {today.getFullYear()}년 {today.getMonth() + 1}월 {today.getDate()}일
       </div>
       </div>
-      <div className="text-end" onClick={makepdf}>
+      <div className="text-end" onClick={handleSubmit}>
         <DoneButton width={100} height={30} title="서명하기" />
       </div>
     </div>

@@ -1,8 +1,8 @@
 export interface contractProp {
   freelancerProjectId: number;
   contractCreated: boolean;
-  contractStartDate: Date;
-  contractEndDate: Date;
+  contractStartDate: string;
+  contractEndDate: string;
   contractTotalAmount: number;
   contractDownPayment: number;
   contractFinalPayment: number;

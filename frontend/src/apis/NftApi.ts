@@ -24,9 +24,12 @@ export const pinata = async (formData: FormData): Promise<string> => {
 
 // 이미지 CID를 사용하여 JSON 메타데이터 생성 및 Pinata에 업로드
 export const uploadMetadataToPinata = async (imageCID: string, pdfCID: string, data: contractProp): Promise<string> => {
+  const start = data?.contractStartDate?.split('T')[0];
+  const end = data?.contractEndDate?.split('T')[0];
+
   const metadata = {
-    name: "My NFT",
-    description: "This NFT includes a cover image and a document as content",
+    name: data.projectName,
+    description: `${start}일 부터 ${end}일 까지 ${data.period}동안 진행한 프로젝트`,
     image: `https://gateway.pinata.cloud/ipfs/${imageCID}`, // 이미지 CID
     attributes: [
       {

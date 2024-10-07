@@ -51,11 +51,14 @@ export const defaultNftInfo: nftInfoProp = {
 export const generateImage = async (canvasRef: React.RefObject<HTMLCanvasElement>, data: contractProp): Promise<FormData> => {
   const canvas = canvasRef.current;
 
+  const start = data?.contractStartDate?.split('T')[0];
+  const end = data?.contractEndDate?.split('T')[0];
+
   if (canvas) {
     const ctx = canvas.getContext("2d");
     if (ctx) {
-      canvas.width = 200;
-      canvas.height = 300;
+      canvas.width = 300;
+      canvas.height = 200;
 
       const gradient = getRandomGradient(ctx, canvas.width, canvas.height);
 
@@ -71,16 +74,16 @@ export const generateImage = async (canvasRef: React.RefObject<HTMLCanvasElement
 
       // 텍스트 추가
       ctx.font = "bold 30px Arial";
-      ctx.fillText(data.projectName, 20, 80);
+      ctx.fillText(data.projectName, 20, 50);
 
       ctx.font = "23px Arial";
-      ctx.fillText(data.companyName, 20, 130);
+      ctx.fillText(data.contractCompanyName, 20, 90);
 
       ctx.font = "15px Arial";
-      ctx.fillText(data.period, 20, 170);
+      ctx.fillText(`${start} - ${end}`, 20, 130);
 
       ctx.font = "20px Arial";
-      ctx.fillText(data.name, 20, 210);
+      ctx.fillText(data.candidateName, 20, 170);
 
       return new Promise<FormData>((resolve) => {
         canvas.toBlob((blob) => {

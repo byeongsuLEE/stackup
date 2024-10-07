@@ -9,7 +9,7 @@ import NFTMinting from "../components/NFTPage/NFTMinting";
 import NFTLoading from "./NFTLoadingPage";
 
 const SignatureDetail = () => {
-  const today = new Date();
+  const [ today ] = useState(new Date());
   const { signMessage } = MakeSign();
   const { freelancerProjectId } = useParams();
   const [ pdf, setPdf ] = useState<any>();
@@ -118,16 +118,18 @@ const SignatureDetail = () => {
               <label htmlFor="condition" className="font-bold text-sm">추가 특약사항</label>
               <span className="text-sm">{contract.contractAdditionalTerms}</span>
 
+              
               <div className="text-center my-10 font-bold">
               계약일자 : {today.getFullYear()}년 {today.getMonth() + 1}월 {today.getDate()}일
             </div>
             </div>
           </div>
+          <div onClick={handleSubmit}>
+            <NFTMinting Minting={Minting} isLoading={isLoading} pdf={pdf} contractData={contract}/>
+            </div>
         </div>
         )}
-        <div onClick={handleSubmit}>
-        <NFTMinting Minting={Minting} isLoading={isLoading} pdf={pdf} contractData={contract}/>
-        </div>
+        
     </div>
   )
 }

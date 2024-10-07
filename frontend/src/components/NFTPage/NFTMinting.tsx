@@ -49,14 +49,6 @@ const NFTMinting = ({ Minting, isLoading, pdf, contractData }: NFTMintingProps) 
     }
   }, [ethereum]);
 
-  //test data 
-  const testdata = {
-    projectName: "Default Project",
-    companyName: "Default Company",
-    period: "2024.01.01 ~ 2024.12.31",
-    name: "Default Name"
-  }
-
   // 버튼 클릭 시 호출될 핸들러 함수
   const handleMintNFT = async () => {
 

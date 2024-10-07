@@ -49,22 +49,12 @@ export const handlePrint = async (elementRef: React.RefObject<HTMLDivElement>): 
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
 
-    // 이미지 크기 조정 (비율 유지하여 A4 크기에 맞춤)
+    // 이미지 크기 조정 (모든 내용을 A4 한 페이지에 맞추기)
     const imgWidth = pageWidth;
     const imgHeight = (element.scrollHeight / element.scrollWidth) * pageWidth;
 
-    let position = 0;
-    if (imgHeight > pageHeight) {
-      while (position < imgHeight) {
-        pdf.addImage(dataUrl, 'PNG', 0, -position, imgWidth, imgHeight);
-        position += pageHeight;
-        if (position < imgHeight) {
-          pdf.addPage();
-        }
-      }
-    } else {
-      pdf.addImage(dataUrl, 'PNG', 0, 0, imgWidth, imgHeight);
-    }
+    // A4 페이지 크기에 맞추어 이미지를 한 페이지에 추가
+    pdf.addImage(dataUrl, 'PNG', 0, 0, imgWidth, imgHeight > pageHeight ? pageHeight : imgHeight);
 
     // Blob 생성 후 FormData에 추가
     const pdfBlob: Blob = pdf.output('blob');

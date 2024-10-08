@@ -182,7 +182,7 @@ const ProjectDetail = () => {
             </li>
           ))}
         </ul>
-        {sessionStorage.getItem("userType") === "developer" ? (
+        {sessionStorage.getItem("userType") === "client" ? (
           <>
             {project.freelancerStepConfirmed ? (
               <div className="text-end mt-10" onClick={handleStep}>

@@ -5,7 +5,7 @@ import { passwordStore } from "../store/AccountStore"
 const BASE_URL: string = "http://localhost:8080/api"
 
 //== 계좌 목록 불러오기 ==//
-export const accountUpdate = async (): Promise<void> => {
+export const accountUpdate = async (): Promise<any> => {
   const response = await axios({
     method: 'get',
     url: `${BASE_URL}/account/update`,
@@ -14,7 +14,7 @@ export const accountUpdate = async (): Promise<void> => {
     }
   })
 
-  console.log(response.data)
+  return response.data
 }
 
 //== 계좌 목록 조회 ==//
@@ -73,7 +73,6 @@ export const mainAccout = async (accountId? : string): Promise<string> => {
 
 //== 대표 계좌 조회 ==//
 export const getMainAccount = async (): Promise<string> => {
-  try {
     const response = await axios({
       method: 'get',
       url: `${BASE_URL}/account/main`,
@@ -81,11 +80,8 @@ export const getMainAccount = async (): Promise<string> => {
         Authorization: `Bearer ${sessionStorage.getItem('token')}`
       }
     })
+    console.log(response.data)
     return response.data
-
-  } catch (error){
-    return "메인계좌가 없습니다."
-  }
 }
 
 //== 계좌 거래내역 조회 ==//

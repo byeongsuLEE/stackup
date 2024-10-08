@@ -1,27 +1,31 @@
 import { useEffect, useState } from "react";
 import { accountInfo } from "../apis/Account.type";
-// import { accountUpdate, getAccount, getMainAccount } from "../apis/AccountsApi";
-import { accountUpdate, getAccount } from "../apis/AccountsApi";
+import { accountUpdate, getAccount, getMainAccount } from "../apis/AccountsApi";
 import AccountList from "../components/AccountPage/AccountList";
-import DoneButton from "../components/common/DoneButton";
 import PlusIcon from "../icons/PlusIcon";
 
 const Account = () => {
-  const isAccount = true;
-
+  const [ isAccount, setIsAccount ] = useState<boolean>(false);
   const [accountList, setAccountList] = useState<accountInfo[]>([]);
   const [ mainAccount, setMainAccount ] = useState<string>(""); 
-  console.log(setMainAccount)
 
   useEffect(() => {
     const update = async () => {
-      await accountUpdate();
+      const list = await accountUpdate();
 
-      const data = await getAccount();
-      setAccountList(data);
+      if (list) {
+        setIsAccount(true)
 
-      // const main = await getMainAccount();
-      // setMainAccount(main);
+        const data = await getAccount();
+        setAccountList(data);
+
+        const main = await getMainAccount();
+        setMainAccount(main);
+
+      } else {
+        setIsAccount(false)
+      }
+      
     }
     
     update();
@@ -48,7 +52,6 @@ const Account = () => {
       ) : (
         <div className="flex flex-col items-center">
           <span className="my-10">등록된 계좌가 없습니다.</span>
-          <DoneButton width={150} height={40} title="계좌 등록" />
         </div>
       )}
 

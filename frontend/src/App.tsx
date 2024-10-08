@@ -1,7 +1,6 @@
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
-import SimplePopup from "./components/common/ChatPopup";
 import Footer from "./components/common/Footer";
 import Navbar from "./components/common/Navbar";
 import AccountDetail from "./pages/AccountDetailPage";
@@ -20,12 +19,12 @@ import Home from "./pages/HomePage";
 import Login from "./pages/LoginPage";
 import MitermEvaluate from "./pages/MitermEvaluatePage";
 import Mypage from "./pages/MyPage";
-import NFTLoading from './pages/NFTLoadingPage';
+import NFTLoading from "./pages/NFTLoadingPage";
 import PostWork from "./pages/PostWorkPage";
 import ProjectDetail from "./pages/ProjectDetailPage";
 import ProjectGroup from "./pages/ProjectGruopPage";
 import Project from "./pages/ProjectPage";
-import SelectedCandidate from './pages/SelectedCandidatePage';
+import SelectedCandidate from "./pages/SelectedCandidatePage";
 import SignatureDetail from "./pages/SignatureDetailPage";
 import Transfer from "./pages/TransferPage";
 import WorkDetail from "./pages/WorkDetailPage";
@@ -45,37 +44,67 @@ function App() {
               <Routes>
                 <Route path="/test" element={<NFTLoading />} />
                 <Route path="/" element={<Home />} />
-                <Route path="/signature/detail/:freelancerProjectId" element={<SignatureDetail />} />
+                <Route
+                  path="/signature/detail/:freelancerProjectId"
+                  element={<SignatureDetail />}
+                />
                 <Route path="/login" element={<Login />} />
                 <Route path="/work" element={<Work />} />
                 <Route path="/work/post" element={<PostWork />} />
                 <Route path="/work/detail/:boardId" element={<WorkDetail />} />
-                <Route path="/work/detail/candidate/:boardId" element={<CandidateCheck />} />
-                <Route path="/work/detail/select/:boardId/:projectId" element={<SelectedCandidate />} />
-                <Route path="/work/projectgroup/:boardId" element={<ProjectGroup />} />
-                <Route path="/work/detail/contract/:boardId/:projectId/:freelancerProjectId" element={<Contract />} />
+                <Route
+                  path="/work/detail/candidate/:boardId"
+                  element={<CandidateCheck />}
+                />
+                <Route
+                  path="/work/detail/select/:boardId/:projectId"
+                  element={<SelectedCandidate />}
+                />
+                <Route
+                  path="/work/projectgroup/:boardId"
+                  element={<ProjectGroup />}
+                />
+                <Route
+                  path="/work/detail/contract/:boardId/:projectId/:freelancerProjectId"
+                  element={<Contract />}
+                />
                 <Route path="/project" element={<Project />} />
-                <Route path="/project/detail/:projectId" element={<ProjectDetail />} />
+                <Route
+                  path="/project/detail/:projectId"
+                  element={<ProjectDetail />}
+                />
                 <Route path="/career" element={<Career />} />
                 <Route path="/career/detail" element={<CareerDetail />} />
                 <Route path="/career/register" element={<CareerRegister />} />
                 <Route path="/account" element={<Account />} />
-                <Route path="/account/detail/:accountId" element={<AccountDetail />} />
+                <Route
+                  path="/account/detail/:accountId"
+                  element={<AccountDetail />}
+                />
                 <Route path="/mypage/:accountId" element={<Mypage />} />
                 <Route path="/signup/client" element={<ClientSignup />} />
-                <Route path="/signup/freelancer" element={<FreelancerSignup />} />
-                <Route path="/signup/freelancer/skill" element={<FreelancerSkill />} />
-                <Route path="/evaluate/miterm/:projectId" element={<MitermEvaluate />} />
-                <Route path="/evaluate/final/:projectId" element={<FinalEvaluate />} />
+                <Route
+                  path="/signup/freelancer"
+                  element={<FreelancerSignup />}
+                />
+                <Route
+                  path="/signup/freelancer/skill"
+                  element={<FreelancerSkill />}
+                />
+                <Route
+                  path="/evaluate/miterm/:projectId"
+                  element={<MitermEvaluate />}
+                />
+                <Route
+                  path="/evaluate/final/:projectId"
+                  element={<FinalEvaluate />}
+                />
                 <Route path="/transfer" element={<Transfer />} />
                 <Route path="/callback" element={<Callback />} />
                 <Route path="/install-metamask" element={<InstallWallet />} />
               </Routes>
             </main>
             <Footer />
-            <div className="fixed right-7 bottom-3">
-              <SimplePopup />
-            </div>
           </div>
         </BrowserRouter>
       </QueryClientProvider>

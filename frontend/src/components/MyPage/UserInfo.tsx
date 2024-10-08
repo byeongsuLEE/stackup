@@ -41,9 +41,10 @@ const UserInfo = (data: freelanceInformation) => {
   }, [data]);
 
   const changeValue = (key: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLocal((value) => ({
-      ...value,
-      [key]: e.target.value || ''
+    const value = e.target.value ? (key === 'careerYear' ? Number(e.target.value) : e.target.value) : '';
+    setLocal((prevValue) => ({
+      ...prevValue,
+      [key]: value || ''
     }));
   };
 
@@ -102,11 +103,11 @@ const UserInfo = (data: freelanceInformation) => {
         <div className="flex flex-col ml-10">
           <span>대분류</span>
           <div className="flex">
-            <Major major={WebIcon} title="웹" name="category" value="web" />
-            <Major major={MobileIcon} title="모바일" name="category" value="mobile" />
-            <Major major={PublisherIcon} title="퍼블리셔" name="category" value="publisher" />
-            <Major major={AIIcon} title="AI" name="category" value="ai" />
-            <Major major={DBIcon} title="DB" name="category" value="db" />
+            <Major major={WebIcon} category="classification" title="웹" name="category" value="web" />
+            <Major major={MobileIcon} category="classification" title="모바일" name="category" value="mobile" />
+            <Major major={PublisherIcon} category="classification" title="퍼블리셔" name="category" value="publisher" />
+            <Major major={AIIcon} category="classification" title="AI" name="category" value="ai" />
+            <Major major={DBIcon} category="classification" title="DB" name="category" value="db" />
           </div>
 
           <span>사용언어(중복선택 가능)</span>
@@ -139,8 +140,8 @@ const UserInfo = (data: freelanceInformation) => {
             type="text"
             value={local.careerYear ? `${local.careerYear}년` : ""}
             onChange={(e) => {
-              const value = e.target.value.replace(/[^0-9]/g, ""); // 숫자 외의 값 제거
-              changeValue('careerYear')(value); // 상태 업데이트는 숫자만 처리
+              // const value = e.target.value.replace(/[^0-9]/g, ""); // 숫자 외의 값 제거
+              changeValue('careerYear')(e as React.ChangeEvent<HTMLInputElement>); // 상태 업데이트는 숫자만 처리
             }}
             readOnly={isReadOnly}
           />

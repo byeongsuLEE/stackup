@@ -5,7 +5,7 @@ interface WorkProps {
   startDate: Date;
   period: string;
   classification: string;
-  deposit: string;
+  deposit: number;
   deadline: Date;
   recruits: number;
   applicants: number;
@@ -21,7 +21,7 @@ const Work = ({ title, startDate, period, classification, deposit, deadline, rec
   const validPeriod = !isNaN(parseInt(period, 10)) ? parseInt(period, 10) : 0;
 
   // deposit이 숫자인지 확인하고, 유효한 경우에만 사용
-  const validDeposit = !isNaN(parseInt(deposit, 10)) ? parseInt(deposit, 10) : 0;
+  // const validDeposit = !isNaN(parseInt(deposit, 10)) ? parseInt(deposit, 10) : 0;
 
   // projectPeriod 계산
   const projectPeriod = validStartDate
@@ -29,7 +29,7 @@ const Work = ({ title, startDate, period, classification, deposit, deadline, rec
     : '유효하지 않은 시작일';  // 유효하지 않은 경우 표시할 내용
 
   // budget 계산
-  const budget = new Intl.NumberFormat().format(validDeposit);
+  const budget = new Intl.NumberFormat().format(deposit);
 
   // remainDay 계산
   const remainDay = validDeadline

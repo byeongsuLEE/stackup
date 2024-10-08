@@ -12,4 +12,5 @@ RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 # Flask 서버 실행
+ENV FLASK_APP=app.py
 CMD ["flask", "run", "--host=0.0.0.0", "--port=5000"]

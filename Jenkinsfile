@@ -50,7 +50,7 @@ pipeline {
                         git branch: 'main', url: "${GITHUB_REPO}", credentialsId: "${GITHUB_CREDENTIALS_ID}"
                         dir('flask') {
                             sh """
-                            sed -i 's|image: docker.io/choho97/flask-app:.*|image: choho97/stackup-flask:${IMAGE_TAG}|' deployment.yaml
+                            sed -i 's|image: choho97/flask-flask:.*|image: choho97/stackup-flask:${IMAGE_TAG}|' deployment.yaml
                             """
                         }
                         sh """

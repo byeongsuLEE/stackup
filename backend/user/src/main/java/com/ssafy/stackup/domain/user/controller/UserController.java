@@ -121,7 +121,7 @@ public class UserController {
     }
 
 
-    @PatchMapping("/info/second-password")
+    @PostMapping("/info/second-password")
     public ResponseEntity<ApiResponse<String>> setSecondPassword(@RequestBody UserInfoResponseDto userRequestInfo){
            userService.setSecondPassword(userRequestInfo);
 

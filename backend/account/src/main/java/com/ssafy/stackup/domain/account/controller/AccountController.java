@@ -203,7 +203,7 @@ public class AccountController {
 
     @PostMapping("/main/{accountId}")
     public ResponseEntity<?> setMainAccount(@PathVariable Long accountId, HttpServletRequest request) throws Exception {
-        User user = getUserDetailInfo(request);
+         User user = getUserDetailInfo(request);
         Long userId = user.getId();
         accountService.setMainAccount(accountId, user);
 

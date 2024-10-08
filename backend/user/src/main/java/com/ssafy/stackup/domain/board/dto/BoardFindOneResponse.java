@@ -4,11 +4,14 @@ import com.ssafy.stackup.domain.board.entity.Board;
 import com.ssafy.stackup.domain.board.entity.Level;
 import com.ssafy.stackup.domain.framework.dto.FrameworkRequest;
 import com.ssafy.stackup.domain.language.dto.LanguageRequest;
+import com.ssafy.stackup.domain.user.dto.request.FreelancerInfoRequestDto;
 import com.ssafy.stackup.domain.user.dto.response.ClientResponseDto;
+import com.ssafy.stackup.domain.user.dto.response.FreelancerRegisterResponseDto;
 import com.ssafy.stackup.domain.user.entity.Client;
 import com.ssafy.stackup.domain.user.entity.Freelancer;
-import lombok.Data;
+import lombok.*;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,10 +38,16 @@ public class BoardFindOneResponse {
     private Date upload;
     private List<BoardApplicantRequest> applicantList;
     private ClientResponseDto client;
+    private boolean isStartProject;
 
     public BoardFindOneResponse() {}
 
     public BoardFindOneResponse(Board board) {
+        if(board.getProject()!=null){
+            this.isStartProject = true;
+        }else {
+            this.isStartProject = false;
+        }
         this.boardId = board.getBoardId();
         this.title = board.getTitle();
         this.description = board.getDescription();

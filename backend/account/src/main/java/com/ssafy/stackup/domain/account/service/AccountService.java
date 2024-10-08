@@ -338,7 +338,7 @@ public class AccountService {
         HttpEntity<User> requestEntity = new HttpEntity<>(user, headers);
 
             // POST 요청 보내기 (응답을 Map으로 받음)
-            ResponseEntity<String> response = restTemplate.exchange(USER_SERVICE_URL+"/info/second-password", HttpMethod.PATCH, requestEntity, String.class);
+            ResponseEntity<String> response = restTemplate.exchange(USER_SERVICE_URL+"info/second-password", HttpMethod.PATCH, requestEntity, String.class);
             if(response.getStatusCode() != HttpStatus.OK) {
 
 

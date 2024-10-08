@@ -168,6 +168,7 @@ public class ProjectServiceImpl implements ProjectService {
                 .projectId(project.getId())
                 .title(project.getTitle())
                 .status(project.getStatus())
+                .boardId(project.getBoard().getBoardId())
                 .step(project.getStep())
                 .classification(board.getClassification())
                 .languages(boardLanguageList)

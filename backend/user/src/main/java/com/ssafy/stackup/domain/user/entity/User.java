@@ -89,6 +89,7 @@ public abstract class User {
         this.userAddress = address;
     }
 
+
     public void updateReportedCount(Integer reportedCount) {
         this.reportedCount = reportedCount;
     }

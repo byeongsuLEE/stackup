@@ -34,6 +34,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
+import retrofit2.http.HEAD;
 
 import java.util.*;
 
@@ -446,6 +447,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(userId).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
         user.updateAddress(address);
         userRepository.save(user);
+
     }
     /**
      * @param tokenDto 로그인 시 발급한 토큰 데이터

@@ -52,7 +52,9 @@ pipeline {
                 // 매니페스트 파일 수정
                 dir('flask') {
                     sh """
+                    cat deployment.yaml
                     sed -i 's|image: choho97/flask-flask:.*|image: choho97/stackup-flask:${IMAGE_TAG}|' deployment.yaml
+                    cat deployment.yaml
                     """
                 }
                 

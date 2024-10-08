@@ -7,4 +7,5 @@ export interface candidate {
     portfolioUrl: string;
     reportedCount: number;
     totalScore: number;
+    clientSigned: boolean;
 }

@@ -10,21 +10,19 @@ const Account = () => {
 
   useEffect(() => {
     const update = async () => {
-      const list = await accountUpdate();
-      console.log(list)
-      if (list == 200) {
-        setIsAccount(true)
+      await accountUpdate();
 
-        const data = await getAccount();
+      const data = await getAccount();
+
+      if (data.length === 0) {
+        setIsAccount(false)
+      } else {
+        setIsAccount(true)
         setAccountList(data);
 
         const main = await getMainAccount();
         setMainAccount(main);
-
-      } else {
-        setIsAccount(false)
-      }
-      
+      }    
     }
     
     update();

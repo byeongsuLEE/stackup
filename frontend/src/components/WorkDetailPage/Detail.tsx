@@ -20,7 +20,6 @@ interface DetailProps {
 }
 
 const Detail = ({ project, clientId }: DetailProps) => {
-  console.log(project.client.totalScore)
   const [sessionClientId, setSessionClientId] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isAnomaly, setIsAnomaly] = useState<boolean | undefined>(undefined); // is_anomaly 상태
@@ -199,9 +198,6 @@ const Detail = ({ project, clientId }: DetailProps) => {
           <span><pre>{project.description}</pre></span>
         </div>
       </div>
-
-
-
     </>
   );
 };

@@ -67,8 +67,10 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: "${GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
                         // GitHub 매니페스트 리포지토리 클론
                         sh """
+                            rm -rf stackupM  # 기존 디렉토리 삭제
                             git clone -b main https://${GIT_USER}:${GIT_PASS}@github.com/S-Choi-1997/stackupM.git
                             cd stackupM/${MANIFESTS_PATH}
+                            ls -la
                         """
 
                         // 현재 디렉터리의 파일 목록 출력 (디버깅용)

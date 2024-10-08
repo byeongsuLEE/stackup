@@ -64,6 +64,7 @@ pipeline {
                 
                 // Git 커밋 및 푸시
                 sh """
+                    git diff
                     git config user.email "jenkins@company.com"
                     git config user.name "Jenkins CI"
                     git add flask/deployment.yaml

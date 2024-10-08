@@ -31,6 +31,8 @@ public class Chat {
     @Column(name="chat_regist_time", updatable = false)
     private LocalDateTime registTime;
 
+    private String chatRoomId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chatroom_id")
     private ChatRoom chatRoom;

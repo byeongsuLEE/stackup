@@ -34,6 +34,27 @@ public class ChatServiceImpl implements ChatService {
     private final TokenProvider tokenProvider;
     private final ChatRoomRepository chatRoomRepository;
 
+    // 메시지 저장
+    public Chat saveMessage(Long userId, String chatRoomId, String message) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found")); // 사용자 존재 여부 체크
+
+        Chat chat = Chat.builder()
+                .user(user)
+                .message(message)
+                .chatRoomId(chatRoomId) // chatRoomId를 직접 저장하기 위해 필요
+                .build();
+
+        System.out.println(userId + chatRoomId + message);
+
+        return chatRepository.save(chat);
+    }
+
+    // 채팅 메시지 조회
+    public List<Chat> getMessages(String chatRoomId) {
+        return chatRepository.findByChatRoomId(chatRoomId);
+    }
+
     /**
      * @param chatDto 채팅 데이터
      * @param token   헤더에 들어있는 액세스 토큰 (유저 정보)
@@ -76,7 +97,7 @@ public class ChatServiceImpl implements ChatService {
     @Transactional(readOnly = true)
     public List<ChatResponseDto> chatLogs(final Long chatroomId) {
         ChatRoom chatRoom = channelValidate(chatroomId);
-        List<Chat> chatLogs = chatRepository.findByChatRoomId(chatRoom.getId());
+        List<Chat> chatLogs = chatRepository.findByChatRoomId(chatRoom.getId().toString());
 
         List<ChatResponseDto> chatResponseDtoList = chatLogs.stream()
                 .map(chatLog -> ChatResponseDto.builder()

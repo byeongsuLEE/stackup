@@ -15,7 +15,7 @@ pipeline {
         IMAGE_TAG = "${env.BUILD_NUMBER}" // 빌드 번호를 이미지 태그로 사용
 
         // Kubernetes 매니페스트 경로
-        MANIFESTS_PATH = 'Spring-frontend' // GitHub 리포지토리 내 매니페스트 경로
+        MANIFESTS_PATH = 'spring-frontend' // GitHub 리포지토리 내 매니페스트 경로
     }
 
     stages {

@@ -2,7 +2,7 @@ import { addDays, format } from "date-fns";
 import { useNavigate } from "react-router-dom";
 import { project } from "../../apis/Board.type";
 
-const AppliedBox = ({ title, client, period, startDate,boardId }: project) => {
+const AppliedBox = ({ title, client, period, startDate, boardId }: project) => {
   const navigate = useNavigate();
 
   const toDetail = ()=>{

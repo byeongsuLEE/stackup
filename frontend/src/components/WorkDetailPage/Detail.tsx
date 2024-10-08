@@ -26,9 +26,6 @@ const Detail = ({ project, clientId }: DetailProps) => {
   const [loading, setLoading] = useState(true); // 로딩 상태
 
   const boardId = project.boardId;
-  // const { pathId } = useParams();
-
-
   const navigate = useNavigate();
 
   // 프로젝트 삭제
@@ -113,7 +110,6 @@ const Detail = ({ project, clientId }: DetailProps) => {
     (applicant) => applicant.id.toString() === sessionFreelancerId
   );
   
-
   return (
     <>
       <div className="bg-bgGreen border border-mainGreen h-auto rounded-lg p-10 w-[1000px]] my-20 mx-10">
@@ -130,7 +126,7 @@ const Detail = ({ project, clientId }: DetailProps) => {
                 </div>
               ) : (
                 <div>
-                  <button className="bg-subGreen1 text-white rounded-lg px-2 font-bold text-sm w-[100px] h-[25px]" >지원완료</button>
+                  <button disabled className="bg-subGreen1 text-white rounded-lg px-2 font-bold text-sm w-[100px] h-[30px]" >지원완료</button>
                 </div>
               )}
             </>

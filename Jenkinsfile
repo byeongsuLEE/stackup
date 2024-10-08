@@ -44,26 +44,37 @@ pipeline {
         }
 
         stage('Update Kubernetes Manifests') {
-            steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'stackup_github', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
-                        git branch: 'main', url: "${GITHUB_REPO}", credentialsId: "${GITHUB_CREDENTIALS_ID}"
-                        dir('flask') {
-                            sh """
-                            sed -i 's|image: choho97/flask-flask:.*|image: choho97/stackup-flask:${IMAGE_TAG}|' deployment.yaml
-                            """
-                        }
-                        sh """
-                            git config user.email "jenkins@company.com"
-                            git config user.name "Jenkins CI"
-                            git add flask/deployment.yaml
-                            git commit -m 'Update image to choho97/stackup-flask:${IMAGE_TAG}' || echo "No changes to commit"
-                            git push https://$GIT_USER:$GIT_PASS@github.com/S-Choi-1997/stackupM.git main
-                        """
-                    }
+    steps {
+        script {
+            withCredentials([usernamePassword(credentialsId: 'stackup_github', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+                git branch: 'main', url: "${GITHUB_REPO}", credentialsId: "${GITHUB_CREDENTIALS_ID}"
+                
+                // 매니페스트 파일 수정
+                dir('flask') {
+                    sh """
+                    sed -i 's|image: choho97/flask-flask:.*|image: choho97/stackup-flask:${IMAGE_TAG}|' deployment.yaml
+                    """
                 }
+                
+                // 변경된 파일의 차이를 출력
+                sh """
+                    echo "Checking for changes in the repository:"
+                    git diff
+                """
+                
+                // Git 커밋 및 푸시
+                sh """
+                    git config user.email "jenkins@company.com"
+                    git config user.name "Jenkins CI"
+                    git add flask/deployment.yaml
+                    git commit -m 'Update image to choho97/stackup-flask:${IMAGE_TAG}' || echo "No changes to commit"
+                    git push https://$GIT_USER:$GIT_PASS@github.com/S-Choi-1997/stackupM.git main
+                """
             }
         }
+    }
+}
+
 
         stage('Deploy to Kubernetes with Argo CD') {
             steps {

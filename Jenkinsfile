@@ -2,50 +2,26 @@ pipeline {
     agent any
 
     environment {
-        // Git 리포지토리 설정
         GIT_REPO = 'https://lab.ssafy.com/s11-fintech-finance-sub1/S11P21C103.git'
         GIT_CREDENTIALS_ID = 'stackup-gitlab'
-
-        // GitHub 리포지토리 설정 (매니페스트)
         GITHUB_REPO = 'https://github.com/S-Choi-1997/stackupM.git'
         GITHUB_CREDENTIALS_ID = 'stackup_github'
-
-        // Docker Hub 설정
         DOCKER_HUB_CREDENTIALS_ID = 'stackup_docker'
         DOCKER_REGISTRY = 'docker.io'
-        IMAGE_NAME = 'choho97/stackup-flask'  // Docker 이미지 이름
+        IMAGE_NAME = 'choho97/stackup-flask'
         IMAGE_TAG = "${env.BUILD_NUMBER}"
-
-        // Kubernetes 및 Argo CD 설정
         K8S_NAMESPACE = 'default'
         ARGOCD_SERVER = '34.64.46.226:30081'
-        ARGOCD_CREDENTIALS_ID = 'stackup_argo'  // ArgoCD 자격 증명 ID
-
-        // 추가한 환경변수들
-        AWS_ACCESS_KEY_ID = 'AKIAYS2NQJX3RYCARFUQ'
-        AWS_SECRET_ACCESS_KEY = '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'
-        DB_PASSWORD = '1q2w3e4r!'
-        DB_URL = 'jdbc:mysql://34.22.93.211:3306/stackup'
-        DB_USERNAME = 'root'
-        ELASTIC_URL = 'http://34.47.84.173:9200/'
-        GITHUB_ID = 'Iv23li51nY1w8lyOBlai'
-        GITHUB_SECRET = 'c2cd01f968c1d38a9b528cece96b3de94ab43733'
-        PUBLIC_DATA_PORTAL_API_KEY = 'npc0/ueEMOagYro4kXt4rObYM1FEIbIV/UvVUHM5zG2K9E4zl2cEFx3uvkJfM13LxXPrJG2jYh/I9mZoxbB8ig=='
-        PUBLIC_DATA_PORTAL_API_URL = 'https://api.odcloud.kr/api/nts-businessman/v1/status'
-        REDIS_IP = '34.64.42.43'
-        REDIS_PASSWORD = 'I9JR5oaodA'
-        S3_BUCKET = 'worqbucket'
-        SECRET = 'uw5YoYHImqUhahQfNWU7VZpPrZ2pQx4kyN6hQkztIiJN/CMfhjnBwcVW3ccDud2e3Dq/xzeCvF4kQ2YUt5Ncpg=='
-        SECRET_ACCOUNT_KEY = 'vBpCYu3TdmWmcBc='
+        ARGOCD_CREDENTIALS_ID = 'stackup_argo'
     }
 
     stages {
         stage('Checkout Code') {
             steps {
-                // Git 리포지토리에서 소스 코드를 체크아웃
                 git branch: 'dev/ml', url: "${GIT_REPO}", credentialsId: "${GIT_CREDENTIALS_ID}"
             }
         } 
+
         stage('Install ArgoCD CLI') {
             steps {
                 sh """
@@ -59,7 +35,6 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Docker Hub에 로그인하고 Docker 이미지를 빌드 및 푸시
                     withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
                         sh "docker build -t ${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} ."
@@ -70,38 +45,28 @@ pipeline {
         }
 
         stage('Update Kubernetes Manifests') {
-        steps {
-            script {
-                // GitHub 리포지토리를 체크아웃하기 위해 자격 증명 사용
-                withCredentials([usernamePassword(credentialsId: 'stackup_github', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
-                    // 매니페스트 파일이 있는 GitHub 리포지토리를 체크아웃하여 업데이트
-                    git branch: 'main', url: "${GITHUB_REPO}", credentialsId: "${GITHUB_CREDENTIALS_ID}"
-                    
-                    // 매니페스트 파일에서 Docker 이미지 태그 업데이트
-                    dir('flask') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'stackup_github', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+                        git branch: 'main', url: "${GITHUB_REPO}", credentialsId: "${GITHUB_CREDENTIALS_ID}"
+                        dir('flask') {
+                            sh """
+                            sed -i 's|image: docker.io/choho97/flask-app:.*|image: docker.io/choho97/stackup-flask:${IMAGE_TAG}|' deployment.yaml
+                            """
+                        }
                         sh """
-                        sed -i 's|image: docker.io/choho97/flask-app:.*|image: docker.io/choho97/stackup-flask:${IMAGE_TAG}|' deployment.yaml
+                            git add flask/deployment.yaml
+                            git commit -m 'Update image to choho97/stackup-flask:${IMAGE_TAG}' || echo "No changes to commit"
+                            git push https://$GIT_USER:$GIT_PASS@github.com/S-Choi-1997/stackupM.git main
                         """
                     }
-                    
-                    // Git 커밋 및 푸시
-                    sh """
-                        git add flask/deployment.yaml
-                        git commit -m 'Update image to choho97/stackup-flask:${IMAGE_TAG}' || echo "No changes to commit"
-                        git push https://$GIT_USER:$GIT_PASS@github.com/S-Choi-1997/stackupM.git main
-                    """
                 }
             }
         }
-    }
-
-
-
 
         stage('Deploy to Kubernetes with Argo CD') {
             steps {
                 script {
-                    // ArgoCD를 사용해 배포
                     withCredentials([usernamePassword(credentialsId: "${ARGOCD_CREDENTIALS_ID}", usernameVariable: 'ARGOCD_USER', passwordVariable: 'ARGOCD_PASS')]) {
                         sh """
                         echo y | ./argocd login ${ARGOCD_SERVER} --username ${ARGOCD_USER} --password ${ARGOCD_PASS} --insecure

@@ -50,4 +50,9 @@ body {
 .scrollbar {
   overflow-x: auto;
   scrollbar-width: thin;
+  scrollbar-color: #ffffff #ffffff;
+}
+
+.scrollbar:hover {
+  scrollbar-color: #b9b8b8 #ffffff;
 }

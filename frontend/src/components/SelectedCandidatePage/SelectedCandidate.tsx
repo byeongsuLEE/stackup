@@ -19,8 +19,8 @@ const SelectedCandidate = ({ name,  portfolioUrl, totalScore, freelancerProjectI
       </td >
       <td className="flex justify-center mt-1.5 center">
         {clientSigned ? (
-          <div className="">
-            <DoneButton width={100} height={30} title="서명완료" />
+          <div>
+            <button disabled className="bg-subGreen1 text-white rounded-lg px-2 font-bold text-sm w-[100px] h-[30px]" > 서명완료</button>
           </div>
         ) : (
           <div className="mr-3" onClick={handleContract}>

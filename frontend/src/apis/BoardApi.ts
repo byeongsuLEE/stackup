@@ -21,10 +21,6 @@ export const allProject = async (page: number, size: number): Promise<{ data: pr
 
         console.log(response.data);
         
-        // isCharged가 true인 항목을 위로 정렬
-        // const sortedBoards = [...response.data.data].sort((a, b) => {
-        //     return Number(b.isCharged) - Number(a.isCharged);
-        // });
         return {
             data: response.data.content,
             totalPages: response.data.totalPages
@@ -121,7 +117,6 @@ export const projectDetail = async (boardId?: string): Promise<any> => {
             method: 'get',
             url: `${BASE_URL}/${boardId}`
         })
-        // console.log('조회',response.data)
         return response.data.data
 
     } catch (error) {

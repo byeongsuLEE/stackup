@@ -2,7 +2,7 @@ import { useRef } from "react";
 import ContractDetail from "../components/ContractPage/ContractDetail";
 import DoneButton from "../components/common/DoneButton";
 import { signature, submitContract } from "../apis/ContractApi";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { MakeSign } from "../hooks/MakeSign";
 
 interface ContractDetailComponentType {
@@ -10,18 +10,22 @@ interface ContractDetailComponentType {
 }
 
 const Contract = () => {
-  const { freelancerProjectId } = useParams();
-  const contractDetailRef = useRef<ContractDetailComponentType | null>(null);
+  const navigate = useNavigate();
   const { signMessage } = MakeSign();
+  const { boardId, projectId, freelancerProjectId } = useParams();
+  const contractDetailRef = useRef<ContractDetailComponentType | null>(null);
+  
 
   const handleSubmit = async () => {
     if(contractDetailRef.current){
-      const data = contractDetailRef.current.getContractData()
+      const data = contractDetailRef.current.getContractData();
       await submitContract(data, freelancerProjectId);
 
       const sign = await signMessage();
       if (sign) {
         await signature(sign.signedMessage, freelancerProjectId);
+
+        navigate(`/work/detail/${boardId}/${projectId}`);
       }
     }
   };

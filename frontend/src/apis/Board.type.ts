@@ -45,8 +45,7 @@ export interface project {
     clientStepConfirmed:boolean;
     freelancerStepConfirmed:boolean;
     step: string;
-
-    
+    clientContractSigned: boolean;
 }
 
 const clientBasic = {

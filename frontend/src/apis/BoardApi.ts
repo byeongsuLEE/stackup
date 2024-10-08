@@ -210,3 +210,26 @@ export const projectDelete = async (boardId: string): Promise<void> => {
         }
     }
 }
+
+// 프로젝트 프리랜서 리스트 조회
+export const projectFreelancer = async (boardId: string): Promise<any> => {
+    try {
+        const response = await axios({
+            method: 'get',
+            url: `${BASE_URL}/${boardId}/selected-applicant-list`,
+            headers: {
+                Authorization: `Bearer ${window.sessionStorage.getItem('token')}`
+            }
+        })
+        return response.data
+
+    } catch (error) {
+
+        if (axios.isAxiosError(error)) {
+            console.error("Axios error: ", error.message);
+
+        } else {
+            console.error("Unexpected error: ", error);
+        }
+    }
+}

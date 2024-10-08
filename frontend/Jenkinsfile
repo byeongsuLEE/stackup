@@ -37,15 +37,17 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                // npm 의존성 설치
-                sh 'npm install'
+                dir('frontend') {
+                    sh 'npm install'
+                }
             }
         }
 
         stage('Build React App') {
             steps {
-                // React 애플리케이션 빌드
-                sh 'npm run build'
+                dir('frontend') {
+                    sh 'npm run build'
+                }
             }
         }
 

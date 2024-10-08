@@ -44,6 +44,7 @@ export interface project {
     applicantList:Array<projectApplicantProps>
     clientStepConfirmed:boolean;
     freelancerStepConfirmed:boolean;
+    step: string;
 
     
 }
@@ -89,7 +90,8 @@ export const projectBasic = {
     freelancerProjectId: 0 ,
     applicantList: [],
     clientStepConfirmed: false,
-    freelancerStepConfirmed: false   
+    freelancerStepConfirmed: false,
+    step:''   
 }
 
 //== 프로젝트 filter ==//

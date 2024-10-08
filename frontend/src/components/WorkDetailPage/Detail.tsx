@@ -119,7 +119,7 @@ const Detail = ({ project, clientId }: DetailProps) => {
       <div className="bg-bgGreen border border-mainGreen h-auto rounded-lg p-10 w-[1000px]] my-20 mx-10">
         <div className="flex flex-col">
           <span className="text-lg font-bold">{project?.title} _ {classification}</span>
-          <span className="text-subTxt text-sm">{project?.client.businessName} _ 평점 {project?.client.totalScore}wja</span>
+          <span className="text-subTxt text-sm">{project?.client.businessName} _ 평점 {project?.client.totalScore}점</span>
         </div>
         <div className="flex justify-end">
           {window.sessionStorage.getItem("userType") === "freelancer" ? (

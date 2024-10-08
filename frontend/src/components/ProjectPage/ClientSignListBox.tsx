@@ -3,6 +3,7 @@ import DoneButton from "../common/DoneButton";
 import { project } from "../../apis/Board.type";
 
 const ClientSignListBox = (sign: project) => {
+  console.log(sign)
   const navigate = useNavigate();
 
   const boardId = sign.boardId

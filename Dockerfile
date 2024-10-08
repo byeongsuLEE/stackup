@@ -22,6 +22,10 @@ FROM nginx:alpine
 # Copy the build output to Nginx's html directory
 COPY --from=build /app/frontend/build /usr/share/nginx/html
 
+# Copy blockchain files into the container
+COPY ./blockchain/NFT/build/contracts/MyNFT.json /app/blockchain/NFT/build/contracts/
+
+
 # Expose port 80
 EXPOSE 80
 

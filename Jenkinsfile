@@ -7,8 +7,7 @@ pipeline {
         GITHUB_REPO = 'https://github.com/S-Choi-1997/stackupM.git'
         GITHUB_CREDENTIALS_ID = 'stackup_github'
         DOCKER_HUB_CREDENTIALS_ID = 'stackup_docker'
-        DOCKER_REGISTRY = 'docker.io'
-        IMAGE_NAME = 'choho97/stackup-flask'
+        IMAGE_NAME = 'choho97/stackup-flask'  // docker.io 제거
         IMAGE_TAG = "${env.BUILD_NUMBER}"
         K8S_NAMESPACE = 'default'
         ARGOCD_SERVER = '34.64.46.226:30081'
@@ -37,8 +36,8 @@ pipeline {
                 script {
                     withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
                         sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
-                        sh "docker build -t ${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG} ."
-                        sh "docker push ${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}"
+                        sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."  // docker.io 제거
+                        sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"  // docker.io 제거
                     }
                 }
             }
@@ -51,7 +50,7 @@ pipeline {
                         git branch: 'main', url: "${GITHUB_REPO}", credentialsId: "${GITHUB_CREDENTIALS_ID}"
                         dir('flask') {
                             sh """
-                            sed -i 's|image: docker.io/choho97/flask-app:.*|image: docker.io/choho97/stackup-flask:${IMAGE_TAG}|' deployment.yaml
+                            sed -i 's|image: docker.io/choho97/flask-app:.*|image: choho97/stackup-flask:${IMAGE_TAG}|' deployment.yaml
                             """
                         }
                         sh """

@@ -495,20 +495,21 @@ public class ProjectServiceImpl implements ProjectService {
                 if(!project.getStatus().name().equals(projectType)) continue;
 
 
-                Long freelancerProjectId = freelancerProjects.stream()
+                FreelancerProject freelancerProject = freelancerProjects.stream()
                         .filter(fp -> fp.getProject().getId().equals(project.getId())
                                 && fp.getFreelancer().getId().equals(user.getId()))
-                        .map(FreelancerProject::getId)
                         .findFirst()
                         .orElse(null);
 
 
                 isMyProjectConfirmed    = project.isFreelancerStepConfirmed();
                 ProjectInfoResponseDto projectInfoResponseDto= ProjectInfoResponseDto.builder()
+                        .isClientContractSigned(freelancerProject.isClientSigned())
+                        .isFreelancerContractSigned(freelancerProject.isFreelancerSigned())
                         .isMyProjectStepConfirmed(isMyProjectConfirmed)
                         .clientStepConfirmed(project.isClientStepConfirmed())
                         .freelancerStepConfirmed(isMyProjectConfirmed)
-                        .freelancerProjectId(freelancerProjectId)
+                        .freelancerProjectId(freelancerProject.getId())
                         .projectId(project.getId())
                         .status(project.getStatus())
                         .step(project.getStep())

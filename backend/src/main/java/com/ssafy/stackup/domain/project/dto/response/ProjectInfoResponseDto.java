@@ -25,6 +25,8 @@ public class ProjectInfoResponseDto {
     private Long freelancerProjectId;
     private boolean isMyContractSigned;
     private boolean isMyProjectStepConfirmed;  // freelancer 일때만 확인가능
+    private boolean isClientContractSigned;
+    private boolean isFreelancerContractSigned;
     private ProjectStatus status;
     private ProjectStep step;
     private String title;

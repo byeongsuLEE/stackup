@@ -46,6 +46,15 @@ pipeline {
                 git branch: 'dev/ml', url: "${GIT_REPO}", credentialsId: "${GIT_CREDENTIALS_ID}"
             }
         } 
+        stage('Install ArgoCD CLI') {
+            steps {
+                sh """
+                    curl -sSL -o argocd-linux-amd64 https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64
+                    chmod +x argocd-linux-amd64
+                    mv argocd-linux-amd64 /usr/local/bin/argocd
+                """
+            }
+        }
 
         stage('Build Docker Image') {
             steps {

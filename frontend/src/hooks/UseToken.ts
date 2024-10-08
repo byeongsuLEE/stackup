@@ -1,5 +1,5 @@
 import { AbiItem } from 'web3-utils';
-import { useWeb3 } from './useWeb3';
+import { useWeb3 } from './UseWeb3';
 
 const SSF_TOKEN_CONTRACT_ADDRESS = '0x066b74Fc73bfaf0C266b0269F91dDeeB5aAB6998';
 

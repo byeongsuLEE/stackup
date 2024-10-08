@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { accountInfo } from "../apis/Account.type";
-import { accountUpdate, getAccount, getMainAccount } from "../apis/AccountsApi";
+// import { accountUpdate, getAccount, getMainAccount } from "../apis/AccountsApi";
+import { accountUpdate, getAccount } from "../apis/AccountsApi";
 import AccountList from "../components/AccountPage/AccountList";
 import DoneButton from "../components/common/DoneButton";
 import PlusIcon from "../icons/PlusIcon";
@@ -10,16 +11,17 @@ const Account = () => {
 
   const [accountList, setAccountList] = useState<accountInfo[]>([]);
   const [ mainAccount, setMainAccount ] = useState<string>(""); 
+  console.log(setMainAccount)
 
   useEffect(() => {
     const update = async () => {
-      const main = await getMainAccount();
-      setMainAccount(main);
-
       await accountUpdate();
 
       const data = await getAccount();
       setAccountList(data);
+
+      // const main = await getMainAccount();
+      // setMainAccount(main);
     }
     
     update();

@@ -14,9 +14,9 @@ const CandidateList = () => {
 
   const toProjectGroup = async() => {
     
-    await startProject(checkedList, String(boardId));
+    const project = await startProject(checkedList, String(boardId));
     
-    navigate(`/work/detail/select/${boardId}`);
+    navigate(`/work/detail/select/${boardId}/${project.projectId}`);
   }
 
   const update = async () => {

@@ -10,17 +10,19 @@ const RegisterForm = () => {
   
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-
+  console.log(startDate, endDate)
   const projectFile = watch("projectFile");
 
-  const handleStartDateChange = (newDate: Date | null) => {
-    setStartDate(newDate);
-    setValue("startDate", newDate ?? new Date());
+  const handleStartDateChange = (newDate: string | null) => {
+    const parsedDate = newDate ? new Date(newDate) : new Date(); // string을 Date로 변환
+    setStartDate(parsedDate); // 상태 업데이트
+    setValue("startDate", parsedDate); // Date 형식으로 저장
   };
 
-  const handleEndDateChange = (newDate: Date | null) => {
-    setEndDate(newDate);
-    setValue("endDate", newDate ?? new Date());
+  const handleEndDateChange = (newDate: string | null) => {
+    const parsedDate = newDate ? new Date(newDate) : new Date(); // string을 Date로 변환
+    setEndDate(parsedDate); // 상태 업데이트
+    setValue("endDate", parsedDate); // Date 형식으로 저장
   };
 
   const onSubmit = (data: projectData) => {

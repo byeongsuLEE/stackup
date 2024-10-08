@@ -5,7 +5,7 @@ import { selectedCandidate } from "../../apis/ClientApi";
 import { useParams } from "react-router-dom";
 import React, { useState, forwardRef, useImperativeHandle, useEffect } from "react";
 
-const ContractDetail = forwardRef((props, ref) => {
+const ContractDetail = forwardRef((_props, ref) => {
   const { boardId, freelancerProjectId } = useParams();
 
   const { data: project, isLoading: isProjectLoading } = useQuery({

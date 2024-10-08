@@ -60,7 +60,7 @@ pipeline {
 
                         echo "Building Docker image: choho97/stackup-frontend:${IMAGE_TAG}"
                         // Docker 이미지 빌드
-                        sh "docker build -t choho97/stackup-frontend:${IMAGE_TAG} -f Dockerfile ."
+                        sh "docker build -t choho97/stackup-frontend:${IMAGE_TAG} -f frontend/Dockerfile frontend/"
                         // Docker 이미지 푸시
                         sh "docker push choho97/stackup-frontend:${IMAGE_TAG}"
                     }

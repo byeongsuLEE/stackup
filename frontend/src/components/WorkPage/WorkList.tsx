@@ -58,7 +58,7 @@ const WorkList = () => {
   }
 
   // 페이지 변경 핸들러
-  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+  const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value - 1); // 페이지 번호를 0부터 시작하도록 조정
   }
 

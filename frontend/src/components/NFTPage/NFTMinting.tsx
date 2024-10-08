@@ -25,6 +25,7 @@ const NFTMinting = ({ Minting, isLoading, pdf, contractData }: NFTMintingProps) 
   const ethereum = window.ethereum;
   const [addr, setAddr] = useState("");
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  console.log(addr)
 
   // 지갑 연결 함수
   const handleGetAccount = async () => {

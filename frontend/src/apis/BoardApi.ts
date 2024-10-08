@@ -36,7 +36,10 @@ export const allProject = async (page: number, size: number): Promise<{ data: pr
         } else {
             console.error("Unexpected error: ", error);
         }
-        return [];
+        return {
+            data: [],
+            totalPages: 0
+        };
     }
 }
 

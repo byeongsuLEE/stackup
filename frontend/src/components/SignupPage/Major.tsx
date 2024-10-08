@@ -1,7 +1,9 @@
 import React from "react";
 import { freelanceStore } from "../../store/FreelanceStore";
+import { WebIconProps } from "../../icons/WebIcon";
+
 interface MajorProps {
-  major: React.ComponentType;
+  major: React.ComponentType<WebIconProps>;
   category: "classification" | "level";
   title: string;
   name: string;
@@ -64,7 +66,7 @@ const Major: React.FC<MajorProps> = ({ major: MajorIcon, category, title, name, 
         onChange={handleChange}
       />
       <div className="flex flex-col items-center">
-        <MajorIcon /> {/* major prop을 MajorIcon으로 받아서 사용 */}
+        <MajorIcon w={30} h={30}/> {/* major prop을 MajorIcon으로 받아서 사용 */}
         <span className="my-5">{title}</span>
       </div>
     </div>

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { project } from "./Board.type";
-import { ProjectStepResponse, projectData } from "./Project.type";
+import { projectData } from "./Project.type";
 
 const BASE_URL: string = "http://localhost:8080/api/project"
 

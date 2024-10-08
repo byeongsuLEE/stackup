@@ -41,11 +41,11 @@ const SkillInsert = () => {
             <div
               className="flex"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => state.setClassification(e.target.value)}>
-              <Major major={WebIcon} title="웹" name="category" value="web" />
-              <Major major={WebIcon} title="모바일" name="category" value="mobile" />
-              <Major major={WebIcon} title="퍼블리셔" name="category" value="publisher" />
-              <Major major={WebIcon} title="AI" name="category" value="ai" />
-              <Major major={WebIcon} title="DB" name="category" value="db" />
+              <Major major={WebIcon} category='classification' title="웹" name="category" value="web" />
+              <Major major={WebIcon} category='classification' title="모바일" name="category" value="mobile" />
+              <Major major={WebIcon} category='classification' title="퍼블리셔" name="category" value="publisher" />
+              <Major major={WebIcon} category='classification' title="AI" name="category" value="ai" />
+              <Major major={WebIcon} category='classification' title="DB" name="category" value="db" />
             </div>
 
             <span>사용언어(중복선택 가능)</span>

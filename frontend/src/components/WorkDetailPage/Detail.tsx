@@ -22,7 +22,7 @@ interface DetailProps {
 const Detail = ({ project, clientId }: DetailProps) => {
   const [sessionClientId, setSessionClientId] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isAnomaly, setIsAnomaly] = useState<boolean | null>(null); // is_anomaly 상태
+  const [isAnomaly, setIsAnomaly] = useState<boolean | undefined>(undefined); // is_anomaly 상태
   const [loading, setLoading] = useState(true); // 로딩 상태
 
   const boardId = project.boardId;

@@ -95,7 +95,8 @@ const NFTDisplay = () => {
   const [nfts, setNfts] = useState<NFTData[]>([]);
   const [loading, setLoading] = useState(true);
   const NFT_CONTRACT_ADDRESS = import.meta.env.VITE_NFT_CONTRACT_ADDRESS;
-
+  
+  console.log(account)
   useEffect(() => {
     const fetchNFTs = async () => {
       setLoading(true);

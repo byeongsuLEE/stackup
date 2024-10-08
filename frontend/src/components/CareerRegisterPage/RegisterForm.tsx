@@ -8,19 +8,19 @@ import { previousProject } from "../../apis/ProjectApi";
 const RegisterForm = () => {
   const { register, handleSubmit, setValue, watch } = useForm<projectData>({});
   
-  const [startDate, setStartDate] = useState<string | null>(null);
-  const [endDate, setEndDate] = useState<string | null>(null);
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
 
   const projectFile = watch("projectFile");
 
-  const handleStartDateChange = (newDate: string | null) => {
+  const handleStartDateChange = (newDate: Date | null) => {
     setStartDate(newDate);
-    setValue("startDate", newDate ?? "");
+    setValue("startDate", newDate ?? new Date());
   };
 
-  const handleEndDateChange = (newDate: string | null) => {
+  const handleEndDateChange = (newDate: Date | null) => {
     setEndDate(newDate);
-    setValue("endDate", newDate ?? "");
+    setValue("endDate", newDate ?? new Date());
   };
 
   const onSubmit = (data: projectData) => {

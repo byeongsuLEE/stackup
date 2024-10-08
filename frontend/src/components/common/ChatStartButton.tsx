@@ -1,4 +1,3 @@
-import React from "react";
 import { useUserStore } from "../../store/UserStore"; // 로그인한 유저 정보 불러오기
 
 interface ChatStartButtonProps {

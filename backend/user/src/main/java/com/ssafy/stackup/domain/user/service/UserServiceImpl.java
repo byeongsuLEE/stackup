@@ -27,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.messaging.simp.user.SimpUserRegistry;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -40,7 +41,9 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class UserServiceImpl implements UserService {
+    private final SimpUserRegistry userRegistry;
     @Value("${default.image}")
     private String defaultImage;
 
@@ -448,6 +451,14 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
 
     }
+
+    @Override
+    public void setAccountKey(Long userId, String accountKey) {
+        User user = userRepository.findById(userId).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+        user.updateAcountKey(accountKey);
+        userRepository.save(user);
+    }
+
     /**
      * @param tokenDto 로그인 시 발급한 토큰 데이터
      * @param response 토큰을 헤더에 추가하기 위한 servlet

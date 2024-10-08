@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.security.SecureRandom;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -60,7 +61,9 @@ public class AccountService {
 
         System.out.println("Request URL: " + USER_SERVICE_URL);
         System.out.println("Authorization Header: " + headers.get("Authorization"));
-        ResponseEntity<ApiResponse<User>> response = restTemplate.exchange(USER_SERVICE_URL + "info"+ " {" +userId+ " }", HttpMethod.GET, httpEntity, new ParameterizedTypeReference<ApiResponse<User>>() {
+
+        String url = USER_SERVICE_URL + "info"+ "/"+userId;
+        ResponseEntity<ApiResponse<User>> response = restTemplate.exchange(url, HttpMethod.GET, httpEntity, new ParameterizedTypeReference<ApiResponse<User>>() {
         });
         if (response.getStatusCode().is2xxSuccessful()) {
             ApiResponse<User> apiResponse = response.getBody();
@@ -97,6 +100,7 @@ public class AccountService {
 
     private String apikey;
 
+    @Transactional
     public void fetchAndStoreAccountData(User user, HttpServletRequest request) {
         String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit/inquireDemandDepositAccountList";
 
@@ -117,7 +121,7 @@ public class AccountService {
             HttpEntity<User> requestEntity = new HttpEntity<>(user, headers);
 
             // POST 요청 보내기 (응답을 Map으로 받음)
-            ResponseEntity<String> response = restTemplate.exchange(USER_SERVICE_URL+"/accountKey", HttpMethod.PATCH, requestEntity, String.class);
+            ResponseEntity<String> response = restTemplate.exchange(USER_SERVICE_URL+user.getId()+"/accountKey", HttpMethod.PATCH, requestEntity, String.class);
             if(response.getStatusCode() != HttpStatus.OK) {
                 throw new CustomException(USER_NOT_FOUND);
             }
@@ -125,8 +129,9 @@ public class AccountService {
         }
 
         // 현재 날짜와 시간 가져오기
-        String transmissionDate = LocalTime.now().format(DateTimeFormatter.BASIC_ISO_DATE);
+        String transmissionDate = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
         String transmissionTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HHmmss"));
+
 
         // 난수 생성
         String institutionTransactionUniqueNo = generateRandomNumberString(20);
@@ -160,6 +165,8 @@ public class AccountService {
         requestBody.put("REC", Collections.emptyList()); // 필요한 경우 적절한 REC 필드 값을 추가
 
         HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
+
+
 
         // POST 요청 보내기
         ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Map.class);
@@ -273,6 +280,7 @@ public class AccountService {
         // 요청 엔터티 생성 (헤더 + 바디)
         HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
 
+
         // POST 요청 보내기 (응답을 Map으로 받음)
         ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Map.class);
 
@@ -351,9 +359,6 @@ public class AccountService {
         String accountNo = EncryptionUtil.decrypt(account.getAccountNum());
 
         user.setMainAccount(EncryptionUtil.encrypt(accountNo));
-
-
-
     }
 
     public static HttpHeaders createHeaders(HttpServletRequest request) {

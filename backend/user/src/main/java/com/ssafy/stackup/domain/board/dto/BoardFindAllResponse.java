@@ -5,8 +5,11 @@ import com.ssafy.stackup.domain.board.entity.Level;
 import com.ssafy.stackup.domain.framework.dto.FrameworkRequest;
 import com.ssafy.stackup.domain.language.dto.LanguageRequest;
 import com.ssafy.stackup.domain.user.dto.response.ClientResponseDto;
+import com.ssafy.stackup.domain.user.entity.Client;
 import lombok.Data;
 
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,6 +17,7 @@ import java.util.stream.Collectors;
 @Data
 public class BoardFindAllResponse {
     private Long boardId;
+    private boolean isStartProject;
     private String title;
     private String description;
     private String classification;
@@ -35,6 +39,12 @@ public class BoardFindAllResponse {
     public BoardFindAllResponse() {}
 
     public BoardFindAllResponse(Board board) {
+        if(board.getProject()!=null){
+            this.isStartProject = true;
+        }else {
+            this.isStartProject = false;
+        }
+
         this.boardId = board.getBoardId();
         this.title = board.getTitle();
         this.description = board.getDescription();

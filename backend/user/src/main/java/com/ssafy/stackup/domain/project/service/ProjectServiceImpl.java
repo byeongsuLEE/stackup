@@ -495,6 +495,7 @@ public class ProjectServiceImpl implements ProjectService {
                         .freelancerStepConfirmed(isMyProjectConfirmed)
                         .freelancerProjectId(freelancerProjectId)
                         .projectId(project.getId())
+                        .step(project.getStep())
                         .status(project.getStatus())
                         .title(project.getTitle())
                         .startDate(project.getBoard().getStartDate())

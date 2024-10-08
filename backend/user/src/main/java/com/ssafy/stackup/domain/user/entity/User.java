@@ -89,6 +89,14 @@ public abstract class User {
         this.userAddress = address;
     }
 
+    public void updatePublicKey(String publicKey){
+        this.publicKey = publicKey;
+    }
+
+    public void updateAcountKey(String accountKey){
+        this.accountKey = accountKey;
+    }
+
 
     public void updateReportedCount(Integer reportedCount) {
         this.reportedCount = reportedCount;

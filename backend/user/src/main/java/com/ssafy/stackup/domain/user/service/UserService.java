@@ -38,4 +38,5 @@ public interface UserService {
 
     void setAddress(Long userId, String address);
 
+    void setAccountKey(Long userId, String accountKey);
 }

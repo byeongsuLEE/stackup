@@ -140,6 +140,13 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("주소 등록완료"));
     }
 
+    @PatchMapping("/{userId}/accountKey")
+    public ResponseEntity<ApiResponse<String>> setAccountKey (@PathVariable Long userId, @RequestBody Map<String, String> requestBody){
+        String accountKey = requestBody.get("accountKey");
+        userService.setAccountKey(userId,accountKey);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("주소 등록완료"));
+    }
+
     @GetMapping("/info/{applicantId}")
     public ResponseEntity<ApiResponse<?>> getApplicantInfo (@PathVariable Long applicantId){
         UserInfoResponseDto userInfoResponseDto=   userService.getInfo(applicantId);

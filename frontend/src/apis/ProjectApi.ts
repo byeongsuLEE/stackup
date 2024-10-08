@@ -64,9 +64,25 @@ export const startProject = async (checkedList: number[], boardId: string): Prom
   return response.data.data
 }
 
+//프로젝트 단계 확인
+export const checkProjectStep = async (projectId: number): Promise<any> => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${BASE_URL}/${projectId}/step/check`,
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching project step:', error);
+    throw error;  // 에러가 발생한 경우 예외를 다시 던짐
+  }
+}
 
 
-//프로젝트 단계 확인 및 변경
+//프로젝트 단계 변경
 export const projectStep = async (
   projectId?: number,
   currentStep?: string,
@@ -104,7 +120,7 @@ export const contractProjectDetail = async (projectId: number): Promise<any> => 
       },
     });
 
-    console.log(response.data); 
+    // console.log(response.data); 
     return response.data?.data || response.data; // data에 있는 값이 없는 경우 처리
   } catch (error) {
     console.error('Error fetching project details:', error);

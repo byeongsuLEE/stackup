@@ -28,15 +28,19 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                // npm 의존성 설치
-                sh 'npm install'
+                dir('frontend') {
+                    // npm 의존성 설치
+                    sh 'npm install'
+                }
             }
         }
 
         stage('Build React App') {
             steps {
-                // React 애플리케이션 빌드
-                sh 'npm run build'
+                dir('frontend') {
+                    // React 애플리케이션 빌드
+                    sh 'npm run build'
+                }
             }
         }
 
@@ -49,7 +53,7 @@ pipeline {
 
                         echo "Building Docker image: choho97/stackup-frontend:${IMAGE_TAG}"
                         // Docker 이미지 빌드
-                        sh "docker build -t choho97/stackup-frontend:${IMAGE_TAG} -f Dockerfile ."
+                        sh "docker build -t choho97/stackup-frontend:${IMAGE_TAG} -f frontend/Dockerfile ."
                         // Docker 이미지 푸시
                         sh "docker push choho97/stackup-frontend:${IMAGE_TAG}"
                     }
@@ -74,10 +78,6 @@ pipeline {
                         // deployment.yaml 파일의 이미지 태그 업데이트
                         sh "sed -i 's|image: choho97/stackup-frontend:.*|image: choho97/stackup-frontend:${IMAGE_TAG}|' deployment.yaml"
 
-                        // service.yaml 파일의 이미지 태그 업데이트 (필요 시)
-                        // 보통 Service에는 이미지 태그가 필요 없지만, 만약 있다면 아래 주석을 해제하세요.
-                        // sh "sed -i 's|image: choho97/stackup-frontend:.*|image: choho97/stackup-frontend:${IMAGE_TAG}|' service.yaml"
-
                         // Git 설정 및 커밋
                         sh """
                             git config user.email "jenkins@example.com"
@@ -92,8 +92,6 @@ pipeline {
                 }
             }
         }
-
-        // Argo CD 동기화 단계는 생략합니다. Argo CD가 GitHub 매니페스트 변경을 자동으로 감지하여 동기화합니다.
     }
 
     post {

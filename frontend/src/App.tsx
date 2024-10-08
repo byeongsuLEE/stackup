@@ -71,7 +71,6 @@ function App() {
                 <Route path="/transfer" element={<Transfer />} />
                 <Route path="/callback" element={<Callback />} />
                 <Route path="/install-metamask" element={<InstallWallet />} />
-                <Route path="/chat/:chatRoomId" element={<ChatRoom />} />
               </Routes>
             </main>
             <Footer />

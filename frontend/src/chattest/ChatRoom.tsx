@@ -31,8 +31,8 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chatRoomId }) => {
   const [message, setMessage] = useState(''); // 입력된 메시지 상태
   const stompClientRef = useRef<any>(null); // STOMP 클라이언트 참조 변수
   const userId = sessionStorage.getItem('userId')
-
-
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  
   useEffect(() => {
     freelanceMypage();
     const sock = new SockJS('http://localhost:8080/api/ws'); // WebSocket 엔드포인트 설정
@@ -93,10 +93,23 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chatRoomId }) => {
     }
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      sendMessage(); // 엔터 키가 눌리면 메시지 전송
+      event.preventDefault(); // 기본 동작 방지 (줄바꿈 방지)
+    }
+  };
+
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages]);
+
   return (
     <div>
       {/* <h2>채팅방 {chatRoomId}</h2> */}
-      <div style={{ height: '300px', overflowY: 'scroll', padding: '10px' }}>
+      <div style={{ height: '350px', overflowY: 'auto', padding: '10px' }}>
         {messages.map((msg, index) => {
           // 보낸 메시지인지 상대 메시지인지 확인하여 해당 컴포넌트 렌더링
           return msg.userId == userId ? (
@@ -105,6 +118,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chatRoomId }) => {
             <OtherMessageComponent key={index} message={msg.message} />
           );
         })}
+        <div ref={messagesEndRef}/>
       </div>
       <div className='mt-1'>
         <input
@@ -112,7 +126,8 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chatRoomId }) => {
           value={message}
           className="flex-1 border border-gray-300 rounded-lg p-2 mr-2"
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="메시지를 입력해주세요..."
+          onKeyDown={handleKeyDown}
+          placeholder="메시지를 입력해주세요"
           style={{ width: '80%', padding: '10px', marginTop: '10px' }}
         />
         <button

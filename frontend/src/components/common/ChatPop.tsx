@@ -19,8 +19,8 @@ export interface client {
         id: number;
         name: string | null; // name이 null일 수 있으므로 이를 반영
     },
-    title : string;
-    boardId : number;
+    title: string;
+    boardId: number;
 }
 
 export default function SimplePopup() {
@@ -69,7 +69,7 @@ export default function SimplePopup() {
         // loadChats(); // 컴포넌트가 마운트될 때 채팅 데이터를 불러옴
         setNewMessages(true); // 새로운 메시지 감지 (여기서는 테스트용으로 true로 설정, 실제로는 메시지 수신 로직 추가)
     }, [loadChats]);
-    
+
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         fetchClient()
         setAnchor(anchor ? null : event.currentTarget);
@@ -135,23 +135,23 @@ export default function SimplePopup() {
                             {/* 스크롤 추가 */}
                             {chats.map((chat) => (
                                 <ChatListItem
-                                key={chat.chatId}
-                                name={chat.name}
-                                // messagePreview={chat.messagePreview}
-                                // timestamp={chat.timestamp}
-                                // chatId={chat.chatId}
-                                // unreadCount={chat.unreadCount}
-                                onClick={() => handleChatClick(chat.chatId)} // 클릭 시 채팅방 활성화
+                                    key={chat.chatId}
+                                    name={chat.name}
+                                    // messagePreview={chat.messagePreview}
+                                    // timestamp={chat.timestamp}
+                                    // chatId={chat.chatId}
+                                    // unreadCount={chat.unreadCount}
+                                    onClick={() => handleChatClick(chat.chatId)} // 클릭 시 채팅방 활성화
                                 />
                             ))}
                         </div>
-                        )}
+                    )}
 
                     {/* 활성화된 채팅방이 있다면 해당 채팅방의 내용을 표시 */}
                     {activeChatId && activeChat && (
                         <div className="flex flex-col h-full">
                             {/* 제목과 뒤로가기 버튼을 한 줄로 표시 */}
-                            <div className="flex items-center mb-4">
+                            <div className="flex items-center mb-5">
                                 <button
                                     onClick={() => setActiveChatId(null)}
                                     className="text-mainGreen underline"
@@ -160,40 +160,11 @@ export default function SimplePopup() {
                                 </button>
                                 <h2 className="text-lg font-bold ml-2">{activeChat.name}</h2>
                             </div>
-                            <ChatRoom chatRoomId={activeChatId}/>
+                            <div className="flex-grow overflow-y-auto p-4">
+                                <ChatRoom chatRoomId={activeChatId} />
 
-                            {/* 채팅 내용 표시 및 스크롤 영역 */}
-                            {/* <div className="flex-grow overflow-y-auto p-4 max-h-96"> */}
-                            <div>
-                                {/* {activeChat.messages.map((message, index) => (
-                  <div key={index}>
-                    {shouldDisplayDate(
-                      message.date,
-                      index,
-                      activeChat.messages
-                    ) && <MessageDateComponent date={message.date} />}
-                    {message.senderId === activeChatId ? (
-                      // MyMessageComponent: 내가 보낸 메시지
-                      <MyMessageComponent message={message.content} />
-                    ) : (
-                      // OtherMessageComponent: 상대방이 보낸 메시지
-                      <OtherMessageComponent message={message.content} />
-                    )}
-                  </div>
-                ))} */}
                             </div>
-
-                            {/* 채팅 입력창 - 항상 하단에 고정 */}
-                            {/* <div className="mt-4">
-                <ChatInputComponent
-                  onSendMessage={(content) => {
-                    // 메시지를 전송하는 로직 추가
-                    console.log("Message sent:", content);
-                    // 서버로 전송하는 로직 추가 가능 (예: stomp.js를 사용하거나 API 호출)
-                  }}
-                />
-              </div> */}
-                        </div>
+                            </div>
                     )}
                 </PopupBody>
             </BasePopup>

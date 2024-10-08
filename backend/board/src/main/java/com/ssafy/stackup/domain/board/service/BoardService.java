@@ -2,6 +2,7 @@ package com.ssafy.stackup.domain.board.service;
 
 import com.ssafy.stackup.common.exception.ResourceNotFoundException;
 import com.ssafy.stackup.domain.board.dto.BoardApplicantRequest;
+import com.ssafy.stackup.domain.board.dto.BoardCreateRequest;
 import com.ssafy.stackup.domain.board.dto.BoardFindAllResponse;
 import com.ssafy.stackup.domain.board.dto.BoardSearchResponse;
 import com.ssafy.stackup.domain.board.entity.Board;
@@ -25,6 +26,8 @@ import com.ssafy.stackup.domain.recommend.repository.BoardElasticsearchRepositor
 import com.ssafy.stackup.domain.recommend.service.RecommendationService;
 import com.ssafy.stackup.domain.user.entity.Client;
 import com.ssafy.stackup.domain.user.entity.Freelancer;
+import com.ssafy.stackup.domain.user.entity.FreelancerProject;
+import com.ssafy.stackup.domain.user.repository.FreelancerProjectRepository;
 import com.ssafy.stackup.domain.user.repository.FreelancerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -39,11 +42,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
+import javax.swing.text.html.Option;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,6 +70,9 @@ public class BoardService {
 
     @Autowired
     private FreelancerRepository freelancerRepository;
+
+    @Autowired
+    private FreelancerProjectRepository freelancerProjectRepository;
 
     @Autowired
     private BoardApplicantRepository boardApplicantRepository;
@@ -173,7 +177,7 @@ public class BoardService {
                     .build();
             frameworks.add(boardFramework);
         }
-       board.setBoardFrameworks(frameworks);
+        board.setBoardFrameworks(frameworks);
 
 //        List<String> languageNames = new ArrayList<>();
 
@@ -285,10 +289,28 @@ public class BoardService {
 
     public List<BoardApplicantRequest> getSelectedApplicantListByBoardId(Long boardId) {
 
-            List<BoardApplicant> applicants = boardApplicantRepository.findByBoard_BoardIdAndIsPassedTrue(boardId);
-            return applicants.stream()
-                    .map(BoardApplicantRequest::new)
-                    .collect(Collectors.toList());
+        List<BoardApplicant> applicants = boardApplicantRepository.findByBoard_BoardIdAndIsPassedTrue(boardId);
 
+        return applicants.stream()
+                .map(applicant -> {
+                    // 프리랜서 프로젝트 정보 가져오기
+                    FreelancerProject freelancerProject = freelancerProjectRepository.findById(applicant.getFreelancerProjectId())
+                            .orElse(null);
+
+                    boolean freelancerSigned = false;
+                    boolean clientSigned = false;
+                    if (freelancerProject != null) {
+                        // 프리랜서 서명 여부 확인
+                        freelancerSigned = freelancerProject.isFreelancerSigned();
+                        clientSigned = freelancerProject.isClientSigned();
+                    }
+
+                    // BoardApplicantRequest에 서명 여부 추가
+                    BoardApplicantRequest dto = new BoardApplicantRequest(applicant);
+                    dto.updateFreelancerSigned(freelancerSigned);
+                    dto.updateClientSinged(clientSigned);
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 }

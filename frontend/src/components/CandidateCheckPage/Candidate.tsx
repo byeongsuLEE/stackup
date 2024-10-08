@@ -1,25 +1,33 @@
 import { useNavigate } from "react-router-dom";
 import { projectApplicantProps } from "../../apis/Board.type";
-import ChatStartButton from "../common/ChatStartButton";
 import DoneButton from "../common/DoneButton";
 
-const Candidate = ({ name,  portfolioUrl, totalScore, id, onCheckboxChange }: projectApplicantProps) => {
-
+const Candidate = ({
+  name,
+  portfolioUrl,
+  totalScore,
+  id,
+  onCheckboxChange,
+}: projectApplicantProps) => {
   const checkCandidate = () => {
     onCheckboxChange(id);
-  }
+  };
 
   const navigate = useNavigate();
   const toProfile = () => {
     navigate(`/mypage/${id}`);
-  }
+  };
 
   return (
     <tr>
       <td>
         <div className="form-control">
           <label className="cursor-pointer label">
-            <input type="checkbox" className="checkbox checkbox-success" onChange={checkCandidate}/>
+            <input
+              type="checkbox"
+              className="checkbox checkbox-success"
+              onChange={checkCandidate}
+            />
           </label>
         </div>
       </td>
@@ -32,8 +40,6 @@ const Candidate = ({ name,  portfolioUrl, totalScore, id, onCheckboxChange }: pr
         <div onClick={toProfile} className="mr-3">
           <DoneButton width={60} height={30} title="프로필" />
         </div>
-
-        <ChatStartButton freelancerId={id} />
       </td>
     </tr>
   );

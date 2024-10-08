@@ -14,7 +14,7 @@ export const accountUpdate = async (): Promise<any> => {
     }
   })
 
-  return response.data
+  return response.status
 }
 
 //== 계좌 목록 조회 ==//
@@ -80,7 +80,7 @@ export const getMainAccount = async (): Promise<string> => {
         Authorization: `Bearer ${sessionStorage.getItem('token')}`
       }
     })
-    console.log(response.data)
+
     return response.data
 }
 

@@ -80,7 +80,7 @@ pipeline {
                         // deployment.yaml 파일의 이미지 태그 업데이트
                         sh "ls"
                         sh "dir"
-                        sh "sed -i 's|image: choho97/stackup-frontend:.*|image: choho97/stackup-frontend:${IMAGE_TAG}|' deployment.yaml"
+                        sh "sed -i 's|image: choho97/stackup-frontend:.*|image: choho97/stackup-frontend:${IMAGE_TAG}|' stackupM/deployment.yaml"
 
                         // Git 설정 및 커밋
                         sh """

@@ -166,6 +166,7 @@ public class ProjectServiceImpl implements ProjectService {
 
         ProjectInfoResponseDto projectInfoResponseDto = ProjectInfoResponseDto.builder()
                 .projectId(project.getId())
+                .boardId(project.getBoard().getBoardId())
                 .title(project.getTitle())
                 .status(project.getStatus())
                 .step(project.getStep())

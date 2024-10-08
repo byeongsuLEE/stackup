@@ -2,13 +2,19 @@ package com.ssafy.stackup.domain.evaluation.service;
 
 import com.ssafy.stackup.common.exception.CustomException;
 import com.ssafy.stackup.common.response.ErrorCode;
+import com.ssafy.stackup.domain.board.entity.BoardApplicant;
+import com.ssafy.stackup.domain.board.repository.BoardApplicantRepository;
 import com.ssafy.stackup.domain.evaluation.dto.EvaluationRequestDto;
 import com.ssafy.stackup.domain.evaluation.entity.Evaluation;
 import com.ssafy.stackup.domain.evaluation.repository.EvaluationRepository;
 import com.ssafy.stackup.domain.project.entity.Project;
 import com.ssafy.stackup.domain.project.repository.ProjectRepository;
 import com.ssafy.stackup.domain.user.entity.EvaluationType;
+import com.ssafy.stackup.domain.user.entity.Freelancer;
+import com.ssafy.stackup.domain.user.entity.FreelancerProject;
 import com.ssafy.stackup.domain.user.entity.User;
+import com.ssafy.stackup.domain.user.repository.FreelancerProjectRepository;
+import com.ssafy.stackup.domain.user.repository.FreelancerRepository;
 import com.ssafy.stackup.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,6 +32,9 @@ public class EvaluationServiceImpl implements EvaluationService{
     private final UserRepository userRepository;
     private final ProjectRepository projectRepository;
     private final EvaluationRepository evaluationRepository;
+    private final FreelancerRepository freelancerRepository;
+    private final FreelancerProjectRepository freelancerProjectRepository;
+    private final BoardApplicantRepository boardApplicantRepository;
 
     /**
      * 평가 하기
@@ -38,11 +47,54 @@ public class EvaluationServiceImpl implements EvaluationService{
     @Override
     public void addEvaluation(EvaluationRequestDto evaluationRequestDto, User evaluator) {
 
+        //평가받는사람
         User user = userRepository.findById(evaluationRequestDto.getUserId())
                 .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Project project= projectRepository.findById(evaluationRequestDto.getProjectId())
                 .orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
+
+
+        Freelancer freelancer = null;
+        //평가하는 사람 입장
+        if(evaluator.isClient()){
+             freelancer = freelancerRepository.findById(evaluationRequestDto.getUserId())
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        }
+        else{
+             freelancer = freelancerRepository.findById(evaluator.getId())
+                    .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+        }
+
+        FreelancerProject freelancerProject = freelancerProjectRepository.findByProjectAndFreelancer(project,freelancer)
+                .orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
+
+
+        BoardApplicant boardApplicant = boardApplicantRepository.findByFreelancer_IdAndBoard_BoardId(freelancer.getId(),project.getBoard().getBoardId());
+
+        if(evaluator.isClient()){
+
+            if(evaluationRequestDto.getType() == EvaluationType.MIDDLE){
+                freelancerProject.updateMiddleClientEvaluated();
+                boardApplicant.updateMiddleClientEvaluated();
+            }else{
+                freelancerProject.updateFinalClientEvaluated();
+                boardApplicant.updateFinalClientEvaluated();
+            }
+        }
+        else{
+            if(evaluationRequestDto.getType() == EvaluationType.MIDDLE){
+                freelancerProject.updateMiddleFreelancerEvaluated();
+                boardApplicant.updateMiddleFreelancerEvaluated();
+
+            }else{
+                freelancerProject.updateFinalFreelancerEvaluated();
+                boardApplicant.updateFinalFreelancerEvaluated();
+            }
+        }
+
+
 
         Evaluation evaluation = Evaluation.builder()
                 .evaluator(evaluator)
@@ -61,6 +113,8 @@ public class EvaluationServiceImpl implements EvaluationService{
 
 
         evaluationRepository.save(evaluation);
+        freelancerProjectRepository.save(freelancerProject);
+        boardApplicantRepository.save(boardApplicant);
 
         //총점
         Double newScore = calculateTotalScoreWithWeight(evaluationRequestDto);

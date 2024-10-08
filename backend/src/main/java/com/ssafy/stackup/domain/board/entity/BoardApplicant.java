@@ -44,6 +44,27 @@ public class BoardApplicant {
     private boolean isPassed;
 
 
+    private boolean isMiddleClientEvaluated;//  클라리언트가 중간평가를 했는지?
+    private boolean isMiddleFreelancerEvaluated;
+    private boolean isFinalClientEvaluated;//
+    private boolean isFinalFreelancerEvaluated;
+
+
+    public void updateMiddleClientEvaluated() {
+        this.isMiddleClientEvaluated = true;
+    }
+    public void updateMiddleFreelancerEvaluated() {
+        this.isMiddleFreelancerEvaluated = true;
+    }
+    public void updateFinalClientEvaluated() {
+        this.isFinalClientEvaluated = true;
+    }
+    public void updateFinalFreelancerEvaluated() {
+        this.isFinalFreelancerEvaluated = true;
+    }
+
+
+
     public boolean getIsPassed() {
         return isPassed;
     }

@@ -21,6 +21,8 @@ public class BoardApplicantRequest {
     private Long freelancerProjectId;
     private boolean freelancerSigned;
     private boolean clientSigned;
+
+
     public BoardApplicantRequest(BoardApplicant boardApplicant) {
         Freelancer freelancer = boardApplicant.getFreelancer();
         this.id = freelancer.getId();
@@ -43,4 +45,6 @@ public class BoardApplicantRequest {
     public void updateClientSinged(boolean clientSigned) {
         this.clientSigned = clientSigned;
     }
+
+
 }

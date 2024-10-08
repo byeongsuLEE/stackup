@@ -5,11 +5,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import { project, projectBasic } from "../apis/Board.type";
 import { contractProjectDetail, projectStep } from "../apis/ProjectApi";
 import InfoBox from "../components/WorkPage/InfoBox";
+import AlertBox from "../components/common/AlertBox";
 import DoneButton from "../components/common/DoneButton";
 import CandidateIcon from "../icons/CandidateIcon";
 import PeriodIcon from "../icons/PeriodIcon";
 import PriceIcon from "../icons/PriceIcon";
-import AlertBox from "../components/common/AlertBox";
 
 interface Step {
   name: string;
@@ -176,6 +176,10 @@ const ProjectDetail = () => {
     return <div>로딩 중...</div>; // 로딩 중일 때 표시할 내용
   }
 
+  console.log(project.clientStepConfirmed);
+  console.log(project.freelancerStepConfirmed);
+  console.log(project)
+
   return (
     <div className="mx-20 my-10 flex items-center flex-col">
       {showAlert && <AlertBox title="단계 완료가 요청되었습니다." />}
@@ -190,9 +194,27 @@ const ProjectDetail = () => {
             </li>
           ))}
         </ul>
-        <div className="text-end mt-10" onClick={handleStep}>
-          <DoneButton width={200} height={30} title={buttonTitle} />
-        </div>
+        {sessionStorage.getItem("userType") === "developer" ? (
+          <>
+            {project.freelancerStepConfirmed ? (
+            <div className="text-end mt-10" onClick={handleStep}>
+              <DoneButton width={200} height={30} title={buttonTitle} />
+            </div>
+            ) : (
+              <div></div>
+          )}
+          </>
+        ) : (
+          <>
+            {project.freelancerStepConfirmed ? (
+              <div></div>
+            ) : (
+              <div className="text-end mt-10" onClick={handleStep}>
+                <DoneButton width={200} height={30} title={buttonTitle} />
+              </div>
+            )}
+          </>
+        )}
       </div>
       <div className="bg-bgGreen border border-mainGreen h-auto rounded-lg p-10 w-[1000px] ">
         <div className="flex justify-between ">

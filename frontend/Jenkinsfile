@@ -12,38 +12,17 @@ pipeline {
 
         // Docker Hub 설정
         DOCKER_HUB_CREDENTIALS_ID = 'stackup_docker'
-        DOCKER_REGISTRY = 'docker.io'
         IMAGE_TAG = "${env.BUILD_NUMBER}" // 빌드 번호를 이미지 태그로 사용
-
-        // Kubernetes 설정
-        K8S_NAMESPACE = 'default'
 
         // Argo CD 설정
         ARGOCD_SERVER = 'http://34.64.46.226:30081'
         ARGOCD_CREDENTIALS_ID = 'stackup_argo'
-
-        // 추가한 환경변수들 (Jenkins Credentials 사용 권장)
-        AWS_ACCESS_KEY_ID = credentials('aws_access_key_id')
-        AWS_SECRET_ACCESS_KEY = credentials('aws_secret_access_key')
-        DB_PASSWORD = credentials('db_password')
-        DB_URL = 'jdbc:mysql://34.22.93.211:3306/stackup'
-        DB_USERNAME = 'root'
-        ELASTIC_URL = 'http://34.47.84.173:9200/'
-        GITHUB_ID = 'Iv23li51nY1w8lyOBlai'
-        GITHUB_SECRET = credentials('github_secret')
-        PUBLIC_DATA_PORTAL_API_KEY = credentials('public_data_portal_api_key')
-        PUBLIC_DATA_PORTAL_API_URL = 'https://api.odcloud.kr/api/nts-businessman/v1/status'
-        REDIS_IP = '34.64.42.43'
-        REDIS_PASSWORD = credentials('redis_password')
-        S3_BUCKET = 'worqbucket'
-        SECRET = credentials('secret')
-        SECRET_ACCOUNT_KEY = credentials('secret_account_key')
     }
 
     stages {
         stage('Checkout Code') {
             steps {
-                // Jenkinsfile이 frontend 폴더 내에 있으므로 현재 디렉터리에서 소스 코드 체크아웃
+                // Git 리포지토리에서 소스 코드 체크아웃
                 git branch: 'dev/fe', url: "${GIT_REPO}", credentialsId: "${GIT_CREDENTIALS_ID}"
             }
         }
@@ -73,7 +52,16 @@ pipeline {
         stage('Build and Push Docker Image') {
             steps {
                 script {
-                    buildAndPushDockerImage('frontend', "choho97/stackup-frontend:${IMAGE_TAG}")
+                    withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        // Docker Hub에 로그인
+                        sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
+
+                        echo "Building Docker image: choho97/stackup-frontend:${IMAGE_TAG}"
+                        // Docker 이미지 빌드
+                        sh "docker build -t choho97/stackup-frontend:${IMAGE_TAG} -f Dockerfile ."
+                        // Docker 이미지 푸시
+                        sh "docker push choho97/stackup-frontend:${IMAGE_TAG}"
+                    }
                 }
             }
         }
@@ -81,7 +69,35 @@ pipeline {
         stage('Update Kubernetes Manifests') {
             steps {
                 script {
-                    updateKubernetesManifests('frontend', "choho97/stackup-frontend:${IMAGE_TAG}")
+                    withCredentials([usernamePassword(credentialsId: "${GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+                        // GitHub 매니페스트 리포지토리 클론
+                        sh """
+                            git clone -b main https://${GIT_USER}:${GIT_PASS}@github.com/S-Choi-1997/stackupM.git
+                            cd stackupM/Spring-frontend
+                        """
+
+                        // 현재 디렉터리의 파일 목록 출력 (디버깅용)
+                        sh 'echo "Listing files in Spring-frontend directory:"'
+                        sh 'ls -la'
+
+                        // deployment.yaml 파일의 이미지 태그 업데이트
+                        sh "sed -i 's|image: choho97/stackup-frontend:.*|image: choho97/stackup-frontend:${IMAGE_TAG}|' deployment.yaml"
+
+                        // service.yaml 파일의 이미지 태그 업데이트 (필요 시)
+                        // 만약 Service에 이미지 태그가 명시되어 있지 않다면 이 단계는 생략 가능합니다.
+                        // sh "sed -i 's|image: choho97/stackup-frontend:.*|image: choho97/stackup-frontend:${IMAGE_TAG}|' service.yaml"
+
+                        // Git 설정
+                        sh """
+                            git config user.email "jenkins@example.com"
+                            git config user.name "jenkins"
+                            git add deployment.yaml
+                            git commit -m "Update image to choho97/stackup-frontend:${IMAGE_TAG}" || echo "No changes to commit"
+                        """
+
+                        // 변경 사항 GitHub에 푸시
+                        sh "git push https://${GIT_USER}:${GIT_PASS}@github.com/S-Choi-1997/stackupM.git main"
+                    }
                 }
             }
         }
@@ -89,7 +105,9 @@ pipeline {
         stage('Deploy via ArgoCD') {
             steps {
                 script {
-                    syncArgoCD('frontend')
+                    // Argo CD CLI를 사용하여 배포를 동기화하지 않습니다.
+                    // Argo CD가 GitHub 매니페스트를 자동으로 감지하고 동기화하도록 설정되어 있다고 가정합니다.
+                    echo "Argo CD가 GitHub 매니페스트의 변경 사항을 자동으로 감지하여 배포를 동기화합니다."
                 }
             }
         }
@@ -102,71 +120,5 @@ pipeline {
         failure {
             echo 'Build or deployment process failed.'
         }
-    }
-}
-
-// Docker 이미지 빌드 및 푸시 함수 정의
-def buildAndPushDockerImage(project, imageName) {
-    withCredentials([usernamePassword(credentialsId: "${DOCKER_HUB_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-        // Docker Hub에 로그인
-        sh "echo ${DOCKER_PASS} | docker login -u ${DOCKER_USER} --password-stdin"
-
-        echo "Building and pushing Docker image: ${imageName}"
-
-        // Docker 이미지 빌드 및 푸시 (이중 인용부호 사용)
-        sh "docker build -t ${imageName} -f Dockerfile ."
-        sh "docker push ${imageName}"
-    }
-}
-
-// Kubernetes 매니페스트 업데이트 함수 정의
-def updateKubernetesManifests(project, imageName) {
-    withCredentials([usernamePassword(credentialsId: "${GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
-        // 고유한 디렉터리에 GitHub 매니페스트 리포지토리 클론
-        dir("manifests-${project}-${env.BUILD_NUMBER}") {
-            git branch: 'main', url: "${GITHUB_REPO}", credentialsId: "${GITHUB_CREDENTIALS_ID}"
-
-            // 디렉터리 내용 출력 (디버깅용)
-            sh "echo \"Listing files in manifests-${project}-${env.BUILD_NUMBER} after checkout:\""
-            sh 'ls -la'
-
-            // 프로젝트별 매니페스트 디렉터리로 이동 (대소문자 정확히 매칭)
-            dir("Spring-${project}") {
-                // 디렉터리 내용 출력 (디버깅용)
-                sh "echo \"Listing files in Spring-${project}:\""
-                sh 'ls -la'
-
-                // deployment.yaml 파일 존재 여부 확인
-                sh 'test -f deployment.yaml || (echo "deployment.yaml not found" && exit 1)'
-
-                // 이미지 태그 업데이트
-                sh """
-                    sed -i 's|image: choho97/stackup-${project}:.*|image: choho97/stackup-${project}:${IMAGE_TAG}|' deployment.yaml
-                """
-
-                // 변경 사항 커밋 및 푸시 (변경 사항이 없을 경우 빌드 실패 방지)
-                sh """
-                    git config user.email "jenkins@example.com"
-                    git config user.name "jenkins"
-                    git add deployment.yaml kustomization.yaml service.yaml
-                    git commit -m "Update image to choho97/stackup-${project}:${IMAGE_TAG}" || echo "No changes to commit"
-                """
-
-                // GitHub에 푸시 - 자격 증명 사용
-                sh "git push https://$GIT_USER:$GIT_PASS@github.com/S-Choi-1997/stackupM.git main"
-            }
-        }
-    }
-}
-
-// ArgoCD 동기화 함수 정의
-def syncArgoCD(project) {
-    withCredentials([usernamePassword(credentialsId: "${ARGOCD_CREDENTIALS_ID}", usernameVariable: 'ARGOCD_USER', passwordVariable: 'ARGOCD_PASS')]) {
-        // ArgoCD CLI를 이용하여 배포 동기화
-        // Assumption: ArgoCD CLI가 현재 작업 디렉터리에 존재
-        sh """
-            ./argocd login ${ARGOCD_SERVER} --username ${ARGOCD_USER} --password ${ARGOCD_PASS} --insecure
-            ./argocd app sync ${project}
-        """
     }
 }

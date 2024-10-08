@@ -15,9 +15,10 @@ const Account = () => {
       const data = await getAccount();
 
       if (data.length === 0) {
-        setIsAccount(false)
+        setIsAccount(false);
+        
       } else {
-        setIsAccount(true)
+        setIsAccount(true);
         setAccountList(data);
 
         const main = await getMainAccount();

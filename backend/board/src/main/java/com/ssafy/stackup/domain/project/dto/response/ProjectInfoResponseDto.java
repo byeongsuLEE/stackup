@@ -20,6 +20,7 @@ import java.util.List;
 @Builder
 @Getter
 public class ProjectInfoResponseDto {
+
     private Long projectId;
     private Long freelancerProjectId;
     private ProjectStatus status;
@@ -33,6 +34,8 @@ public class ProjectInfoResponseDto {
     private List<String> languages;
     private String certificateUrl;
     private Long recruits;  //모집인원
+    private boolean isClientContractSigned;
+    private boolean isFreelancerContractSigned;
 
     private Boolean isCharged;
     private Long applicants;

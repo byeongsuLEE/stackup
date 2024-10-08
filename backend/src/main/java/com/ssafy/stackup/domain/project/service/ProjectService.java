@@ -29,4 +29,6 @@ public interface ProjectService {
     void contractSubmit(ProjectContractInfoRequestDto projectContractInfoRequestDto);
 
     ContractInfoResponseDto getContractInfo(Long freelancerProjectId, Long id);
+
+    ProjectStepCheckResponseDto getProjectStepCheck(Long projectId, User user);
 }

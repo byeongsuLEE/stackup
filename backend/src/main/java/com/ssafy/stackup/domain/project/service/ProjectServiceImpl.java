@@ -345,6 +345,21 @@ public class ProjectServiceImpl implements ProjectService {
         return contractInfoResponseDto;
     }
 
+    @Override
+    public ProjectStepCheckResponseDto getProjectStepCheck(Long projectId, User user) {
+
+
+        Project project = projectRepository.findById(projectId)
+                .orElseThrow(()-> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
+
+        return ProjectStepCheckResponseDto.builder()
+                .currentStep(project.getStep())
+                .isClientConfirmed(project.isClientStepConfirmed())
+                .isFreelancerConfirmed(project.isFreelancerStepConfirmed())
+                .build();
+
+    }
+
 
     /**
      *

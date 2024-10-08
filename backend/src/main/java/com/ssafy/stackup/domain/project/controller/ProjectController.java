@@ -132,7 +132,15 @@ public class ProjectController {
     }
 
 
-
+    @GetMapping("/{projectId}/step/check")
+    public ResponseEntity<ApiResponse<ProjectStepCheckResponseDto>> getProjectStepCheck(@PathVariable Long projectId ,@AuthUser User user){
+        ProjectStepCheckResponseDto projectStepCheckResponseDto = projectService.getProjectStepCheck(projectId, user);
+        String message = "프로젝트 확인이 완료 되었습니다.";
+        if(projectStepCheckResponseDto.isChangeProjectStep()){
+            message = "프로젝트 확인 완료 및 프로젝트 단계가 변경되었습니다.";
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(projectStepCheckResponseDto,message));
+    }
 
 
 

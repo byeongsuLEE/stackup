@@ -16,4 +16,6 @@ public class ProjectStepCheckResponseDto {
 
     ProjectStep currentStep;
     boolean isChangeProjectStep;
+    boolean isClientConfirmed;
+    boolean isFreelancerConfirmed;
 }

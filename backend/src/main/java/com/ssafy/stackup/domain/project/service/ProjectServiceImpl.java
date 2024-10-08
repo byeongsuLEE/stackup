@@ -417,10 +417,15 @@ public class ProjectServiceImpl implements ProjectService {
                     .filter(project -> project.getStatus().equals(ProjectStatus.valueOf(projectType.toUpperCase())))
                     .collect(Collectors.toList());
 
+            boolean isMyProjectConfirmed = false;
 
             for(Project project : clientProjectList) {
                 if(!project.getStatus().name().equals(projectType)) continue;
+                isMyProjectConfirmed = project.isClientStepConfirmed();
                 ProjectInfoResponseDto projectInfoResponseDto= ProjectInfoResponseDto.builder()
+                        .isMyProjectStepConfirmed(isMyProjectConfirmed)
+                        .clientStepConfirmed(isMyProjectConfirmed)
+                        .freelancerStepConfirmed(project.isFreelancerStepConfirmed())
                         .projectId(project.getId())
                         .status(project.getStatus())
                         .step(project.getStep())
@@ -469,6 +474,8 @@ public class ProjectServiceImpl implements ProjectService {
             Set<FreelancerProject> freelancerProjects = freelancer.getFreelancerProjects();
 
             projects = UserUtil.getProjects(freelancerProjects);
+
+            boolean isMyProjectConfirmed = false;
             for(Project project : projects) {
                 if(!project.getStatus().name().equals(projectType)) continue;
 
@@ -481,8 +488,11 @@ public class ProjectServiceImpl implements ProjectService {
                         .orElse(null);
 
 
-
+                isMyProjectConfirmed    = project.isFreelancerStepConfirmed();
                 ProjectInfoResponseDto projectInfoResponseDto= ProjectInfoResponseDto.builder()
+                        .isMyProjectStepConfirmed(isMyProjectConfirmed)
+                        .clientStepConfirmed(project.isClientStepConfirmed())
+                        .freelancerStepConfirmed(isMyProjectConfirmed)
                         .freelancerProjectId(freelancerProjectId)
                         .projectId(project.getId())
                         .status(project.getStatus())

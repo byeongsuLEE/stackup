@@ -23,6 +23,8 @@ import java.util.List;
 public class ProjectInfoResponseDto {
     private Long projectId;
     private Long freelancerProjectId;
+    private boolean isMyContractSigned;
+    private boolean isMyProjectStepConfirmed;  // freelancer 일때만 확인가능
     private ProjectStatus status;
     private ProjectStep step;
     private String title;

@@ -30,6 +30,8 @@ import Transfer from "./pages/TransferPage";
 import WorkDetail from "./pages/WorkDetailPage";
 import Work from "./pages/WorkPage";
 import InstallWallet from './pages/InstallWalletPage';
+import ChatRoom from "./chattest/ChatRoom";
+import SimplePopup from "./components/common/ChatPop";
 
 function App() {
   const queryClient = new QueryClient();
@@ -69,9 +71,13 @@ function App() {
                 <Route path="/transfer" element={<Transfer />} />
                 <Route path="/callback" element={<Callback />} />
                 <Route path="/install-metamask" element={<InstallWallet />} />
+                <Route path="/chat/:chatRoomId" element={<ChatRoom />} />
               </Routes>
             </main>
             <Footer />
+            <div className="fixed right-7 bottom-3">
+            <SimplePopup />
+          </div>
           </div>
         </BrowserRouter>
       </QueryClientProvider>

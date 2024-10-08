@@ -61,27 +61,32 @@ pipeline {
         }
 
         stage('Update Kubernetes Manifests') {
-            steps {
-                script {
+        steps {
+            script {
+                // GitHub 리포지토리를 체크아웃하기 위해 자격 증명 사용
+                withCredentials([usernamePassword(credentialsId: 'stackup_github', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
                     // 매니페스트 파일이 있는 GitHub 리포지토리를 체크아웃하여 업데이트
                     git branch: 'main', url: "${GITHUB_REPO}", credentialsId: "${GITHUB_CREDENTIALS_ID}"
-
+                    
                     // 매니페스트 파일에서 Docker 이미지 태그 업데이트
-
-                    dir('flask') {  // 매니페스트 파일이 위치한 디렉터리 설정
+                    dir('flask') {
                         sh """
-                        sed -i 's|image: docker.io/choho97/flask-app:.*|image: ${DOCKER_REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}|' deployment.yaml
+                        sed -i 's|image: docker.io/choho97/flask-app:.*|image: docker.io/choho97/stackup-flask:${IMAGE_TAG}|' deployment.yaml
                         """
                     }
-
+                    
+                    // Git 커밋 및 푸시
                     sh """
                         git add flask/deployment.yaml
-                        git commit -m 'Update image to ${IMAGE_NAME}:${IMAGE_TAG}' || echo "No changes to commit"
+                        git commit -m 'Update image to choho97/stackup-flask:${IMAGE_TAG}' || echo "No changes to commit"
                         git push https://$GIT_USER:$GIT_PASS@github.com/S-Choi-1997/stackupM.git main
                     """
                 }
             }
         }
+    }
+
+
 
 
         stage('Deploy to Kubernetes with Argo CD') {

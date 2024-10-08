@@ -121,13 +121,10 @@ const ProjectDetail = () => {
   const endDate = format(endDateObject, "yyyy-MM-dd");
   const remainDay = differenceInDays(new Date(endDate), new Date());
   const period = `${startDate} ~ ${endDate}`;
+  const boardId = project.boardId;
 
-  const handleNavigateToMitermForm = () => {
-    navigate(`/evaluate/miterm/${projectId}`, { state: { userId } });
-  };
-
-  const handleNavigateToFinalForm = () => {
-    navigate(`/evaluate/final/${projectId}`, { state: { userId } });
+  const handleNavigateToEvaluate = () => {
+    navigate(`/evaluate/check/${projectId}`, { state: { stepResponse, boardId } });
   };
 
   const handleStep = async () => {
@@ -138,9 +135,9 @@ const ProjectDetail = () => {
         handleConfirmStep();
 
         if (stepResponse === "DEVELOPMENT") {
-          handleNavigateToMitermForm();
+          handleNavigateToEvaluate();
         } else if (stepResponse === "DEPLOYMENT") {
-          handleNavigateToFinalForm();
+          handleNavigateToEvaluate();
         }
       } else {
         console.warn("stepResponse 값이 없습니다.");
@@ -184,12 +181,18 @@ const ProjectDetail = () => {
         </ul>
         {sessionStorage.getItem("userType") === "client" ? (
           <>
-            {project.freelancerStepConfirmed ? (
+            {project.freelancerStepConfirmed && stepResponse != "DEVELOPMENT"  ? (
               <div className="text-end mt-10" onClick={handleStep}>
                 <DoneButton width={200} height={30} title={buttonTitle} />
               </div>
             ) : (
-              <div></div>
+              <div>
+                {project.freelancerStepConfirmed && stepResponse == "DEVELOPMENT" && (
+                  <div className="text-end mt-10" onClick={handleNavigateToEvaluate}>
+                    <DoneButton width={200} height={30} title="중간 평가 관리" />
+                  </div>
+                )}
+              </div>
             )}
           </>
         ) : (

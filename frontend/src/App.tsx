@@ -30,6 +30,7 @@ import Transfer from "./pages/TransferPage";
 import WorkDetail from "./pages/WorkDetailPage";
 import Work from "./pages/WorkPage";
 import InstallWallet from './pages/InstallWalletPage';
+import EvaluateCheck from "./pages/EvaluateCheckPage";
 
 function App() {
   const queryClient = new QueryClient();
@@ -66,9 +67,12 @@ function App() {
                 <Route path="/signup/freelancer/skill" element={<FreelancerSkill />} />
                 <Route path="/evaluate/miterm/:projectId" element={<MitermEvaluate />} />
                 <Route path="/evaluate/final/:projectId" element={<FinalEvaluate />} />
-                <Route path="/transfer" element={<Transfer />} />
+                <Route path="/transfer/:projectId" element={<Transfer />} />
                 <Route path="/callback" element={<Callback />} />
                 <Route path="/install-metamask" element={<InstallWallet />} />
+                <Route path="/evaluate/check/:projectId" element={<EvaluateCheck />} />
+
+
               </Routes>
             </main>
             <Footer />

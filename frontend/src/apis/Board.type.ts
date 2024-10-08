@@ -140,6 +140,7 @@ export interface recommend {
     languages: Array<{ language: Language }>;   // languages 타입 수정
     level: string;
     boardId: number;
+    
 }
 
 
@@ -155,4 +156,21 @@ export interface projectApplicantProps {
     totalScore: number;
     isChecked: boolean;
     onCheckboxChange: (id: number) => void;
+    middleClientEvaluated: boolean;
+    finalClientEvaluated: boolean;
+
 }
+
+// export interface projectApplicantProps {
+//     clientSigned: boolean;
+//     email: string;
+//     freelancerProjectId: number;
+//     freelancerSigned: boolean;
+//     id: number;
+//     isPassed: boolean;
+//     name: string;
+//     phone: string;
+//     portfolioUrl: string;
+//     reportedCount: number;
+//     totalScore: number;
+// }

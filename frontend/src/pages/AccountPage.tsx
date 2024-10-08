@@ -13,13 +13,13 @@ const Account = () => {
 
   useEffect(() => {
     const update = async () => {
-      const main = await getMainAccount();
-      setMainAccount(main);
-
       await accountUpdate();
 
       const data = await getAccount();
       setAccountList(data);
+
+      // const main = await getMainAccount();
+      // setMainAccount(main);
     }
     
     update();

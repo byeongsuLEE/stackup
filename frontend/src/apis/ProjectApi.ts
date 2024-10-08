@@ -48,7 +48,7 @@ export const getProject = async (type: string): Promise<project[]> => {
 }
 
 // 프로젝트 시작하기
-export const startProject = async (checkedList: number[], boardId: string): Promise<void> => {
+export const startProject = async (checkedList: number[], boardId: string): Promise<any> => {
   const response = await axios({
     method: 'post',
     url: `${BASE_URL}/start`,
@@ -60,8 +60,8 @@ export const startProject = async (checkedList: number[], boardId: string): Prom
       "boardId": boardId
     }
   })
-
-  console.log(response.data)
+  
+  return response.data.data
 }
 
 

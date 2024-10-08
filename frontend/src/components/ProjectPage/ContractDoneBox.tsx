@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
-import { project } from "../../apis/Board.type";
-import { projectStep } from "../../apis/ProjectApi";
 import { useNavigate } from "react-router-dom";
+import { project } from "../../apis/Board.type";
 
-interface Step {
+interface StepProps {
   name: string;
   completed: boolean;
 }
 
 
-const ContractDoneBox = ({ title, period, projectId }: project) => {
-  const steps: Step[] = [
+const ContractDoneBox = ({ title, period, projectId, step }: project) => {
+  const steps: StepProps[] = [
     { name: '기획 및 설계', completed: false },
     { name: '퍼블리셔 및 디자인', completed: false },
     { name: '개발', completed: false },
@@ -41,30 +40,21 @@ const ContractDoneBox = ({ title, period, projectId }: project) => {
   const [stepResponse, setStepResponse] = useState<string | null>(null);
 
   useEffect(() => {
-    // 프로젝트 단계 확인
-    const fetchStepResponse = async () => {
-      try {
-        const response = await projectStep(projectId); // 비동기 처리
-        setStepResponse(response.data.currentStep);  // 상태 업데이트
-      } catch (error) {
-        console.error("Failed to fetch project step", error);
-      }
-    };
-
-    fetchStepResponse();  // 단계 값 불러오기
-  }, []);  // project.worktype 대신 projectId로 종속성 설정
+    setStepResponse(step)
+  }, []);
+  
   updateSteps(stepResponse as Status);
 
   const navigate = useNavigate();
-  const toDetail = () => {  
+  const toDetail = () => {
     navigate(`/project/detail/${projectId}`);
-  } 
+  }
 
   return (
     <>
       <div
-      onClick={toDetail} 
-      className="bg-bgGreen border border-mainGreen rounded-xl w-[1000px] mb-5 pt-10 px-5 h-[200px] flex flex-col">
+        onClick={toDetail}
+        className="bg-bgGreen border border-mainGreen rounded-xl w-[1000px] mb-5 pt-10 px-5 h-[200px] flex flex-col">
         <ul className="steps">
           {steps.map((step, index) => (
             <li

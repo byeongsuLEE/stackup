@@ -76,19 +76,11 @@ const ProjectDetail = () => {
 
   useEffect(() => {
     if (numericProjectId !== undefined) {
-      const fetchStepResponse = async () => {
-        try {
-          const response = await projectStep(numericProjectId);
-          setStepResponse(response.data.currentStep);
-        } catch (error) {
-          console.error("Failed to fetch project step", error);
-        }
-      };
-
       const fetchProjectDetail = async () => {
         try {
           const data = await contractProjectDetail(numericProjectId);
           setProject(data);
+          setStepResponse(data.step)
           setWorkType(data.worktype ? "재택" : "통근");
           setLoading(false); // 추가: 데이터 로딩 완료 후 로딩 상태 해제
         } catch (error) {
@@ -96,9 +88,7 @@ const ProjectDetail = () => {
           setLoading(false); // 실패 시에도 로딩 상태 해제
         }
       };
-
       fetchProjectDetail();
-      fetchStepResponse();
     } else {
       console.error("numericProjectId가 정의되지 않았습니다.");
     }
@@ -176,9 +166,7 @@ const ProjectDetail = () => {
     return <div>로딩 중...</div>; // 로딩 중일 때 표시할 내용
   }
 
-  console.log(project.clientStepConfirmed);
-  console.log(project.freelancerStepConfirmed);
-  console.log(project)
+  // console.log(steps)
 
   return (
     <div className="mx-20 my-10 flex items-center flex-col">
@@ -197,12 +185,12 @@ const ProjectDetail = () => {
         {sessionStorage.getItem("userType") === "developer" ? (
           <>
             {project.freelancerStepConfirmed ? (
-            <div className="text-end mt-10" onClick={handleStep}>
-              <DoneButton width={200} height={30} title={buttonTitle} />
-            </div>
+              <div className="text-end mt-10" onClick={handleStep}>
+                <DoneButton width={200} height={30} title={buttonTitle} />
+              </div>
             ) : (
               <div></div>
-          )}
+            )}
           </>
         ) : (
           <>

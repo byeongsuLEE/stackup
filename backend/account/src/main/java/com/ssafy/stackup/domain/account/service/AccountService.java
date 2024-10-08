@@ -263,6 +263,9 @@ public class AccountService {
     }
 
     public String generateAccountKey(String email) {
+
+
+
         String url = "https://finopenapi.ssafy.io/ssafy/api/v1/member/";
         // 요청 헤더 설정
         HttpHeaders headers = new HttpHeaders();

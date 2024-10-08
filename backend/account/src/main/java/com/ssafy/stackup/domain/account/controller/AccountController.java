@@ -13,12 +13,14 @@ import com.ssafy.stackup.domain.account.service.TransferService;
 import com.ssafy.stackup.domain.account.service.WonAuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -90,11 +92,20 @@ public class AccountController {
     }
 
     @GetMapping("/update")
-    public void updateAccount(HttpServletRequest request){
+    public  ResponseEntity<List<Object>> updateAccount(HttpServletRequest request){
         User user = getUserDetailInfo(request);
-        accountService.fetchAndStoreAccountData(user,request);
-    }
 
+        try {
+            accountService.fetchAndStoreAccountData(user,request);
+            // 성공적인 경우에는 필요한 데이터를 리턴하거나 OK 상태를 리턴
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            // 에러 발생 시 로그를 남기고 빈 배열 리턴
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ArrayList<>());
+        }
+
+    }
     @GetMapping("/{accountId}")
     public AccountResponse getAccount(@PathVariable Long accountId) throws Exception {
         Account account = accountService.getAccount(accountId);
@@ -202,10 +213,18 @@ public class AccountController {
 
 
     @GetMapping("/main")
-    public ResponseEntity<String> getMainAccount(HttpServletRequest request) throws Exception {
+    public ResponseEntity<Object> getMainAccount(HttpServletRequest request) throws Exception {
         User user = getUserDetailInfo(request);
-        Long userId = user.getId();
+
+        // user.getMainAccount() 값이 null 또는 빈 문자열인지 확인
+        if (user.getMainAccount() == null || user.getMainAccount().isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("메인 계좌가 없습니다");
+            return ResponseEntity.ok(new String[]{});
+
+        }
+        // 계좌가 존재하는 경우 복호화
         String account = EncryptionUtil.decrypt(user.getMainAccount());
+
         return ResponseEntity.ok(account);
     }
 

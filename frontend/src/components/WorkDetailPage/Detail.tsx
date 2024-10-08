@@ -132,13 +132,25 @@ const Detail = ({ project, clientId }: DetailProps) => {
             </>
           ) : sessionClientId == clientId && (
             <div className="flex">
-              <div onClick={toCandidate}>
-                <DoneButton width={100} height={25} title="지원자 관리" />
-              </div>
-              <Payment boardId={boardId} />
-              <button onClick={deleteProject} className="bg-subGreen2 text-bgGreen font-bold text-sm px-3 rounded-lg ml-2">
-                삭제하기
-              </button>
+              {project.startProject ? (
+                <>
+                <Payment boardId={boardId} />
+                <button onClick={deleteProject} className="bg-subGreen2 text-bgGreen font-bold text-sm px-3 rounded-lg ml-2">
+                  삭제하기
+                </button>
+              </>
+              ) : (
+                <>
+                  <div onClick={toCandidate}>
+                    <DoneButton width={100} height={25} title="지원자 관리" />
+                  </div>
+                  <Payment boardId={boardId} />
+                  <button onClick={deleteProject} className="bg-subGreen2 text-bgGreen font-bold text-sm px-3 rounded-lg ml-2">
+                    삭제하기
+                  </button>
+                </>
+              )}
+              
             </div>
           )}
 

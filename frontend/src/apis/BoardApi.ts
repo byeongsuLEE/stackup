@@ -18,8 +18,6 @@ export const allProject = async (page: number, size: number): Promise<{ data: pr
                 size
             }
         });
-
-        console.log(response.data);
         
         return {
             data: response.data.content,
@@ -140,7 +138,6 @@ export const recommendProject = async (): Promise<recommend[]> => {
                 Authorization: `Bearer ${sessionStorage.getItem("token")}`
             }
         })
-        console.log(response.data)
         return response.data
 
     } catch (error) {

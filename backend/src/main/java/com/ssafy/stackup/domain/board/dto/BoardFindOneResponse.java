@@ -38,10 +38,16 @@ public class BoardFindOneResponse {
     private Date upload;
     private List<BoardApplicantRequest> applicantList;
     private ClientResponseDto client;
+    private boolean isStartProject;
 
     public BoardFindOneResponse() {}
 
     public BoardFindOneResponse(Board board) {
+        if(board.getProject()!=null){
+            this.isStartProject = true;
+        }else {
+            this.isStartProject = false;
+        }
         this.boardId = board.getBoardId();
         this.title = board.getTitle();
         this.description = board.getDescription();

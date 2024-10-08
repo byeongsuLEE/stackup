@@ -25,7 +25,7 @@ const Contract = () => {
       if (sign) {
         await signature(sign.signedMessage, freelancerProjectId);
 
-        navigate(`/work/detail/${boardId}/${projectId}`);
+        navigate(`/work/detail/select/${boardId}/${projectId}`);
       }
     }
   };

@@ -26,7 +26,6 @@ const Detail = ({ project, clientId }: DetailProps) => {
   const [loading, setLoading] = useState(true); // 로딩 상태
 
   const boardId = project.boardId;
-  console.log(project)
   const navigate = useNavigate();
 
   // 프로젝트 삭제
@@ -111,7 +110,6 @@ const Detail = ({ project, clientId }: DetailProps) => {
     (applicant) => applicant.id.toString() === sessionFreelancerId
   );
   
-
   return (
     <>
       <div className="bg-bgGreen border border-mainGreen h-auto rounded-lg p-10 w-[1000px]] my-20 mx-10">

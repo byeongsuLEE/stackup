@@ -3,7 +3,6 @@ import DoneButton from "../common/DoneButton";
 import { project } from "../../apis/Board.type";
 
 const SignListBox = (sign: project) => {
-  console.log(sign.clientContractSigned)
   const freelancerProjectId = sign.freelancerProjectId;
   
   return (

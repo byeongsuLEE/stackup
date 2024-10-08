@@ -20,6 +20,7 @@ interface DetailProps {
 }
 
 const Detail = ({ project, clientId }: DetailProps) => {
+  console.log(project.client.totalScore)
   const [sessionClientId, setSessionClientId] = useState<string | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isAnomaly, setIsAnomaly] = useState<boolean | undefined>(undefined); // is_anomaly 상태
@@ -27,6 +28,7 @@ const Detail = ({ project, clientId }: DetailProps) => {
 
   const boardId = project.boardId;
   const navigate = useNavigate();
+  const totalScore =  Math.round(Number(project.client.totalScore) * 10) / 10;
 
   // 프로젝트 삭제
   const deleteProject = async () => {
@@ -115,7 +117,7 @@ const Detail = ({ project, clientId }: DetailProps) => {
       <div className="bg-bgGreen border border-mainGreen h-auto rounded-lg p-10 w-[1000px]] my-20 mx-10">
         <div className="flex flex-col">
           <span className="text-lg font-bold">{project?.title} _ {classification}</span>
-          <span className="text-subTxt text-sm">{project?.client.businessName} _ 평점 {project?.client.totalScore}점</span>
+          <span className="text-subTxt text-sm">{project?.client.businessName} _ 평점 {totalScore}점</span>
         </div>
         <div className="flex justify-end">
           {window.sessionStorage.getItem("userType") === "freelancer" ? (

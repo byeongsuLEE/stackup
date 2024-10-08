@@ -21,6 +21,14 @@ public class BoardApplicantRequest {
     private Long freelancerProjectId;
     private boolean freelancerSigned;
     private boolean clientSigned;
+
+    private boolean isMiddleClientEvaluated;//  클라리언트가 중간평가를 했는지?
+    private boolean isMiddleFreelancerEvaluated;
+    private boolean isFinalClientEvaluated;//
+    private boolean isFinalFreelancerEvaluated;
+
+
+
     public BoardApplicantRequest(BoardApplicant boardApplicant) {
         Freelancer freelancer = boardApplicant.getFreelancer();
         this.id = freelancer.getId();
@@ -33,6 +41,10 @@ public class BoardApplicantRequest {
         this.isPassed = boardApplicant.getIsPassed(); // BoardApplicant에서 isPassed 가져오기
         this.portfolioUrl = freelancer.getPortfolioUrl();
         this.freelancerProjectId = boardApplicant.getFreelancerProjectId();
+        this.isMiddleClientEvaluated = boardApplicant.isMiddleClientEvaluated();
+        this.isMiddleFreelancerEvaluated= boardApplicant.isMiddleFreelancerEvaluated();
+        this.isFinalClientEvaluated = boardApplicant.isFinalClientEvaluated();
+        this.isFinalFreelancerEvaluated = boardApplicant.isFinalFreelancerEvaluated();
 
     }
 

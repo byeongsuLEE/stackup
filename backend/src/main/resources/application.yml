@@ -58,7 +58,7 @@ spring:
   kafka:
     bootstrap-servers: 34.64.190.133:9092
     consumer:
-      group-id: my-group
+      group-id: analysis1
       auto-offset-reset: earliest
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer

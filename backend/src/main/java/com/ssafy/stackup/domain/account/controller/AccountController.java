@@ -12,9 +12,11 @@ import com.ssafy.stackup.domain.user.entity.User;
 import com.ssafy.stackup.domain.user.repository.UserRepository;
 import com.ssafy.stackup.domain.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -82,11 +84,25 @@ public class AccountController {
         accountService.generateAccountKey(email);
     }
 
+//    @GetMapping("/update")
+//    public void updateAccount(@AuthUser User user){
+//        Long userId = user.getId();
+//        System.out.println(userId);
+//        accountService.fetchAndStoreAccountData(userId);
+//    }
     @GetMapping("/update")
-    public void updateAccount(@AuthUser User user){
+    public ResponseEntity<List<Object>> updateAccount(@AuthUser User user) {
         Long userId = user.getId();
-        System.out.println(userId);
-        accountService.fetchAndStoreAccountData(userId);
+        try {
+            System.out.println(userId);
+            accountService.fetchAndStoreAccountData(userId);
+            // 성공적인 경우에는 필요한 데이터를 리턴하거나 OK 상태를 리턴
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            // 에러 발생 시 로그를 남기고 빈 배열 리턴
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ArrayList<>());
+        }
     }
 
     @GetMapping("/{accountId}")
@@ -206,10 +222,25 @@ public class AccountController {
         return ResponseEntity.ok("메인 계좌 설정 성공");
     }
 
+//    @GetMapping("/main")
+//    public ResponseEntity<String> getMainAccount(@AuthUser User user) throws Exception {
+//        Long userId = user.getId();
+//        String account = EncryptionUtil.decrypt(user.getMainAccount());
+//        return ResponseEntity.ok(account);
+//    }
     @GetMapping("/main")
-    public ResponseEntity<String> getMainAccount(@AuthUser User user) throws Exception {
+    public ResponseEntity<Object> getMainAccount(@AuthUser User user) throws Exception {
         Long userId = user.getId();
+
+        // user.getMainAccount() 값이 null 또는 빈 문자열인지 확인
+        if (user.getMainAccount() == null || user.getMainAccount().isEmpty()) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("메인 계좌가 없습니다");
+            return ResponseEntity.ok(new String[]{});
+        }
+
+        // 계좌가 존재하는 경우 복호화
         String account = EncryptionUtil.decrypt(user.getMainAccount());
+
         return ResponseEntity.ok(account);
     }
 

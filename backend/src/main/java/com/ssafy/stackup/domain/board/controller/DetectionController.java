@@ -29,7 +29,7 @@ public class DetectionController {
     private final BlockingQueue<String> analysisResultsQueue = new LinkedBlockingQueue<>();
     private final RestTemplate restTemplate = new RestTemplate();
 
-    @KafkaListener(topics = "analysis_results", groupId = "group_id")
+    @KafkaListener(topics = "analysis_results", groupId = "analysis1")
     public void listen(String message) {
         analysisResultsQueue.offer(message);
     }

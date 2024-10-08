@@ -511,6 +511,7 @@ public class ProjectServiceImpl implements ProjectService {
                         .freelancerProjectId(freelancerProjectId)
                         .projectId(project.getId())
                         .status(project.getStatus())
+                        .step(project.getStep())
                         .title(project.getTitle())
                         .startDate(project.getBoard().getStartDate())
                         .period(project.getBoard().getPeriod())

@@ -5,13 +5,16 @@ FROM node:14 AS build
 WORKDIR /app
 
 # Copy package.json and package-lock.json
-COPY package*.json ./
+COPY frontend/package*.json ./  # frontend 폴더에서 패키지 파일 복사
 
 # Install dependencies
 RUN npm install
 
 # Copy the rest of the application code
-COPY . .
+COPY frontend/. .  # frontend 폴더 전체 복사
+
+# Copy blockchain files into the container
+COPY blockchain/NFT/build/contracts/MyNFT.json /app/blockchain/NFT/build/contracts/
 
 # Build the React application
 RUN npm run build

@@ -229,12 +229,13 @@ public class AccountController {
 //        return ResponseEntity.ok(account);
 //    }
     @GetMapping("/main")
-    public ResponseEntity<String> getMainAccount(@AuthUser User user) throws Exception {
+    public ResponseEntity<Object> getMainAccount(@AuthUser User user) throws Exception {
         Long userId = user.getId();
 
         // user.getMainAccount() 값이 null 또는 빈 문자열인지 확인
         if (user.getMainAccount() == null || user.getMainAccount().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("메인 계좌가 없습니다");
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("메인 계좌가 없습니다");
+            return ResponseEntity.ok(new String[]{});
         }
 
         // 계좌가 존재하는 경우 복호화

@@ -1,6 +1,7 @@
 import { accountInfo } from "../../apis/Account.type";
 
 const Account = (account: accountInfo) => {
+
   return (
     <div className="bg-bgGreen border flex flex-col justify-between border-mainGreen w-[300px] h-[200px] my-5 rounded-lg p-5">
       <div className="flex items-center">

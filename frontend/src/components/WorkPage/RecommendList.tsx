@@ -16,7 +16,6 @@ const RecommendList = () => {
 
   const update = async () => {
     const data = await recommendProject();
-    console.log("확인", data)
     setRecommendList(data)
   }
 

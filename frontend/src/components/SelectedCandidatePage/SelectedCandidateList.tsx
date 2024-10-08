@@ -13,7 +13,6 @@ const SelectedCandidateList = () => {
     const update = async () => {
       const data = await selectedCandidate(boardId);
       setSelectList(data)
-      console.log(data)
     }
 
     update();

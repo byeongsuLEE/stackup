@@ -67,31 +67,17 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: "${GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
                         // GitHub 매니페스트 리포지토리 클론
                         sh """
-                            rm -rf stackupM  # 기존 디렉토리 삭제
+                            rm -rf stackupM
                             git clone -b main https://${GIT_USER}:${GIT_PASS}@github.com/S-Choi-1997/stackupM.git
-                            cd stackupM/${MANIFESTS_PATH}
-                            ls -la
-                        """
-
-                        // 현재 디렉터리의 파일 목록 출력 (디버깅용)
-                        sh 'echo "Listing files in Spring-frontend directory:"'
-                        sh 'ls -la'
-
-                        // deployment.yaml 파일의 이미지 태그 업데이트
-                        sh "ls"
-                        sh "dir"
-                        sh "sed -i 's|image: choho97/stackup-frontend:.*|image: choho97/stackup-frontend:${IMAGE_TAG}|' stackupM/deployment.yaml"
-
-                        // Git 설정 및 커밋
-                        sh """
+                            cd stackupM/spring-frontend
+                            ls -la  # 파일 리스트 확인
+                            sed -i 's|image: choho97/stackup-frontend:.*|image: choho97/stackup-frontend:${IMAGE_TAG}|' deployment.yaml
                             git config user.email "jenkins@example.com"
                             git config user.name "jenkins"
                             git add deployment.yaml
                             git commit -m "Update image to choho97/stackup-frontend:${IMAGE_TAG}" || echo "No changes to commit"
+                            git push https://${GIT_USER}:${GIT_PASS}@github.com/S-Choi-1997/stackupM.git main
                         """
-
-                        // 변경 사항 GitHub에 푸시
-                        sh "git push https://${GIT_USER}:${GIT_PASS}@github.com/S-Choi-1997/stackupM.git main"
                     }
                 }
             }

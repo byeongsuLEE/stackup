@@ -1,4 +1,4 @@
-import MetamaskIcon from "../icons/MetaMaskIcon";
+import MetamaskIcon from "../icons/MetamaskIcon";
 
 const InstallWallet = () => {
   return (

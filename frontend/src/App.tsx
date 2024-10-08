@@ -29,6 +29,7 @@ import SignatureDetail from "./pages/SignatureDetailPage";
 import Transfer from "./pages/TransferPage";
 import WorkDetail from "./pages/WorkDetailPage";
 import Work from "./pages/WorkPage";
+import InstallWallet from './pages/InstallWalletPage';
 
 function App() {
   const queryClient = new QueryClient();
@@ -100,6 +101,7 @@ function App() {
                 />
                 <Route path="/transfer" element={<Transfer />} />
                 <Route path="/callback" element={<Callback />} />
+                <Route path="/install-metamask" element={<InstallWallet />} />
               </Routes>
             </main>
             <Footer />

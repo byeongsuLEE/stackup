@@ -2,25 +2,22 @@ import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import { Box, Tab } from "@mui/material";
-import React, { useEffect } from "react";
+import React from "react";
 import RegisteredCareer from "../components/CareerPage/RegisteredCareer";
 import NFTDisplay from "../components/NFTPage/NFTDisplay";
-import NFTMinting from "../components/NFTPage/NFTMinting";
-import { CallTest } from "../hooks/Test";
-import NFTLoading from "./NFTLoadingPage";
 
 const Career = () => {
   const [value, setValue] = React.useState('1');
 
-  
-  
+
+
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
   return (
     <div className='mt-10'>
-     
+
       <Box sx={{ width: '100%', typography: 'body1' }}>
         <TabContext value={value}>
           <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -43,7 +40,7 @@ const Career = () => {
           </div>
         </TabContext>
       </Box>
-      
+
     </div>
   )
 }

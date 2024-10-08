@@ -26,6 +26,8 @@ import com.ssafy.stackup.domain.recommend.repository.BoardElasticsearchRepositor
 import com.ssafy.stackup.domain.recommend.service.RecommendationService;
 import com.ssafy.stackup.domain.user.entity.Client;
 import com.ssafy.stackup.domain.user.entity.Freelancer;
+import com.ssafy.stackup.domain.user.entity.FreelancerProject;
+import com.ssafy.stackup.domain.user.repository.FreelancerProjectRepository;
 import com.ssafy.stackup.domain.user.repository.FreelancerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -68,6 +70,9 @@ public class BoardService {
 
     @Autowired
     private FreelancerRepository freelancerRepository;
+
+    @Autowired
+    private FreelancerProjectRepository freelancerProjectRepository;
 
     @Autowired
     private BoardApplicantRepository boardApplicantRepository;
@@ -284,10 +289,28 @@ public class BoardService {
 
     public List<BoardApplicantRequest> getSelectedApplicantListByBoardId(Long boardId) {
 
-            List<BoardApplicant> applicants = boardApplicantRepository.findByBoard_BoardIdAndIsPassedTrue(boardId);
-            return applicants.stream()
-                    .map(BoardApplicantRequest::new)
-                    .collect(Collectors.toList());
+        List<BoardApplicant> applicants = boardApplicantRepository.findByBoard_BoardIdAndIsPassedTrue(boardId);
 
+        return applicants.stream()
+                .map(applicant -> {
+                    // 프리랜서 프로젝트 정보 가져오기
+                    FreelancerProject freelancerProject = freelancerProjectRepository.findById(applicant.getFreelancerProjectId())
+                            .orElse(null);
+
+                    boolean freelancerSigned = false;
+                    boolean clientSigned = false;
+                    if (freelancerProject != null) {
+                        // 프리랜서 서명 여부 확인
+                        freelancerSigned = freelancerProject.isFreelancerSigned();
+                        clientSigned = freelancerProject.isClientSigned();
+                    }
+
+                    // BoardApplicantRequest에 서명 여부 추가
+                    BoardApplicantRequest dto = new BoardApplicantRequest(applicant);
+                    dto.updateFreelancerSigned(freelancerSigned);
+                    dto.updateClientSinged(clientSigned);
+                    return dto;
+                })
+                .collect(Collectors.toList());
     }
 }

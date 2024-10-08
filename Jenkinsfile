@@ -55,6 +55,8 @@ pipeline {
                             """
                         }
                         sh """
+                            git config user.email "jenkins@company.com"
+                            git config user.name "Jenkins CI"
                             git add flask/deployment.yaml
                             git commit -m 'Update image to choho97/stackup-flask:${IMAGE_TAG}' || echo "No changes to commit"
                             git push https://$GIT_USER:$GIT_PASS@github.com/S-Choi-1997/stackupM.git main

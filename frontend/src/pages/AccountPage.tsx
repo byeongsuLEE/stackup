@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { accountInfo } from "../apis/Account.type";
 import { accountUpdate, getAccount, getMainAccount } from "../apis/AccountsApi";
-import AccountList from "../components/AccountPage/AccountList";
-import PlusIcon from "../icons/PlusIcon";
+import AccountList from "../components/AccountPage/AccountList"; 
 
 const Account = () => {
   const [ isAccount, setIsAccount ] = useState<boolean>(false);
@@ -39,12 +38,6 @@ const Account = () => {
       <div className="bg-subTxt w-auto h-[1px] flex justify-center mx-10 my-5"></div>
       {isAccount ? (
         <div>
-          <div className="flex items-center justify-end mr-20 mb-5">
-            <span className="mr-2">
-              계좌 추가
-            </span>
-            <PlusIcon />
-          </div>
           <div className="">
           <AccountList accountList={ accountList } mainAccount={mainAccount} />
           </div>

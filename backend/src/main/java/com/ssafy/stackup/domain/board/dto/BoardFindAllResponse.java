@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 @Data
 public class BoardFindAllResponse {
     private Long boardId;
+    private boolean isStartProject;
     private String title;
     private String description;
     private String classification;
@@ -38,6 +39,12 @@ public class BoardFindAllResponse {
     public BoardFindAllResponse() {}
 
     public BoardFindAllResponse(Board board) {
+        if(board.getProject()!=null){
+            this.isStartProject = true;
+        }else {
+            this.isStartProject = false;
+        }
+
         this.boardId = board.getBoardId();
         this.title = board.getTitle();
         this.description = board.getDescription();

@@ -53,7 +53,7 @@ pipeline {
                 dir('flask') {
                     sh """
                     cat deployment.yaml
-                    sed -i 's|image: choho97/flask-flask:.*|image: choho97/stackup-flask:${IMAGE_TAG}|' deployment.yaml
+                    sed -i 's|image: choho97/stackup-flask:.*|image: choho97/stackup-flask:${IMAGE_TAG}|' deployment.yaml
                     cat deployment.yaml
                     """
                 }

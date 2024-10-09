@@ -5,11 +5,8 @@ import com.ssafy.stackup.domain.board.entity.Level;
 import com.ssafy.stackup.domain.framework.dto.FrameworkRequest;
 import com.ssafy.stackup.domain.language.dto.LanguageRequest;
 import com.ssafy.stackup.domain.user.dto.response.ClientResponseDto;
-import com.ssafy.stackup.domain.user.entity.Client;
 import lombok.Data;
 
-import java.awt.*;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;

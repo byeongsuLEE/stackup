@@ -20,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +34,28 @@ public class ChatServiceImpl implements ChatService {
     private final UserRepository userRepository;
     private final TokenProvider tokenProvider;
     private final ChatRoomRepository chatRoomRepository;
+
+    // 메시지 저장
+    public Chat saveMessage(Long userId, String chatRoomId, String message, LocalDateTime registTime) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found")); // 사용자 존재 여부 체크
+
+        Chat chat = Chat.builder()
+                .user(user)
+                .message(message)
+                .registTime(registTime)
+                .chatRoomId(chatRoomId) // chatRoomId를 직접 저장하기 위해 필요
+                .build();
+
+        System.out.println(userId + chatRoomId + message);
+
+        return chatRepository.save(chat);
+    }
+
+    // 채팅 메시지 조회
+    public List<Chat> getMessages(String chatRoomId) {
+        return chatRepository.findByChatRoomId(chatRoomId);
+    }
 
     /**
      * @param chatDto 채팅 데이터
@@ -56,6 +79,7 @@ public class ChatServiceImpl implements ChatService {
                 .user(userOpt)
                 .chatRoom(chatRoom)
                 .message(chatDto.getMessage())
+                .registTime(chatDto.getRegistTime())
                 .build();
 
         chatRepository.save(chat);
@@ -75,7 +99,7 @@ public class ChatServiceImpl implements ChatService {
     @Transactional(readOnly = true)
     public List<ChatResponseDto> chatLogs(final Long chatroomId) {
         ChatRoom chatRoom = channelValidate(chatroomId);
-        List<Chat> chatLogs = chatRepository.findByChatRoomId(chatRoom.getId());
+        List<Chat> chatLogs = chatRepository.findByChatRoomId(chatRoom.getId().toString());
 
         List<ChatResponseDto> chatResponseDtoList = chatLogs.stream()
                 .map(chatLog -> ChatResponseDto.builder()
@@ -100,13 +124,24 @@ public class ChatServiceImpl implements ChatService {
             if (optionalChatRoom.isPresent()) {
                 chatRoom = optionalChatRoom.get();
 
+                // Chat 엔티티를 ChatDto로 변환
+                List<ChatDto> chatDtoList = chatRoom.getChats().stream()
+                        .map(chat -> ChatDto.builder()
+                                .chatroomId(chat.getId())
+                                .receiverId(chat.getUser().getId())
+                                .message(chat.getMessage())
+                                .registTime(chat.getRegistTime())
+                                .build())
+                        .collect(Collectors.toList());
+
                 ChatRoomInfoResponseDto response = ChatRoomInfoResponseDto.builder()
                         .chatRoomId(chatRoom.getId())
                         .clientId(clientId)
                         .freelancerId(freelancerId)
-                        .chats(chatRoom.getChats())
+                        .chats(chatDtoList)
                         .previewChat("")
                         .build();
+                return response;
             }
 
             User client = userRepository.findById(clientId).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -125,7 +160,7 @@ public class ChatServiceImpl implements ChatService {
                     .chatRoomId(chatRoom.getId())
                     .clientId(clientId)
                     .freelancerId(freelancerId)
-                    .chats(chatRoom.getChats())
+                    .chats(null)
                     .previewChat("")
                     .build();
         }
@@ -146,10 +181,24 @@ public class ChatServiceImpl implements ChatService {
         List<ChatRoom> chatRoomList = chatRoomRepository.findAllByFreelancerIdOrClientId(userId, userId).orElse(null);
 
 
+
+
+
         for(ChatRoom chatRoom : chatRoomList) {
+
+            // Chat 엔티티를 ChatDto로 변환
+            List<ChatDto> chatDtoList = chatRoom.getChats().stream()
+                    .map(chat -> ChatDto.builder()
+                            .chatroomId(chat.getId())
+                            .receiverId(chat.getUser().getId())
+                            .message(chat.getMessage())
+                            .registTime(chat.getRegistTime())
+                            .build())
+                    .collect(Collectors.toList());
+
             ChatRoomInfoResponseDto chatRoomInfoResponseDto = ChatRoomInfoResponseDto.builder()
                     .chatRoomId(chatRoom.getId())
-                    .chats(chatRoom.getChats())
+                    .chats(chatDtoList)
                     .clientId(chatRoom.getClient().getId())
                     .freelancerId(chatRoom.getFreelancer().getId())
                     .build();

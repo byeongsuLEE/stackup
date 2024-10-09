@@ -55,4 +55,6 @@ public class BoardApplicantRequest {
     public void updateClientSinged(boolean clientSigned) {
         this.clientSigned = clientSigned;
     }
+
+
 }

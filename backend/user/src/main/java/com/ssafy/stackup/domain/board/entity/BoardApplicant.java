@@ -63,6 +63,7 @@ public class BoardApplicant {
     }
 
 
+
     public boolean getIsPassed() {
         return isPassed;
     }

@@ -42,7 +42,7 @@ public class SecurityConfiguration {
     };
 
     private final String[] CORS_ALLOW_URL = { // 허용할 URL
-            "http://localhost:5173", "https://i11c204.p.ssafy.io:443", "https://i11c204.p.ssafy.io","https://github.com"
+            "http://localhost:5173","https://github.com" ,"https://stackup.live","https://stackup.live:443" , "https://stackup.live"
     };
 
     @Bean

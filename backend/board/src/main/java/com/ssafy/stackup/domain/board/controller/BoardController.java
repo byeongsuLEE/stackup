@@ -6,6 +6,7 @@ import com.ssafy.stackup.common.response.ErrorCode;
 import com.ssafy.stackup.domain.board.dto.*;
 import com.ssafy.stackup.domain.board.entity.Board;
 import com.ssafy.stackup.domain.board.repository.BoardApplicantRepository;
+import com.ssafy.stackup.domain.board.repository.BoardRepository;
 import com.ssafy.stackup.domain.board.service.BoardService;
 import com.ssafy.stackup.domain.recommend.entity.Recommend;
 import com.ssafy.stackup.domain.recommend.service.RecommendationService;
@@ -38,7 +39,8 @@ public class BoardController {
 
     @Autowired
     private RecommendationService recommendationService;
-
+    @Autowired
+    private BoardRepository boardRepository;
 
 
     @GetMapping("/client/{userId}")
@@ -207,6 +209,34 @@ public class BoardController {
         List<Board> boards = boardApplicantRepository.findBoardsByUserId(userId);
         return boards.stream()
                 .map(BoardFindAllResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    /**
+     *
+     * @ 작성자   : 김연지
+     * @ 작성일   : 2024-10-08
+     * @ 설명     : 지원한 board들을 작성한 client 조회
+     * @param user
+     * @return
+     */
+
+    @GetMapping("/apply-client")
+    public List<BoardClientResponse> applyClients(@AuthUser User user) {
+        Long userId = user.getId();
+        List<Board> boards = boardApplicantRepository.findBoardsByUserId(userId);
+        return boards.stream()
+                .map(BoardClientResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/myboard")
+    public List<BoardClientResponse> myBoards(@AuthUser User user) {
+        Long userId = user.getId();
+        System.out.println(userId);
+        List<Board> boards = boardRepository.findByClient_Id(userId);
+        return boards.stream()
+                .map(BoardClientResponse::new)
                 .collect(Collectors.toList());
     }
 

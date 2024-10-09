@@ -20,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,13 +36,14 @@ public class ChatServiceImpl implements ChatService {
     private final ChatRoomRepository chatRoomRepository;
 
     // 메시지 저장
-    public Chat saveMessage(Long userId, String chatRoomId, String message) {
+    public Chat saveMessage(Long userId, String chatRoomId, String message, LocalDateTime registTime) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found")); // 사용자 존재 여부 체크
 
         Chat chat = Chat.builder()
                 .user(user)
                 .message(message)
+                .registTime(registTime)
                 .chatRoomId(chatRoomId) // chatRoomId를 직접 저장하기 위해 필요
                 .build();
 

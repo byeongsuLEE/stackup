@@ -7,10 +7,6 @@ import { useChatStore } from "../../store/ChatStore";
 import { FaArrowLeft } from "react-icons/fa";
 import { useUserStore } from "../../store/UserStore"; // 로그인한 유저 정보 불러오기
 
-// import MyMessageComponent from "../chat/MyMessageComponent"; // 내가 보낸 메시지 컴포넌트
-// import OtherMessageComponent from "../chat/OtherMessageComponent"; // 상대방이 보낸 메시지 컴포넌트
-// import MessageDateComponent from "../chat/MessageDateComponent"; // 메시지 날짜 컴포넌트
-// import ChatInputComponent from "../chat/ChatInputComponent"; // 채팅 입력창 컴포넌트
 import ChatRoom from "../../chattest/ChatRoom";
 import axios from "axios";
 
@@ -87,17 +83,6 @@ export default function SimplePopup() {
 
     const activeChat = chats.find((chat) => chat.chatId === activeChatId);
 
-    // 날짜가 변할 때만 표시
-    const shouldDisplayDate = (
-        currentDate: string,
-        index: number,
-        messages: any[]
-    ) => {
-        if (index === 0) return true; // 첫 번째 메시지에는 날짜 표시
-        const previousMessage = messages[index - 1];
-        return currentDate !== previousMessage.date;
-    };
-
     return (
         <div style={{ position: "relative" }}>
             <button
@@ -137,10 +122,7 @@ export default function SimplePopup() {
                                 <ChatListItem
                                     key={chat.chatId}
                                     name={chat.name}
-                                    // messagePreview={chat.messagePreview}
                                     timestamp={chat.registTime}
-                                    // chatId={chat.chatId}
-                                    // unreadCount={chat.unreadCount}
                                     onClick={() => handleChatClick(chat.chatId)} // 클릭 시 채팅방 활성화
                                 />
                             ))}

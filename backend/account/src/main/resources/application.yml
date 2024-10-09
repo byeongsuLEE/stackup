@@ -49,7 +49,7 @@ spring:
             client-secret: ${GITHUB_SECRET}
             client-id: ${GITHUB_ID}
             scope: read:user, user:email
-            redirect-uri: "http://localhost:8080/api/login/oauth2/code/github"
+            redirect-uri: "https://stackup.live/api/login/oauth2/code/github"
         provider:
           github:
             authorization-uri: https://github.com/login/oauth/authorize

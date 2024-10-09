@@ -2,8 +2,8 @@ import axios from "axios"
 import { accountInfo, transactionInfo } from "./Account.type"
 import { passwordStore } from "../store/AccountStore"
 
-// const BASE_URL: string = "http://localhost:8080/api"
-const BASE_URL = import.meta.env.VITE_SERVER_URL;
+const BASE_URL: string = "http://localhost:8080/api"
+// const BASE_URL = import.meta.env.VITE_SERVER_URL;
 
 //== 계좌 목록 불러오기 ==//
 export const accountUpdate = async (): Promise<void> => {
@@ -228,3 +228,4 @@ export const transfer = async (freelancerId: number, balance: string): Promise<v
   })
 
 }
+

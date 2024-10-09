@@ -20,6 +20,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -33,6 +34,28 @@ public class ChatServiceImpl implements ChatService {
     private final UserRepository userRepository;
     private final TokenProvider tokenProvider;
     private final ChatRoomRepository chatRoomRepository;
+
+    // 메시지 저장
+    public Chat saveMessage(Long userId, String chatRoomId, String message, LocalDateTime registTime) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found")); // 사용자 존재 여부 체크
+
+        Chat chat = Chat.builder()
+                .user(user)
+                .message(message)
+                .registTime(registTime)
+                .chatRoomId(chatRoomId) // chatRoomId를 직접 저장하기 위해 필요
+                .build();
+
+        System.out.println(userId + chatRoomId + message);
+
+        return chatRepository.save(chat);
+    }
+
+    // 채팅 메시지 조회
+    public List<Chat> getMessages(String chatRoomId) {
+        return chatRepository.findByChatRoomId(chatRoomId);
+    }
 
     /**
      * @param chatDto 채팅 데이터
@@ -76,7 +99,7 @@ public class ChatServiceImpl implements ChatService {
     @Transactional(readOnly = true)
     public List<ChatResponseDto> chatLogs(final Long chatroomId) {
         ChatRoom chatRoom = channelValidate(chatroomId);
-        List<Chat> chatLogs = chatRepository.findByChatRoomId(chatRoom.getId());
+        List<Chat> chatLogs = chatRepository.findByChatRoomId(chatRoom.getId().toString());
 
         List<ChatResponseDto> chatResponseDtoList = chatLogs.stream()
                 .map(chatLog -> ChatResponseDto.builder()

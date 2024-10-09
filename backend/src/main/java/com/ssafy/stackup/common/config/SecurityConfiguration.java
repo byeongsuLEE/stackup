@@ -34,7 +34,7 @@ public class SecurityConfiguration {
     private final CustomOAuth2UserService customOAuth2UserService; // CustomOAuth2UserService 주입
 
     private final String[] PERMIT_ALL_ARRAY = { // 허용할 API
-            "/","/user/client/signup", "/user/login","/**","/login/**", "/oauth2/**", "/user/token"
+            "/","/user/client/signup", "/user/login","/**","/login/**", "/oauth2/**", "/user/token","/user/ws/**", "/user/oauth2/**"
     };
 
     private final String[] CORS_API_METHOD = { // 허용할 Method
@@ -42,7 +42,7 @@ public class SecurityConfiguration {
     };
 
     private final String[] CORS_ALLOW_URL = { // 허용할 URL
-            "http://localhost:5173", "https://i11c204.p.ssafy.io:443", "https://i11c204.p.ssafy.io","https://github.com"
+            "http://localhost:5173","https://github.com" ,"https://stackup.live","https://stackup.live:443" , "https://stackup.live"
     };
 
     @Bean
@@ -75,6 +75,14 @@ public class SecurityConfiguration {
 
                 // OAuth2 로그인 설정
                 .oauth2Login(oauth2 -> oauth2
+                        .authorizationEndpoint(authorizationEndpointConfig ->
+                                authorizationEndpointConfig
+                                        .baseUri("/user/oauth2/authorization") // OAuth2 인증 경로 커스터마이징
+                        )
+                        .redirectionEndpoint(redirectionEndpointConfig ->
+                                redirectionEndpointConfig
+                                        .baseUri("/user/login/oauth2/code/*") // 커스텀 리디렉션 경로
+                        )
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
                                 .userService(customOAuth2UserService))
                         .successHandler(customOauth2SuccessHandler)

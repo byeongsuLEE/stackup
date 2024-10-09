@@ -26,7 +26,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'be/cd', url: "${GIT_REPO}", credentialsId: "${GIT_CREDENTIALS_ID}"
+                git branch: 'be/msa-user', url: "${GIT_REPO}", credentialsId: "${GIT_CREDENTIALS_ID}"
+                sh "pwd"
             }
         }
 
@@ -145,7 +146,7 @@ def buildDockerImage(project, imageName) {
             }
 
             // Docker 이미지 빌드 및 푸시
-            dir("backend/spring-${project}") {
+            dir("backend/${project}") {
                 sh "ls"
                 sh "pwd"
                 sh 'chmod +x ./gradlew'

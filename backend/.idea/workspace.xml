@@ -5,13 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="770a738c-7cff-4cbe-947d-9fe8c12c7597" name="Changes" comment="feat : dev/be 채팅 구현 update">
-      <change afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/config/CorsMvcConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/config/JpaConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/config/RedisConfiguration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/config/RestTemplateConfiguration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/config/S3Configuration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/config/SecurityConfiguration.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/account/src/main/java/com/ssafy/stackup/common/config/WebSocketConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

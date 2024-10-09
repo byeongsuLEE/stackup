@@ -34,7 +34,7 @@ public class SecurityConfiguration {
     private final CustomOAuth2UserService customOAuth2UserService; // CustomOAuth2UserService 주입
 
     private final String[] PERMIT_ALL_ARRAY = { // 허용할 API
-            "/","/user/client/signup", "/user/login","/**","/login/**", "/oauth2/**", "/user/token","/user/ws/**"
+            "/","/user/client/signup", "/user/login","/**","/login/**", "/oauth2/**", "/user/token","/user/ws/**", "/user/oauth2/**"
     };
 
     private final String[] CORS_API_METHOD = { // 허용할 Method
@@ -75,6 +75,10 @@ public class SecurityConfiguration {
 
                 // OAuth2 로그인 설정
                 .oauth2Login(oauth2 -> oauth2
+                        .authorizationEndpoint(authorizationEndpointConfig ->
+                                authorizationEndpointConfig
+                                        .baseUri("/user/oauth2/authorization") // OAuth2 인증 경로 커스터마이징
+                        )
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
                                 .userService(customOAuth2UserService))
                         .successHandler(customOauth2SuccessHandler)

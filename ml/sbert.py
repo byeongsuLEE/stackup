@@ -7,9 +7,10 @@ app = Flask(__name__)
 # SBERT 모델 로드
 model = SentenceTransformer('snunlp/KR-SBERT-V40K-klueNLI-augSTS')
 
+
 # Spring Boot 서버로부터 Board 데이터 가져오기
 def get_boards_from_spring():
-    response = requests.get("http://localhost:8081/api/board/search-all")
+    response = requests.get("https://stackup.live/api/board/search-all")
     return response.json()
 
 @app.route('/flask/similar_boards', methods=['POST'])

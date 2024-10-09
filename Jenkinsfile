@@ -146,6 +146,7 @@ def buildDockerImage(project, imageName) {
 
             // Docker 이미지 빌드 및 푸시
             dir("backend/${project}") {
+                sh "ls"
                 sh 'chmod +x ./gradlew'
                 sh './gradlew clean build -x test --stacktrace'
                 sh "docker build -t ${imageName} -f Dockerfile ."

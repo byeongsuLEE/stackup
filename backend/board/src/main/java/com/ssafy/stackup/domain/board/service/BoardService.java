@@ -15,7 +15,7 @@ import com.ssafy.stackup.domain.framework.dto.FrameworkRequest;
 import com.ssafy.stackup.domain.framework.entity.Framework;
 import com.ssafy.stackup.domain.framework.repository.BoardFrameworkRepository;
 import com.ssafy.stackup.domain.framework.repository.FrameworkRepository;
-import com.ssafy.stackup.domain.framework.service.FrameworkService;
+
 import com.ssafy.stackup.domain.language.dto.BoardLanguageUpdateRequest;
 import com.ssafy.stackup.domain.language.entity.Language;
 import com.ssafy.stackup.domain.language.repository.BoardLanguageRepository;
@@ -66,8 +66,7 @@ public class BoardService {
     private LanguageRepository languageRepository;
 
     private BoardLanguageRepository boardLanguageRepository;
-    @Autowired
-    private FrameworkService frameworkService;
+
 
     @Autowired
     private FreelancerRepository freelancerRepository;
@@ -220,7 +219,7 @@ public class BoardService {
 
     @Transactional(readOnly = true)
     public List<FrameworkRequest> findFrameworks(Long boardId) {
-        return frameworkService.findFrameworkByBoardId(boardId).stream()
+        return boardRepository.findFrameworksByBoardId(boardId).stream()
                 .map(FrameworkRequest::new)
                 .collect(Collectors.toList());
     }

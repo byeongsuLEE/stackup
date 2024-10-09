@@ -43,7 +43,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'be/cd', url: "${GIT_REPO}", credentialsId: "${GIT_CREDENTIALS_ID}"
+                git branch: 'be/msa-user', url: "${GIT_REPO}", credentialsId: "${GIT_CREDENTIALS_ID}"
+                sh "pwd"
             }
         }
 
@@ -125,51 +126,55 @@ def buildDockerImage(project, imageName) {
                 sh "docker build -t ${imageName} -f Dockerfile ."
                 sh "docker push ${imageName}"
             }
+            
+            // GitHub 리포지토리 체크아웃과 푸시 작업에 락을 적용
+            lock(resource: 'git-push') {
+                // GitHub 리포지토리 체크아웃
+                git branch: 'main', url: "${GITHUB_REPO}", credentialsId: "${GITHUB_CREDENTIALS_ID}"
 
-            // GitHub 리포지토리 체크아웃
-            git branch: 'main', url: "${GITHUB_REPO}", credentialsId: "${GITHUB_CREDENTIALS_ID}"
+                // spring-${project} 디렉터리로 이동해서 작업
+                dir("spring-${project}") {
 
-            // spring-${project} 디렉터리로 이동해서 작업
-            dir("spring-${project}") {
-
-                 // 로컬 변경 사항을 커밋 또는 스태시
-                sh """
-                    git add .
-                    git commit -m "Auto-commit before pulling changes" || echo "No changes to commit"
-                """
-
-                // 원격 저장소에서 변경 사항을 가져옴 (rebase 사용)
-                withCredentials([usernamePassword(credentialsId: "${GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+                    // 로컬 변경 사항을 커밋 또는 스태시
                     sh """
-                        pwd
-                        git pull --rebase https://$GIT_USER:$GIT_PASS@github.com/S-Choi-1997/stackupM.git main
+                        git add .
+                        git commit -m "Auto-commit before pulling changes" || echo "No changes to commit"
                     """
-                }
 
-                // 이미지 태그 업데이트 및 기타 작업 수행
-                sh """
-                    sed -i 's|image: choho97/stackup-${project}:.*|image: choho97/stackup-${project}:${IMAGE_TAG}|' deployment.yaml
-                    cat deployment.yaml
-                    git config user.email "jenkins@example.com"
-                    git config user.name "jenkins"
-                """
-
-                // 한 단계 상위 디렉터리로 이동 후 GitHub에 푸시
-                dir('..') {
-                    sh "git diff"
-                    sh "pwd"
-                    sh "ls"
-                    
-                    // 변경 사항을 스테이징하고 커밋한 후 푸시
+                    // 원격 저장소에서 변경 사항을 가져옴 (rebase 사용)
                     withCredentials([usernamePassword(credentialsId: "${GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
                         sh """
-                            git add spring-${project}/deployment.yaml spring-${project}/kustomization.yaml spring-${project}/service.yaml
-                            git commit -m "Update image to choho97/stackup-${project}:${IMAGE_TAG}" || echo "No changes to commit"
-                            git push https://$GIT_USER:$GIT_PASS@github.com/S-Choi-1997/stackupM.git main
+                            pwd
+                            git pull --rebase https://$GIT_USER:$GIT_PASS@github.com/S-Choi-1997/stackupM.git main
                         """
+                    }
+
+                    // 이미지 태그 업데이트 및 기타 작업 수행
+                    sh """
+                        sed -i 's|image: choho97/stackup-${project}:.*|image: choho97/stackup-${project}:${IMAGE_TAG}|' deployment.yaml
+                        cat deployment.yaml
+                        git config user.email "jenkins@example.com"
+                        git config user.name "jenkins"
+                    """
+
+                    // 한 단계 상위 디렉터리로 이동 후 GitHub에 푸시
+                    dir('..') {
+                        sh "git diff"
+                        sh "pwd"
+                        sh "ls"
+                        
+                        // 변경 사항을 스테이징하고 커밋한 후 푸시
+                        withCredentials([usernamePassword(credentialsId: "${GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+                            sh """
+                                git add spring-${project}/deployment.yaml spring-${project}/kustomization.yaml spring-${project}/service.yaml
+                                git commit -m "Update image to choho97/stackup-${project}:${IMAGE_TAG}" || echo "No changes to commit"
+                                git push https://$GIT_USER:$GIT_PASS@github.com/S-Choi-1997/stackupM.git main
+                            """
+                        }
                     }
                 }
             }
+
 
             // Argo CD Sync
             def appName = "spring-${project}"

@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ChatController {
 
-    @MessageMapping("/chatroom/send")
+    @MessageMapping("/user/chatroom/send")
     @SendTo("/topic/chatroom") // 채팅방 ID에 따라 구독한 클라이언트에게 메시지 전송
     public ChatMessage sendMessage(@Payload ChatMessage chatMessage) {
         return chatMessage; // 클라이언트에게 메시지를 그대로 반환
@@ -28,13 +28,13 @@ public class ChatController {
 
     private final ChatServiceImpl chatService;
     // 메시지 저장 API
-    @PostMapping("/chat/send")
+    @PostMapping("/user/chat/send")
     public Chat sendToMessage(@RequestBody ChatMessage chatMessage) {
         return chatService.saveMessage(chatMessage.getUserId(), chatMessage.getChatRoomId(), chatMessage.getMessage(), chatMessage.getRegistTime());
     }
 
     // 채팅 메시지 조회 API
-    @GetMapping("/chat/room/{chatRoomId}")
+    @GetMapping("/user/chat/room/{chatRoomId}")
     public List<ChatMessageResponse> getMessages(@PathVariable String chatRoomId) {
         List<Chat> chats = chatService.getMessages(chatRoomId);
 

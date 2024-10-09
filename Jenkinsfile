@@ -86,10 +86,26 @@ pipeline {
 
     post {
         success {
-            echo 'Build and deployment process completed successfully!'
+            script {
+                sendMattermostNotification("빌드 성공: ${env.JOB_NAME} #${env.BUILD_NUMBER}")
+            }
         }
         failure {
-            echo 'Build or deployment process failed.'
+            script {
+                sendMattermostNotification("빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER}")
+            }
         }
     }
+}
+def sendMattermostNotification(String message) {
+    def mattermostWebhookURL = 'https://meeting.ssafy.com/hooks/qaxyrt1y7pdmmjdrqwg7o35bfe'
+    
+    httpRequest(
+        url: mattermostWebhookURL,
+        httpMode: 'POST',
+        contentType: 'APPLICATION_JSON',
+        requestBody: """{
+            "text": "${message}"
+        }"""
+    )
 }

@@ -1,25 +1,53 @@
 import axios from "axios";
 import DoneButton from "../common/DoneButton";
 import Radios from "../common/Radios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { projectDetail } from "../../apis/BoardApi";
 
 const svURL = import.meta.env.VITE_SERVER_URL;
 
 const MitermForm = () => {
   // 상태 변수 설정
   const location = useLocation()
-  const { userId, stepResponse, boardId } = location.state;
+  let { userId, boardId, stepResponse, freelancerProjectId } = location.state;
   const { projectId } = useParams<{ projectId: string }>();
   const [responseTimeScore, setResponseTimeScore] = useState<number | null>(null);
   const [reqChangeFreqScore, setReqChangeFreqScore] = useState<number | null>(null);
   const [reqClarityScore, setReqClarityScore] = useState<number | null>(null);
   const navigate = useNavigate();
+  const [ clientId, setClientId ] = useState<string>();
+  const [ id, setId ] = useState<string>();
+
+  useEffect(() => {
+    const update = async () => {
+      const data = await projectDetail(boardId);
+      setClientId(data.client.id);
+    };
+  
+    update();
+  }, [boardId]);
+  
+  useEffect(() => {
+    if (clientId) {
+      if (sessionStorage.getItem('userType') === 'freelancer') {
+        setId(clientId);
+      } else {
+        setId(userId);
+      }
+    }
+  }, [clientId, userId]);
 
   const handleSubmit = async () => {
+    if (!id) {
+      console.error("ID 값이 설정되지 않았습니다.");
+      alert("ID 값이 설정되지 않았습니다. 다시 시도해 주세요.");
+      return;
+    }
+
     // 평가 점수 객체 생성
     const evaluationData = {
-      userId: userId,
+      userId: id,
       projectId: Number(projectId),
       responseTimeScore: responseTimeScore,
       reqChangeFreqScore: reqChangeFreqScore,
@@ -28,15 +56,14 @@ const MitermForm = () => {
     };
 
     try {
-      const response = await axios(`${svURL}/evaluation/project-user`, {
+      await axios(`${svURL}/evaluation/project-user`, {
         method: "POST",
         headers: {
           ContentType : "application/json",
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`, // JWT 토큰 추가
+          Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
         data: evaluationData,
       });
-      console.log(response.data)
       // 추가적인 작업 (예: 성공 메시지 표시, 폼 초기화 등)
       // 폼 초기화
       setResponseTimeScore(null);
@@ -45,7 +72,12 @@ const MitermForm = () => {
 
       // 성공 메시지 표시
       alert("평가가 성공적으로 완료되었습니다.");
-      navigate(`/evaluate/check/${projectId}`,{state:{stepResponse, boardId}});
+      if (sessionStorage.getItem('userType') === 'client'){
+        navigate(`/transfer/${projectId}`, {state:{userId, boardId, stepResponse, freelancerProjectId}});
+      } else {
+        navigate(`/project/detail/${projectId}`, {state:{userId, boardId, stepResponse}})
+      }
+      
 
     } catch (error) {
       console.error("Error submitting evaluation:", error);

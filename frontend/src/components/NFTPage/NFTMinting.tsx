@@ -72,7 +72,6 @@ const NFTMinting = ({ Minting, isLoading, pdf, contractData, projectId }: NFTMin
       console.error("NFT 발행 오류:", error);
       alert("NFT 발행 실패");
     }
-
   };
 
   return (

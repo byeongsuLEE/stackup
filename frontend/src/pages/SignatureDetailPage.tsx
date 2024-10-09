@@ -46,9 +46,7 @@ const SignatureDetail = () => {
     } else {
       console.log("로딩이 완료되었습니다.");
     }
-  }, [isLoading]);
 
-  useLayoutEffect(() => {
     //== pdf 생성 ==//
     const MakePDF = async () => {
       const pdfData = await handlePrint(componentRef);
@@ -56,7 +54,7 @@ const SignatureDetail = () => {
     }
 
     MakePDF();
-  }, [contract])
+  }, [isLoading, contract]);
 
   const formattedStart = contract?.contractStartDate?.split('T')[0];
   const formattedEnd = contract?.contractEndDate?.split('T')[0];

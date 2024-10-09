@@ -10,7 +10,7 @@ const EvaluateCheck = () => {
   const { projectId } = useParams<{ projectId: string }>();
   const NumericProjectId = projectId ? Number(projectId) : null;
   const location = useLocation();
-  const { stepResponse, boardId } = location.state;
+  const { userId, stepResponse, boardId } = location.state;
   const navigate = useNavigate();
   const [evalList, setEvalList] = useState<projectApplicantProps[]>([]);
 
@@ -19,7 +19,7 @@ const EvaluateCheck = () => {
       if(NumericProjectId) {
         await projectStep(NumericProjectId, stepResponse, true);
       }
-      navigate(`/project/detail/${projectId}`);
+      navigate(`/project/detail/${projectId}`, { state: { userId, stepResponse, boardId }});
     } catch (error) {
       console.error("Error updating project step:", error);
     }
@@ -30,7 +30,7 @@ const EvaluateCheck = () => {
       try {
         const response = await projectFreelancer(boardId);
         setEvalList(response);
-        // console.log(response);
+
       } catch (error) {
         console.error("Error fetching project freelancer:", error);
       }
@@ -39,9 +39,8 @@ const EvaluateCheck = () => {
     if (boardId) {
       fetchProjectFreelancer();
     }
-  }, [boardId]);
 
-  // console.log(evalList);
+  }, [boardId]);
 
   return (
     <div className="m-10">
@@ -64,7 +63,8 @@ const EvaluateCheck = () => {
             boardId={boardId}
             key={index}
             stepResponse={stepResponse}
-            freelancer={freelancer}/>
+            freelancer={freelancer}
+            />
           ))}
         </tbody>
       </table>

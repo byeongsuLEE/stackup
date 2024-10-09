@@ -12,7 +12,7 @@ def get_boards_from_spring():
     response = requests.get("http://localhost:8081/api/board/search-all")
     return response.json()
 
-@app.route('/similar_boards', methods=['POST'])
+@app.route('/flask/similar_boards', methods=['POST'])
 def find_similar_boards():
     data = request.json
     query_description = data['description']

@@ -119,7 +119,7 @@ def retrain_model():
         normal_data_cache = []  # 캐시 초기화
         print(f"Model retrained with new data. Epochs: {epochs}")
 
-@app.route('/api/analyze', methods=['POST'])
+@app.route('/flask/api/analyze', methods=['POST'])
 def analyze():
     global model, normal_data_cache
     data = request.json # New project

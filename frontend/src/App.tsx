@@ -46,7 +46,7 @@ function App() {
               <Routes>
                 <Route path="/test" element={<NFTLoading />} />
                 <Route path="/" element={<Home />} />
-                <Route path="/signature/detail/:freelancerProjectId" element={<SignatureDetail />} />
+                <Route path="/signature/detail/:projectId/:freelancerProjectId" element={<SignatureDetail />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/work" element={<Work />} />
                 <Route path="/work/post" element={<PostWork />} />

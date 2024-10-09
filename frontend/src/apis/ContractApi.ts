@@ -1,8 +1,8 @@
 import axios from "axios"
 
-// const BASE_URL: string = "http://localhost:8080/api/project"
+const BASE_URL: string = "http://localhost:8080/api/project"
 const svURL = import.meta.env.VITE_SERVER_URL;
-const BASE_URL = `${svURL}/user/project`
+// const BASE_URL = `${svURL}/user/project`
 
 //== 계약서 정보 저장 ==//
 export const submitContract = async (data: any, freelancerProjectId?: string): Promise<void> => {
@@ -45,7 +45,7 @@ export const submitContract = async (data: any, freelancerProjectId?: string): P
 
   //== 서명 확인 ==//
   export const signature = async (sign?: string, freelancerProjectId?: string): Promise<void> => {
-    const response = await axios({
+    await axios({
       method: 'post',
       url: `${BASE_URL}/${freelancerProjectId}/contract/sign`,
       headers: {
@@ -55,8 +55,6 @@ export const submitContract = async (data: any, freelancerProjectId?: string): P
         "signature": sign
       }
     })
-
-    console.log(response.data)
   }
 
   //== 계약서 정보 ==//
@@ -68,6 +66,5 @@ export const contractData = async (freelancerProjectId?: string): Promise<any> =
       Authorization: `Bearer ${sessionStorage.getItem('token')}`
     }
   })
-  console.log(response.data.data)
   return response.data.data
 }

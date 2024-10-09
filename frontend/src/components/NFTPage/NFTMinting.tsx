@@ -3,6 +3,7 @@ import { pinata, uploadMetadataToPinata } from "../../apis/NftApi";
 import { generateImage } from "../../hooks/MakeImage";
 import DoneButton from "../common/DoneButton";
 import { contractProp } from "../../apis/Contract.type";
+import { useNavigate } from "react-router-dom";
 
 // window.ethereum 타입 확장
 declare global {
@@ -68,7 +69,6 @@ const NFTMinting = ({ Minting, isLoading, pdf, contractData }: NFTMintingProps) 
       console.error("NFT 발행 오류:", error);
       alert("NFT 발행 실패");
     }
-
   };
 
   return (

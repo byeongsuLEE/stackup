@@ -40,7 +40,7 @@ export const getAccount = async (): Promise<accountInfo[]> => {
 }
 
 //== 계좌 상세 조회 ==//
-export const accountDetail  = async (accountId?: string): Promise<accountInfo> => {
+export const accountDetail = async (accountId?: string): Promise<accountInfo> => {
   const response = await axios({
     method: 'get',
     url: `${BASE_URL}/account/${accountId}`,
@@ -80,7 +80,7 @@ export const getMainAccount = async (): Promise<string> => {
       }
     })
 
-    return response.data
+    return response.data;
 }
 
 //== 계좌 거래내역 조회 ==//
@@ -214,18 +214,17 @@ export const authCheck = async (accountId: string): Promise<void> => {
 }
 
 //== 계좌 이체 ==//
-export const transfer = async (accountId: string, accountNum: string, balance: string): Promise<void> => {
-  const response = await axios ({
+export const transfer = async (freelancerId: number, balance: string): Promise<void> => {
+  await axios ({
     method: 'post',
-    url: `${BASE_URL}/account/${accountId}/transfer`,
+    url: `${BASE_URL}/account/transfer`,
     headers: {
       Authorization: `Bearer ${sessionStorage.getItem('token')}`
     },
     data: {
-      'depositAccount': accountNum,
+      'freelancerId': freelancerId,
       'transactionBalance': balance
     }
   })
 
-  console.log(response)
 }

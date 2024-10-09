@@ -1,9 +1,9 @@
 import { contractData, signature } from "../apis/ContractApi";
 import { useQuery } from "react-query";
 import { handlePrint } from "../hooks/MakePDF";
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MakeSign } from "../hooks/MakeSign";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { CallTest } from "../hooks/Test";
 import NFTMinting from "../components/NFTPage/NFTMinting";
 import NFTLoading from "./NFTLoadingPage";
@@ -11,10 +11,11 @@ import NFTLoading from "./NFTLoadingPage";
 const SignatureDetail = () => {
   const [ today ] = useState(new Date());
   const { signMessage } = MakeSign();
-  const { freelancerProjectId } = useParams();
+  const { projectId, freelancerProjectId } = useParams();
   const [ pdf, setPdf ] = useState<any>();
   const { Minting, isLoading } = CallTest(); // Minting 함수 가져옴
-    
+  const navigate = useNavigate();
+
   //== pdf 생성 ==//
   const componentRef = useRef<HTMLDivElement>(null);
 
@@ -22,6 +23,8 @@ const SignatureDetail = () => {
     //== 전자 서명 ==//
     const data = await signMessage();
     signature(data?.signedMessage, freelancerProjectId);
+
+    // navigate(`/project/detail/${projectId}`);
   }
 
   const { data: contract, isLoading: isProjectLoading } = useQuery({
@@ -36,9 +39,7 @@ const SignatureDetail = () => {
     } else {
       console.log("로딩이 완료되었습니다.");
     }
-  }, [isLoading]);
 
-  useLayoutEffect(() => {
     //== pdf 생성 ==//
     const MakePDF = async () => {
       const pdfData = await handlePrint(componentRef);
@@ -46,7 +47,7 @@ const SignatureDetail = () => {
     }
 
     MakePDF();
-  }, [contract])
+  }, [isLoading, contract]);
 
   const formattedStart = contract?.contractStartDate?.split('T')[0];
   const formattedEnd = contract?.contractEndDate?.split('T')[0];

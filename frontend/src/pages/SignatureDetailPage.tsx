@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import { handlePrint } from "../hooks/MakePDF";
 import { useEffect, useRef, useState } from "react";
 import { MakeSign } from "../hooks/MakeSign";
-import { useNavigate, useParams } from "react-router-dom";
+import {  useParams } from "react-router-dom";
 import { CallTest } from "../hooks/Test";
 import NFTMinting from "../components/NFTPage/NFTMinting";
 import NFTLoading from "./NFTLoadingPage";
@@ -14,7 +14,8 @@ const SignatureDetail = () => {
   const { projectId, freelancerProjectId } = useParams();
   const [ pdf, setPdf ] = useState<any>();
   const { Minting, isLoading } = CallTest(); // Minting 함수 가져옴
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  console.log(projectId)
 
   //== pdf 생성 ==//
   const componentRef = useRef<HTMLDivElement>(null);

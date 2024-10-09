@@ -85,20 +85,34 @@ pipeline {
     }
 
     post {
+        post {
         success {
             script {
-                sendMattermostNotification(": ${env.JOB_NAME} #${env.BUILD_NUMBER}")
+                def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
+                def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
+                mattermostSend(color: 'good',
+                    message: "빌드 성공: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)",
+                    endpoint: 'https://meeting.ssafy.com/hooks/ctjpiwrc3386fcqerphr5fquxr',
+                    channel: 'BuildTest'
+                        )
             }
         }
         failure {
             script {
-                sendMattermostNotification("빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER}")
+                def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
+                def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()
+                mattermostSend(color: 'danger',
+                    message: "빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${Author_ID}(${Author_Name})\n(<${env.BUILD_URL}|Details>)",
+                    endpoint: 'https://meeting.ssafy.com/hooks/ctjpiwrc3386fcqerphr5fquxr',
+                    channel: 'BuildTest'
+                        )
             }
         }
     }
+    }
 }
 def sendMattermostNotification(String message) {
-    def mattermostWebhookURL = 'https://meeting.ssafy.com/hooks/qaxyrt1y7pdmmjdrqwg7o35bfe'
+    def mattermostWebhookURL = 'https://meeting.ssafy.com/hooks/ctjpiwrc3386fcqerphr5fquxr'
     
     httpRequest(
         url: mattermostWebhookURL,

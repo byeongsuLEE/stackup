@@ -85,7 +85,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chatRoomId }) => {
       console.log('Sending message:', chatMessage);
 
       // STOMP 클라이언트를 통해 메시지 전송
-      stompClientRef.current.send('/app/chatroom/send', {}, JSON.stringify(chatMessage));
+      stompClientRef.current.send('/user/chatroom/send', {}, JSON.stringify(chatMessage));
 
       await axios.post(`${svURL}/user/chat/send`, {
         userId: userId,

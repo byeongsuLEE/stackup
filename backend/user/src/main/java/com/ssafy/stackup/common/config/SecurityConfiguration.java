@@ -77,7 +77,11 @@ public class SecurityConfiguration {
                 .oauth2Login(oauth2 -> oauth2
                         .authorizationEndpoint(authorizationEndpointConfig ->
                                 authorizationEndpointConfig
-                                        .baseUri("/user/oauth2/authorization") // OAuth2 인증 경로 커스터마이징
+                                        .baseUri("/user/oauth2/authorization") // github 로그인 페이지로 이동
+                        )
+                        .redirectionEndpoint(redirectionEndpointConfig ->
+                                redirectionEndpointConfig
+                                        .baseUri("/user/login/oauth2/code/*") // github 로그인 성공 후 코드넣고 사용자 정보 요청
                         )
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
                                 .userService(customOAuth2UserService))

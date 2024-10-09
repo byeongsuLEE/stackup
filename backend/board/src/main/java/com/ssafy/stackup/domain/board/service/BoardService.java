@@ -267,7 +267,7 @@ public class BoardService {
     private final RestTemplate restTemplate;
 
     public BoardSearchResponse findSimilarBoards(String description) {
-        String flaskUrl = "http://localhost:5000/similar_boards";
+        String flaskUrl = "https://stackup.live/flask/similar_boards";
 
         // Flask로 보낼 요청 데이터 설정
         HttpHeaders headers = new HttpHeaders();

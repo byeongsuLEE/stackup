@@ -10,7 +10,7 @@ const FinalForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { userId } = location.state;
-  const { projectId } = useParams<{ projectId: string }>();
+  const { projectId } = useParams();
 
   // 상태값 선언 (각 점수와 한줄평을 관리)
   const [responseTimeScore, setResponseTimeScore] = useState<number | null>(null);
@@ -47,7 +47,7 @@ const FinalForm = () => {
       });
       console.log(response.data);
       alert("평가가 성공적으로 완료되었습니다.");
-      navigate('/transfer')
+      navigate(`/transfer/${projectId}`)
     } catch (error) {
       console.error("Error submitting evaluation:", error);
     }

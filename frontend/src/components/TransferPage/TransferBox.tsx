@@ -1,9 +1,9 @@
 
 interface TransferBoxProps {
-  totalAmount: number;
-  middleAmount: number;
+  totalAmount?: number;
+  middleAmount?: number;
 }
-const TransferBox = ({ totalAmount, middleAmount }: TransferBoxProps) => {
+const TransferBox = ({ totalAmount = 0, middleAmount = 0 }: TransferBoxProps) => {
   const finalAmount = totalAmount - middleAmount;
   const setFinalAmount = finalAmount.toLocaleString('ko-KR');
   const setTotalAmount = totalAmount.toLocaleString('ko-KR');

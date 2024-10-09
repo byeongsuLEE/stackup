@@ -4,7 +4,7 @@ import { passwordStore } from "../store/AccountStore"
 
 // const BASE_URL: string = "http://localhost:8080/api"
 const svURL = import.meta.env.VITE_SERVER_URL;
-const BASE_URL = `${svURL}/account`
+const BASE_URL = `${svURL}`
 
 //== 계좌 목록 불러오기 ==//
 export const accountUpdate = async (): Promise<void> => {

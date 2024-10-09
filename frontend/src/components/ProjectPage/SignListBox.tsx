@@ -3,8 +3,7 @@ import DoneButton from "../common/DoneButton";
 import { project } from "../../apis/Board.type";
 
 const SignListBox = (sign: project) => {
-  const freelancerProjectId = sign.freelancerProjectId;
-  
+
   return (
     <div className="bg-bgGreen border my-2 border-mainGreen h-[150px] w-full rounded-lg p-5 flex justify-between items-center">
       <div className="flex flex-col justify-center">
@@ -13,7 +12,7 @@ const SignListBox = (sign: project) => {
       </div>
 
       {sign.clientContractSigned ? (
-        <Link to={`/signature/detail/${freelancerProjectId}`}>
+        <Link to={`/signature/detail/${sign.projectId}/${sign.freelancerProjectId}`}>
           <DoneButton width={120} height={30} title="서명하기" />
         </Link>
       ) : (

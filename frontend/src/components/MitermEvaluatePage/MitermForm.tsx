@@ -9,13 +9,13 @@ const svURL = import.meta.env.VITE_SERVER_URL;
 const MitermForm = () => {
   // 상태 변수 설정
   const location = useLocation()
-  const { userId, stepResponse, boardId } = location.state;
+  const { userId, stepResponse, boardId, freelancerProjectId } = location.state;
   const { projectId } = useParams<{ projectId: string }>();
   const [responseTimeScore, setResponseTimeScore] = useState<number | null>(null);
   const [reqChangeFreqScore, setReqChangeFreqScore] = useState<number | null>(null);
   const [reqClarityScore, setReqClarityScore] = useState<number | null>(null);
   const navigate = useNavigate();
-
+  
   const handleSubmit = async () => {
     // 평가 점수 객체 생성
     const evaluationData = {
@@ -45,7 +45,7 @@ const MitermForm = () => {
 
       // 성공 메시지 표시
       alert("평가가 성공적으로 완료되었습니다.");
-      navigate(`/evaluate/check/${projectId}`,{state:{stepResponse, boardId}});
+      navigate(`/evaluate/check/${projectId}`,{state:{stepResponse, boardId, freelancerProjectId}});
 
     } catch (error) {
       console.error("Error submitting evaluation:", error);

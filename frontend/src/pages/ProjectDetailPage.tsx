@@ -21,12 +21,13 @@ const svURL = import.meta.env.VITE_SERVER_URL;
 const ProjectDetail = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [loading, setLoading] = useState(true); // 추가: 로딩 상태 관리
+
   const handleConfirmStep = () => {
     setShowAlert(true);
     setTimeout(() => {
       setShowAlert(false);
       window.location.reload();
-    }, 2000);
+    }, 1000);
   };
 
   const [buttonTitle, setButtonTitle] = useState("단계 완료");
@@ -66,7 +67,7 @@ const ProjectDetail = () => {
   };
 
   const navigate = useNavigate();
-  const userId = 15;
+  const userId = sessionStorage.getItem('userId');
   const { projectId } = useParams<{ projectId: string }>();
   const numericProjectId = projectId ? parseInt(projectId, 10) : undefined;
 
@@ -162,8 +163,6 @@ const ProjectDetail = () => {
   if (loading) {
     return <div>로딩 중...</div>; // 로딩 중일 때 표시할 내용
   }
-
-  // console.log(steps)
 
   return (
     <div className="mx-20 my-10 flex items-center flex-col">

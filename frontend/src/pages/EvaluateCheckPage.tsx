@@ -10,7 +10,7 @@ const EvaluateCheck = () => {
   const { projectId } = useParams<{ projectId: string }>();
   const NumericProjectId = projectId ? Number(projectId) : null;
   const location = useLocation();
-  const { stepResponse, boardId, freelancerProjectId } = location.state;
+  const { userId, stepResponse, boardId } = location.state;
   const navigate = useNavigate();
   const [evalList, setEvalList] = useState<projectApplicantProps[]>([]);
 
@@ -19,7 +19,7 @@ const EvaluateCheck = () => {
       if(NumericProjectId) {
         await projectStep(NumericProjectId, stepResponse, true);
       }
-      navigate(`/transfer/${projectId}`, { state: { stepResponse, freelancerProjectId }});
+      navigate(`/project/detail/${projectId}`, { state: { userId, stepResponse, boardId }});
     } catch (error) {
       console.error("Error updating project step:", error);
     }
@@ -39,6 +39,7 @@ const EvaluateCheck = () => {
     if (boardId) {
       fetchProjectFreelancer();
     }
+
   }, [boardId]);
 
   return (

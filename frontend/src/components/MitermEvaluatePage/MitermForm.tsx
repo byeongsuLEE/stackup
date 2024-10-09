@@ -9,13 +9,13 @@ const svURL = import.meta.env.VITE_SERVER_URL;
 const MitermForm = () => {
   // 상태 변수 설정
   const location = useLocation()
-  const { userId, stepResponse, boardId, freelancerProjectId } = location.state;
+  const { userId, boardId, stepResponse, freelancerProjectId } = location.state;
   const { projectId } = useParams<{ projectId: string }>();
   const [responseTimeScore, setResponseTimeScore] = useState<number | null>(null);
   const [reqChangeFreqScore, setReqChangeFreqScore] = useState<number | null>(null);
   const [reqClarityScore, setReqClarityScore] = useState<number | null>(null);
   const navigate = useNavigate();
-  
+
   const handleSubmit = async () => {
     // 평가 점수 객체 생성
     const evaluationData = {
@@ -28,7 +28,7 @@ const MitermForm = () => {
     };
 
     try {
-      const response = await axios(`${svURL}/evaluation/project-user`, {
+      await axios(`${svURL}/evaluation/project-user`, {
         method: "POST",
         headers: {
           ContentType : "application/json",
@@ -36,7 +36,6 @@ const MitermForm = () => {
         },
         data: evaluationData,
       });
-      console.log(response.data)
       // 추가적인 작업 (예: 성공 메시지 표시, 폼 초기화 등)
       // 폼 초기화
       setResponseTimeScore(null);
@@ -45,7 +44,7 @@ const MitermForm = () => {
 
       // 성공 메시지 표시
       alert("평가가 성공적으로 완료되었습니다.");
-      navigate(`/evaluate/check/${projectId}`,{state:{stepResponse, boardId, freelancerProjectId}});
+      navigate(`/transfer/${projectId}`, {state:{userId, boardId, stepResponse, freelancerProjectId}});
 
     } catch (error) {
       console.error("Error submitting evaluation:", error);

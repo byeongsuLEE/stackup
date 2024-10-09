@@ -67,7 +67,7 @@ const ProjectDetail = () => {
   };
 
   const navigate = useNavigate();
-  const userId = sessionStorage.getItem('userId');
+  const userId = 10;
   const { projectId } = useParams<{ projectId: string }>();
   const numericProjectId = projectId ? parseInt(projectId, 10) : undefined;
 

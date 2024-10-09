@@ -20,7 +20,7 @@ const Freelancer = ({ stepResponse, freelancer, boardId }: FreelancerProps) => {
       navigate(`/evaluate/miterm/${projectId}`, { state: { userId, stepResponse, boardId, freelancerProjectId } });
     }
     else {
-      navigate(`/evaluate/final/${projectId}`, { state: { userId, freelancerProjectId } });
+      navigate(`/evaluate/final/${projectId}`, { state: { userId, stepResponse, boardId, freelancerProjectId } });
     }
   }
 

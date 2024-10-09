@@ -9,7 +9,7 @@ const svURL = import.meta.env.VITE_SERVER_URL;
 const FinalForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { userId } = location.state;
+  const { userId, boardId, stepResponse, freelancerProjectId } = location.state;
   const { projectId } = useParams();
 
   // 상태값 선언 (각 점수와 한줄평을 관리)
@@ -47,7 +47,7 @@ const FinalForm = () => {
       });
       console.log(response.data);
       alert("평가가 성공적으로 완료되었습니다.");
-      navigate(`/transfer/${projectId}`)
+      navigate(`/transfer/${projectId}`, {state:{userId, boardId, stepResponse, freelancerProjectId}})
     } catch (error) {
       console.error("Error submitting evaluation:", error);
     }

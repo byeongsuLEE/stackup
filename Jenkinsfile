@@ -87,7 +87,7 @@ pipeline {
     post {
         success {
             script {
-                sendMattermostNotification("빌드 성공: ${env.JOB_NAME} #${env.BUILD_NUMBER}")
+                sendMattermostNotification(": ${env.JOB_NAME} #${env.BUILD_NUMBER}")
             }
         }
         failure {
@@ -103,7 +103,7 @@ def sendMattermostNotification(String message) {
     httpRequest(
         url: mattermostWebhookURL,
         httpMode: 'POST',
-        contentType: 'APPLICATION_JSON',
+        contentType: 'APPLICATION_JSON;charset=UTF-8' ,
         requestBody: """{
             "text": "${message}"
         }"""

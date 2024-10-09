@@ -37,7 +37,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chatRoomId }) => {
 
   useEffect(() => {
     freelanceMypage();
-    const sock = new SockJS(`${svURL}/user/ws`); // WebSocket 엔드포인트 설정
+    const sock = new SockJS(`wss://stackup.live/api/user/ws`); // WebSocket 엔드포인트 설정
     stompClientRef.current = Stomp.over(sock);
     stompClientRef.current.connect({}, (frame: any) => {
         console.log(frame)

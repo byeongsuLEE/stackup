@@ -96,15 +96,6 @@ pipeline {
 
     post {
         success {
-            echo 'Build and deployment process completed successfully!'
-        }
-        failure {
-            echo 'Build or deployment process failed.'
-        }
-        
-    }
-    post {
-        success {
             script {
                 def Author_ID = sh(script: "git show -s --pretty=%an", returnStdout: true).trim()
                 def Author_Name = sh(script: "git show -s --pretty=%ae", returnStdout: true).trim()

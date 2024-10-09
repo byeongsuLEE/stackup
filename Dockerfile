@@ -21,7 +21,7 @@ RUN npm run build
 FROM nginx:alpine
 
 # 빌드된 결과물을 NGINX 정적 파일 경로로 복사
-COPY --from=build /app/frontend/build /usr/share/nginx/html
+COPY --from=build /app/frontend/dist /usr/share/nginx/html
 
 # NGINX 설정 파일 복사 (nginx.conf 파일이 있다면 추가)
 COPY nginx.conf /etc/nginx/nginx.conf

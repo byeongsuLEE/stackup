@@ -99,8 +99,8 @@ cloud:
 
 redirect:
   url:
-    callback: "http://localhost:5173/callback"
-    main: "http://localhost:5173"
+    callback: "https://stackup.live/callback"
+    main: "https://stackup.live"
 
 publicDataPortal:
   api:

@@ -44,7 +44,7 @@ public class DetectionController {
         }
 
         // Flask 서버에 데이터 전송
-        String flaskUrl = "https://stackup.live/flask/api/analyze";
+        String flaskUrl = "http://stackup.live/flask/api/analyze";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(org.springframework.http.MediaType.APPLICATION_JSON);
 

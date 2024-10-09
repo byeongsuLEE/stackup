@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+const svURL = import.meta.env.VITE_SERVER_URL;
 declare global {
   interface Window {
     IMP: any;
@@ -14,7 +15,7 @@ const Payment: React.FC<PaymentProps> = ({ boardId }) => {
   useEffect(() => {
     // iamport.payment.js를 불러옴
     const script = document.createElement('script');
-    script.src = 'https://cdn.iamport.kr/js/iamport.payment-1.2.0.js';
+    script.src = `https://cdn.iamport.kr/js/iamport.payment-1.2.0.js`;
     script.async = true;
     document.body.appendChild(script);
 
@@ -39,7 +40,7 @@ const Payment: React.FC<PaymentProps> = ({ boardId }) => {
       function (rsp: any) {
         if (rsp.success) {
           // 결제 성공 시 Spring Boot 서버로 요청
-          fetch(`http://localhost:8080/api/board/${boardId}/payment-success`, {
+          fetch(`${svURL}/board/${boardId}/payment-success`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

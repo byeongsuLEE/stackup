@@ -18,6 +18,7 @@ import SeniorIcon from '../../icons/Senior';
 import axios from 'axios';
 import { useState } from 'react';
 
+const svURL = import.meta.env.VITE_SERVER_URL;
 
 const WorkForm = () => {
   const { register, handleSubmit, control, setValue, watch } = useForm<createProjectProp>({
@@ -68,7 +69,7 @@ const WorkForm = () => {
     }
 
     try {
-      const res = await axios.post('http://localhost:8080/api/board/search', {
+      const res = await axios.post(`${svURL}/board/search`, {
         description: description, // description을 POST 요청의 body에 포함
       });
 

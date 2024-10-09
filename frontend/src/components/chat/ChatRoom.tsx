@@ -6,6 +6,8 @@ import MyMessageComponent from './MyMessageComponent';
 import OtherMessageComponent from './OtherMessageComponent';
 import axios from 'axios';
 
+const svURL = import.meta.env.VITE_SERVER_URL;
+
 // 채팅 메시지 인터페이스 정의
 interface ChatMessage {
   userId: string | null;
@@ -35,7 +37,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chatRoomId }) => {
 
   useEffect(() => {
     freelanceMypage();
-    const sock = new SockJS('http://localhost:8080/api/ws'); // WebSocket 엔드포인트 설정
+    const sock = new SockJS(`${svURL}/ws`); // WebSocket 엔드포인트 설정
     stompClientRef.current = Stomp.over(sock);
     stompClientRef.current.connect({}, (frame: any) => {
         console.log(frame)
@@ -50,7 +52,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chatRoomId }) => {
     // 채팅 메시지 불러오기
     const fetchMessages = async () => {
       try {
-        const response = await axios.get(`http://localhost:8080/api/chat/room/${chatRoomId}`);
+        const response = await axios.get(`${svURL}/chat/room/${chatRoomId}`);
         console.log(response.data)
         setMessages(response.data);
       } catch (error) {
@@ -85,7 +87,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chatRoomId }) => {
       // STOMP 클라이언트를 통해 메시지 전송
       stompClientRef.current.send('/app/chatroom/send', {}, JSON.stringify(chatMessage));
 
-      await axios.post('http://localhost:8080/api/chat/send', {
+      await axios.post(`${svURL}/chat/send`, {
         userId: userId,
         chatRoomId: chatRoomId,
         message: message,

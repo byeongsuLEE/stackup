@@ -1,14 +1,15 @@
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
 import { styled } from "@mui/system";
-import * as React from "react";
+import { useState, useEffect } from "react";
 import ChatIcon from "../../icons/ChatIcon";
 import ChatListItem from "../chat/ChatListItem";
 import { useChatStore } from "../../store/ChatStore";
 import { FaArrowLeft } from "react-icons/fa";
 import { useUserStore } from "../../store/UserStore"; // 로그인한 유저 정보 불러오기
-
 import ChatRoom from "../chat/ChatRoom";
 import axios from "axios";
+
+const svURL = import.meta.env.VITE_SERVER_URL;
 
 export interface client {
     client: {
@@ -20,10 +21,10 @@ export interface client {
 }
 
 export default function SimplePopup() {
-    const [anchor, setAnchor] = React.useState<null | HTMLElement>(null);
-    const [activeChatId, setActiveChatId] = React.useState<string | null>(null); // 활성화된 채팅방 ID 상태
-    const [newMessages, setNewMessages] = React.useState<boolean>(true); // 새 메시지 여부
-    const [clientList, setClientList] = React.useState<client[] | []>([]);
+    const [anchor, setAnchor] = useState<null | HTMLElement>(null);
+    const [activeChatId, setActiveChatId] = useState<string | null>(null); // 활성화된 채팅방 ID 상태
+    const [newMessages, setNewMessages] = useState<boolean>(true); // 새 메시지 여부
+    const [clientList, setClientList] = useState<client[] | []>([]);
 
     const loadChats = useChatStore((state) => state.loadChats);
     const chats = useChatStore((state) => state.chats);
@@ -39,9 +40,9 @@ export default function SimplePopup() {
         try {
             let url = '';
             if (userType === 'freelancer') {
-                url = `http://localhost:8080/api/board/apply-client`; // 프리랜서에 대한 API 엔드포인트
+                url = `${svURL}/board/apply-client`; // 프리랜서에 대한 API 엔드포인트
             } else if (userType === 'client') {
-                url = `http://localhost:8080/api/board/myboard`; // 클라이언트에 대한 API 엔드포인트
+                url = `${svURL}/board/myboard`; // 클라이언트에 대한 API 엔드포인트
             }
             const response = await axios({
                 method: 'get',
@@ -58,11 +59,7 @@ export default function SimplePopup() {
         }
     };
 
-    React.useEffect(() => {
-        console.log(userType)
-        console.log(clientList)
-        console.log(activeChat, activeChatId)
-        // loadChats(); // 컴포넌트가 마운트될 때 채팅 데이터를 불러옴
+    useEffect(() => {
         setNewMessages(true); // 새로운 메시지 감지 (여기서는 테스트용으로 true로 설정, 실제로는 메시지 수신 로직 추가)
     }, [loadChats]);
 

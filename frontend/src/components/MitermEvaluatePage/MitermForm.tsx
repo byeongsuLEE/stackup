@@ -4,6 +4,8 @@ import Radios from "../common/Radios";
 import { useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 
+const svURL = import.meta.env.VITE_SERVER_URL;
+
 const MitermForm = () => {
   // 상태 변수 설정
   const location = useLocation()
@@ -26,7 +28,7 @@ const MitermForm = () => {
     };
 
     try {
-      const response = await axios(`http://localhost:8080/api/evaluation/project-user`, {
+      const response = await axios(`${svURL}/evaluation/project-user`, {
         method: "POST",
         headers: {
           ContentType : "application/json",

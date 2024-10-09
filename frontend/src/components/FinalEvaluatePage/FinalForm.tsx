@@ -4,6 +4,8 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import DoneButton from "../common/DoneButton";
 import Radios from "../common/Radios";
 
+const svURL = import.meta.env.VITE_SERVER_URL;
+
 const FinalForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -37,7 +39,7 @@ const FinalForm = () => {
     };
 
     try {
-      const response = await axios.post("http://localhost:8080/api/evaluation/project-user", evaluationData, {
+      const response = await axios.post(`${svURL}/evaluation/project-user`, evaluationData, {
         headers: {
           ContentType: "application/json",
           Authorization: `Bearer ${sessionStorage.getItem('token')}`,

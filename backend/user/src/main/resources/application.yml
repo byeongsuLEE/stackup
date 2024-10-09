@@ -50,7 +50,7 @@ spring:
             client-secret: ${GITHUB_SECRET}
             client-id: ${GITHUB_ID}
             scope: read:user, user:email
-            redirect-uri: "http://stackup.live/api/user/login/oauth2/code/github"
+            redirect-uri: "https://stackup.live/api/user/login/oauth2/code/github"
         provider:
           github:
             authorization-uri: https://github.com/login/oauth/authorize
@@ -99,8 +99,8 @@ cloud:
 
 redirect:
   url:
-    callback: "http://stackup.live/callback"
-    main: "http://stackup.live"
+    callback: "https://stackup.live/callback"
+    main: "https://stackup.live"
 
 publicDataPortal:
   api:

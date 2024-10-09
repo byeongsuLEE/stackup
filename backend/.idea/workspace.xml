@@ -5,38 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="770a738c-7cff-4cbe-947d-9fe8c12c7597" name="Changes" comment="init : msa 기본구조">
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/controller/FreelancerController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/controller/UserController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/dto/request/ClientLoginRequestDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/dto/request/ClientSignUpRequestDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/dto/request/FreelancerInfoRequestDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/dto/response/ClientLoginResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/dto/response/ClientResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/dto/response/FreelancerLoginResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/dto/response/FreelancerRegisterResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/dto/response/FreelancerResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/dto/response/LoginResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/dto/response/TokenDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/dto/response/UserInfoResponseDto.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/entity/AuthUser.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/entity/Client.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/entity/EvaluationType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/entity/Freelancer.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/entity/FreelancerFramework.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/entity/FreelancerLanguage.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/entity/FreelancerProject.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/entity/User.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/entity/UserAdapter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/entity/UserType.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/repository/ClientRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/repository/FreelancerProjectRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/repository/FreelancerRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/repository/UserRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/service/UserDetailsServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/service/UserService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/user/src/main/java/com/ssafy/stackup/domain/user/service/UserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-10-04__9_28__Changes_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-10-04__9_28__Changes_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-10-04__9_28__Changes_1.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-10-04__9_28__Changes_1.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

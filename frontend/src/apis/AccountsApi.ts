@@ -216,8 +216,7 @@ export const authCheck = async (accountId: string): Promise<void> => {
 
 //== 계좌 이체 ==//
 export const transfer = async (freelancerId: number, balance: string): Promise<void> => {
-  console.log(freelancerId, balance)
-  const response = await axios ({
+  await axios ({
     method: 'post',
     url: `${BASE_URL}/account/transfer`,
     headers: {
@@ -229,5 +228,4 @@ export const transfer = async (freelancerId: number, balance: string): Promise<v
     }
   })
 
-  console.log(response)
 }

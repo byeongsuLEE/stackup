@@ -45,7 +45,6 @@ export const getProject = async (type: string): Promise<project[]> => {
       Authorization: `Bearer ${sessionStorage.getItem("token")}`
     }
   })
-  // console.log(response.data.data)
   return response.data.data
 }
 
@@ -122,7 +121,6 @@ export const contractProjectDetail = async (projectId?: any): Promise<any> => {
       },
     });
 
-    console.log(response.data); 
     return response.data?.data || response.data; // data에 있는 값이 없는 경우 처리
   } catch (error) {
     console.error('Error fetching project details:', error);

@@ -125,7 +125,15 @@ const ProjectDetail = () => {
   const boardId = project.boardId;
 
   const handleNavigateToEvaluate = () => {
-    navigate(`/evaluate/check/${projectId}`, { state: { stepResponse, boardId } });
+    if (sessionStorage.getItem('userType') === 'client'){
+      navigate(`/evaluate/check/${projectId}`, { state: { stepResponse, boardId } });
+
+    } else if (stepResponse === 'DEVELOPMENT') {
+      navigate(`/evaluate/miterm/${projectId}`, { state: { stepResponse, boardId }});
+
+    } else {
+      navigate(`/evaluate/final/${projectId}`, { state: { stepResponse, boardId }});
+    }
   };
 
   const handleStep = async () => {

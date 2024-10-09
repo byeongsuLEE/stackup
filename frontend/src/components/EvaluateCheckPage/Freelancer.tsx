@@ -9,7 +9,6 @@ interface FreelancerProps {
 }
 
 const Freelancer = ({ stepResponse, freelancer, boardId }: FreelancerProps) => {
-  console.log(freelancer)
   const { projectId } = useParams();
   const userId = freelancer.id;
   const freelancerProjectId = freelancer.freelancerProjectId;

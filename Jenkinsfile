@@ -145,7 +145,7 @@ def buildDockerImage(project, imageName) {
             }
 
             // Docker 이미지 빌드 및 푸시
-            dir("backend/${project}") {
+            dir("backend/spring-${project}") {
                 sh "ls"
                 sh "pwd"
                 sh 'chmod +x ./gradlew'

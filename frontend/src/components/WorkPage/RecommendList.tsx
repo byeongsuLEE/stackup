@@ -16,7 +16,6 @@ const RecommendList = () => {
 
   const update = async () => {
     const data = await recommendProject();
-    console.log("확인", data)
     setRecommendList(data)
   }
 
@@ -33,8 +32,10 @@ const RecommendList = () => {
         <span className="font-bold text-subGreen1">
           {name}
           </span>
-          님을 위한 추천 프로젝트</span>
-      <div className="flex flex-row flex-wrap gap-4">
+           님을 위한 추천 프로젝트
+      </span>
+
+      <div className="flex overflow-x-auto space-x-4 py-4 scrollbar">
         {recommendList?.map((recommend: recommend, index: number) => (
           <div
             onClick={() => toWorkDetail(recommend.boardId)}

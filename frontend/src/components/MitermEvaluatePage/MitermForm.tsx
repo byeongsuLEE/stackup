@@ -7,7 +7,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 const MitermForm = () => {
   // 상태 변수 설정
   const location = useLocation()
-  const { userId } = location.state;
+  const { userId, stepResponse, boardId } = location.state;
   const { projectId } = useParams<{ projectId: string }>();
   const [responseTimeScore, setResponseTimeScore] = useState<number | null>(null);
   const [reqChangeFreqScore, setReqChangeFreqScore] = useState<number | null>(null);
@@ -43,7 +43,7 @@ const MitermForm = () => {
 
       // 성공 메시지 표시
       alert("평가가 성공적으로 완료되었습니다.");
-      navigate('/transfer')
+      navigate(`/evaluate/check/${projectId}`,{state:{stepResponse, boardId}});
 
     } catch (error) {
       console.error("Error submitting evaluation:", error);

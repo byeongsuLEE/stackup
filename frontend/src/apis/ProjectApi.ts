@@ -122,7 +122,7 @@ export const contractProjectDetail = async (projectId: number): Promise<any> => 
       },
     });
 
-    // console.log(response.data); 
+    console.log(response.data); 
     return response.data?.data || response.data; // data에 있는 값이 없는 경우 처리
   } catch (error) {
     console.error('Error fetching project details:', error);

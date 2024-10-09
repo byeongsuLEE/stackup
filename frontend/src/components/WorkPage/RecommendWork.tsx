@@ -26,10 +26,7 @@ const RecommendWork = ({ title, classification, frameworks, languages }: Recomme
   // frameworks와 languages 배열을 join으로 , 구분하여 출력
   const frameworksList = frameworks.map(framework => framework.framework.name);
   const languagesList = languages.map(language => language.language.name);
-
   
-
-  console.log(name)
   return (
     <div>
       

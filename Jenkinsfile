@@ -14,9 +14,8 @@ pipeline {
         DOCKER_HUB_CREDENTIALS_ID = 'stackup_docker'
         IMAGE_TAG = "${env.BUILD_NUMBER}" // 빌드 번호를 이미지 태그로 사용
 
-        // Argo CD 설정
-        ARGOCD_SERVER = 'http://34.64.46.226:30081'
-        ARGOCD_CREDENTIALS_ID = 'stackup_argo'
+        // Kubernetes 매니페스트 경로
+        MANIFESTS_PATH = 'spring-frontend' // GitHub 리포지토리 내 매니페스트 경로
     }
 
     stages {
@@ -27,25 +26,21 @@ pipeline {
             }
         }
 
-        stage('List Frontend Files') {
-            steps {
-                // 현재 디렉터리의 파일 목록 출력 (디버깅용)
-                sh 'echo "Listing files in frontend directory:"'
-                sh 'ls -la'
-            }
-        }
-
         stage('Install Dependencies') {
             steps {
-                // npm 의존성 설치
-                sh 'npm install'
+                dir('frontend') {
+                    // npm 의존성 설치
+                    sh 'npm install'
+                }
             }
         }
 
         stage('Build React App') {
             steps {
-                // React 애플리케이션 빌드
-                sh 'npm run build'
+                dir('frontend') {
+                    // React 애플리케이션 빌드
+                    sh 'npm run build'
+                }
             }
         }
 
@@ -72,42 +67,18 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: "${GITHUB_CREDENTIALS_ID}", usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
                         // GitHub 매니페스트 리포지토리 클론
                         sh """
+                            rm -rf stackupM
                             git clone -b main https://${GIT_USER}:${GIT_PASS}@github.com/S-Choi-1997/stackupM.git
-                            cd stackupM/Spring-frontend
-                        """
-
-                        // 현재 디렉터리의 파일 목록 출력 (디버깅용)
-                        sh 'echo "Listing files in Spring-frontend directory:"'
-                        sh 'ls -la'
-
-                        // deployment.yaml 파일의 이미지 태그 업데이트
-                        sh "sed -i 's|image: choho97/stackup-frontend:.*|image: choho97/stackup-frontend:${IMAGE_TAG}|' deployment.yaml"
-
-                        // service.yaml 파일의 이미지 태그 업데이트 (필요 시)
-                        // 만약 Service에 이미지 태그가 명시되어 있지 않다면 이 단계는 생략 가능합니다.
-                        // sh "sed -i 's|image: choho97/stackup-frontend:.*|image: choho97/stackup-frontend:${IMAGE_TAG}|' service.yaml"
-
-                        // Git 설정
-                        sh """
+                            cd stackupM/spring-frontend
+                            ls -la  # 파일 리스트 확인
+                            sed -i 's|image: choho97/stackup-frontend:.*|image: choho97/stackup-frontend:${IMAGE_TAG}|' deployment.yaml
                             git config user.email "jenkins@example.com"
                             git config user.name "jenkins"
                             git add deployment.yaml
                             git commit -m "Update image to choho97/stackup-frontend:${IMAGE_TAG}" || echo "No changes to commit"
+                            git push https://${GIT_USER}:${GIT_PASS}@github.com/S-Choi-1997/stackupM.git main
                         """
-
-                        // 변경 사항 GitHub에 푸시
-                        sh "git push https://${GIT_USER}:${GIT_PASS}@github.com/S-Choi-1997/stackupM.git main"
                     }
-                }
-            }
-        }
-
-        stage('Deploy via ArgoCD') {
-            steps {
-                script {
-                    // Argo CD CLI를 사용하여 배포를 동기화하지 않습니다.
-                    // Argo CD가 GitHub 매니페스트를 자동으로 감지하고 동기화하도록 설정되어 있다고 가정합니다.
-                    echo "Argo CD가 GitHub 매니페스트의 변경 사항을 자동으로 감지하여 배포를 동기화합니다."
                 }
             }
         }

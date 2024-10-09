@@ -26,10 +26,8 @@ const Detail = ({ project, clientId }: DetailProps) => {
   const [loading, setLoading] = useState(true); // 로딩 상태
 
   const boardId = project.boardId;
-  // const { pathId } = useParams();
-
-
   const navigate = useNavigate();
+  const totalScore =  Math.round(Number(project.client.totalScore) * 10) / 10;
 
   // 프로젝트 삭제
   const deleteProject = async () => {
@@ -113,13 +111,12 @@ const Detail = ({ project, clientId }: DetailProps) => {
     (applicant) => applicant.id.toString() === sessionFreelancerId
   );
   
-
   return (
     <>
       <div className="bg-bgGreen border border-mainGreen h-auto rounded-lg p-10 w-[1000px]] my-20 mx-10">
         <div className="flex flex-col">
           <span className="text-lg font-bold">{project?.title} _ {classification}</span>
-          <span className="text-subTxt text-sm">{project?.client.businessName} _ 평점 {project?.client.totalScore}점</span>
+          <span className="text-subTxt text-sm">{project?.client.businessName} _ 평점 {totalScore}점</span>
         </div>
         <div className="flex justify-end">
           {window.sessionStorage.getItem("userType") === "freelancer" ? (
@@ -130,19 +127,31 @@ const Detail = ({ project, clientId }: DetailProps) => {
                 </div>
               ) : (
                 <div>
-                  <button className="bg-subGreen1 text-white rounded-lg px-2 font-bold text-sm w-[100px] h-[25px]" >지원완료</button>
+                  <button disabled className="bg-subGreen1 text-white rounded-lg px-2 font-bold text-sm w-[100px] h-[30px]" >지원완료</button>
                 </div>
               )}
             </>
           ) : sessionClientId == clientId && (
             <div className="flex">
-              <div onClick={toCandidate}>
-                <DoneButton width={100} height={25} title="지원자 관리" />
-              </div>
-              <Payment boardId={boardId} />
-              <button onClick={deleteProject} className="bg-subGreen2 text-bgGreen font-bold text-sm px-3 rounded-lg ml-2">
-                삭제하기
-              </button>
+              {project.startProject ? (
+                <>
+                <Payment boardId={boardId} />
+                <button onClick={deleteProject} className="bg-subGreen2 text-bgGreen font-bold text-sm px-3 rounded-lg ml-2">
+                  삭제하기
+                </button>
+              </>
+              ) : (
+                <>
+                  <div onClick={toCandidate}>
+                    <DoneButton width={100} height={25} title="지원자 관리" />
+                  </div>
+                  <Payment boardId={boardId} />
+                  <button onClick={deleteProject} className="bg-subGreen2 text-bgGreen font-bold text-sm px-3 rounded-lg ml-2">
+                    삭제하기
+                  </button>
+                </>
+              )}
+              
             </div>
           )}
 
@@ -189,9 +198,6 @@ const Detail = ({ project, clientId }: DetailProps) => {
           <span><pre>{project.description}</pre></span>
         </div>
       </div>
-
-
-
     </>
   );
 };

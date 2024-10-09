@@ -13,15 +13,12 @@ interface WorkProps {
 }
 
 const Work = ({ title, startDate, period, classification, deposit, deadline, recruits, applicants, client }: WorkProps) => {
- 
   const validStartDate = startDate ? new Date(startDate) : null;
   const validDeadline = deadline ? new Date(deadline) : null;
+  const totalScore =  Math.round(client.totalScore * 10) / 10;
 
   // period가 숫자인지 확인하고, 유효한 경우에만 사용
   const validPeriod = !isNaN(parseInt(period, 10)) ? parseInt(period, 10) : 0;
-
-  // deposit이 숫자인지 확인하고, 유효한 경우에만 사용
-  // const validDeposit = !isNaN(parseInt(deposit, 10)) ? parseInt(deposit, 10) : 0;
 
   // projectPeriod 계산
   const projectPeriod = validStartDate
@@ -35,11 +32,6 @@ const Work = ({ title, startDate, period, classification, deposit, deadline, rec
   const remainDay = validDeadline
     ? differenceInDays(validDeadline, new Date())
     : 0; // 유효하지 않은 경우 기본값 0
-
-  // remainDay가 0 이하이면 출력하지 않기
-  // if (remainDay < 0) {
-  //   return null;
-  // }
 
   if (classification === 'web') {
     classification = '웹'
@@ -73,7 +65,7 @@ const Work = ({ title, startDate, period, classification, deposit, deadline, rec
           <div className="flex flex-col">
             <span className='text-red-400'>마감 {remainDay}일전</span>
             <span>지원자 {applicants}명/{recruits}명</span>
-            <div className="flex mt-2 items-center justify-center bg-mainGreen rounded-lg w-[100px] h-[30px]">평점 {client.totalScore} 점</div>
+            <div className="flex mt-2 items-center justify-center bg-mainGreen rounded-lg w-[100px] h-[30px]">평점 {totalScore} 점</div>
           </div>
         </div>
 

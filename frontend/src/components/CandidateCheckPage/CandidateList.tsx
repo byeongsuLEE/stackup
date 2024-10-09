@@ -53,11 +53,7 @@ const CandidateList = () => {
         </thead>
         <tbody>
           {candidateList?.map((candidate: projectApplicantProps, index: number) => (
-            <Candidate
-              {...candidate}
-              onCheckboxChange={handleCheck}
-              key={index}
-            />
+            <Candidate {...candidate} onCheckboxChange={handleCheck} key={index} />
           ))}
         </tbody>
       </table>

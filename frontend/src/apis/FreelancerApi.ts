@@ -45,6 +45,5 @@ export const appliedProject = async (): Promise<any> => {
       Authorization: `Bearer ${sessionStorage.getItem('token')}`
     }
   })
-  console.log(response.data)
   return response.data
 }

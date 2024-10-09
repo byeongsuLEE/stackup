@@ -11,9 +11,15 @@ const SignListBox = (sign: project) => {
         <span className="mb-3">{sign.title} _ {sign.client.businessName}</span>
         <span>{sign.period}</span>
       </div>
-      <Link to={`/signature/detail/${freelancerProjectId}`}>
-        <DoneButton width={120} height={30} title="서명하기" />
-      </Link>
+
+      {sign.clientContractSigned ? (
+        <Link to={`/signature/detail/${freelancerProjectId}`}>
+          <DoneButton width={120} height={30} title="서명하기" />
+        </Link>
+      ) : (
+        <button disabled className="bg-subGreen2 text-white rounded-lg px-2 font-bold text-sm w-[120px] h-[30px]" >계약서 생성중</button>
+      )}
+      
     </div>
   )
 }

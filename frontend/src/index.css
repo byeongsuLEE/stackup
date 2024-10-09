@@ -11,7 +11,7 @@
 }
 
 *::-webkit-scrollbar {
-  display: none; /* Chrome, Safari, Opera*/
+  display: block; /* Chrome, Safari, Opera*/
 }
 
 .theme-background-color {
@@ -45,4 +45,14 @@ body {
 .slide-up {
   transform: translateY(-20px);
   opacity: 1;
+}
+
+.scrollbar {
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #ffffff #ffffff;
+}
+
+.scrollbar:hover {
+  scrollbar-color: #b9b8b8 #ffffff;
 }

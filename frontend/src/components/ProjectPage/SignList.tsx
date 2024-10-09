@@ -4,7 +4,6 @@ import SignListBox from "./SignListBox";
 import { project } from "../../apis/Board.type";
 import ClientSignListBox from "./ClientSignListBox";
 
-
 const SignList = () => {
   const [ signList, setSignList ] = useState<project[]>([]);
 
@@ -12,7 +11,6 @@ const SignList = () => {
     const update = async () => {
       const data = await getProject('PENDING');
       setSignList(data)
-      console.log(data)
     }
 
     update();

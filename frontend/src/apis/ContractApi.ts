@@ -6,7 +6,7 @@ const BASE_URL = `${svURL}/user/project`
 
 //== 계약서 정보 저장 ==//
 export const submitContract = async (data: any, freelancerProjectId?: string): Promise<void> => {
-    const response = await axios({
+    await axios({
       method: 'patch',
       url: `${BASE_URL}/contract/submit`,
       headers: {
@@ -27,7 +27,6 @@ export const submitContract = async (data: any, freelancerProjectId?: string): P
         "projectName": data.projectName
       }
     })
-    console.log(response.data)
   }
   
   //== 계약서 정보 불러오기 ==//

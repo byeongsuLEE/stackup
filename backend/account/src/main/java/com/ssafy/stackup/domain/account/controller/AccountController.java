@@ -205,7 +205,7 @@ public class AccountController {
     public ResponseEntity<?> setMainAccount(@PathVariable Long accountId, HttpServletRequest request) throws Exception {
          User user = getUserDetailInfo(request);
         Long userId = user.getId();
-        accountService.setMainAccount(accountId, user);
+        accountService.setMainAccount(accountId, user , request);
 
         return ResponseEntity.ok("메인 계좌 설정 성공");
     }

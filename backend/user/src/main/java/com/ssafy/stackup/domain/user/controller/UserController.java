@@ -130,7 +130,12 @@ public class UserController {
            
     }
 
+    @PostMapping("/info/main-account")
+    public ResponseEntity<ApiResponse<String>> setMainAccount(@RequestBody UserInfoResponseDto userRequestInfo){
+        userService.setMainAccount(userRequestInfo);
+        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("2차 비밀번호 저장 완료"));
 
+    }
 
 
     @PatchMapping("/{userId}/address")

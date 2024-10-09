@@ -114,4 +114,8 @@ public abstract class User {
     public boolean isClient() {
         return hasRole("ROLE_CLIENT");
     }
+
+    public void updateMainAccount(String mainAccount) {
+        this.mainAccount = mainAccount;
+    }
 }

@@ -77,22 +77,22 @@ public class TransactionsService {
         String email = user.getEmail();
 
         apikey = getApikey();
-
-        if (accountKey == null) {
-            System.out.println("accountKey 없음");
-            // account_key가 없으면 새로운 key를 발급받아 저장
-            accountKey = accountService.searchAccountKey(email);
-            user.setAccountKey(accountKey);
-
-            HttpHeaders headers = createHeaders(request);
-            HttpEntity<User> requestEntity = new HttpEntity<>(user, headers);
-
-            ResponseEntity<String> response = restTemplate.exchange(USER_SERVICE_URL+"/accountKey", HttpMethod.PATCH, requestEntity, String.class);
-            if(response.getStatusCode() != HttpStatus.OK) {
-                throw new CustomException(USER_NOT_FOUND);
-            }
-
-        }
+//
+//        if (accountKey == null) {
+//            System.out.println("accountKey 없음");
+//            // account_key가 없으면 새로운 key를 발급받아 저장
+//            accountKey = accountService.searchAccountKey(email);
+//            user.setAccountKey(accountKey);
+//
+//            HttpHeaders headers = createHeaders(request);
+//            HttpEntity<User> requestEntity = new HttpEntity<>(user, headers);
+//
+//            ResponseEntity<String> response = restTemplate.exchange(USER_SERVICE_URL+"/accountKey", HttpMethod.POST, requestEntity, String.class);
+//            if(response.getStatusCode() != HttpStatus.OK) {
+//                throw new CustomException(USER_NOT_FOUND);
+//            }
+//
+//        }
 
         // 현재 날짜와 시간 가져오기
         String transmissionDate = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);

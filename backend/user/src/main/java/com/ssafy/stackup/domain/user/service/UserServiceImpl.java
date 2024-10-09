@@ -459,6 +459,15 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    @Override
+    public void setMainAccount(UserInfoResponseDto userRequestInfo) {
+        User user = userRepository.findById(userRequestInfo.getId())
+                .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+        user.updateMainAccount(userRequestInfo.getMainAccount());
+        userRepository.save(user);
+    }
+
     /**
      * @param tokenDto 로그인 시 발급한 토큰 데이터
      * @param response 토큰을 헤더에 추가하기 위한 servlet

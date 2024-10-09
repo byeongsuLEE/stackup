@@ -338,7 +338,7 @@ public class AccountService {
         HttpEntity<User> requestEntity = new HttpEntity<>(user, headers);
 
             // POST 요청 보내기 (응답을 Map으로 받음)
-            ResponseEntity<String> response = restTemplate.exchange(USER_SERVICE_URL+"info/second-password", HttpMethod.PATCH, requestEntity, String.class);
+            ResponseEntity<String> response = restTemplate.exchange(USER_SERVICE_URL+"info/second-password", HttpMethod.POST, requestEntity, String.class);
             if(response.getStatusCode() != HttpStatus.OK) {
 
 
@@ -357,11 +357,25 @@ public class AccountService {
     }
 
     @Transactional
-    public void setMainAccount(Long accountId, User user) throws Exception {
+    public void setMainAccount(Long accountId, User user, HttpServletRequest request) throws Exception {
         Account account = getAccount(accountId);
         String accountNo = EncryptionUtil.decrypt(account.getAccountNum());
 
         user.setMainAccount(EncryptionUtil.encrypt(accountNo));
+
+        HttpHeaders headers = createHeaders(request);
+        HttpEntity<User> requestEntity = new HttpEntity<>(user, headers);
+
+        // POST 요청 보내기 (응답을 Map으로 받음)
+        ResponseEntity<String> response = restTemplate.exchange(USER_SERVICE_URL+"info/main-account", HttpMethod.POST
+                , requestEntity, String.class);
+        if(response.getStatusCode() != HttpStatus.OK) {
+
+
+            throw new CustomException(USER_NOT_SET_SECOND_PASSWORD);
+        }
+
+
     }
 
     public static HttpHeaders createHeaders(HttpServletRequest request) {

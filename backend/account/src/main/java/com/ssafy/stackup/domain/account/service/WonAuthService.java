@@ -73,23 +73,23 @@ public class WonAuthService {
         apikey = getApikey();
 
 
-        if (accountKey == null) {
-            System.out.println("accountKey 없음");
-            // account_key가 없으면 새로운 key를 발급받아 저장
-            accountKey = accountService.searchAccountKey(email);
-            user.setAccountKey(accountKey);
-
-            HttpHeaders headers = createHeaders(request);
-            HttpEntity<User> requestEntity = new HttpEntity<>(user, headers);
-
-            // POST 요청 보내기 (응답을 Map으로 받음)
-            ResponseEntity<String> response = restTemplate.exchange(USER_SERVICE_URL+"/info/second-password", HttpMethod.PATCH, requestEntity, String.class);
-            if(response.getStatusCode() != HttpStatus.OK) {
-
-
-                throw new CustomException(ErrorCode.USER_NOT_FOUND);
-            }
-        }
+//        if (accountKey == null) {
+//            System.out.println("accountKey 없음");
+//            // account_key가 없으면 새로운 key를 발급받아 저장
+//            accountKey = accountService.searchAccountKey(email);
+//            user.setAccountKey(accountKey);
+//
+//            HttpHeaders headers = createHeaders(request);
+//            HttpEntity<User> requestEntity = new HttpEntity<>(user, headers);
+//
+//            // POST 요청 보내기 (응답을 Map으로 받음)
+//            ResponseEntity<String> response = restTemplate.exchange(USER_SERVICE_URL+"/info/second-password", HttpMethod.PATCH, requestEntity, String.class);
+//            if(response.getStatusCode() != HttpStatus.OK) {
+//
+//
+//                throw new CustomException(ErrorCode.USER_NOT_FOUND);
+//            }
+//        }
 
         // 현재 날짜와 시간 가져오기
         String transmissionDate = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
@@ -145,23 +145,23 @@ public class WonAuthService {
 
         apikey = getApikey();
 
-        if (accountKey == null) {
-            System.out.println("accountKey 없음");
-            // account_key가 없으면 새로운 key를 발급받아 저장
-            accountKey = accountService.searchAccountKey(email);
-            user.setAccountKey(accountKey);
-
-            HttpHeaders headers = createHeaders(request);
-            HttpEntity<User> requestEntity = new HttpEntity<>(user, headers);
-
-            // POST 요청 보내기 (응답을 Map으로 받음)
-            ResponseEntity<String> response = restTemplate.exchange(USER_SERVICE_URL+"/info/second-password", HttpMethod.PATCH, requestEntity, String.class);
-            if(response.getStatusCode() != HttpStatus.OK) {
-
-
-                throw new CustomException(ErrorCode.USER_NOT_FOUND);
-            }
-        }
+//        if (accountKey == null) {
+//            System.out.println("accountKey 없음");
+//            // account_key가 없으면 새로운 key를 발급받아 저장
+//            accountKey = accountService.searchAccountKey(email);
+//            user.setAccountKey(accountKey);
+//
+//            HttpHeaders headers = createHeaders(request);
+//            HttpEntity<User> requestEntity = new HttpEntity<>(user, headers);
+//
+//            // POST 요청 보내기 (응답을 Map으로 받음)
+//            ResponseEntity<String> response = restTemplate.exchange(USER_SERVICE_URL+"/info/second-password", HttpMethod.PATCH, requestEntity, String.class);
+//            if(response.getStatusCode() != HttpStatus.OK) {
+//
+//
+//                throw new CustomException(ErrorCode.USER_NOT_FOUND);
+//            }
+//        }
 
         String transmissionDate = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
         String transmissionTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HHmmss"));

@@ -1,8 +1,8 @@
 import axios from "axios"
 
-// const BASE_URL: string = "http://localhost:8080/api/project"
+const BASE_URL: string = "http://localhost:8080/api/project"
 const svURL = import.meta.env.VITE_SERVER_URL;
-const BASE_URL = `${svURL}/user/project`
+// const BASE_URL = `${svURL}/user/project`
 
 //== 계약서 정보 저장 ==//
 export const submitContract = async (data: any, freelancerProjectId?: string): Promise<void> => {
@@ -68,6 +68,5 @@ export const contractData = async (freelancerProjectId?: string): Promise<any> =
       Authorization: `Bearer ${sessionStorage.getItem('token')}`
     }
   })
-  console.log(response.data.data)
   return response.data.data
 }

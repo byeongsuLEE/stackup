@@ -24,7 +24,6 @@ const Contract = () => {
       const sign = await signMessage();
       if (sign) {
         await signature(sign.signedMessage, freelancerProjectId);
-
         navigate(`/work/detail/select/${boardId}/${projectId}`);
       }
     }
@@ -38,7 +37,7 @@ const Contract = () => {
       <ContractDetail ref={contractDetailRef} />
 
       <div className="mt-5 text-end mr-10" onClick={handleSubmit}>
-        <DoneButton height={30} width={150} title="제출" />
+        <DoneButton height={30} width={150} title="서명 제출" />
       </div>
     </div>
   );

@@ -18,7 +18,6 @@ const ContractDone = () => {
 
     fetchProject();
   }, []);
-  console.log(projectList);
 
   return (
     <>

@@ -11,6 +11,7 @@ const SignList = () => {
     const update = async () => {
       const data = await getProject('PENDING');
       setSignList(data)
+      console.log(data);
     }
 
     update();

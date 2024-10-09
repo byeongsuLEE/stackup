@@ -32,6 +32,8 @@ import Work from "./pages/WorkPage";
 import InstallWallet from './pages/InstallWalletPage';
 import EvaluateCheck from "./pages/EvaluateCheckPage";
 import SimplePopup from "./components/common/ChatPopup";
+import MainLoadingIcon from "./icons/MainLoading";
+import Loading from "./pages/LoadingPage";
 
 function App() {
   const queryClient = new QueryClient();
@@ -72,6 +74,7 @@ function App() {
                 <Route path="/callback" element={<Callback />} />
                 <Route path="/install-metamask" element={<InstallWallet />} />
                 <Route path="/evaluate/check/:projectId" element={<EvaluateCheck />} />
+                <Route path="/loading" element={<Loading />} />
 
 
               </Routes>

@@ -34,7 +34,7 @@ public class SecurityConfiguration {
     private final CustomOAuth2UserService customOAuth2UserService; // CustomOAuth2UserService 주입
 
     private final String[] PERMIT_ALL_ARRAY = { // 허용할 API
-            "/","/user/client/signup", "/user/login","/**","/login/**", "/oauth2/**", "/user/token"
+            "/","/user/client/signup", "/user/login","/**","/login/**", "/oauth2/**", "/user/token","/user/ws/**"
     };
 
     private final String[] CORS_API_METHOD = { // 허용할 Method

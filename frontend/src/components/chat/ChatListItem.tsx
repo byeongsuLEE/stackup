@@ -3,8 +3,8 @@ import React from "react";
 interface ChatListItemProps {
     name: string;
     chatId: number;
+    timestamp: string;
     //   messagePreview: string;
-    //   timestamp: string;
     //   unreadCount: number;
     onClick?: (chatId: number) => void; // 클릭 핸들러 추가 (선택적 속성)
 }
@@ -12,8 +12,8 @@ interface ChatListItemProps {
 const ChatListItem: React.FC<ChatListItemProps> = ({
     chatId,
     name,
+    timestamp,
     //   messagePreview,
-    //   timestamp,
     //   unreadCount,
     onClick, // onClick 속성 추가
 }) => {

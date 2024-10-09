@@ -13,11 +13,13 @@ interface ChatMessage {
   userId: string | null;
   message: string;
   chatRoomId: string;
+  registTime: string;
 }
 
 interface ReceiveMessage {
   userId: number | null;
   message: string;
+  registTime: string;
 }
 
 interface ChatRoomProps {
@@ -32,7 +34,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chatRoomId }) => {
   const stompClientRef = useRef<any>(null); // STOMP 클라이언트 참조 변수
   const userId = sessionStorage.getItem('userId')
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
-  
+
   useEffect(() => {
     freelanceMypage();
     const sock = new SockJS('http://localhost:8080/api/ws'); // WebSocket 엔드포인트 설정
@@ -47,8 +49,8 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chatRoomId }) => {
       console.error('STOMP Error: ', error); // 연결 실패 시 에러 로그 출력
     });
 
-     // 채팅 메시지 불러오기
-     const fetchMessages = async () => {
+    // 채팅 메시지 불러오기
+    const fetchMessages = async () => {
       try {
         const response = await axios.get(`http://localhost:8080/api/chat/room/${chatRoomId}`);
         console.log(response.data)
@@ -59,7 +61,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chatRoomId }) => {
     };
 
     fetchMessages(); // 컴포넌트 마운트 시 메시지 불러오기
-    console.log('메시지 : ',messages)
+    console.log('메시지 : ', messages)
 
     // 컴포넌트가 언마운트될 때 WebSocket 연결 해제
     return () => {
@@ -68,7 +70,8 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chatRoomId }) => {
   }, [chatRoomId]);
 
   // const name = freelanceStore((state) => state.name);
-  
+  const myRegistTime = new Date().toLocaleString('sv-SE', { timeZone: 'Asia/Seoul' }).replace(' ', 'T');
+
   // 메시지 전송 함수
   const sendMessage = async () => {
     if (message.trim() !== '') {
@@ -76,17 +79,19 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chatRoomId }) => {
         userId: userId,
         message: message,
         chatRoomId: chatRoomId,
+        registTime: myRegistTime
       };
 
       console.log('Sending message:', chatMessage);
 
       // STOMP 클라이언트를 통해 메시지 전송
       stompClientRef.current.send('/app/chatroom/send', {}, JSON.stringify(chatMessage));
-      
+
       await axios.post('http://localhost:8080/api/chat/send', {
         userId: userId,
         chatRoomId: chatRoomId,
         message: message,
+        registTime: myRegistTime
       });
 
       setMessage(''); // 메시지 입력란 초기화
@@ -106,6 +111,13 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chatRoomId }) => {
     }
   }, [messages]);
 
+  const formatTime = (timestamp : string) => {
+    const date = new Date(timestamp);
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
+  };
+
   return (
     <div>
       {/* <h2>채팅방 {chatRoomId}</h2> */}
@@ -113,12 +125,12 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chatRoomId }) => {
         {messages.map((msg, index) => {
           // 보낸 메시지인지 상대 메시지인지 확인하여 해당 컴포넌트 렌더링
           return msg.userId == userId ? (
-            <MyMessageComponent key={index} message={msg.message} />
+            <MyMessageComponent key={index} message={msg.message} registTime={formatTime(msg.registTime)} />
           ) : (
-            <OtherMessageComponent key={index} message={msg.message} />
+            <OtherMessageComponent key={index} message={msg.message} registTime={formatTime(msg.registTime)} />
           );
         })}
-        <div ref={messagesEndRef}/>
+        <div ref={messagesEndRef} />
       </div>
       <div className='mt-1'>
         <input

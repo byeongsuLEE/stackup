@@ -138,7 +138,7 @@ export default function SimplePopup() {
                                     key={chat.chatId}
                                     name={chat.name}
                                     // messagePreview={chat.messagePreview}
-                                    // timestamp={chat.timestamp}
+                                    timestamp={chat.registTime}
                                     // chatId={chat.chatId}
                                     // unreadCount={chat.unreadCount}
                                     onClick={() => handleChatClick(chat.chatId)} // 클릭 시 채팅방 활성화

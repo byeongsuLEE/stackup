@@ -1,16 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import DoneButton from "../common/DoneButton";
 import Radios from "../common/Radios";
+import { projectDetail } from "../../apis/BoardApi";
 
 const svURL = import.meta.env.VITE_SERVER_URL;
 
 const FinalForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { userId } = location.state;
-  const { projectId } = useParams<{ projectId: string }>();
+  const { userId, boardId, stepResponse, freelancerProjectId } = location.state;
+  const { projectId } = useParams();
+  const [ clientId, setClientId ] = useState<string>();
+  const [ id, setId ] = useState<string>();
 
   // 상태값 선언 (각 점수와 한줄평을 관리)
   const [responseTimeScore, setResponseTimeScore] = useState<number | null>(null);
@@ -22,10 +25,35 @@ const FinalForm = () => {
   const [legalTermsScore, setLegalTermsScore] = useState<number | null>(null);
   const [shortReview, setShortReview] = useState<string>("");
 
+  useEffect(() => {
+    const update = async () => {
+      const data = await projectDetail(boardId);
+      setClientId(data.client.id);
+    };
+  
+    update();
+  }, [boardId]);
+  
+  useEffect(() => {
+    if (clientId) {
+      if (sessionStorage.getItem('userType') === 'freelancer') {
+        setId(clientId);
+      } else {
+        setId(userId);
+      }
+    }
+  }, [clientId, userId]);
+
   // 서버로 데이터를 POST하는 함수
   const handleSubmit = async () => {
+    if (!id) {
+      console.error("ID 값이 설정되지 않았습니다.");
+      alert("ID 값이 설정되지 않았습니다. 다시 시도해 주세요.");
+      return;
+    }
+
     const evaluationData = {
-      userId: userId,
+      userId: id,
       projectId: Number(projectId),
       responseTimeScore,
       reqChangeFreqScore,
@@ -47,7 +75,11 @@ const FinalForm = () => {
       });
       console.log(response.data);
       alert("평가가 성공적으로 완료되었습니다.");
-      navigate('/transfer')
+      if (sessionStorage.getItem('userType') === 'client') {
+        navigate(`/transfer/${projectId}`, {state:{userId, boardId, stepResponse, freelancerProjectId}});
+      } else {
+        navigate(`/project/detail/${projectId}`, {state:{userId, boardId, stepResponse, freelancerProjectId}});
+      }
     } catch (error) {
       console.error("Error submitting evaluation:", error);
     }

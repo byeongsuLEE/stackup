@@ -31,6 +31,7 @@ import WorkDetail from "./pages/WorkDetailPage";
 import Work from "./pages/WorkPage";
 import InstallWallet from './pages/InstallWalletPage';
 import EvaluateCheck from "./pages/EvaluateCheckPage";
+import SimplePopup from "./components/common/ChatPopup";
 
 function App() {
   const queryClient = new QueryClient();
@@ -76,6 +77,10 @@ function App() {
               </Routes>
             </main>
             <Footer />
+            <div className="fixed right-7 bottom-3">
+            <SimplePopup/>
+          </div>
+
           </div>
         </BrowserRouter>
       </QueryClientProvider>

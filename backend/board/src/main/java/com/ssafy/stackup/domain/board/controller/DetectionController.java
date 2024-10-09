@@ -18,7 +18,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 @RestController
-@RequestMapping("/detect/illegal/{boardId}")
+@RequestMapping("/board/detect/illegal/{boardId}")
 public class DetectionController {
 
     @Autowired

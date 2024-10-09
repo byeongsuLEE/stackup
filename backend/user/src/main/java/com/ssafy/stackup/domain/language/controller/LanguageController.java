@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/languages")
+@RequestMapping("user/languages")
 public class LanguageController {
 
     private final LanguageService languageService;

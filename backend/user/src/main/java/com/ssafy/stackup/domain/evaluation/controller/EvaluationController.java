@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 설명    :
  */
 @RestController
-@RequestMapping("evaluation")
+@RequestMapping("user/evaluation")
 @RequiredArgsConstructor
 public class EvaluationController {
 

@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/frameworks")
+@RequestMapping("user/frameworks")
 public class FrameworkController {
 
     private final FrameworkService frameworkService;

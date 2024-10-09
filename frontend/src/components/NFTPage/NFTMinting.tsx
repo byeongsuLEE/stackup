@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { contractProp } from "../../apis/Contract.type";
 import { pinata, uploadMetadataToPinata } from "../../apis/NftApi";
 import { generateImage } from "../../hooks/MakeImage";
 import DoneButton from "../common/DoneButton";
-import { contractProp } from "../../apis/Contract.type";
-// import { useNavigate } from "react-router-dom";
 
 // window.ethereum 타입 확장
 declare global {
@@ -17,16 +17,18 @@ interface NFTMintingProps {
   isLoading: boolean; // 부모 컴포넌트에서 전달받는 로딩 상태
   pdf: any;
   contractData: contractProp;
+  projectId: number;
 }
 
-const NFTMinting = ({ Minting, isLoading, pdf, contractData }: NFTMintingProps) => {
+const NFTMinting = ({ Minting, isLoading, pdf, contractData, projectId }: NFTMintingProps) => {
   //== pdf 생성 ==//
   const componentRef = useRef<HTMLDivElement>(null);
 
   const ethereum = window.ethereum;
-  const [addr, setAddr] = useState("");
+  const [, setAddr] = useState("");
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  console.log(addr)
+  const navigate = useNavigate();
+  // console.log(addr)
 
   // 지갑 연결 함수
   const handleGetAccount = async () => {
@@ -65,6 +67,7 @@ const NFTMinting = ({ Minting, isLoading, pdf, contractData }: NFTMintingProps) 
       // NFT 발행
       await Minting(cid);
       alert("NFT가 완성되었습니다.");
+      navigate(`/project/detail/${projectId}`);
     } catch (error) {
       console.error("NFT 발행 오류:", error);
       alert("NFT 발행 실패");
@@ -73,20 +76,20 @@ const NFTMinting = ({ Minting, isLoading, pdf, contractData }: NFTMintingProps) 
 
   return (
     <>
-    {isLoading ? (
-      <div></div>
-    ) : (
-    <div>
-      <div ref={componentRef}>
-        {/* 캔버스 요소 추가 */}
-        <canvas ref={canvasRef} style={{ border: "1px solid black", display: "none" }}></canvas>
-      
-      <div className="mt-10 text-end" onClick={handleMintNFT}>
-        <DoneButton height={30} width={150} title="제출" />
+      {isLoading ? (
+        <div></div>
+      ) : (
+        <div>
+          <div ref={componentRef}>
+            {/* 캔버스 요소 추가 */}
+            <canvas ref={canvasRef} style={{ border: "1px solid black", display: "none" }}></canvas>
+
+            <div className="mt-2 text-end" onClick={handleMintNFT}>
+              <DoneButton height={30} width={150} title="서명 제출" />
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  )}
+      )}
     </>
   );
 };

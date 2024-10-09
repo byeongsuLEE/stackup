@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
+import SimplePopup from "./components/common/ChatPopup";
 import Footer from "./components/common/Footer";
 import Navbar from "./components/common/Navbar";
 import AccountDetail from "./pages/AccountDetailPage";
@@ -12,10 +13,13 @@ import Career from "./pages/CareerPage";
 import CareerRegister from "./pages/CareerRegisterPage";
 import ClientSignup from "./pages/ClientSignupPage";
 import Contract from "./pages/ContractPage";
+import EvaluateCheck from "./pages/EvaluateCheckPage";
 import FinalEvaluate from "./pages/FinalEvaluatePage";
 import FreelancerSignup from "./pages/FreelancerSignupPage";
 import FreelancerSkill from "./pages/FreelancerSkillPage";
 import Home from "./pages/HomePage";
+import InstallWallet from './pages/InstallWalletPage';
+import Loading from "./pages/LoadingPage";
 import Login from "./pages/LoginPage";
 import MitermEvaluate from "./pages/MitermEvaluatePage";
 import Mypage from "./pages/MyPage";
@@ -29,9 +33,6 @@ import SignatureDetail from "./pages/SignatureDetailPage";
 import Transfer from "./pages/TransferPage";
 import WorkDetail from "./pages/WorkDetailPage";
 import Work from "./pages/WorkPage";
-import InstallWallet from './pages/InstallWalletPage';
-import EvaluateCheck from "./pages/EvaluateCheckPage";
-import SimplePopup from "./components/common/ChatPopup";
 
 function App() {
   const queryClient = new QueryClient();
@@ -72,14 +73,17 @@ function App() {
                 <Route path="/callback" element={<Callback />} />
                 <Route path="/install-metamask" element={<InstallWallet />} />
                 <Route path="/evaluate/check/:projectId" element={<EvaluateCheck />} />
+                <Route path="/loading" element={<Loading />} />
+                <Route path="/nft-loading" element={<NFTLoading />} />
+
 
 
               </Routes>
             </main>
             <Footer />
             <div className="fixed right-7 bottom-3">
-            <SimplePopup/>
-          </div>
+              <SimplePopup />
+            </div>
 
           </div>
         </BrowserRouter>

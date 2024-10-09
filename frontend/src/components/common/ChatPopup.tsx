@@ -25,6 +25,7 @@ export default function SimplePopup() {
     const [activeChatId, setActiveChatId] = useState<string | null>(null); // 활성화된 채팅방 ID 상태
     const [newMessages, setNewMessages] = useState<boolean>(true); // 새 메시지 여부
     const [clientList, setClientList] = useState<client[] | []>([]);
+    console.log(clientList)
 
     const loadChats = useChatStore((state) => state.loadChats);
     const chats = useChatStore((state) => state.chats);

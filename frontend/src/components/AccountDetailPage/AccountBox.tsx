@@ -4,7 +4,6 @@ import DoneButton from "../common/DoneButton";
 import CheckPassword from "./CheckPassword";
 import SetPassword from "./SetPassword";
 import { mainAccout } from "../../apis/AccountsApi";
-import { useNavigate } from "react-router-dom";
 
 interface AccountBoxProps {
   account: accountInfo;
@@ -12,7 +11,6 @@ interface AccountBoxProps {
 }
 
 const AccountBox = ({ account, mainAccount }: AccountBoxProps) => {
-  const navigate = useNavigate();
   const [isPasswordSet, setIsPasswordSet] = useState(false);
 
   const handleSetPassword = async() => {
@@ -22,7 +20,7 @@ const AccountBox = ({ account, mainAccount }: AccountBoxProps) => {
 
   const handleMainAccount = async() => {
     await mainAccout(account.accountId);
-    navigate('/account');
+    window.location.reload();
   }
   
   if (!account) {

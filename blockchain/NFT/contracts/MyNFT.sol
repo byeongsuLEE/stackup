@@ -13,8 +13,8 @@ contract MyNFT is ERC721URIStorage, ERC721Enumerable, Ownable {
 
     constructor() ERC721("MyNFT", "MNFT") {}
 
-    // 소유자만 민팅 가능한 기능
-    function mint(address recipient, string memory _tokenURI) external onlyOwner {
+    // 누구나 민팅 가능한 기능으로 수정
+    function mint(address recipient, string memory _tokenURI) external {
         uint256 tokenId = nextTokenId;
         nextTokenId++;
         _mint(recipient, tokenId);

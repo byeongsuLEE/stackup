@@ -9,9 +9,10 @@ import json
 from tensorflow.keras.models import load_model as keras_load_model
 from sklearn.preprocessing import MinMaxScaler
 import logging
+from flask_cors import CORS
 
 app = Flask(__name__)
-
+CORS(app)
 # SBERT 모델 로드
 model1 = SentenceTransformer('snunlp/KR-SBERT-V40K-klueNLI-augSTS')
 

@@ -58,6 +58,10 @@ public class Project{
     @JoinColumn(name = "board_id")
     private Board board; // 프로젝트 모집 게시글 (1대다 관계)
 
+    private String previousProjectStartDate ;
+    private String previousProjectEndDate ;
+
+
     public ProjectStep nextProjectStep(){
        this.step =  this.step.next();
        return  this.step;

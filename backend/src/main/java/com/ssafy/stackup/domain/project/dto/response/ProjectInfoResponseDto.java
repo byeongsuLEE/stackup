@@ -51,6 +51,9 @@ public class ProjectInfoResponseDto {
     private ClientResponseDto client;
     private Long boardId;
 
+    private String previousProjectStartDate ;
+    private String previousProjectEndDate ;
+
 
     public void updateClient (Project project)
     {

@@ -64,27 +64,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final BoardApplicantRepository boardApplicantRepository;
     private final ClientRepository clientRepository;
 
-    @Override
-    public void registerPreviousProject(MultipartFile certificateFile, String title, Long period) {
 
-
-        try {
-            String certificateUrl = s3ImageUpLoadService.uploadImage(certificateFile);
-            Project project = Project.builder()
-                    .status(ProjectStatus.BEFORE)
-                    .title(title)
-                    .period(String.valueOf(period))
-                    .certificateUrl(certificateUrl)
-                    .build();
-
-            projectRepository.save(project);
-
-        }
-        catch (IOException e) {
-            throw new CustomException(ErrorCode.IOEXCEPTION);
-        }
-
-    }
 
     /**
      *
@@ -361,6 +341,27 @@ public class ProjectServiceImpl implements ProjectService {
 
     }
 
+    @Override
+    public void registerPreviousProject(MultipartFile certificateFile, String title, String startDate, String endDate) {
+
+        try {
+            String certificateUrl = s3ImageUpLoadService.uploadImage(certificateFile);
+            Project project = Project.builder()
+                    .status(ProjectStatus.BEFORE)
+                    .title(title)
+                    .previousProjectStartDate(startDate)
+                    .previousProjectEndDate(endDate)
+                    .certificateUrl(certificateUrl)
+                    .build();
+
+            projectRepository.save(project);
+
+        }
+        catch (IOException e) {
+            throw new CustomException(ErrorCode.IOEXCEPTION);
+        }
+    }
+
 
     /**
      *
@@ -479,6 +480,8 @@ public class ProjectServiceImpl implements ProjectService {
                         .title(project.getTitle())
                         .period(project.getPeriod())
                         .certificateUrl(project.getCertificateUrl())
+                        .previousProjectStartDate(project.getPreviousProjectStartDate())
+                        .previousProjectEndDate(project.getPreviousProjectEndDate())
                         .build();
 
                 projectInfoResponseDtos.add(projectInfoResponseDto);

@@ -206,7 +206,7 @@ def analyze():
 
                 # 임계값 동적 계산 (기존 데이터의 95% 분위수)
                 threshold = dynamic_threshold(mse)
-                anomalies = detect_anomalies_with_additional_conditions([processed_data], mse, threshold)
+                anomalies = detect_anomalies_with_additional_conditions(processed_data)
 
                 # Kafka로 결과 전송
                 message = json.dumps({

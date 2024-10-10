@@ -77,7 +77,6 @@ const getNFTs = async (
         const tokenId = await contract.methods.tokenOfOwnerByIndex(account, i).call();
 
         if (!tokenId) {
-          console.error(`Token ID를 가져오지 못했습니다. Index: ${i}`);
           continue;
         }
 

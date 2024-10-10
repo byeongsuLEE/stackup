@@ -1,7 +1,7 @@
 import axios from "axios"
 import { passwordStore } from "../store/AccountStore"
 import { accountInfo, transactionInfo } from "./Account.type"
-import { callNft } from "../hooks/MintNft";
+// import { callNft } from "../hooks/MintNft";
 
 const BASE_URL = import.meta.env.VITE_SERVER_URL;
 

@@ -13,6 +13,10 @@ def get_boards_from_spring():
     response = requests.get("https://stackup.live/api/board/search-all")
     return response.json()
 
+@app.route('/flask/flask')
+def hello():
+    return "Hello, Flask!"
+
 @app.route('/flask/similar-boards', methods=['POST'])
 def find_similar_boards():
     data = request.json

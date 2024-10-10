@@ -43,7 +43,7 @@ export const handlePrint = async (elementRef: React.RefObject<HTMLDivElement>): 
     const pdf = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
-      format: 'a4',
+      format:  [210, 148.5],
     });
 
     const pageWidth = pdf.internal.pageSize.getWidth();

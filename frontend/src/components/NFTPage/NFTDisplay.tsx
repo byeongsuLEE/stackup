@@ -75,10 +75,10 @@ const getNFTs = async (
     for (let i = 0; i < numBalance; i++) {
       try {
         const tokenId = await contract.methods.tokenOfOwnerByIndex(account, i).call();
-        // console.log(`Token ID at index ${i}:`, tokenId); // 로그 추가
+        console.log(`Token ID at index ${i}:`, tokenId); // 로그 추가
 
         if (!tokenId) {
-          // console.error(`Token ID를 가져오지 못했습니다. Index: ${i}`);
+          console.error(`Token ID를 가져오지 못했습니다. Index: ${i}`);
           continue;
         }
 

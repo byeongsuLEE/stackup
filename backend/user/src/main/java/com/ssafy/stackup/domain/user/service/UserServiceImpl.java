@@ -423,6 +423,9 @@ public class UserServiceImpl implements UserService {
             Client client = clientRepository.findById(user.getId())
                     .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
 
+            System.out.println("메인계좌"+client.getMainAccount());
+            System.out.println("유저 주소"+client.getUserAddress());
+
             ClientResponseDto clientResponseDto  = ClientResponseDto.builder()
                     .id(client.getId())
                     .roles(client.getRoles())

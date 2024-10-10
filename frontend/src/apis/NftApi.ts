@@ -29,7 +29,7 @@ export const uploadMetadataToPinata = async (imageCID: string, pdfCID: string, d
 
   const metadata = {
     name: data.projectName,
-    description: `${start}일 부터 ${end}일 까지 ${data.period}동안 진행한 프로젝트`,
+    description: `${start}일 부터 ${end}일 까지 ${data.period}일 동안 진행한 프로젝트`,
     image: `https://gateway.pinata.cloud/ipfs/${imageCID}`, // 이미지 CID
     attributes: [
       {

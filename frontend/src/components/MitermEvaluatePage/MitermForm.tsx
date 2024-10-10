@@ -61,7 +61,7 @@ const MitermForm = () => {
     };
 
     try {
-      await axios(`${svURL}/evaluation/project-user`, {
+      await axios(`${svURL}/user/evaluation/project-user`, {
         method: "POST",
         headers: {
           ContentType : "application/json",

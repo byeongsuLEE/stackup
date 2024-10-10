@@ -1,6 +1,7 @@
 import axios from "axios"
 import { passwordStore } from "../store/AccountStore"
 import { accountInfo, transactionInfo } from "./Account.type"
+import { callNft } from "../hooks/MintNft";
 
 const BASE_URL = import.meta.env.VITE_SERVER_URL;
 
@@ -26,6 +27,7 @@ export const getAccount = async (): Promise<accountInfo[]> => {
   })
 
   const accountList = response.data
+  console.log(response.data)
 
   accountList.forEach((account: accountInfo) => {
     const balance = account.balnace

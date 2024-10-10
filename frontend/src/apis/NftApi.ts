@@ -31,11 +31,11 @@ export const uploadMetadataToPinata = async (imageCID: string, pdfCID: string, d
   const metadata = {
     name: data.projectName,
     description: `${start}일 부터 ${end}일 까지 ${data.period}일 동안 진행한 프로젝트`,
-    image: `https://gateway.pinata.cloud/ipfs/${imageCID}`, // 이미지 CID
+    image: `https://fuchsia-changing-flamingo-499.mypinata.cloud/ipfs/${imageCID}`, // 이미지 CID
     attributes: [
       {
         trait_type: "Document",
-        value: `https://gateway.pinata.cloud/ipfs/${pdfCID}`, // PDF CID
+        value: `https://fuchsia-changing-flamingo-499.mypinata.cloud/ipfs/${pdfCID}`, // PDF CID
       }
     ]
   };

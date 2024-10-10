@@ -5,7 +5,7 @@ FROM python:3.10-slim
 WORKDIR /app
 
 # requirements.txt 복사 및 설치
-COPY ml/requirements.txt . 
+COPY ./requirements.txt . 
 RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
 # Flask 애플리케이션 코드 복사

@@ -41,8 +41,6 @@ def find_similar_boards():
     # Spring Boot 서버에서 모든 Board 데이터 가져오기
     board_data = get_boards_from_spring()
 
-    # print(board_data['data'])
-
     # 모든 게시글의 description 임베딩
     board_descriptions = [board['description'] for board in board_data['data']]
     board_embeddings = model1.encode(board_descriptions, convert_to_tensor=True)
@@ -55,9 +53,7 @@ def find_similar_boards():
 
     # 유사도가 높은 순으로 정렬하여 상위 1개 게시글 선택
     similar_indices = cosine_scores.argsort()[0][::-1][0] 
-    print(similar_indices)
     similar_board = board_data['data'][similar_indices]
-    print(similar_board)
 
     return jsonify(similar_board)
 
@@ -119,16 +115,15 @@ def preprocess_data(data, scaler):
     required_fields = ['period', 'deposit', 'level']
     data = {key: data[key] for key in required_fields}
 
-    # 레벨 전처리
-    # data = preprocess_level(data)
-
     # 거래 금액과 거래 기간 데이터 추출 및 전처리
     total_price = np.array(data['deposit']).reshape(-1, 1)  # deposit 열을 사용
     period = np.array(data['period']).reshape(-1, 1)  # period 열을 사용하여 기간 데이터 추출
     level = np.array(data['level']).reshape(-1, 1)  # level 추가
 
     # 거래 금액을 거래 기간으로 나누어 일일 거래 금액(price_per_day) 계산
-    price_per_day = total_price / period
+    # period가 31일 이상일 경우 month를 추가하여 보정
+    month = np.where(period >= 31, period // 30, 1)
+    price_per_day = (total_price / period) * month
 
     # 거래 금액, 일일 거래 금액, 레벨을 결합한 새로운 특징 데이터
     features = np.hstack((total_price, price_per_day, level))
@@ -159,14 +154,14 @@ def detect_anomalies_with_additional_conditions(data, reconstruction_errors, thr
     anomalies = reconstruction_errors >= threshold  # 임계값보다 크거나 같을 때만 이상으로 간주
     for i, project in enumerate(data):
         price_period = project['period'] / project['deposit']
-        if price_period <= 10 or price_period >= 1000:
+        if price_period < 10 or price_period >= 1000:
             anomalies[i] = True
     return anomalies
 
 @app.route('/flask/analyze', methods=['POST'])
 def analyze():
     global model, normal_data_cache
-    data = request.json # New project
+    data = request.json  # New project
     
     # 데이터 출력
     print("Received data:", data)
@@ -204,7 +199,7 @@ def analyze():
                 mse = compute_reconstruction_error(processed_data, reconstructed_data)
 
                 # 임계값 동적 계산 (기존 데이터의 95% 분위수)
-                threshold = dynamic_threshold(mse)  # 95가 아닌 변수를 사용
+                threshold = dynamic_threshold(mse)
                 anomalies = detect_anomalies_with_additional_conditions([data], mse, threshold)
 
                 # Kafka로 결과 전송

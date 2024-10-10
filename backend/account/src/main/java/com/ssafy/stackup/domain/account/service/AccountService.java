@@ -114,6 +114,7 @@ public class AccountService {
             System.out.println("accountKey 없음");
             // account_key가 없으면 새로운 key를 발급받아 저장
             accountKey = searchAccountKey(email);
+            System.out.println("accountKey 111: " + accountKey);
             user.setAccountKey(accountKey);
 
 
@@ -125,7 +126,7 @@ public class AccountService {
             if(response.getStatusCode() != HttpStatus.OK) {
                 throw new CustomException(USER_NOT_FOUND);
             }
-
+            System.out.println("accountKey 222: " + accountKey);
         }
 
         // 현재 날짜와 시간 가져오기

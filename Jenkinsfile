@@ -106,13 +106,7 @@ pipeline {
     post {
         success {
             script {
-                def authors = []
-                for (changeSet in currentBuild.changeSets) {
-                    for (entry in changeSet.items) {
-                        authors << entry.author.fullName
-                    }
-                }
-                def userName = authors.unique().join(", ")
+                def userName = env.BUILD_USER ?: "Unknown"
 
                 mattermostSend(color: 'good',
                     message: "빌드 성공: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${userName}\n(<${env.BUILD_URL}|Details>)",
@@ -123,13 +117,7 @@ pipeline {
         }
         failure {
             script {
-                def authors = []
-                for (changeSet in currentBuild.changeSets) {
-                    for (entry in changeSet.items) {
-                        authors << entry.author.fullName
-                    }
-                }
-                def userName = authors.unique().join(", ")
+                def userName = env.BUILD_USER ?: "Unknown"
 
                 mattermostSend(color: 'danger',
                     message: "빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${userName}\n(<${env.BUILD_URL}|Details>)",

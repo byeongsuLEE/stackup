@@ -8,11 +8,13 @@ import InputPassword from "../components/common/InputPassword";
 const Transfer = () => {
   const location = useLocation();
   const { projectId } = useParams();
-  const { userId, boardId, stepResponse, freelancerProjectId } = location.state;
+  const { boardId, stepResponse, freelancerProjectId } = location.state;
   const [total, setTotal] = useState<number>(0);
   const [mid, setMid] = useState<number>(0);
   const [final, setFinal] = useState<number>(0);
   const [showKeypad, setShowKeypad] = useState(false);
+  const userId = sessionStorage.getItem('userId');
+  const NumericUserId = Number(userId)
 
   const handleShowKeypad = () => {
     setShowKeypad(true);
@@ -43,7 +45,8 @@ const Transfer = () => {
         <div onClick={handleShowKeypad}>
           <DoneButton width={100} height={30} title="송금하기" />
         </div>
-        {showKeypad && <InputPassword middleAmount={mid} finalAmount={final} userId={userId} stepResponse={stepResponse} projectId={projectId} boardId={boardId} />}
+        {userId}
+        {showKeypad && <InputPassword middleAmount={mid} finalAmount={final} userId={NumericUserId} stepResponse={stepResponse} projectId={projectId} boardId={boardId} />}
       </div>
     </div>
   )

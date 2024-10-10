@@ -46,13 +46,9 @@ export const handlePrint = async (elementRef: React.RefObject<HTMLDivElement>): 
       format:  'a4',
     });
 
-    // const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
 
     // 이미지 크기 조정 (모든 내용을 A4 한 페이지에 맞추기)
-    // const imgWidth = pageWidth;
-    // const imgHeight = (element.scrollHeight / element.scrollWidth) * pageWidth;
-
     const imgWidth = (element.scrollWidth / element.scrollHeight) * pageHeight;
     const imgHeight = pageHeight;
 

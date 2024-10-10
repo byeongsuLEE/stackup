@@ -88,6 +88,7 @@ const SignatureDetail = () => {
               <span className="text-sm">총 계약금액은 {contract.contractTotalAmount}만원으로 하며, 계약금액 중 {contract.contractDownPayment}은 착수시점에 지급하고,
                 잔금 {contract.contractFinalPayment}만원은 작업 완료 시 작업완료납품과 동시에 “갑”은 “을”에게 지급하기로
                 한다.
+                <br />
                 단, 회사업무 수행을 위한 출장 등이 발생할 경우에는 “갑”이 그 비용을 지급하고,
                 식대 등은 “을”의 비용으로 한다.</span>
               <br />

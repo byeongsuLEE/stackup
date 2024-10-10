@@ -8,13 +8,12 @@ const BASE_URL = `${svURL}/project`
 
 //== 이전 프로젝트 등록 ==//
 export const previousProject = async (data: projectData): Promise<void> => {
-  console.log(typeof data.projectFile);
-
+  console.log(data.startDate.toISOString())
   const formData = new FormData();
   formData.append("certificateFile", data.projectFile[0]);
   formData.append("title", data.projectName);
-  formData.append("period", '10');
-  // formData.append("endDate", data.endDate);
+  formData.append("startDate", data.startDate.toISOString());
+  formData.append("endDate", data.endDate.toISOString());
 
   try {
     const response = await axios({

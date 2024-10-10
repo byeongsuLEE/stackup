@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 public interface ProjectService {
-    void registerPreviousProject(MultipartFile certificateFile, String title, String startDate, String endDate);
+    void registerPreviousProject(MultipartFile certificateFile, String title, String startDate, String endDate, Long userId);
 
     List<ProjectInfoResponseDto> getAllProjects(User user, String projectType);
 

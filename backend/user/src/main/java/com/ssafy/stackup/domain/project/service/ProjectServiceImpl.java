@@ -65,7 +65,7 @@ public class ProjectServiceImpl implements ProjectService {
     private final ClientRepository clientRepository;
 
     @Override
-    public void registerPreviousProject(MultipartFile certificateFile, String title, String startDate, String endDate) {
+    public void registerPreviousProject(MultipartFile certificateFile, String title, String startDate, String endDate, Long userId) {
 
         try {
             String certificateUrl = s3ImageUpLoadService.uploadImage(certificateFile);
@@ -74,6 +74,7 @@ public class ProjectServiceImpl implements ProjectService {
                     .title(title)
                     .previousProjectStartDate(startDate)
                     .previousProjectEndDate(endDate)
+                    .previousProjectEndRegistFreelancerId(userId)
                     .certificateUrl(certificateUrl)
                     .build();
 
@@ -458,6 +459,7 @@ public class ProjectServiceImpl implements ProjectService {
             ProjectStatus projectStatus = ProjectStatus.valueOf(projectType.toUpperCase());
             projects = projectRepository.findByStatus(projectStatus);
             for(Project project : projects) {
+                if(user.getId() == project.getPreviousProjectEndRegistFreelancerId()) continue;
                 ProjectInfoResponseDto projectInfoResponseDto= ProjectInfoResponseDto.builder()
                         .status(ProjectStatus.BEFORE)
                         .title(project.getTitle())

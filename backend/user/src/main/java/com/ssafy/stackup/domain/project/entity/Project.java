@@ -61,6 +61,8 @@ public class Project{
     private String previousProjectStartDate ;
     private String previousProjectEndDate ;
 
+    private Long previousProjectEndRegistFreelancerId;
+
 
     public ProjectStep nextProjectStep(){
         this.step =  this.step.next();

@@ -63,11 +63,12 @@ public class ProjectController {
     public ResponseEntity<ApiResponse<String>> registerPreviousProject(            @RequestParam(value = "certificateFile") MultipartFile certificateFile,
                                                                                    @RequestParam(value = "title") String title,
                                                                                    @RequestParam(value = "startDate") String startDate,
-                                                                                   @RequestParam(value = "endDate") String endDate
+                                                                                   @RequestParam(value = "endDate") String endDate,
+                                                                                   @AuthUser User user
 
     ) {
 
-        projectService.registerPreviousProject(certificateFile,title,startDate,endDate);
+        projectService.registerPreviousProject(certificateFile,title,startDate,endDate,user.getId());
         return  ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success("프로젝트 등록 성공"));
     }

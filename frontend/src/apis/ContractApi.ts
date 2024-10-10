@@ -1,7 +1,7 @@
 import axios from "axios"
 
 const svURL = import.meta.env.VITE_SERVER_URL;
-const BASE_URL = `${svURL}/project`
+const BASE_URL = `${svURL}/user/project`
 
 //== 계약서 정보 저장 ==//
 export const submitContract = async (data: any, freelancerProjectId?: string): Promise<void> => {

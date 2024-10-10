@@ -1,5 +1,3 @@
-# pip install flask scikit-learn numpy pandas confluent-kafka
-
 from flask import Flask, request, jsonify
 import joblib
 import numpy as np
@@ -9,8 +7,6 @@ import json
 from tensorflow.keras.models import load_model as keras_load_model
 from sklearn.preprocessing import MinMaxScaler
 import logging
-
-app = Flask(__name__)
 
 # Kafka 프로듀서 설정
 conf = {'bootstrap.servers': '34.64.190.133:9092'}
@@ -53,18 +49,6 @@ def check_missing_values(data):
                 data[key] = 0  # 기본값 0으로 대체
     return data
 
-# 레벨 전처리 함수
-# def preprocess_level(data):
-#     level_map = {
-#         "주니어": 1,
-#         "미드 레벨": 2,
-#         "시니어": 3,
-#         "레벨 미선택": 0
-#     }
-#     data['level'] = data['level'].map(level_map)
-#     data['level'].fillna(0, inplace=True)
-#     return data
-
 # 동적 임계값 설정 함수 (백분위수 + 평균/표준편차 기반)
 def dynamic_threshold(mse):
     threshold_percentile = np.percentile(mse, PERCENTILE_THRESHOLD)
@@ -104,9 +88,6 @@ def preprocess_data(data, scaler):
 def compute_reconstruction_error(original, reconstructed):
     mse = np.mean(np.power(original - reconstructed, 2), axis=1)
     return mse
-# def compute_reconstruction_error(original, reconstructed):
-#     mae = np.mean(np.abs(original - reconstructed), axis=1)  # 절대 오차 사용
-#     return mae
 
 # 재학습 함수
 def retrain_model():
@@ -200,50 +181,3 @@ def delivery_report(err, msg):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
-
-
-# # Zookeeper 실행
-# zookeeper-server-start.sh config/zookeeper.properties
-
-# # Kafka 브로커 실행
-# kafka-server-start.sh config/server.properties
-
-# # Kafka 토픽 생성
-# kafka-topics.sh --create --topic analysis_results --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
-
-# 현재는 임계값 계산을 하지 않고 95%로 고정 => 임계값 계산 필요
-
-# kafka로 보내는 message 예시
-# 1. 정상적인 요청
-# {
-#     "status": "Analysis in progress"
-# }
-
-# 2. 필드가 누락된 요청
-# {
-#     "error": "Missing field: level"
-# }
-
-# 3. 예측 실패
-# {
-#     "error": "Prediction failed"
-# }
-
-# 4. 모델이 로드되지 않은 경우
-# {
-#     "error": "Model not found"
-# }
-
-# 5. 이상 거래로 판단된 경우
-# {
-#     "boardId": "12345",
-#     "is_anomaly": [true],
-#     "reconstruction_error": [0.015]
-# }
-
-# 6. 정상 거래로 판단된 경우
-# {
-#     "boardId": "12345",
-#     "is_anomaly": [false],
-#     "reconstruction_error": [0.001]
-# }

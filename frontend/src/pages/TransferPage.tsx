@@ -45,7 +45,6 @@ const Transfer = () => {
         <div onClick={handleShowKeypad}>
           <DoneButton width={100} height={30} title="송금하기" />
         </div>
-        {userId}
         {showKeypad && <InputPassword middleAmount={mid} finalAmount={final} userId={NumericUserId} stepResponse={stepResponse} projectId={projectId} boardId={boardId} />}
       </div>
     </div>

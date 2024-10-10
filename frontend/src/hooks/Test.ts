@@ -11,6 +11,7 @@ export const CallTest = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const Minting = async ( cid: string ) => {
+    console.log(cid)
     // NFT 스마트 계약 주소
     const NFT_CONTRACT_ADDRESS = import.meta.env.VITE_NFT_CONTRACT_ADDRESS;
     const metadataURI = `https://fuchsia-changing-flamingo-499.mypinata.cloud/ipfs/${cid}`; // IPFS CID를 URI로 사용

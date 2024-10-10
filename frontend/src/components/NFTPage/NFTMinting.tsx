@@ -59,9 +59,7 @@ const NFTMinting = ({ Minting, isLoading, pdf, contractData, projectId }: NFTMin
       const image = await generateImage(canvasRef, contractData);
 
       const imageHash = await pinata(image);
-      console.log(imageHash)
       const pdfHash = await pinata(pdf);
-      console.log(pdfHash)
 
       const cid = await uploadMetadataToPinata(imageHash, pdfHash, contractData);
 

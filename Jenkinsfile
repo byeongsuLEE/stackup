@@ -106,7 +106,13 @@ pipeline {
     post {
         success {
             script {
-                def userName = env.BUILD_USER ?: "Unknown"
+                def authors = []
+                for (changeSet in currentBuild.changeSets) {
+                    for (entry in changeSet.items) {
+                        authors << entry.author.fullName
+                    }
+                }
+                def userName = authors.unique().join(", ")
 
                 mattermostSend(color: 'good',
                     message: "빌드 성공: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${userName}\n(<${env.BUILD_URL}|Details>)",
@@ -117,7 +123,13 @@ pipeline {
         }
         failure {
             script {
-                def userName = env.BUILD_USER ?: "Unknown"
+                def authors = []
+                for (changeSet in currentBuild.changeSets) {
+                    for (entry in changeSet.items) {
+                        authors << entry.author.fullName
+                    }
+                }
+                def userName = authors.unique().join(", ")
 
                 mattermostSend(color: 'danger',
                     message: "빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER} by ${userName}\n(<${env.BUILD_URL}|Details>)",
@@ -134,6 +146,7 @@ pipeline {
             echo 'Temporary files cleaned up.'
         }
     }
+
 }
 
 // Docker 이미지 빌드 및 푸시 함수 정의

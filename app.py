@@ -187,6 +187,7 @@ def analyze():
             try:
                 # 예측
                 reconstructed_data = model.predict(processed_data)
+                print(reconstructed_data)
                 mse = compute_reconstruction_error(processed_data, reconstructed_data)
 
                 # 임계값 동적 계산 (기존 데이터의 95% 분위수)

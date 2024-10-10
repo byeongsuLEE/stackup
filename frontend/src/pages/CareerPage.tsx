@@ -5,6 +5,7 @@ import { Box, Tab } from "@mui/material";
 import React from "react";
 import RegisteredCareer from "../components/CareerPage/RegisteredCareer";
 import NFTDisplay from "../components/NFTPage/NFTDisplay";
+import RegisteredCareerList from "../components/CareerPage/RegisteredCareerList";
 
 const Career = () => {
   const [value, setValue] = React.useState('1');
@@ -32,7 +33,7 @@ const Career = () => {
             </TabPanel>
             <TabPanel value="2">
               <div className='mt-5'>
-                <RegisteredCareer />
+                <RegisteredCareerList />
               </div>
             </TabPanel>
           </div>

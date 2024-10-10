@@ -1,6 +1,5 @@
 import axios from "axios";
 
-// const BASE_URL: string = "http://localhost:8080/api/board";
 const svURL = import.meta.env.VITE_SERVER_URL;
 const BASE_URL = `${svURL}/board`
 

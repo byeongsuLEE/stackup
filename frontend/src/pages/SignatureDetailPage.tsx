@@ -126,10 +126,10 @@ const SignatureDetail = () => {
                 계약일자 : {today.getFullYear()}년 {today.getMonth() + 1}월 {today.getDate()}일
               </div>
             </div>
-            <div
-              onClick={handleSubmit}>
+            <div onClick={handleSubmit}>
               <NFTMinting projectId={projectId} Minting={Minting} isLoading={isLoading} pdf={pdf} contractData={contract} />
             </div>
+            <div></div>
           </div>
         </>
       )}

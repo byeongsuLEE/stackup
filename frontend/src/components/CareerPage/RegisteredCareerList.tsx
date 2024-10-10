@@ -19,8 +19,8 @@ const RegisteredCareerList = () => {
 
 
   return (
-    <div className="flex items-center">
-      <Link className="mb-5" to="/career/register">
+    <div className="">
+      <Link className="mb-5 flex items-center" to="/career/register">
         <DoneButton width={150} height={40} title="경력 등록하기" />
         </Link>
 

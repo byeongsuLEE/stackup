@@ -44,7 +44,6 @@ function App() {
             <main className="flex-grow mt-28 mx-20">
               <Navbar />
               <Routes>
-                <Route path="/test" element={<NFTLoading />} />
                 <Route path="/" element={<Home />} />
                 <Route path="/signature/detail/:projectId/:freelancerProjectId" element={<SignatureDetail />} />
                 <Route path="/login" element={<Login />} />
@@ -80,7 +79,9 @@ function App() {
             </main>
             <Footer />
             <div className="fixed right-7 bottom-3">
+              {sessionStorage.getItem("token")&&
               <SimplePopup />
+              }
             </div>
 
           </div>

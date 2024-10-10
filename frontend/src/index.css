@@ -56,3 +56,53 @@ body {
 .scrollbar:hover {
   scrollbar-color: #b9b8b8 #ffffff;
 }
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+.main {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.roller {
+  display: inline-block;
+  height: 50px;
+  overflow: hidden;
+}
+
+#rolltext {
+  display: block;
+  text-align: center;
+  animation: roll 5s infinite;
+}
+
+@keyframes roll {
+  0% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-50px);
+  }
+  50% {
+    transform: translateY(-100px);
+  }
+  75% {
+    transform: translateY(-150px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+#spare-time {
+  color: red;
+  font-weight: bold;
+}

@@ -32,7 +32,8 @@ const SignatureDetail = () => {
 
     setTimeout(() => {
       setShowAlert(false);
-    }, 60000);
+      // window.location.reload();
+    }, 30000);
   }
   const { data: contract, isLoading: isProjectLoading } = useQuery({
     queryKey: ['contract', freelancerProjectId],

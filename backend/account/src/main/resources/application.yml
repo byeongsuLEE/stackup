@@ -11,8 +11,7 @@ spring:
     hikari:
       minimum-idle: 10  # 최소 유휴 커넥션을 10으로 설정
       maximum-pool-size: 50  # 최대 커넥션 풀 크기
-  jpa:
-    open-in-view: false
+
     #    show-sql: true # JPA SQL 출력 설정
     database-platform: org.hibernate.dialect.MySQL8Dialect # JPA 데이터베이스 플랫폼 설정
     hibernate:

@@ -25,9 +25,9 @@ pipeline {
         // 추가한 환경변수들
         AWS_ACCESS_KEY_ID = 'AKIAYS2NQJX3RYCARFUQ'
         AWS_SECRET_ACCESS_KEY = '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'
-        DB_PASSWORD = '1q2w3e4r!'
-        DB_URL = 'jdbc:mysql://34.22.93.211:3306/stackup'
-        DB_USERNAME = 'root'
+        // DB_PASSWORD = '1q2w3e4r!'
+        // DB_URL = 'jdbc:mysql://34.22.93.211:3306/stackup'
+        // DB_USERNAME = 'root'
         ELASTIC_URL = 'http://34.47.84.173:9200/'
         GITHUB_ID = 'Iv23li51nY1w8lyOBlai'
         GITHUB_SECRET = 'c2cd01f968c1d38a9b528cece96b3de94ab43733'
@@ -71,6 +71,11 @@ pipeline {
                     when {
                         changeset "**/backend/user/**"
                     }
+                    environment {
+                        DB_URL = 'jdbc:mysql://34.22.93.211:3306/stackup'
+                        DB_USERNAME = 'root'
+                        DB_PASSWORD = '1q2w3e4r!'
+                    }
                     steps {
                         script {
                             buildDockerImage('user', "choho97/stackup-user:${IMAGE_TAG}")
@@ -82,6 +87,11 @@ pipeline {
                     when {
                         changeset "**/backend/board/**"
                     }
+                    environment {
+                        DB_URL = 'jdbc:mysql://34.22.93.211:3306/stackup'
+                        DB_USERNAME = 'root'
+                        DB_PASSWORD = '1q2w3e4r!'
+                    }
                     steps {
                         script {
                             buildDockerImage('board', "choho97/stackup-board:${IMAGE_TAG}")
@@ -92,6 +102,11 @@ pipeline {
                 stage('Build Account Docker Image') {
                     when {
                         changeset "**/backend/account/**"
+                    }
+                    environment {
+                        DB_URL = 'jdbc:mysql://34.47.121.250:3306/stackup'
+                        DB_USERNAME = 'root'
+                        DB_PASSWORD = '1q2w3e4r!'
                     }
                     steps {
                         script {

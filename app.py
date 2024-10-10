@@ -210,7 +210,7 @@ def analyze():
                 })
 
                 # Kafka로 메시지 전송 및 콜백 설정
-                producer.produce('analysis', message, callback=delivery_report)
+                producer.produce('analysis_results', message, callback=delivery_report)
                 producer.flush()
 
                 # 정상 데이터인 경우에만 캐시에 저장

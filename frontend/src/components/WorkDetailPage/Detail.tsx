@@ -88,6 +88,7 @@ const Detail = ({ project, clientId }: DetailProps) => {
     const checkAnomaly = async () => {
       try {
         const response = await axios.get(`${svURL}/api/board/detect/illegal/${project.boardId}`);
+        console.log(response.data)
         setIsAnomaly(response.data.is_anomaly[0]);
       } catch (error) {
         console.error("Error fetching anomaly data:", error);

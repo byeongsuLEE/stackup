@@ -1,6 +1,6 @@
 import { Unstable_Popup as BasePopup } from "@mui/base/Unstable_Popup";
 import { styled } from "@mui/system";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import ChatIcon from "../../icons/ChatIcon";
 import ChatListItem from "../chat/ChatListItem";
 import { useChatStore } from "../../store/ChatStore";

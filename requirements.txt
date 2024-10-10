@@ -154,3 +154,5 @@ wsproto==1.2.0
 xxhash==3.5.0
 xyzservices==2024.6.0
 yarl==1.11.1
+sentence-transformers
+

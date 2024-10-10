@@ -29,4 +29,7 @@ public class ProjectContractInfoRequestDto {
     private String contractCompanyName; // 회사명 (클라이언트)
     private String contractConfidentialityClause; // 비밀 유지 조항
     private String contractAdditionalTerms; // 추가 특약 사항
+    private String period;
+    private String candidateName;
+    private String projectName;
 }

@@ -22,7 +22,7 @@ public class Project{
     @Column(name = "project_id",  unique = true, nullable = false)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_id")
     private Client client;
 
@@ -61,10 +61,32 @@ public class Project{
     @JoinColumn(name = "board_id")
     private Board board; // 프로젝트 모집 게시글 (1대다 관계)
 
+    private String previousProjectStartDate ;
+    private String previousProjectEndDate ;
+
+
     public ProjectStep nextProjectStep(){
-       this.step =  this.step.next();
-       return  this.step;
+        this.step =  this.step.next();
+        return  this.step;
     }
+
+    /**
+     * 모든 지원자 + 클라이언트가 서명 했는지 확인 메서드!
+     * @ 작성자   : 이병수
+     * @ 작성일   : 2024-10-07
+     * @ 설명     :
+     * @return
+
+     */
+    public boolean isAllFreelancersSigned (){
+        for (FreelancerProject freelancerProject : this.freelancerProjectList) {
+            if (!freelancerProject.checkUsersSignConfirm()) {
+                return false; // 한 명이라도 서명을 하지 않으면 false 반환
+            }
+        }
+        return true; // 모든 프리랜서가 서명을 완료했으면 true 반환
+    }
+
 
     public void finishProjectStep(){
         this.status =  ProjectStatus.FINISH;

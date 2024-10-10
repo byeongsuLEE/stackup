@@ -65,15 +65,15 @@ public class ProjectServiceImpl implements ProjectService {
     private final ClientRepository clientRepository;
 
     @Override
-    public void registerPreviousProject(MultipartFile certificateFile, String title, Long period) {
-
+    public void registerPreviousProject(MultipartFile certificateFile, String title, String startDate, String endDate) {
 
         try {
             String certificateUrl = s3ImageUpLoadService.uploadImage(certificateFile);
             Project project = Project.builder()
                     .status(ProjectStatus.BEFORE)
                     .title(title)
-                    .period(String.valueOf(period))
+                    .previousProjectStartDate(startDate)
+                    .previousProjectEndDate(endDate)
                     .certificateUrl(certificateUrl)
                     .build();
 
@@ -83,7 +83,6 @@ public class ProjectServiceImpl implements ProjectService {
         catch (IOException e) {
             throw new CustomException(ErrorCode.IOEXCEPTION);
         }
-
     }
 
     /**

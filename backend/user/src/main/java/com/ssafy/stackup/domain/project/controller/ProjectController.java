@@ -62,9 +62,12 @@ public class ProjectController {
     @PostMapping("/previous-project")
     public ResponseEntity<ApiResponse<String>> registerPreviousProject(            @RequestParam(value = "certificateFile") MultipartFile certificateFile,
                                                                                    @RequestParam(value = "title") String title,
-                                                                                   @RequestParam(value = "period") Long period) {
+                                                                                   @RequestParam(value = "startDate") String startDate,
+                                                                                   @RequestParam(value = "endDate") String endDate
 
-        projectService.registerPreviousProject(certificateFile,title,period);
+    ) {
+
+        projectService.registerPreviousProject(certificateFile,title,startDate,endDate);
         return  ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success("프로젝트 등록 성공"));
     }

@@ -23,8 +23,11 @@ import java.util.List;
 public class ProjectInfoResponseDto {
     private Long projectId;
     private Long freelancerProjectId;
+
     private boolean isMyContractSigned;
     private boolean isMyProjectStepConfirmed;  // freelancer 일때만 확인가능
+    private boolean isClientContractSigned;
+    private boolean isFreelancerContractSigned;
     private ProjectStatus status;
     private ProjectStep step;
     private String title;
@@ -36,8 +39,6 @@ public class ProjectInfoResponseDto {
     private List<String> languages;
     private String certificateUrl;
     private Long recruits;  //모집인원
-    private boolean isClientContractSigned;
-    private boolean isFreelancerContractSigned;
 
     private Boolean isCharged;
     private Long applicants;
@@ -50,25 +51,28 @@ public class ProjectInfoResponseDto {
     private ClientResponseDto client;
     private Long boardId;
 
+    private String previousProjectStartDate ;
+    private String previousProjectEndDate ;
+
 
     public void updateClient (Project project)
     {
         if(project.getClient() !=null){
             Board board = project.getBoard();
-                this.client = ClientResponseDto.builder()
-                        .id(board.getClient().getId())
-                        .name(board.getClient().getName())
-                        .email(board.getClient().getEmail())
-                        .phone(board.getClient().getPhone())
-                        .secondPassword(board.getClient().getSecondPassword())
-                        .accountKey(board.getClient().getAccountKey())
-                        .mainAccount(board.getClient().getMainAccount())
-                        .totalScore(board.getClient().getTotalScore())
-                        .reportedCount(board.getClient().getReportedCount())
-                        .roles(board.getClient().getRoles())
-                        .businessRegistrationNumber(board.getClient().getBusinessRegistrationNumber())
-                        .businessName(board.getClient().getBusinessName())
-                        .build();
+            this.client = ClientResponseDto.builder()
+                    .id(board.getClient().getId())
+                    .name(board.getClient().getName())
+                    .email(board.getClient().getEmail())
+                    .phone(board.getClient().getPhone())
+                    .secondPassword(board.getClient().getSecondPassword())
+                    .accountKey(board.getClient().getAccountKey())
+                    .mainAccount(board.getClient().getMainAccount())
+                    .totalScore(board.getClient().getTotalScore())
+                    .reportedCount(board.getClient().getReportedCount())
+                    .roles(board.getClient().getRoles())
+                    .businessRegistrationNumber(board.getClient().getBusinessRegistrationNumber())
+                    .businessName(board.getClient().getBusinessName())
+                    .build();
 
         }
     }

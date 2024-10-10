@@ -93,7 +93,7 @@ const WorkForm = () => {
             프로젝트 등록에 어려움이 있다면?
           </div>
             <div onClick={getAi}>
-              <Button width={200} height={30} title="AI 프로젝트 등록" />
+              <Button type="button" width={200} height={30} title="AI 프로젝트 등록" />
             </div>
         </div>
 

@@ -85,22 +85,25 @@ const Detail = ({ project, clientId }: DetailProps) => {
 
   // boardId를 이용해 anomaly 확인
   useEffect(() => {
-    const checkAnomaly = async () => {
-      try {
-        const response = await axios.get(`${svURL}/board/detect/illegal/${project.boardId}`);
-        console.log('이상거래 response : ',response)
-        console.log('이상거래 response.data : ',response.data)
-        const anomaly = response.data.is_anomaly[0] == "false" ? true : false;
-        setIsAnomaly(anomaly);
-      } catch (error) {    
-        setIsAnomaly(undefined)
-        console.error("Error fetching anomaly data:", error);
-      } finally {
-        setLoading(false); // 로딩 완료
-      }
-    };
+    if (project.level !== null && project.boardId !== undefined && project.boardId !== null) {
+      const checkAnomaly = async () => {
+        console.log(project.boardId)
+        try {
+          const response = await axios.get(`${svURL}/board/detect/illegal/${project.boardId}`);
+          // console.log('이상거래 response : ',response)
+          // console.log('이상거래 response.data : ',response.data)
+          const anomaly = response.data.is_anomaly[0] == "false" ? true : false;
+          setIsAnomaly(anomaly);
+        } catch (_error) {
+          setIsAnomaly(undefined)
+          // console.error("Error fetching anomaly data:", error);
+        } finally {
+          setLoading(false); // 로딩 완료
+        }
+      };
+      checkAnomaly();
+    }
 
-    checkAnomaly();
   }, [project]);
 
   if (!isLoaded || loading) {

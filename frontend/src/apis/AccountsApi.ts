@@ -221,16 +221,27 @@ export const authCheck = async (accountId: string): Promise<void> => {
 
 //== 계좌 이체 ==//
 export const transfer = async (freelancerId: number, balance: string): Promise<void> => {
-  await axios({
-    method: 'post',
-    url: `${BASE_URL}/account/transfer`,
-    headers: {
-      Authorization: `Bearer ${sessionStorage.getItem('token')}`
-    },
-    data: {
-      'freelancerId': freelancerId,
-      'transactionBalance': balance
+  try {
+    await axios({
+      method: 'post',
+      url: `${BASE_URL}/account/transfer`,
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`
+      },
+      data: {
+        'freelancerId': freelancerId,
+        'transactionBalance': balance
+      }
+    });
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      // Axios 에러 처리
+      console.error('Error response:', error.response);
+      console.error('Error message:', error.message);
+    } else {
+      // 다른 에러 처리
+      console.error('Unexpected error:', error);
     }
-  })
-
+  }
 }
+

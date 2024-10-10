@@ -16,6 +16,7 @@ export const pinata = async (formData: FormData): Promise<string> => {
     });
 
     return response.data.IpfsHash; // 성공 시 IPFS 해시 반환
+    
   } catch (error) {
     console.error('업로드 중 오류가 발생했습니다:', error);
     return ''; // 오류 발생 시 빈 문자열 반환

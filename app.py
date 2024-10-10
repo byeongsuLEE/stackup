@@ -9,9 +9,10 @@ import json
 from tensorflow.keras.models import load_model as keras_load_model
 from sklearn.preprocessing import MinMaxScaler
 import logging
+# from flask_cors import CORS
 
 app = Flask(__name__)
-
+# CORS(app)
 # SBERT 모델 로드
 model1 = SentenceTransformer('snunlp/KR-SBERT-V40K-klueNLI-augSTS')
 
@@ -52,12 +53,9 @@ def find_similar_boards():
     # 코사인 유사도 계산
     cosine_scores = util.pytorch_cos_sim(query_embedding, board_embeddings).cpu().numpy()
 
-    # # 유사도가 높은 순으로 정렬하여 상위 3개 게시글 선택
-    # similar_indices = cosine_scores.argsort()[0][::-1][:3]
     # 유사도가 높은 순으로 정렬하여 상위 1개 게시글 선택
     similar_indices = cosine_scores.argsort()[0][::-1][0] 
     print(similar_indices)
-    # similar_boards = [board_data['data'][i] for i in similar_indices]
     similar_board = board_data['data'][similar_indices]
     print(similar_board)
 
@@ -79,7 +77,7 @@ scaler_path = 'ml/trained_model/scaler_model.pkl'  # 기존 학습에 사용된 
 RETRAIN_THRESHOLD = 1000  # 재학습할 때 필요한 데이터 수
 normal_data_cache = []  # 정상 데이터를 캐시할 리스트
 
-PERCENTILE_THRESHOLD = 85
+PERCENTILE_THRESHOLD = 50
 
 def load_model():
     try:
@@ -156,6 +154,14 @@ def retrain_model():
         normal_data_cache = []  # 캐시 초기화
         print(f"Model retrained with new data. Epochs: {epochs}")
 
+# 추가적인 조건을 사용한 이상 탐지 함수
+def detect_anomalies_with_additional_conditions(data, reconstruction_errors, threshold):
+    anomalies = reconstruction_errors >= threshold  # 임계값보다 크거나 같을 때만 이상으로 간주
+    for i, project in enumerate(data):
+        price_period = project['period'] / project['deposit']
+        if price_period <= 10 or price_period >= 1000:
+            anomalies[i] = True
+    return anomalies
 
 @app.route('/flask/analyze', methods=['POST'])
 def analyze():
@@ -199,7 +205,7 @@ def analyze():
 
                 # 임계값 동적 계산 (기존 데이터의 95% 분위수)
                 threshold = dynamic_threshold(mse)  # 95가 아닌 변수를 사용
-                anomalies = mse > threshold
+                anomalies = detect_anomalies_with_additional_conditions([data], mse, threshold)
 
                 # Kafka로 결과 전송
                 message = json.dumps({
@@ -209,7 +215,7 @@ def analyze():
                 })
 
                 # Kafka로 메시지 전송 및 콜백 설정
-                producer.produce('analysis', message, callback=delivery_report)
+                producer.produce('analysis_results', message, callback=delivery_report)
                 producer.flush()
 
                 # 정상 데이터인 경우에만 캐시에 저장
@@ -239,4 +245,3 @@ def delivery_report(err, msg):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
-

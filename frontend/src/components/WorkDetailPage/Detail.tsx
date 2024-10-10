@@ -87,7 +87,7 @@ const Detail = ({ project, clientId }: DetailProps) => {
   useEffect(() => {
     const checkAnomaly = async () => {
       try {
-        const response = await axios.get(`${svURL}/api/board/detect/illegal/${project.boardId}`);
+        const response = await axios.get(`${svURL}/board/detect/illegal/${project.boardId}`);
         console.log('이상거래 response : ',response)
         console.log('이상거래 response.data : ',response.data)
         setIsAnomaly(response.data.is_anomaly[0]);

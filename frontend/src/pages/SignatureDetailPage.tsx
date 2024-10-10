@@ -64,7 +64,7 @@ const SignatureDetail = () => {
       {isLoading ? (
         <NFTLoading />
       ) : (
-        <>
+        <div>
           {showAlert && <AlertBox title="NFT 계약 요청 중입니다. 잠시만 기다려주세요." />}
           <div ref={componentRef}>
           <div className="bg-bgGreen border border-mainGreen h-auto w-auto p-5 mx-20 my-20">
@@ -123,18 +123,18 @@ const SignatureDetail = () => {
               <br />
               <label htmlFor="condition" className="font-bold text-sm">추가 특약사항</label>
               <span className="text-sm">{contract.contractAdditionalTerms}</span>
-
               
               <div className="text-center my-10 font-bold">
               계약일자 : {today.getFullYear()}년 {today.getMonth() + 1}월 {today.getDate()}일
             </div>
             </div>
           </div>
+
           <div onClick={handleSubmit}>
             <NFTMinting projectId={projectId} Minting={Minting} isLoading={isLoading} pdf={pdf} contractData={contract}/>
-            </div>
+          </div>
         </div>
-        </>
+        </div>
         )}
         
     </div>

@@ -34,6 +34,8 @@ const InputPassword = ({ userId, projectId, stepResponse, boardId, middleAmount,
   const handleTransfer = async () => {
 
     if (stepResponse === 'DEVELOPMENT' && middleAmount) {
+      console.log('middleAmount:', middleAmount);
+      console.log(userId, middleAmount.toString());
       await transfer(userId, middleAmount.toString());
 
     } else if (stepResponse === 'DEPLOYMENT' && finalAmount) {

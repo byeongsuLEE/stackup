@@ -90,12 +90,21 @@
 ![Jenkins](https://img.shields.io/badge/jenkins-red?style=for-the-badge&logo=jenkins&logoColor=black)
 ![Nginx](https://img.shields.io/badge/nginx-green?style=for-the-badge&logo=nginx&logoColor=black)
 ![Docker](https://img.shields.io/badge/docker-skyblue?style=for-the-badge&logo=docker&logoColor=blue)
-
+![kubernetes](https://img.shields.io/badge/Kubernetes-3069DE?style=for-the-badge&logo=kubernetes&logoColor=white)
+![ArgoCD](https://img.shields.io/badge/Argo%20CD-1e0b3e?style=for-the-badge&logo=argo&logoColor=#d16044)
+![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)
+![mattermost](https://img.shields.io/badge/Mattermost-0058CC?style=for-the-badge&logo=Mattermost&logoColor=white)
+![Helm](https://img.shields.io/badge/Helm-0F1689?style=for-the-badge&logo=Helm&labelColor=0F1689)
+![AmazonAws](https://img.shields.io/badge/Amazon_AWS-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white)
+![GoogleCloud](https://img.shields.io/badge/Google_Cloud-4285F4?style=for-the-badge&logo=google-cloud&logoColor=white)
+ 
 - GitLab: 17.0.5
 - Jenkins: **2.470**
 - Nginx: 1.27.0
 - Docker: 27.1.1
-- argocd: v2.12.3+6b9cd82
+- ArgoCD: ArgoCD Enterprise v2.12.3
+- Mattermost: Mattermost Enterprise Edition 8.x 
+
 
 ### WAS
 

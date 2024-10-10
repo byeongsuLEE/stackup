@@ -113,7 +113,7 @@ portone:
   api-secret: QuEDNv6I2IkSg2hqbpqAr31vy0fQK2DoqFYbMtE0GnG5eEdB9MSR6gHqkdhVx8xXoe8JqXSFN5pFR3Uv
 
 
-USER_SERVICE_URL: http://localhost:8080/api/user/
+USER_SERVICE_URL: https://stackup.live/api/user/
 
 default:
   image: https://raw.githubusercontent.com/tailwindlabs/heroicons/56c073c2c9a66d2e51adb93d8e87e2e941d5b6db/src/20/solid/user-circle.svg

@@ -35,7 +35,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chatRoomId }) => {
   const connectSocket = () => {
     const sock = new SockJS(`https://stackup.live/api/user/ws`);
     stompClientRef.current = Stomp.over(sock);
-    
+
     stompClientRef.current.connect({}, (frame: any) => {
       console.log('Connected: ', frame);
       stompClientRef.current.subscribe(`/topic/chatroom`, (chatMessage: any) => {
@@ -47,7 +47,7 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chatRoomId }) => {
       setTimeout(() => {
         console.log('Reconnecting...');
         connectSocket(); // 재연결 시도
-      }, 2000); // 5초 후 재연결
+      }, 2000); // 2초 후 재연결
     });
   };
 
@@ -67,10 +67,15 @@ const ChatRoom: React.FC<ChatRoomProps> = ({ chatRoomId }) => {
 
     fetchMessages();
 
+    // 팝업이 열릴 때 body 스크롤 막기
+    document.body.style.overflow = 'hidden';
+
     return () => {
       if (stompClientRef.current) {
         stompClientRef.current.disconnect();
       }
+      // 팝업이 닫힐 때 body 스크롤 원상복구
+      document.body.style.overflow = 'auto';
     };
   }, [chatRoomId]);
 

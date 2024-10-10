@@ -111,13 +111,13 @@ const ProjectDetail = () => {
 
   const startDateObject = new Date(project.startDate);
   if (!isValid(startDateObject)) {
-    return <div>유효하지 않은 시작 날짜입니다.</div>;
+    return
   }
   const startDate = format(startDateObject, "yyyy-MM-dd");
   const periodAsNumber = parseInt(project.period.replace(/[^0-9]/g, ""), 10);
   const endDateObject = addDays(startDateObject, periodAsNumber);
   if (!isValid(endDateObject)) {
-    return <div>유효하지 않은 종료 날짜입니다.</div>;
+    return
   }
   const endDate = format(endDateObject, "yyyy-MM-dd");
   const remainDay = differenceInDays(new Date(endDate), new Date());

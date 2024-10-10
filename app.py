@@ -154,7 +154,7 @@ def detect_anomalies_with_additional_conditions(data, reconstruction_errors, thr
     anomalies = reconstruction_errors >= threshold  # 임계값보다 크거나 같을 때만 이상으로 간주
     for i, project in enumerate(data):
         price_period = project['period'] / project['deposit']
-        if price_period < 10 or price_period >= 1000:
+        if price_period <= 3 or price_period >= 1000:
             anomalies[i] = True
     return anomalies
 

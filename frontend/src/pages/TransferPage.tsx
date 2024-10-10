@@ -14,6 +14,7 @@ const Transfer = () => {
   const [final, setFinal] = useState<number>(0);
   const [showKeypad, setShowKeypad] = useState(false);
   const userId = sessionStorage.getItem('userId');
+  const NumericUserId = Number(userId)
 
   const handleShowKeypad = () => {
     setShowKeypad(true);
@@ -45,7 +46,7 @@ const Transfer = () => {
           <DoneButton width={100} height={30} title="송금하기" />
         </div>
         {userId}
-        {showKeypad && <InputPassword middleAmount={mid} finalAmount={final} userId={userId} stepResponse={stepResponse} projectId={projectId} boardId={boardId} />}
+        {showKeypad && <InputPassword middleAmount={mid} finalAmount={final} userId={NumericUserId} stepResponse={stepResponse} projectId={projectId} boardId={boardId} />}
       </div>
     </div>
   )

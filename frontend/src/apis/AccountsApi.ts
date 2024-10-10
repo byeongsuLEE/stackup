@@ -57,16 +57,14 @@ export const accountDetail = async (accountId?: string): Promise<accountInfo> =>
 }
 
 //== 대표 계좌 설정 ==//
-export const mainAccout = async (accountId?: string): Promise<string> => {
-  const response = await axios({
+export const mainAccout = async (accountId? : string): Promise<void> => {
+  await axios({
     method: 'post',
     url: `${BASE_URL}/account/main/${accountId}`,
     headers: {
       Authorization: `Bearer ${sessionStorage.getItem('token')}`
     }
   })
-
-  return response.data
 }
 
 //== 대표 계좌 조회 ==//
@@ -236,4 +234,3 @@ export const transfer = async (freelancerId: number, balance: string): Promise<v
   })
 
 }
-

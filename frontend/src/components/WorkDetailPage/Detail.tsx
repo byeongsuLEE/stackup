@@ -88,7 +88,6 @@ const Detail = ({ project, clientId }: DetailProps) => {
     const checkAnomaly = async () => {
       try {
         const response = await axios.get(`${svURL}/api/board/detect/illegal/${project.boardId}`);
-        console.log(response)
         setIsAnomaly(response.data.is_anomaly[0]);
       } catch (error) {
         console.error("Error fetching anomaly data:", error);
@@ -106,7 +105,6 @@ const Detail = ({ project, clientId }: DetailProps) => {
   }
 
   const sessionFreelancerId = window.sessionStorage.getItem("freelancerId");
-
   const hasApplied = project.applicantList.some(
     (applicant) => applicant.id.toString() === sessionFreelancerId
   );

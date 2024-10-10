@@ -171,9 +171,6 @@ const NFTDisplay = () => {
     return () => clearInterval(interval);
   }, [NFT_CONTRACT_ADDRESS, NFT_ABI, navigate]);
 
-
-
-
   if (loading) {
     return <div>로딩 중...</div>;
   }

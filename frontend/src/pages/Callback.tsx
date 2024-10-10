@@ -14,10 +14,11 @@ const Callback = () => {
 
             if (tokenData !== "로그인") {
                 navigate("/login")
+
             } else if (infoData == null) {
                 navigate("/signup/freelancer")
+                
             } else {
-                // navigate("/")
                 window.location.replace('/');
             }
             

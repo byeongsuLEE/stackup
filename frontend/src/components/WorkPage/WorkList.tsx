@@ -12,13 +12,10 @@ const WorkList = () => {
   const [totalPages, setTotalPages] = useState(1);
   const itemsPerPage = 5; // 페이지 당 항목 수 설정
   const [projectList, setProjectList] = useState<project[]>([]);
-
-
   const navigate = useNavigate();
   const toWorkDetail = (boardId: string) => {
     navigate(`/work/detail/${boardId}`);
   }
-
 
   const update = async () => {
     const {data, totalPages} = await allProject(page, itemsPerPage);
@@ -27,7 +24,6 @@ const WorkList = () => {
   }
   useEffect(() => {
     update();
-    // console.log("프로젝트 목록", projectList)
   }, [page])
 
   //== projectList 반환 ==//

@@ -7,13 +7,12 @@ const BASE_URL = `${svURL}/user/project`
 
 //== 이전 프로젝트 등록 ==//
 export const previousProject = async (data: projectData): Promise<void> => {
-  console.log(typeof data.projectFile);
-
+  console.log(data.startDate.toISOString())
   const formData = new FormData();
   formData.append("certificateFile", data.projectFile[0]);
   formData.append("title", data.projectName);
-  formData.append("period", '10');
-  // formData.append("endDate", data.endDate);
+  formData.append("startDate", data.startDate.toISOString());
+  formData.append("endDate", data.endDate.toISOString());
 
   try {
     const response = await axios({
@@ -83,11 +82,7 @@ export const checkProjectStep = async (projectId: number): Promise<any> => {
 
 
 //프로젝트 단계 변경
-export const projectStep = async (
-  projectId?: number,
-  currentStep?: string,
-  isChangeProjectStep?: boolean
-): Promise<any> => {
+export const projectStep = async ( projectId?: number, currentStep?: string, isChangeProjectStep?: boolean ): Promise<any> => {
   try {
     const response = await axios({
       method: 'patch',

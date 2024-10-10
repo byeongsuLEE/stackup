@@ -73,7 +73,7 @@ scaler_path = 'ml/trained_model/scaler_model.pkl'  # 기존 학습에 사용된 
 RETRAIN_THRESHOLD = 1000  # 재학습할 때 필요한 데이터 수
 normal_data_cache = []  # 정상 데이터를 캐시할 리스트
 
-PERCENTILE_THRESHOLD = 50
+PERCENTILE_THRESHOLD = 60
 
 def load_model():
     try:
@@ -151,11 +151,16 @@ def retrain_model():
 
 # 추가적인 조건을 사용한 이상 탐지 함수
 def detect_anomalies_with_additional_conditions(data, reconstruction_errors, threshold):
-    anomalies = reconstruction_errors >= threshold  # 임계값보다 크거나 같을 때만 이상으로 간주
+    anomalies = np.zeros(len(data), dtype=bool)  # 모든 데이터를 정상으로 초기화
+
     for i, project in enumerate(data):
         price_period = project['period'] / project['deposit']
-        if price_period <= 3 or price_period >= 1000:
-            anomalies[i] = True
+        # price_period 조건에 따라 이상 거래 결정
+        if price_period <= 5 or price_period >= 100:
+            anomalies[i] = True  # price_period 조건에 해당되면 이상 거래로 간주
+        else:
+            anomalies[i] = False  # 그렇지 않은 경우 정상 거래로 간주
+
     return anomalies
 
 @app.route('/flask/analyze', methods=['POST'])
@@ -210,7 +215,7 @@ def analyze():
                 })
 
                 # Kafka로 메시지 전송 및 콜백 설정
-                producer.produce('analysis_results', message, callback=delivery_report)
+                producer.produce('analysis', message, callback=delivery_report)
                 producer.flush()
 
                 # 정상 데이터인 경우에만 캐시에 저장

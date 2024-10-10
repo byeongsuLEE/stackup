@@ -427,19 +427,19 @@ public class UserServiceImpl implements UserService {
             System.out.println("유저 주소"+client.getUserAddress());
 
             ClientResponseDto clientResponseDto  = ClientResponseDto.builder()
-                    .id(client.getId())
-                    .roles(client.getRoles())
-                    .name(client.getName())
-                    .phone(client.getPhone())
-                    .mainAccount(client.getMainAccount())
-                    .email(client.getEmail())
-                    .userAddress(client.getUserAddress())
-                    .secondPassword(client.getSecondPassword())
-                    .accountKey(client.getAccountKey())
+                    .id(user.getId())
+                    .roles(user.getRoles())
+                    .name(user.getName())
+                    .phone(user.getPhone())
+                    .mainAccount(user.getMainAccount())
+                    .email(user.getEmail())
+                    .userAddress(user.getUserAddress())
+                    .secondPassword(user.getSecondPassword())
+                    .accountKey(user.getAccountKey())
                     .businessRegistrationNumber(client.getBusinessRegistrationNumber())
                     .businessName(client.getBusinessName())
-                    .reportedCount(client.getReportedCount())
-                    .totalScore(client.getTotalScore())
+                    .reportedCount(user.getReportedCount())
+                    .totalScore(user.getTotalScore())
                     .build();
 
             return clientResponseDto;

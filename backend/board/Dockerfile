@@ -6,5 +6,5 @@ WORKDIR /app
 COPY build/libs/*.jar /app/app.jar
 
 EXPOSE 8080
-
-CMD ["java", "-jar", "app.jar"]
+# JVM 시간대 옵션 추가
+CMD ["java", "-Duser.timezone=Asia/Seoul", "-jar", "app.jar"]

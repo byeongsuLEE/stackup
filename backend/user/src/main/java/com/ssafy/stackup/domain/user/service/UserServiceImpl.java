@@ -424,16 +424,18 @@ public class UserServiceImpl implements UserService {
                     .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
 
             System.out.println("메인계좌"+client.getMainAccount());
+            String mainAccount = client.getMainAccount();
             System.out.println("유저 주소"+client.getUserAddress());
+            String userAddress = client.getUserAddress();
 
             ClientResponseDto clientResponseDto  = ClientResponseDto.builder()
                     .id(user.getId())
                     .roles(user.getRoles())
                     .name(user.getName())
                     .phone(user.getPhone())
-                    .mainAccount(user.getMainAccount())
+                    .mainAccount(mainAccount)
                     .email(user.getEmail())
-                    .userAddress(user.getUserAddress())
+                    .userAddress(userAddress)
                     .secondPassword(user.getSecondPassword())
                     .accountKey(user.getAccountKey())
                     .businessRegistrationNumber(client.getBusinessRegistrationNumber())

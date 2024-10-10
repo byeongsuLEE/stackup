@@ -68,6 +68,9 @@ pipeline {
         stage('Build and Push Docker Images') {
             parallel {
                 stage('Build User Docker Image') {
+                    when {
+                        changeset "**/backend/user/**"
+                    }
                     steps {
                         script {
                             buildDockerImage('user', "choho97/stackup-user:${IMAGE_TAG}")
@@ -76,6 +79,9 @@ pipeline {
                 }
 
                 stage('Build Board Docker Image') {
+                    when {
+                        changeset "**/backend/board/**"
+                    }
                     steps {
                         script {
                             buildDockerImage('board', "choho97/stackup-board:${IMAGE_TAG}")
@@ -84,6 +90,9 @@ pipeline {
                 }
 
                 stage('Build Account Docker Image') {
+                    when {
+                        changeset "**/backend/account/**"
+                    }
                     steps {
                         script {
                             buildDockerImage('account', "choho97/stackup-account:${IMAGE_TAG}")

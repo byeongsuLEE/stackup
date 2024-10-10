@@ -30,7 +30,7 @@ def hi():
     print("flask 연결 테스트")
     return "hi page"
 
-@app.route('/flask/similar-boards', methods=['POST'])
+@app.route('/flask/similar', methods=['POST'])
 def find_similar_boards():
     return "hi"
     # data = request.json

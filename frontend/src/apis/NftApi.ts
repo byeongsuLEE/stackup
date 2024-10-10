@@ -31,11 +31,11 @@ export const uploadMetadataToPinata = async (imageCID: string, pdfCID: string, d
   const metadata = {
     name: data.projectName,
     description: `${start}일 부터 ${end}일 까지 ${data.period}일 동안 진행한 프로젝트`,
-    image: `https://ipfs.io/ipfs/${imageCID}`, // 이미지 CID
+    image: `https://ipfs.io/ipfs/${imageCID}`,
     attributes: [
       {
         trait_type: "Document",
-        value: `https://ipfs.io/ipfs/${pdfCID}`, // PDF CID
+        value: `https://ipfs.io/ipfs/${pdfCID}`,
       }
     ]
   };

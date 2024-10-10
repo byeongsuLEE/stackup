@@ -8,7 +8,8 @@ spring:
     username: ${DB_USERNAME} # 데이터베이스 사용자 이름 (환경 변수 사용)
     password: ${DB_PASSWORD} # 데이터베이스 비밀번호 (환경 변수 사용)
     driver-class-name: com.mysql.cj.jdbc.Driver # 데이터베이스 드라이버 클래스 이름 설정
-
+    hikari:
+      maximum-pool-size: 20  # 커넥션 풀 크기를 20으로 증가
   jpa:
     #    show-sql: true # JPA SQL 출력 설정
     database-platform: org.hibernate.dialect.MySQL8Dialect # JPA 데이터베이스 플랫폼 설정

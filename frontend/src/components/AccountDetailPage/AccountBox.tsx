@@ -4,6 +4,7 @@ import DoneButton from "../common/DoneButton";
 import CheckPassword from "./CheckPassword";
 import SetPassword from "./SetPassword";
 import { mainAccout } from "../../apis/AccountsApi";
+import { useNavigate } from "react-router-dom";
 
 interface AccountBoxProps {
   account: accountInfo;
@@ -11,6 +12,7 @@ interface AccountBoxProps {
 }
 
 const AccountBox = ({ account, mainAccount }: AccountBoxProps) => {
+  const navigate = useNavigate();
   const [isPasswordSet, setIsPasswordSet] = useState(false);
 
   const handleSetPassword = async() => {
@@ -18,8 +20,9 @@ const AccountBox = ({ account, mainAccount }: AccountBoxProps) => {
     setIsPasswordSet(true);
   };
 
-  const handleMainAccount = () => {
-    mainAccout(account.accountId);
+  const handleMainAccount = async() => {
+    await mainAccout(account.accountId);
+    navigate('/account');
   }
   
   if (!account) {
@@ -29,12 +32,13 @@ const AccountBox = ({ account, mainAccount }: AccountBoxProps) => {
   return (
     <div className="bg-bgGreen flex flex-col justify-between p-10 border border-mainGreen rounded-lg w-[1000px] h-[200px]">
       <div className="flex items-center justify-between">
-        <div>
+        <div className="flex items-center">
+        <img className="mr-2 w-[40px] h-[40px]" src={`/bankicons/${account.bankCode}.png`} alt="" />
           <span className="mr-5">{account.accountName}</span>
           <span>{account.accountNum}</span>
         </div>
         
-        {account.accountNum === mainAccount ? (
+        {account.accountNum == mainAccount ? (
           <div className= "flex items-center justify-center h-[30px] w-[90px] bg-subGreen2 rounded-lg text-white">대표계좌</div>
         ) : (
           <div onClick={handleMainAccount}>

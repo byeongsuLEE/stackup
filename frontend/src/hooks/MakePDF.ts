@@ -51,7 +51,7 @@ export const handlePrint = async (elementRef: React.RefObject<HTMLDivElement>): 
 
     // 이미지 크기 조정 (모든 내용을 A4 한 페이지에 맞추기)
     const imgWidth = pageWidth;
-    const imgHeight = (element.scrollHeight / element.scrollWidth) * pageWidth;z
+    const imgHeight = (element.scrollHeight / element.scrollWidth) * pageWidth;
 
     // A4 페이지 크기에 맞추어 이미지를 한 페이지에 추가
     pdf.addImage(dataUrl, 'PNG', 0, 0, imgWidth, imgHeight > pageHeight ? pageHeight : imgHeight);

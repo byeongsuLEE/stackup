@@ -81,7 +81,9 @@ function App() {
             </main>
             <Footer />
             <div className="fixed right-7 bottom-3">
+              {sessionStorage.getItem("token")&&
               <SimplePopup />
+              }
             </div>
 
           </div>

@@ -16,7 +16,6 @@ app = Flask(__name__)
 # SBERT 모델 로드
 model1 = SentenceTransformer('snunlp/KR-SBERT-V40K-klueNLI-augSTS')
 
-
 # Spring Boot 서버로부터 Board 데이터 가져오기
 def get_boards_from_spring():
     response = requests.get("https://stackup.live/api/board/search-all")
@@ -33,8 +32,6 @@ def hi():
 
 @app.route('/flask/similar', methods=['POST'])
 def find_similar_boards():
-    print(request)
-    print(request.json)
     data = request.json
     query_description = data['description']
 
@@ -56,7 +53,6 @@ def find_similar_boards():
     similar_board = board_data['data'][similar_indices]
 
     return jsonify(similar_board)
-
 
 # Kafka 프로듀서 설정
 conf = {'bootstrap.servers': '34.64.190.133:9092'}
@@ -105,50 +101,41 @@ def dynamic_threshold(mse):
     mean_mse = np.mean(mse)
     std_mse = np.std(mse)
     threshold_std = mean_mse + 3 * std_mse
-    # 두 임계값 중 큰 값을 선택 (혹은 더 적합한 방식으로 선택 가능)
     return max(threshold_percentile, threshold_std)
 
 # 전처리 함수 정의
 def preprocess_data(data, scaler):
-    data = check_missing_values(data)  # 결측값 처리
-    # 필요한 필드 추출
+    data = check_missing_values(data)
     required_fields = ['period', 'deposit', 'level']
     data = {key: data[key] for key in required_fields}
 
-    # 거래 금액과 거래 기간 데이터 추출 및 전처리
-    total_price = np.array(data['deposit']).reshape(-1, 1)  # deposit 열을 사용
-    period = np.array(data['period']).reshape(-1, 1)  # period 열을 사용하여 기간 데이터 추출
-    level = np.array(data['level']).reshape(-1, 1)  # level 추가
+    total_price = np.array(data['deposit']).reshape(-1, 1)
+    period = np.array(data['period']).reshape(-1, 1)
+    level = np.array(data['level']).reshape(-1, 1)
 
-    # 거래 금액을 거래 기간으로 나누어 일일 거래 금액(price_per_day) 계산
-    # period가 31일 이상일 경우 month를 추가하여 보정
     month = np.where(period >= 31, period // 30, 1)
     price_per_day = (total_price / period) * month
 
-    # 거래 금액, 일일 거래 금액, 레벨을 결합한 새로운 특징 데이터
     features = np.hstack((total_price, price_per_day, level))
 
-    # 기존 학습 시 사용된 스케일러로 정규화
     scaled_features = scaler.transform(features)
 
     return scaled_features
 
-def pre_data(data):
-    data = check_missing_values(data)  # 결측값 처리
-    # 필요한 필드 추출
-    required_fields = ['period', 'deposit', 'level']
-    data = {key: data[key] for key in required_fields}
-
-    # 거래 금액과 거래 기간 데이터 추출 및 전처리
-    total_price = data['deposit']  # 거래 금액 (deposit)
-    period = data['period']  # 거래 기간 (period)
-    level = data['level']  # 레벨 (level)
-
-    # 거래 금액을 거래 기간으로 나누어 일일 거래 금액(price_per_day) 계산
+# 일일 거래 금액 계산 함수
+def calculate_price_per_day(data):
+    total_price = data['deposit']
+    period = data['period']
     month = period // 30 if period >= 31 else 1
     price_per_day = (total_price / period) * month
-
     return price_per_day
+
+# 이상 탐지 함수
+def detect_anomalies_with_additional_conditions(price_per_day):
+    if price_per_day <= 5 or price_per_day >= 100:
+        return [True]  # 이상 거래
+    else:
+        return [False]  # 정상 거래
 
 # 재구성 오차 계산 함수
 def compute_reconstruction_error(original, reconstructed):
@@ -160,46 +147,29 @@ def retrain_model():
     global normal_data_cache, model
     if len(normal_data_cache) >= RETRAIN_THRESHOLD:
         new_data = np.vstack(normal_data_cache)
-        epochs = max(1, min(10, len(normal_data_cache) // 1000))  # 데이터 양에 따라 동적으로 에포크 수 조정 (1~10 에포크)
-        model.fit(new_data, new_data, epochs=epochs, batch_size=32)  # 재학습 수행
-        model.save(MODEL_PATH)  # 재학습된 모델 저장
-        normal_data_cache = []  # 캐시 초기화
+        epochs = max(1, min(10, len(normal_data_cache) // 1000))
+        model.fit(new_data, new_data, epochs=epochs, batch_size=32)
+        model.save(MODEL_PATH)
+        normal_data_cache = []
         print(f"Model retrained with new data. Epochs: {epochs}")
-
-# 추가적인 조건을 사용한 이상 탐지 함수
-def detect_anomalies_with_additional_conditions(data):
-    # 일일 거래 금액(price_per_day) 계산
-    price_per_day = pre_data(data)
-
-    # price_per_day 값이 특정 기준 범위를 벗어나는지 확인
-    if price_per_day <= 5 or price_per_day >= 100:
-        return [True]  # 조건에 해당되면 이상 거래로 간주
-    else:
-        return [False]  # 그렇지 않은 경우 정상 거래로 간주
-
 
 @app.route('/flask/analyze', methods=['POST'])
 def analyze():
     global model, normal_data_cache
-    data = request.json  # New project
+    data = request.json
     
-    # 데이터 출력
     print("Received data:", data)
     
-    # 데이터 유효성 검사
     required_fields = ['period', 'deposit', 'level', 'boardId']
     for field in required_fields:
         if field not in data:
             print(f"Missing field: {field}")
             return jsonify({'error': f'Missing field: {field}'}), 400
 
-
-    # 필드 값 유효성 검사
     if data['period'] <= 0 or data['deposit'] <= 0:
         return jsonify({'error': 'Invalid period or deposit value'}), 400
 
     try:
-        # 스케일러 로딩 및 예외 처리 추가
         try:
             scaler = joblib.load(scaler_path)
         except FileNotFoundError:
@@ -208,39 +178,35 @@ def analyze():
             logging.error(f"Error loading scaler: {str(e)}")
             return jsonify({'error': 'Scaler loading failed'}), 500
 
-        # 데이터 전처리
         processed_data = preprocess_data(data, scaler)
-        pp = pre_data(data)
+        price_per_day = calculate_price_per_day(data)
         print("Processed data for prediction:", processed_data)
 
         if model is not None:
             try:
-                # 예측
                 reconstructed_data = model.predict(processed_data)
                 print(reconstructed_data)
                 mse = compute_reconstruction_error(processed_data, reconstructed_data)
 
-                # 임계값 동적 계산 (기존 데이터의 95% 분위수)
                 threshold = dynamic_threshold(mse)
-                anomalies = detect_anomalies_with_additional_conditions(processed_data)
-                anomalies = detect_anomalies_with_additional_conditions(pp)
+                anomalies_mse = mse > threshold
+                anomalies_conditions = detect_anomalies_with_additional_conditions(price_per_day)
 
-                # Kafka로 결과 전송
+                anomalies = [any(anomalies_mse) or any(anomalies_conditions)]
+
                 message = json.dumps({
                     'boardId': data['boardId'],
-                    'is_anomaly': anomalies.tolist(),
+                    'is_anomaly': anomalies,
                     'reconstruction_error': mse.tolist()
                 })
 
-                # Kafka로 메시지 전송 및 콜백 설정
                 producer.produce('analysis', message, callback=delivery_report)
                 producer.flush()
 
-                # 정상 데이터인 경우에만 캐시에 저장
                 if not any(anomalies):
                     normal_data_cache.append(processed_data)
-                    retrain_model()  # 캐시에 데이터가 1000개 이상이면 재학습
-                
+                    retrain_model()
+
                 return jsonify({'status': 'Analysis in progress'}), 202
 
             except Exception as e:

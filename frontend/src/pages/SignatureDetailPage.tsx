@@ -64,10 +64,10 @@ const SignatureDetail = () => {
       {isLoading ? (
         <NFTLoading />
       ) : (
-        <div >
+        <div>
           {showAlert && <AlertBox title="NFT 계약 요청 중입니다. 잠시만 기다려주세요." />}
           <div ref={componentRef} >
-          <div className="bg-bgGreen border border-mainGreen h-[1123px] w-[794px] p-5 mx-20 my-20">
+          <div className="bg-bgGreen border border-mainGreen h-auto w-auto p-5 mx-20 my-20">
             <div className="text-center text-lg font-bold">
               프리랜서 고용 계약서
             </div>

@@ -133,6 +133,23 @@ def preprocess_data(data, scaler):
 
     return scaled_features
 
+def pre_data(data):
+    data = check_missing_values(data)  # 결측값 처리
+    # 필요한 필드 추출
+    required_fields = ['period', 'deposit', 'level']
+    data = {key: data[key] for key in required_fields}
+
+    # 거래 금액과 거래 기간 데이터 추출 및 전처리
+    total_price = data['deposit']  # 거래 금액 (deposit)
+    period = data['period']  # 거래 기간 (period)
+    level = data['level']  # 레벨 (level)
+
+    # 거래 금액을 거래 기간으로 나누어 일일 거래 금액(price_per_day) 계산
+    month = period // 30 if period >= 31 else 1
+    price_per_day = (total_price / period) * month
+
+    return price_per_day
+
 # 재구성 오차 계산 함수
 def compute_reconstruction_error(original, reconstructed):
     mse = np.mean(np.power(original - reconstructed, 2), axis=1)
@@ -150,19 +167,16 @@ def retrain_model():
         print(f"Model retrained with new data. Epochs: {epochs}")
 
 # 추가적인 조건을 사용한 이상 탐지 함수
-def detect_anomalies_with_additional_conditions(processed_data):
-    anomalies = [False]  # 데이터가 단일 개체이므로 초기 값 설정
+def detect_anomalies_with_additional_conditions(data):
+    # 일일 거래 금액(price_per_day) 계산
+    price_per_day = pre_data(data)
 
-    # 스케일링된 price_per_day 값에 접근
-    price_per_day = processed_data[0][1]
-
-    # 스케일링된 price_per_day 값이 특정 기준 범위를 벗어나는지 확인
+    # price_per_day 값이 특정 기준 범위를 벗어나는지 확인
     if price_per_day <= 5 or price_per_day >= 100:
-        anomalies[0] = True  # 조건에 해당되면 이상 거래로 간주
+        return [True]  # 조건에 해당되면 이상 거래로 간주
     else:
-        anomalies[0] = False  # 그렇지 않은 경우 정상 거래로 간주
+        return [False]  # 그렇지 않은 경우 정상 거래로 간주
 
-    return anomalies
 
 @app.route('/flask/analyze', methods=['POST'])
 def analyze():
@@ -178,6 +192,7 @@ def analyze():
         if field not in data:
             print(f"Missing field: {field}")
             return jsonify({'error': f'Missing field: {field}'}), 400
+
 
     # 필드 값 유효성 검사
     if data['period'] <= 0 or data['deposit'] <= 0:
@@ -195,6 +210,7 @@ def analyze():
 
         # 데이터 전처리
         processed_data = preprocess_data(data, scaler)
+        pp = pre_data(data)
         print("Processed data for prediction:", processed_data)
 
         if model is not None:
@@ -207,6 +223,7 @@ def analyze():
                 # 임계값 동적 계산 (기존 데이터의 95% 분위수)
                 threshold = dynamic_threshold(mse)
                 anomalies = detect_anomalies_with_additional_conditions(processed_data)
+                anomalies = detect_anomalies_with_additional_conditions(pp)
 
                 # Kafka로 결과 전송
                 message = json.dumps({

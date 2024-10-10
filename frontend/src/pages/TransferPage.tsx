@@ -8,12 +8,12 @@ import InputPassword from "../components/common/InputPassword";
 const Transfer = () => {
   const location = useLocation();
   const { projectId } = useParams();
-  const {  boardId, stepResponse, freelancerProjectId } = location.state;
+  const {  userId, boardId, stepResponse, freelancerProjectId } = location.state;
   const [total, setTotal] = useState<number>(0);
   const [mid, setMid] = useState<number>(0);
   const [final, setFinal] = useState<number>(0);
   const [showKeypad, setShowKeypad] = useState(false);
-  const userId = sessionStorage.getItem('freelancerId');
+  // const userId = sessionStorage.getItem('freelancerId');
   const NumericUserId = Number(userId)
 
   const handleShowKeypad = () => {

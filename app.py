@@ -150,13 +150,15 @@ def retrain_model():
         print(f"Model retrained with new data. Epochs: {epochs}")
 
 # 추가적인 조건을 사용한 이상 탐지 함수
-def detect_anomalies_with_additional_conditions(data, reconstruction_errors, threshold):
+def detect_anomalies_with_additional_conditions(processed_data):
     anomalies = [False]  # 데이터가 단일 개체이므로 초기 값 설정
 
-    # price_period 조건에 따라 이상 거래 결정
-    price_period = data['deposit'] / data['period']
-    if price_period <= 5 or price_period >= 100:
-        anomalies[0] = True  # price_period 조건에 해당되면 이상 거래로 간주
+    # 스케일링된 price_per_day 값에 접근
+    price_per_day = processed_data[0][1]
+
+    # 스케일링된 price_per_day 값이 특정 기준 범위를 벗어나는지 확인
+    if price_per_day <= 5 or price_per_day >= 100:
+        anomalies[0] = True  # 조건에 해당되면 이상 거래로 간주
     else:
         anomalies[0] = False  # 그렇지 않은 경우 정상 거래로 간주
 
@@ -204,7 +206,7 @@ def analyze():
 
                 # 임계값 동적 계산 (기존 데이터의 95% 분위수)
                 threshold = dynamic_threshold(mse)
-                anomalies = detect_anomalies_with_additional_conditions([data], mse, threshold)
+                anomalies = detect_anomalies_with_additional_conditions([processed_data], mse, threshold)
 
                 # Kafka로 결과 전송
                 message = json.dumps({

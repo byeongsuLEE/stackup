@@ -7,6 +7,7 @@ WORKDIR /app
 # requirements.txt 복사 및 설치
 COPY ./requirements.txt . 
 RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir flask_cors==5.0.0
 
 # Flask 애플리케이션 코드 복사
 COPY . .

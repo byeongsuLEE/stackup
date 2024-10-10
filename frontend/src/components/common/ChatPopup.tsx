@@ -23,7 +23,7 @@ export interface client {
 export default function SimplePopup() {
     const [anchor, setAnchor] = useState<null | HTMLElement>(null);
     const [activeChatId, setActiveChatId] = useState<string | null>(null); // 활성화된 채팅방 ID 상태
-    const [newMessages, setNewMessages] = useState<boolean>(true); // 새 메시지 여부
+    // const [newMessages, setNewMessages] = useState<boolean>(true); // 새 메시지 여부
     const [clientList, setClientList] = useState<client[] | []>([]);
     console.log(clientList)
 
@@ -60,14 +60,14 @@ export default function SimplePopup() {
         }
     };
 
-    useEffect(() => {
-        setNewMessages(true); // 새로운 메시지 감지 (여기서는 테스트용으로 true로 설정, 실제로는 메시지 수신 로직 추가)
-    }, [loadChats]);
+    // useEffect(() => {
+    //     setNewMessages(true); // 새로운 메시지 감지 (여기서는 테스트용으로 true로 설정, 실제로는 메시지 수신 로직 추가)
+    // }, [loadChats]);
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
         fetchClient()
         setAnchor(anchor ? null : event.currentTarget);
-        setNewMessages(false); // 메시지 창이 열리면 새 메시지 배지를 숨김
+        // setNewMessages(false); // 메시지 창이 열리면 새 메시지 배지를 숨김
     };
 
     const open = Boolean(anchor);
@@ -90,7 +90,7 @@ export default function SimplePopup() {
                 style={{ position: "relative" }}
             >
                 <ChatIcon />
-                {newMessages && (
+                {/* {newMessages && (
                     <span
                         style={{
                             position: "absolute",
@@ -106,7 +106,7 @@ export default function SimplePopup() {
                     >
                         New
                     </span>
-                )}{" "}
+                )}{" "} */}
                 {/* 새 메시지 배지 */}
             </button>
             <BasePopup id={id} open={open} anchor={anchor}>
@@ -114,17 +114,22 @@ export default function SimplePopup() {
                     {/* 활성화된 채팅방이 없다면 채팅 리스트를 표시 */}
                     {!activeChatId && (
                         <div className="overflow-y-auto max-h-full">
-                            {" "}
                             {/* 스크롤 추가 */}
-                            {chats.map((chat) => (
-                                <ChatListItem
-                                    key={chat.chatId}
-                                    name={chat.name}
-                                    chatId={chat.chatId}
-                                    // timestamp={chat.registTime}
-                                    onClick={() => handleChatClick(chat.chatId)} // 클릭 시 채팅방 활성화
-                                />
-                            ))}
+                            {chats.length === 0 ? (
+                                <div className="text-center mt-5">
+                                    {userType === 'freelancer' ? '지원한 프로젝트가 없습니다' : '게시한 프로젝트가 없습니다'}
+                                </div>
+                            ) : (
+                                chats.map((chat) => (
+                                    <ChatListItem
+                                        key={chat.chatId}
+                                        name={chat.name}
+                                        chatId={chat.chatId}
+                                        // timestamp={chat.registTime}
+                                        onClick={() => handleChatClick(chat.chatId)} // 클릭 시 채팅방 활성화
+                                    />
+                                ))
+                            )}
                         </div>
                     )}
 
@@ -145,7 +150,7 @@ export default function SimplePopup() {
                                 <ChatRoom chatRoomId={activeChatId} />
 
                             </div>
-                            </div>
+                        </div>
                     )}
                 </PopupBody>
             </BasePopup>

@@ -30,10 +30,7 @@ const WorkForm = () => {
   //== 제출 ==//
   const onSubmit = (information: createProjectProp) => {
     createProject(information)
-    console.log(information)
-    console.log(information.frameworks)
-    console.log(information.languages)
-    //== 나중에 수정하기 ==//
+
     navigate("/work");
   }
 
@@ -73,16 +70,16 @@ const WorkForm = () => {
         description: description, // description을 POST 요청의 body에 포함
       });
 
-      // 응답 처리
-      console.log('응답:', res.data);
       // 선택된 값을 업데이트
       setValue("classification", res.data.classification);
-      console.log(res.data.classification)
+
       const languageIds: string[] = res.data.languages.map((language: Language) => language.languageId.toString())
       setValue("languages", languageIds);
+
       // res.data.frameworks에서 frameworkId만 추출하여 설정
       const frameworkIds: string[] = res.data.frameworks.map((framework: Framework) => framework.frameworkId.toString());
       setValue('frameworks', frameworkIds);
+
     } catch (error) {
       console.error('Error:', error);
     }
@@ -116,14 +113,12 @@ const WorkForm = () => {
           </div>
           <div className='flex flex-col'>
             <input
-              // name="projectName"
               className='border border-slate-300 rounded-lg w-96 p-2'
               type="text"
               {...register("title", { required: '제목을 입력해주세요.' })}
             />
 
             <textarea
-              // name='projectInfo'
               className='py-2 px-2 border mt-3 border-slate-300 h-40 rounded-lg'
               {...register("description", {
                 required: "설명을 입력해주세요.",
@@ -134,7 +129,6 @@ const WorkForm = () => {
             />
 
             <input
-              // name="projectPeople"
               className='border mt-3 border-slate-300 rounded-lg w-96 text-end px-2'
               type="text"
               placeholder="명"
@@ -142,7 +136,6 @@ const WorkForm = () => {
             />
 
             <input
-              // name='budget'
               className='border border-slate-300 rounded-lg w-96 mt-3 text-end px-2'
               type="text" placeholder="만원"
               {...register("deposit", { required: "예상 금액을 입력해주세요." })}
@@ -162,7 +155,6 @@ const WorkForm = () => {
             />
 
             <input
-              // name='projectPeriod' 
               className='border border-slate-300 rounded-lg w-96 mt-3 text-end px-2'
               type="text"
               placeholder="일"
@@ -183,7 +175,6 @@ const WorkForm = () => {
             />
 
             <select
-              // name='workType' 
               className='border border-slate-300 rounded-lg w-96 mt-3 text-end px-2'
               {...register("workType", { required: "근무형태를 입력해주세요." })}
             >
@@ -191,14 +182,12 @@ const WorkForm = () => {
               <option value="false">기간제 상주</option>
             </select>
 
-            <input
-              // name='workAddress' 
+            <input 
               className='border border-slate-300 rounded-lg w-96 mt-3 p-1'
               type="text"
               {...register("address", { required: "실제 근무지를 입력해주세요." })}
             />
             <input
-              // name='requirement' 
               className='border border-slate-300 rounded-lg w-96 mt-3 p-1'
               type="text"
               {...register("requirements", { required: "기타 요구사항을 입력해주세요." })}

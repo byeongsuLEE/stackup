@@ -83,11 +83,7 @@ export const checkProjectStep = async (projectId: number): Promise<any> => {
 
 
 //프로젝트 단계 변경
-export const projectStep = async (
-  projectId?: number,
-  currentStep?: string,
-  isChangeProjectStep?: boolean
-): Promise<any> => {
+export const projectStep = async ( projectId?: number, currentStep?: string, isChangeProjectStep?: boolean ): Promise<any> => {
   try {
     const response = await axios({
       method: 'patch',

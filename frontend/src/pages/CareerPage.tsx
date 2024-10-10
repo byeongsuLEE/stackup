@@ -9,12 +9,10 @@ import NFTDisplay from "../components/NFTPage/NFTDisplay";
 const Career = () => {
   const [value, setValue] = React.useState('1');
 
-
-
-
   const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+  
   return (
     <div className='mt-10'>
 

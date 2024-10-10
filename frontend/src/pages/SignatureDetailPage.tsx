@@ -29,9 +29,9 @@ const SignatureDetail = () => {
     signature(data?.signedMessage, freelancerProjectId);
     window.scrollTo({ top: 0, behavior: 'smooth' });
     setShowAlert(true);
+
     setTimeout(() => {
       setShowAlert(false);
-      // window.location.reload();
     }, 60000);
   }
   const { data: contract, isLoading: isProjectLoading } = useQuery({
@@ -41,11 +41,6 @@ const SignatureDetail = () => {
   });
 
   useEffect(() => {
-    if (isLoading) {
-      console.log("로딩 중입니다...");
-    } else {
-      console.log("로딩이 완료되었습니다.");
-    }
 
     //== pdf 생성 ==//
     const MakePDF = async () => {

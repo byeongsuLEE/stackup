@@ -26,8 +26,6 @@ const Mypage = () => {
     } else {
       update();
     }
-
-
   }, [])
 
   return (

@@ -154,7 +154,7 @@ def detect_anomalies_with_additional_conditions(data, reconstruction_errors, thr
     anomalies = np.zeros(len(data), dtype=bool)  # 모든 데이터를 정상으로 초기화
 
     for i, project in enumerate(data):
-        price_period = project['period'] / project['deposit']
+        price_period = project['deposit'] / project['period']
         # price_period 조건에 따라 이상 거래 결정
         if price_period <= 5 or price_period >= 100:
             anomalies[i] = True  # price_period 조건에 해당되면 이상 거래로 간주

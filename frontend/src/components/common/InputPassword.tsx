@@ -62,8 +62,8 @@ const InputPassword = ({ userId, projectId, stepResponse, boardId, middleAmount,
         } else {
           alert("비밀번호가 올바르지 않습니다.");
         }
-      } catch (error) {
-        console.error("비밀번호 확인 중 오류 발생:", error);
+      } catch (error:any) {
+        console.error("비밀번호 확인 중 오류 발생:", error.message);
         alert("비밀번호 확인에 실패했습니다. 다시 시도해 주세요.");
       }
     } else {

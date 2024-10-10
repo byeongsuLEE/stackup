@@ -92,7 +92,7 @@ const Detail = ({ project, clientId }: DetailProps) => {
         console.log('이상거래 response.data : ',response.data)
         const anomaly = response.data.is_anomaly[0] == "false" ? true : false;
         setIsAnomaly(anomaly);
-      } catch (error) {
+      } catch (error) {    
         setIsAnomaly(undefined)
         console.error("Error fetching anomaly data:", error);
       } finally {

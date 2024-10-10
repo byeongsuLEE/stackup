@@ -10,7 +10,8 @@ spring:
     password: ${DB_PASSWORD} # 데이터베이스 비밀번호 (환경 변수 사용)
     driver-class-name: com.mysql.cj.jdbc.Driver # 데이터베이스 드라이버 클래스 이름 설정
     hikari:
-      maximum-pool-size: 20  # 커넥션 풀 크기를 20으로 증가
+      minimum-idle: 10  # 최소 유휴 커넥션을 10으로 설정
+      maximum-pool-size: 50  # 최대 커넥션 풀 크기
   jpa:
     open-in-view: false
     #    show-sql: true # JPA SQL 출력 설정

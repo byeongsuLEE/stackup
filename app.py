@@ -192,18 +192,20 @@ def analyze():
                 anomalies_mse = mse > threshold
                 anomalies_conditions = detect_anomalies_with_additional_conditions(price_per_day)
 
-                anomalies = [any(anomalies_mse) or any(anomalies_conditions)]
+                # 이상 거래 여부 결정 (둘 중 하나라도 True이면 이상 거래로 간주)
+                is_anomaly = [any(anomalies_mse) or any(anomalies_conditions)]
 
+                # Kafka로 결과 전송
                 message = json.dumps({
                     'boardId': data['boardId'],
-                    'is_anomaly': anomalies,
+                    'is_anomaly': is_anomaly,
                     'reconstruction_error': mse.tolist()
                 })
 
                 producer.produce('analysis', message, callback=delivery_report)
                 producer.flush()
 
-                if not any(anomalies):
+                if not any(is_anomaly):
                     normal_data_cache.append(processed_data)
                     retrain_model()
 

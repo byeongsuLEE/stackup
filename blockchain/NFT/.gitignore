@@ -1,0 +1,34 @@
+# Truffle Build Directory
+# build/
+
+# Ignore node_modules
+node_modules/
+
+# Logs
+logs/
+*.log
+
+# Mac OS
+.DS_Store
+
+# dotenv environment variables file
+.env
+
+# Truffle configuration backup files
+*.bak
+
+# Coverage reports
+coverage/
+coverage.json
+
+# Compiled contracts
+*.sol.js
+
+# VSCode settings
+.vscode/
+
+# Yarn error log
+yarn-error.log
+
+# Lock files
+yarn.lock

@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import "./styles/tailwind.css";
+
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100..900&display=swap");
+
+* {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+*::-webkit-scrollbar {
+  display: block; /* Chrome, Safari, Opera*/
+}
+
+.theme-background-color {
+  background-color: #c3e956;
+}
+.theme-color {
+  color: #c3e956;
+}
+.background-color {
+  background-color: #fbfcf8;
+}
+.sub-color-1 {
+  color: #4d7111;
+}
+.sub-color-2 {
+  color: #1f4b2c;
+}
+.sub-background-color {
+  background-color: #eaf7c4;
+}
+.sub-font-color {
+  color: #b9b8b8;
+}
+
+body {
+  /* background-color: #FBFCF8; */
+  font-family: "Noto Sans KR";
+  font-weight: 300;
+}
+
+.slide-up {
+  transform: translateY(-20px);
+  opacity: 1;
+}
+
+.scrollbar {
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #ffffff #ffffff;
+}
+
+.scrollbar:hover {
+  scrollbar-color: #b9b8b8 #ffffff;
+}

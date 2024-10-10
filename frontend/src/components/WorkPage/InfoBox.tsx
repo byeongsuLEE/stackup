@@ -25,7 +25,7 @@ const InfoBox: React.FC<InfoBoxProps> = ({title, category, content, info:InfoIco
       </div>
       <div className="flex items-center">
         <span>{content}</span>
-        {category === "deposit" && isAnomaly !== null && (
+        {category === "deposit" && isAnomaly !== undefined && (
           <span className={`ml-2 ${isAnomaly ? "text-red-500" : "text-green-500"}`}>
             {isAnomaly ? "⚠️" : "✅"}
           </span>

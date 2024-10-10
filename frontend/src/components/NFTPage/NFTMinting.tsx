@@ -28,7 +28,6 @@ const NFTMinting = ({ Minting, isLoading, pdf, contractData, projectId }: NFTMin
   const [, setAddr] = useState("");
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const navigate = useNavigate();
-  // console.log(addr)
 
   // 지갑 연결 함수
   const handleGetAccount = async () => {

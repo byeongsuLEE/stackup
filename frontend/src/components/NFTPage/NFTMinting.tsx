@@ -16,7 +16,7 @@ interface NFTMintingProps {
   Minting: (cid: string) => Promise<void>; // 부모 컴포넌트에서 전달받는 Minting 함수의 타입
   isLoading: boolean; // 부모 컴포넌트에서 전달받는 로딩 상태
   pdf: any;
-  contractData?: contractProp;
+  contractData: contractProp;
   projectId: number;
 }
 

@@ -6,10 +6,10 @@ const SignListBox = (sign: project) => {
   const freelancerProjectId = sign.freelancerProjectId;
   const projectId = sign.projectId;
   const navigate = useNavigate();
+  
   const toDetail = () => {
     navigate(`/signature/detail/${projectId}/${freelancerProjectId}`, { state: { projectId: projectId } });
-  }
-  console.log(sign.projectId);
+  };
 
   return (
     <div className="bg-bgGreen border my-2 border-mainGreen h-[150px] w-full rounded-lg p-5 flex justify-between items-center">

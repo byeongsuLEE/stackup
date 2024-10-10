@@ -52,7 +52,7 @@ public class UserController {
 
     @GetMapping("/info")
     ResponseEntity<ApiResponse<UserInfoResponseDto>> getInfo(@AuthUser User user) {
-        UserInfoResponseDto userInfoResponseDto=   userService.getInfo(user);
+        UserInfoResponseDto userInfoResponseDto=   userService.getInfo(user.getId());
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(ApiResponse.success(userInfoResponseDto));

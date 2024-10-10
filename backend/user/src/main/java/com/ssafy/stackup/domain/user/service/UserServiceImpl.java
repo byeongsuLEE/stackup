@@ -330,6 +330,7 @@ public class UserServiceImpl implements UserService {
                     .businessRegistrationNumber(client.getBusinessRegistrationNumber())
                     .businessName(client.getBusinessName())
                     .reportedCount(client.getReportedCount())
+                    .mainAccount(client.getMainAccount())
                     .totalScore(client.getTotalScore())
                     .userType("client")
                     .userAddress(user.getUserAddress())
@@ -424,18 +425,17 @@ public class UserServiceImpl implements UserService {
                     .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
 
             System.out.println("메인계좌"+client.getMainAccount());
-            String mainAccount = client.getMainAccount();
             System.out.println("유저 주소"+client.getUserAddress());
-            String userAddress = client.getUserAddress();
 
             ClientResponseDto clientResponseDto  = ClientResponseDto.builder()
                     .id(user.getId())
                     .roles(user.getRoles())
                     .name(user.getName())
                     .phone(user.getPhone())
-                    .mainAccount(mainAccount)
+                    .mainAccount(user.getMainAccount())
+                    .userAddress(user.getUserAddress())
                     .email(user.getEmail())
-                    .userAddress(userAddress)
+                    .userAddress(user.getUserAddress())
                     .secondPassword(user.getSecondPassword())
                     .accountKey(user.getAccountKey())
                     .businessRegistrationNumber(client.getBusinessRegistrationNumber())

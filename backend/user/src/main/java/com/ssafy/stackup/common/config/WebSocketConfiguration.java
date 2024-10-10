@@ -34,7 +34,7 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/user/ws").setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint("/user/ws").setAllowedOrigins("https://stackup.live").withSockJS();
     }
 
 }

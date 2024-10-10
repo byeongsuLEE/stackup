@@ -1,0 +1,906 @@
+```markdown
+# 1. 빌드 및 배포 문서
+
+## JVM, 웹서버, WAS 설정
+
+### CI/CD
+
+### 쿠버네티스 클러스터 설정
+
+# 쿠버네티스 설치
+
+## 기본 공통 설치
+
+- 마스터노드 1개와 워커노드 n개 인스턴스 생성하기
+- 도커 다 설치하기
+
+## Docker 설치
+
+[Docker 공식 설치 가이드 - Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
+
+```bash
+# Add Docker's official GPG key:
+sudo apt-get update
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+# Add the repository to Apt sources:
+echo \
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+sudo apt-get update
+```
+
+```bash
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+```
+
+- **추가: Docker Compose 설치**
+
+### Docker Compose 설치
+
+```bash
+# 최신 버전 확인 후 설치
+sudo curl -SL https://github.com/docker/compose/releases/download/v2.29.6/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose
+
+# 실행 권한 부여
+sudo chmod +x /usr/local/bin/docker-compose
+
+# 설치 확인
+docker-compose --version
+```
+
+## Kubernetes 설치 (kubeadm, kubelet, kubectl)
+
+<aside>
+💡
+
+다음으로 각 노드에 **kubeadm**, **kubelet**, **kubectl**을 설치합니다. 
+
+`kubeadm`은 Kubernetes 클러스터를 초기화하는 도구이고
+
+`kubelet`은 각 노드에서 실행되는 Kubernetes 에이전트
+
+`kubectl`은 Kubernetes 클러스터와 상호작용하는 CLI 도구입니다.
+
+</aside>
+
+참고: [Kubernetes 공식 설치 가이드](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
+
+```bash
+sudo apt-get update
+
+sudo apt-get install -y apt-transport-https ca-certificates curl gpg
+
+sudo mkdir -p /etc/apt/keyrings
+
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.31/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.31/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+sudo apt-get update
+sudo apt-get install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+```
+
+### kubelet 설치
+
+```bash
+sudo apt-get update
+sudo apt-get install -y kubelet
+```
+
+## 마스터 노드 설치
+
+### 마스터 노드 초기화
+
+#### containerD 설치
+
+```bash
+sudo apt update
+sudo apt install -y containerd
+```
+
+#### containerD 파일 설정
+
+```bash
+sudo mkdir -p /etc/containerd
+sudo containerd config default | sudo tee /etc/containerd/config.toml
+```
+
+#### containerD 서비스 시작 및 설정
+
+```bash
+sudo systemctl restart containerd
+sudo systemctl enable containerd
+```
+
+참고: [Kubernetes kubeadm 초기화 가이드](https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/install-kubeadm/)
+
+<aside>
+
+cat /etc/containerd/config.toml 을 통해 CRI 설정 주석처리 되어있나 확인
+
+kubeadm을 통해 초기화
+
+cidr을 통해 IP 범위 정하기
+
+컨트롤 패널(마스터노드) 엔드포인트 설정 6443 (고가용성을 위함)
+
+cri socket ⇒containerd로 설정하기(런타임 컨테이너 소켓)
+
+</aside>
+
+```bash
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --control-plane-endpoint="10.178.0.16:6443" --cri-socket=/run/containerd/containerd.sock
+
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --control-plane-endpoint="10.178.0.16:6443" --cri-socket=/run/containerd/containerd.sock
+
+sudo kubeadm init --pod-network-cidr={ip 범위 설정} --control-plane-endpoint="{마스터 노드 내부IP}" --cri-socket=/run/containerd/containerd.sock
+```
+
+#### 권한 설정
+
+```bash
+sudo chown $(id -u):$(id -g) /etc/kubernetes/admin.conf
+```
+
+```bash
+export KUBECONFIG=/etc/kubernetes/admin.conf
+```
+
+![image.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/28d7c3ce-495d-4e32-9623-2146749d7e09/5b7f2701-ac7b-41bb-b6f9-e0bbb71453a2/image.png)
+
+## 워커 노드 설치
+
+### ~~워커 노드 초기화~~
+
+```bash
+sudo kubeadm init --pod-network-cidr=10.244.0.0/16 --cri-socket=/run/containerd/containerd.sock
+```
+
+안해도 된다 함 그냥 join
+
+### 워커 노드 추가
+
+신규노드 추가시 방법
+
+[참고 링크](https://chatgpt.com/share/c76936d0-194a-4ada-ba33-3a8ef1573f5a)
+
+```bash
+kubeadm join <마스터 노드 IP>:6443 --token <토큰> --discovery-token-ca-cert-hash sha256:<CA 인증서 해시>
+```
+
+```bash
+kubeadm join 10.178.0.2:6443 --token 6k4b3a.zg64j38rhb19z5tv \
+      --discovery-token-ca-cert-hash sha256:6e8edf36a9046659dd48f9c6d633700e0cc7e739570ea0a845827b2edaebf5db
+```
+
+#### 워커 노드 추가를 위한 토큰과 인증서 해시 출력
+
+```bash
+# 토큰 생성
+sudo kubeadm token create
+
+# 인증서 해시 출력
+openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | sha256sum | awk '{print $1}'
+```
+
+이거면 다 됨
+
+```bash
+sudo kubeadm token create --print-join-command
+```
+
+- **가끔 생기는 오류**
+
+### 1. **socat이 설치되지 않음 (`socat not found`)**:
+
+`socat`은 Kubernetes 클러스터에서 노드 간 통신을 처리하는 데 사용됩니다. 이 경고는 `socat`이 시스템에 설치되지 않았다는 경고이며, 이를 해결하려면 `socat`을 설치하면 됩니다.
+
+#### 해결 방법:
+
+`socat`을 설치합니다.
+
+```bash
+sudo apt-get install socat -y
+```
+
+### 2. **IP 포워딩 설정 오류 (`/proc/sys/net/ipv4/ip_forward contents are not set to 1`)**:
+
+Kubernetes 클러스터에서 네트워크 통신이 원활히 이루어지기 위해서는 **IP 포워딩**이 활성화되어 있어야 합니다. `/proc/sys/net/ipv4/ip_forward` 파일의 값이 `1`로 설정되어 있지 않으면 네트워크 패킷이 전달되지 않습니다.
+
+#### 해결 방법:
+
+IP 포워딩을 활성화합니다.
+
+1. **일시적으로 IP 포워딩 활성화**:
+다음 명령어로 즉시 IP 포워딩을 활성화할 수 있습니다.
+    
+    ```bash
+    sudo sysctl -w net.ipv4.ip_forward=1
+    ```
+    
+2. **영구적으로 IP 포워딩 활성화**:
+시스템이 재부팅된 후에도 IP 포워딩이 유지되도록 `/etc/sysctl.conf` 파일을 수정합니다.
+    
+    ```bash
+    sudo nano /etc/sysctl.conf
+    ```
+    
+    파일에서 다음 줄을 추가하거나, 주석 처리가 되어 있다면 주석을 제거합니다.
+    
+    ```bash
+    net.ipv4.ip_forward=1
+    ```
+    
+    그런 다음, 다음 명령어를 실행하여 설정을 적용합니다.
+    
+    ```bash
+    sudo sysctl -p
+    ```
+    
+
+### 3. **명령 재실행**:
+
+위의 문제를 모두 해결한 후, 다시 `kubeadm join` 명령을 실행하여 클러스터에 노드를 추가합니다.
+
+```bash
+sudo kubeadm join 10.178.0.16:6443 --token kgpsnp.m3xrykgcp7jxbss6 \
+--discovery-token-ca-cert-hash sha256:469309d6ea16d2264439fe2ea32148afeed8f137c0f28ff9d31dbfe7a862022d
+```
+
+이제 문제가 해결되어 노드를 클러스터에 성공적으로 추가할 수 있을 것입니다.
+
+## Flannel (CNI) 설치
+
+[Flannel GitHub - Deploying Flannel Manually](https://github.com/flannel-io/flannel#deploying-flannel-manually)
+
+```bash
+kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
+```
+
+마스터 노드에 설치
+
+```bash
+kubectl get daemonset -A # 전체 데몬셋 확인, flannel 있는지 확인
+```
+
+### 1. **Pod 배포 테스트**:
+
+네트워크가 제대로 동작하는지 확인하기 위해 간단한 애플리케이션(예: Nginx)을 배포하고, Pod 간 통신이 잘 이루어지는지 확인할 수 있습니다.
+
+```bash
+kubectl create deployment nginx --image=nginx
+kubectl expose deployment nginx --port=80 --type=NodePort
+```
+
+- 이 명령은 Nginx 애플리케이션을 배포하고, 클러스터 외부에서 접근할 수 있도록 NodePort 서비스를 생성합니다.
+- Nginx 서비스에 접근하여 네트워킹이 잘 동작하는지 확인합니다.
+
+### 2. **클러스터 상태 확인**:
+
+클러스터 내의 모든 노드와 Pod가 정상 상태인지 확인합니다:
+
+```bash
+kubectl get nodes
+kubectl get pods -A
+```
+
+- 모든 노드가 `Ready` 상태인지, Pod들이 `Running` 상태인지 확인합니다.
+
+### 3. **Pod 간 네트워크 통신 확인**:
+
+네트워크가 잘 설정되었는지 확인하려면 **두 개 이상의 Pod 간에 통신이 가능한지** 확인할 수 있습니다.
+
+간단한 BusyBox Pod를 두 개 배포한 후, 한 Pod에서 다른 Pod로의 통신을 테스트합니다:
+
+```bash
+kubectl run busybox1 --image=busybox --restart=Never -- /bin/sh -c "sleep 3600"
+kubectl run busybox2 --image=busybox --restart=Never -- /bin/sh -c "sleep 3600"
+```
+
+그런 다음, `busybox1`에서 `busybox2`로 ping을 테스트합니다:
+
+```bash
+kubectl exec -it busybox1 -- ping <busybox2-pod-ip>
+```
+
+Pod IP는 `kubectl get pods -o wide` 명령어로 확인할 수 있습니다.
+
+## Helm 설치
+
+[Helm 공식 설치 가이드](https://helm.sh/ko/docs/intro/install/)
+
+```bash
+curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+sudo apt-get install apt-transport-https --yes
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+sudo apt-get update
+sudo apt-get install helm
+```
+
+## 배포 노드 설치
+
+### Helm 설치
+
+```bash
+curl https://baltocdn.com/helm/signing.asc | gpg --dearmor | sudo tee /usr/share/keyrings/helm.gpg > /dev/null
+sudo apt-get install apt-transport-https --yes
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main" | sudo tee /etc/apt/sources.list.d/helm-stable-debian.list
+sudo apt-get update
+sudo apt-get install helm
+```
+
+admin.conf 파일을 마스터 노드에서 배포 노드로 가져와야함
+
+키가 안먹히면 재생산하고 마스터에 넣어둘 것(퍼블릭키)
+
+### 헬름을 이용해서 Nginx Ingress Controller 설치하기
+
+```bash
+helm upgrade --install ingress-nginx ingress-nginx \
+  --repo https://kubernetes.github.io/ingress-nginx \
+  --namespace ingress-nginx --create-namespace
+```
+
+## Nginx Ingress Controller(인그레스 컨트롤러)
+
+### 1. **NGINX Ingress Controller 설치**
+
+먼저, Kubernetes 클러스터에 **NGINX Ingress Controller**를 설치해야 합니다. LoadBalancer를 사용하지 않고 **NodePort**를 사용할 것이므로, 설치할 때 이를 고려해 설정합니다.
+
+### 1.1 **Helm 저장소 추가 (필요 시)**:
+
+```bash
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+```
+
+### 1.2 **NGINX Ingress Controller 설치** (NodePort로 설정):
+
+```bash
+helm install ingress-nginx ingress-nginx/ingress-nginx \
+  --set controller.service.type=NodePort \
+  --namespace ingress-nginx --create-namespace
+```
+
+### 1.2 **NGINX Ingress Controller 설치** (Loadbalancer로 설정):
+
+```bash
+helm install ingress-nginx ingress-nginx/ingress-nginx \
+  --set controller.service.type=LoadBalancer \
+  --namespace ingress-nginx --create-namespace
+```
+
+### 2. **Ingress Controller 상태 확인**
+
+설치가 완료되면, Ingress Controller 서비스가 NodePort로 제대로 노출되었는지 확인합니다.
+
+```bash
+kubectl get svc -n ingress-nginx
+```
+
+출력에서 **NodePort**가 할당된 것을 확인할 수 있습니다. 예시:
+
+```
+NAME                      TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE
+ingress-nginx-controller  NodePort   10.110.5.37     <none>        80:32080/TCP, 443:32443/TCP  2m
+```
+
+여기서 **32080**과 **32443**은 외부에서 접근 가능한 NodePort입니다.
+
+### 3. **애플리케이션 서비스 준비**
+
+다음으로, Ingress를 통해 트래픽을 전달할 애플리케이션 서비스를 준비합니다. 예를 들어, `demo`라는 애플리케이션을 배포하고 NodePort로 노출합니다.
+
+### 3.1 **애플리케이션 배포**:
+
+```bash
+kubectl create deployment demo --image=httpd --port=80
+```
+
+### 3.2 **서비스 노출 (ClusterIP로 설정)**:
+
+애플리케이션을 NodePort로 직접 노출하지 않고, **ClusterIP**로 내부에서만 접근 가능하게 설정합니다.
+
+```bash
+kubectl expose deployment demo --port=80 --type=ClusterIP
+```
+
+### 4. **Ingress 리소스 설정**
+
+이제 Ingress 리소스를 통해 외부에서 들어오는 트래픽을 **demo** 서비스로 라우팅할 수 있도록 설정합니다.
+
+### 4.1 **Ingress 리소스 생성**:
+
+아래 YAML 파일을 작성하여 Ingress 리소스를 만듭니다. 경로 기반 또는 도메인 기반으로 트래픽을 라우팅할 수 있습니다.
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: demo-ingress
+  namespace: default
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: <your-domain-or-ip>   # 예: stackup.duckdns.org 또는 노드 외부 IP
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: demo
+            port:
+              number: 80
+```
+
+### 4.2 **Ingress 리소스 적용**:
+
+작성한 YAML 파일을 Kubernetes에 적용합니다.
+
+```bash
+kubectl apply -f demo-ingress.yaml
+```
+
+### 5. **Ingress 설정 확인**
+
+Ingress 설정이 정상적으로 적용되었는지 확인합니다.
+
+```bash
+kubectl get ingress
+```
+
+또한, Ingress의 상세 설정을 확인할 수 있습니다.
+
+```bash
+kubectl describe ingress demo-ingress
+```
+
+### 6. **외부에서 서비스 접근**
+
+- **NodePort**를 통해 접근하려면, 각 노드의 **외부 IP**와 **할당된 NodePort**로 접근합니다.
+- 브라우저에서 `http://<노드 외부 IP>:32080`로 접속하거나, **curl**로 테스트할 수 있습니다.
+
+```bash
+curl http://<노드 외부 IP>:32080
+```
+
+만약 도메인을 사용 중이라면, 도메인 이름으로 접속할 수 있습니다:
+
+```bash
+curl http://<your-domain>
+```
+
+### 7. **모니터링 및 로그 확인**
+
+마지막으로 Ingress Controller가 트래픽을 처리하는 동안, 파드 및 서비스 로그를 확인할 수 있습니다.
+
+### Ingress Controller 로그 확인:
+
+```bash
+kubectl logs -n ingress-nginx <ingress-controller-pod-name>
+```
+
+### 애플리케이션 파드 로그 확인:
+
+```bash
+kubectl logs <demo-pod-name>
+```
+
+---
+
+### 요약:
+
+1. **NGINX Ingress Controller 설치** (NodePort로 설정).
+2. **Ingress Controller 상태 확인** (NodePort 확인).
+3. **애플리케이션 서비스 준비** (ClusterIP로 서비스 노출).
+4. **Ingress 리소스 생성** (트래픽 라우팅 규칙 설정).
+5. **Ingress 설정 확인** (정상 적용 여부 확인).
+6. **외부 IP 및 NodePort를 통해 서비스 접근**.
+7. **모니터링 및 로그 확인**.
+
+이 과정대로 진행하면 Ingress를 통해 외부에서 서비스에 접근할 수 있는 환경을 설정할 수 있습니다.
+
+## 아니야!!!!(Nodeport 쓰면 안되고 Loadbalancer 써야함)
+
+[참고 링크](https://somaz.tistory.com/217)
+
+MetalLB를 설치해야 로드밸런서 외부IP를 잡을수가 있음
+
+MetalLB  
+
+## 시발 이것도 아니야!! 그냥 NodePort 쓰자…
+
+```bash
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+```
+
+```bash
+helm upgrade ingress-nginx ingress-nginx/ingress-nginx \
+  --set controller.service.type=NodePort \
+  --set controller.service.nodePorts.http=30080 \
+  --set controller.service.nodePorts.https=30443 \
+  --namespace ingress-nginx
+```
+
+```bash
+helm install ingress-nginx ingress-nginx/ingress-nginx \
+  --set controller.service.type=NodePort \
+  --set controller.service.nodePorts.http=30080 \
+  --set controller.service.nodePorts.https=30443 \
+  --namespace ingress-nginx --create-namespace
+```
+
+### certbot 이용한 인증
+
+```nginx
+server {
+    listen 80;
+    server_name your-domain.com;
+
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    # 모든 HTTP 요청을 HTTPS로 리디렉션
+    location / {
+        return 301 https://$host$request_uri;
+    }
+}
+
+server {
+    listen 443 ssl;
+    server_name your-domain.com;
+
+    ssl_certificate /etc/nginx/certs/fullchain.pem;
+    ssl_certificate_key /etc/nginx/certs/privkey.pem;
+
+    ssl_protocols       TLSv1.2 TLSv1.3;
+    ssl_ciphers         HIGH:!aNULL:!MD5;
+
+    # 1. 쿠버네티스 노드포트로 요청 라우팅
+    location /kubernetes/ {
+        proxy_pass http://34.64.46.226:30080;
+        proxy_pass http://34.64.197.218:30080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # 2. Jenkins로 요청 라우팅
+    location /jenkins/ {
+        proxy_pass http://jenkins:8080;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    # 3. IP별로 다른 곳으로 라우팅
+    location /service1/ {
+        proxy_pass http://<IP_주소_1>;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /service2/ {
+        proxy_pass http://<IP_주소_2>;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /service3/ {
+        proxy_pass http://<IP_주소_3>;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+```
+
+## 기타 정리
+
+### 초기화 이후 kubeconfig 생성, 현재 사용자에게 권한 주기(Flannel)
+
+참고: [Flannel GitHub - Deploying Flannel Manually](https://github.com/flannel-io/flannel#deploying-flannel-manually)
+
+<aside>
+
+```bash
+export KUBECONFIG=/etc/kubernetes/admin.conf
+
+sudo chmod 644 /etc/kubernetes/admin.conf
+
+sudo chown $(id -u):$(id -g) /etc/kubernetes/admin.conf
+```
+
+</aside>
+
+```bash
+kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
+```
+
+### 중간점검 및 상태 확인
+
+<aside>
+
+- **노드 상태** 확인: `kubectl get nodes`
+- **시스템 Pod 상태** 확인: `kubectl get pods -n kube-system`
+- **클러스터 정보** 확인: `kubectl cluster-info`
+
+</aside>
+
+- **kubectl 인증서 에러**
+
+다음에 같은 `kubectl` 인증서 오류가 발생할 경우 어떻게 해결할 수 있는지 정리해 드리겠습니다.
+
+### 1. **오류 메시지 확인**
+
+오류 메시지가 `tls: failed to verify certificate` 또는 `x509: certificate signed by unknown authority`와 같은 인증서 관련 에러인 경우, 인증서나 설정 파일에 문제가 있을 수 있습니다.
+
+### 2. **`kubeconfig` 파일 경로 및 상태 확인**
+
+먼저, 현재 사용 중인 클라우드 인스턴스에서 `kubeconfig` 파일이 올바르게 설정되어 있는지 확인합니다.
+
+#### 2-1. `kubeconfig` 파일 경로 확인:
+
+```bash
+echo $KUBECONFIG
+```
+
+이 명령어가 아무 출력이 없다면 기본 경로는 `~/.kube/config`입니다.
+
+#### 2-2. `kubeconfig` 파일 상태 확인:
+
+```bash
+ls -l ~/.kube/config
+```
+
+이 명령어로 파일이 존재하는지, 그리고 올바른 권한을 가지고 있는지 확인합니다. 기본적으로 권한은 `600`이어야 합니다:
+
+```bash
+-rw------- 1 user user 1234 date /home/user/.kube/config
+```
+
+### 3. **`admin.conf` 파일 복사**
+
+만약 `kubeconfig` 파일에 문제가 있거나 손상되었다면, 다음과 같이 마스터 노드의 `admin.conf` 파일을 `~/.kube/config`로 복사하여 해결할 수 있습니다.
+
+```bash
+sudo cp /etc/kubernetes/admin.conf ~/.kube/config
+sudo chmod 600 ~/.kube/config
+```
+
+### 4. **환경 변수 설정 (선택 사항)**
+
+만약 `kubectl`이 올바른 `kubeconfig` 파일을 찾지 못한다면, 환경 변수를 설정하여 올바른 파일을 사용하도록 할 수 있습니다:
+
+```bash
+export KUBECONFIG=/etc/kubernetes/admin.conf
+```
+
+### 5. **API 서버와 통신 확인**
+
+이제 클러스터와의 통신이 정상적으로 되는지 확인하기 위해 `kubectl` 명령어를 실행합니다.
+
+```bash
+kubectl get nodes
+```
+
+정상적으로 노드 목록이 출력되면 문제는 해결된 것입니다.
+
+### 요약
+
+1. 오류 메시지 확인 (`tls`, `x509` 관련 에러)
+2. `kubeconfig` 파일 경로 및 권한 확인
+3. 필요 시, `/etc/kubernetes/admin.conf` 파일을 `~/.kube/config`로 복사
+4. 환경 변수를 설정해 올바른 `kubeconfig` 파일 사용
+5. `kubectl` 명령어로 클러스터와의 통신 확인
+
+이 단계를 따르면 동일한 인증서 관련 문제가 발생할 때 쉽게 해결할 수 있습니다.
+
+### 워커 노드 추가 방법 (클러스터화)
+
+```bash
+sudo kubeadm join 34.64.203.94:6443 --token k5x6ny.mtil34lz81h2cvra --discovery-token-ca-cert-hash sha256:1bcadfc9ccecdb7b5b3fed8b0c149eb688f4220bd6da0fbf449b85871e6d8232
+
+sudo kubeadm join {마스터 외부IP}:6443 --token {토큰} --discovery-token-ca-cert-hash sha256:{키}
+```
+
+```bash
+# 키 받는 코드
+openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | \
+openssl rsa -pubin -outform der 2>/dev/null | \
+openssl dgst -sha256 -hex | sed 's/^.* //'
+
+# 토큰 받는 코드
+sudo kubeadm token create
+```
+
+K8S 워커 노드 추가가 안되었던 이유(kubeadm을 init 하지 않아서 파일 안생김)
+
+[참고 링크](https://velog.io/@sororiri/k8s-트러블슈팅-kubelet-이-동작하지-않는-현상)
+
+이것도 안돼서 위에 추가해놓음
+
+### GKE 클러스터 설정
+
+## 1. Helm 리포지토리 추가 및 업데이트
+
+```bash
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+```
+
+## 2. MySQL 값 파일 생성 (선택 사항)
+
+기본 설정을 사용하거나 사용자 정의 설정을 위해 `mysql-values.yaml` 파일을 생성할 수 있습니다.
+
+```yaml
+# mysql-values.yaml
+replication:
+  enabled: true
+  slaveReplicas: 2
+
+auth:
+  rootPassword: "your-root-password"
+  database: "your-database"
+  username: "your-username"
+  password: "your-password"
+
+primary:
+  persistence:
+    size: 8Gi
+
+slave:
+  persistence:
+    size: 8Gi
+```
+
+## 3. MySQL 클러스터 설치
+
+### 기본 설정 사용 시
+
+```bash
+helm install my-mysql bitnami/mysql
+```
+
+### 사용자 정의 설정 사용 시
+
+```bash
+helm install my-mysql bitnami/mysql -f mysql-values.yaml
+```
+
+## 4. 설치 확인
+
+```bash
+helm list
+kubectl get pods -l app.kubernetes.io/name=mysql
+kubectl get svc -l app.kubernetes.io/name=mysql
+```
+
+## 5. MySQL 접속
+
+마스터 포드에 접속하여 MySQL에 접근할 수 있습니다.
+
+```bash
+# 마스터 포드 이름 확인
+POD_NAME=$(kubectl get pods -l app.kubernetes.io/name=mysql -o jsonpath="{.items[0].metadata.name}")
+
+# MySQL 클라이언트 접속
+kubectl exec -it $POD_NAME -- mysql -uroot -p
+```
+
+비밀번호는 `mysql-values.yaml` 파일에 설정한 `rootPassword`를 사용합니다.
+
+## 6. 업그레이드 및 관리
+
+설정을 변경한 후 Helm을 통해 업데이트할 수 있습니다.
+
+```bash
+helm upgrade my-mysql bitnami/mysql -f mysql-values.yaml
+```
+
+## Redis 클러스터 설치
+
+- **Helm 설치**
+    
+    GKE에서 Redis를 쉽게 배포하기 위해 Helm을 사용합니다. Helm이 설치되어 있지 않다면 다음 명령어로 설치합니다.
+    
+    ```bash
+    curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+    ```
+    
+- **Redis Helm 차트 추가**
+
+Redis Helm 차트를 추가하고 업데이트합니다.
+    
+    ```bash
+    helm repo add bitnami https://charts.bitnami.com/bitnami
+    helm repo update
+    ```
+    
+- **Redis 클러스터 배포**
+
+아래 명령어로 Redis 클러스터를 배포합니다.
+    
+    ```bash
+    helm install redis-cluster bitnami/redis \
+    --set cluster.enabled=true \
+    --set global.redis.password=redispassword
+    ```
+    
+- **Redis 클러스터 상태 확인**
+
+클러스터가 정상적으로 생성되었는지 확인합니다.
+    
+    ```bash
+    kubectl get pods
+    ```
+    
+
+### EC2 설정
+
+## 환경 변수
+
+## 배포 특이사항
+
+## DB 접속 정보
+
+# 2. 외부 서비스 정리
+
+```markdown
+# 2. 외부 서비스 정리
+
+## 1. Github API
+
+- **사용 용도**: GitHub OAuth2를 통한 사용자 인증 및 로그인.
+- **사용하는 GitHub API 엔드포인트**:
+    - 사용자 정보 조회: `https://api.github.com/user`
+    - 리다이렉트 uri :  `redirect-uri: "https://stackup.live/api/user/login/oauth2/code/github`
+- **설정 파일 위치**: `application.yml` 또는 `application.properties`에서 OAuth2 관련 GitHub API 설정 확인.
+- **관련 코드**:
+    - 사용자 로그인 처리: `com.ssafy.common.ouath2.service.CustomOAuth2UserService` 클래스.
+
+## 2. PortOne API
+
+- **사용 용도**: 결제 처리 서비스 (예: 카드 결제, 송금 등).
+- **설정 파일 위치**: `application.yml`에서 API 키 및 시크릿 설정.
+- api url : https://cdn.iamport.kr/js/iamport.payment-1.2.0.js`
+- **관련 코드**:
+    - 프론트 결제 api 코드 : `frontend\src\pages\PullupPage.tsx` 
+    - 결제 처리: `com.ssafy.stackup.domain.board` 클래스.
+
+## 3. SSAFY 금융 API
+
+- **사용 용도**: SSAFY Wallet을 사용한 사용자 지갑 관리 및 트랜잭션 처리.
+- **접근 정보**:
+- **사용하는 SSAFY Wallet API 엔드포인트**:
+    - 유저 키 : `POST api/account/key`
+- **설정 파일 위치**: `backend account service`에서 지갑 API 관련 설정.
+- **관련 코드**:
+    - 계좌 처리: `com.ssafy.stackup.domaina.account.service` 클래스.
+```
+
+[외부서비스.md](https://prod-files-secure.s3.us-west-2.amazonaws.com/28d7c3ce-495d-4e32-9623-2146749d7e09/7497d6ef-5819-48ac-ad98-f1499d51ef69/%EC%99%B8%EB%B6%80%EC%84%9C%EB%B9%84%EC%8A%A4.md)
+
+# 3. DB 덤프 파일
+
+## MySQL
+
+[backup.sql](https://prod-files-secure.s3.us-west-2.amazonaws.com/28d7c3ce-495d-4e32-9623-2146749d7e09/d7012b2d-8bbb-428d-ba04-aea0666b4e28/backup.sql)
+```

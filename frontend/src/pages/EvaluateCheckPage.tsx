@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { checkPassword } from "../apis/AccountsApi";
 import { projectApplicantProps } from "../apis/Board.type";
 import { projectFreelancer } from "../apis/BoardApi";
 import { projectStep } from "../apis/ProjectApi";
@@ -45,7 +44,7 @@ const EvaluateCheck = () => {
     }
 
   }, [boardId]);
-  
+
   return (
     <div className="m-10">
       {stepResponse === "DEVELOPMENT" ? (

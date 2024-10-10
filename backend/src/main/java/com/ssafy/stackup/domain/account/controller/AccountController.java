@@ -185,7 +185,7 @@ public class AccountController {
         return ResponseEntity.ok("2차 비밀번호가 성공적으로 저장되었습니다.");
     }
 
-    @GetMapping("/password")
+    @PostMapping("/check/password")
     public ResponseEntity<String> checkSecondPassword(@RequestBody SecondPasswordRequest request,@AuthUser User user){
         Long userId = user.getId();
         String secondPassword = request.getSecondPassword();

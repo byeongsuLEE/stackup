@@ -138,14 +138,14 @@ public class UserController {
     }
 
 
-    @PatchMapping("/{userId}/address")
+    @PostMapping("/{userId}/address")
     public ResponseEntity<ApiResponse<String>> setAddress (@PathVariable Long userId, @RequestBody Map<String, String> requestBody){
         String address = requestBody.get("address");
         userService.setAddress(userId,address);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("주소 등록완료"));
     }
 
-    @PatchMapping("/{userId}/accountKey")
+    @PostMapping("/{userId}/accountKey")
     public ResponseEntity<ApiResponse<String>> setAccountKey (@PathVariable Long userId, @RequestBody Map<String, String> requestBody){
         String accountKey = requestBody.get("accountKey");
         userService.setAccountKey(userId,accountKey);

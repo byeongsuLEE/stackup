@@ -20,6 +20,7 @@ const AccountBox = ({ account, mainAccount }: AccountBoxProps) => {
 
   const handleMainAccount = () => {
     mainAccout(account.accountId);
+    window.location.reload();
   }
   
   if (!account) {

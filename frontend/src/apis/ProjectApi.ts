@@ -2,7 +2,6 @@ import axios from "axios";
 import { project } from "./Board.type";
 import { projectData } from "./Project.type";
 
-// const BASE_URL: string = "http://localhost:8080/api/project"
 const svURL = import.meta.env.VITE_SERVER_URL;
 const BASE_URL = `${svURL}/user/project`
 

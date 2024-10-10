@@ -9,6 +9,7 @@ const Account = () => {
   const [ mainAccount, setMainAccount ] = useState<string>(""); 
 
   useEffect(() => {
+    console.log("Account Page");
     const update = async () => {
       await accountUpdate();
 

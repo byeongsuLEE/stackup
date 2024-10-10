@@ -3,7 +3,6 @@ import { useUserStore } from "../store/UserStore";
 import { freelanceStore } from "../store/FreelanceStore";
 import { clientLoginInfo, clientSignupInfo, freelanceSignupInfo } from "./User.type";
 
-// const BASE_URL: string = "http://localhost:8080/api/user";
 const svURL = import.meta.env.VITE_SERVER_URL;
 const BASE_URL = `${svURL}/user`
 const { setToken, setUserType, setFreelancerId, setClientId } = useUserStore.getState();
@@ -246,3 +245,18 @@ export const getClientFreelancerProfile = async (freelancerId:string): Promise<s
     return "실패";
   }
 };
+
+// 아이디 중복 확인
+export const checkId = async (email: string): Promise<boolean> => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${BASE_URL}/check/${email}`,
+    })
+
+    return response.data.data;
+  } catch (error) {
+    console.error('Error checking id:', error);
+    throw error;
+  }
+}

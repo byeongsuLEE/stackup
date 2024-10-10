@@ -45,7 +45,6 @@ function App() {
             <main className="flex-grow mt-28 mx-20">
               <Navbar />
               <Routes>
-                <Route path="/test" element={<NFTLoading />} />
                 <Route path="/" element={<Home />} />
                 <Route path="/signature/detail/:projectId/:freelancerProjectId" element={<SignatureDetail />} />
                 <Route path="/login" element={<Login />} />

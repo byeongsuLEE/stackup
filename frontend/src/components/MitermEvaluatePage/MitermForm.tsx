@@ -10,7 +10,7 @@ const svURL = import.meta.env.VITE_SERVER_URL;
 const MitermForm = () => {
   // 상태 변수 설정
   const location = useLocation()
-  let { userId, boardId, stepResponse, freelancerProjectId } = location.state;
+  const { userId, boardId, stepResponse, freelancerProjectId } = location.state;
   const { projectId } = useParams<{ projectId: string }>();
   const [responseTimeScore, setResponseTimeScore] = useState<number | null>(null);
   const [reqChangeFreqScore, setReqChangeFreqScore] = useState<number | null>(null);
@@ -27,6 +27,11 @@ const MitermForm = () => {
   
     update();
   }, [boardId]);
+
+  useEffect(() => {
+    console.log(svURL); // svURL 값이 localhost로 출력되는지 확인
+  }, []);
+  
   
   useEffect(() => {
     if (clientId) {

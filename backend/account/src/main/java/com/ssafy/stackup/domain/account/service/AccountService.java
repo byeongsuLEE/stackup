@@ -117,12 +117,20 @@ public class AccountService {
             System.out.println("accountKey 111: " + accountKey);
             user.setAccountKey(accountKey);
 
+            Map<String, String> requestBody = new HashMap<>();
+            requestBody.put("accountKey", accountKey); // accountKey 변수에 값 할당
 
             HttpHeaders headers = createHeaders(request);
-            HttpEntity<User> requestEntity = new HttpEntity<>(user, headers);
+            HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
 
             // POST 요청 보내기 (응답을 Map으로 받음)
-            ResponseEntity<String> response = restTemplate.exchange(USER_SERVICE_URL+user.getId()+"/accountKey", HttpMethod.POST, requestEntity, String.class);
+            ResponseEntity<String> response = restTemplate.exchange(
+                    USER_SERVICE_URL + user.getId() + "/accountKey",
+                    HttpMethod.POST,
+                    requestEntity,
+                    String.class
+            );
+
             if(response.getStatusCode() != HttpStatus.OK) {
                 throw new CustomException(USER_NOT_FOUND);
             }

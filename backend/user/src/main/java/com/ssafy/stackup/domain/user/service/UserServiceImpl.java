@@ -384,62 +384,64 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserInfoResponseDto getInfo(Long userId) {
 
-            User user = userRepository.findById(userId).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+        User user = userRepository.findById(userId).orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
 
 
-            if(user.getRoles().contains("ROLE_FREELANCER")) {
-                Freelancer freelancer = freelancerRepository.findById(user.getId()).orElseThrow(
-                        () -> new CustomException(ErrorCode.USER_NOT_FOUND)
-                );
+        if(user.getRoles().contains("ROLE_FREELANCER")) {
+            Freelancer freelancer = freelancerRepository.findById(user.getId()).orElseThrow(
+                    () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+            );
 
 
-                List<String> frameworks = UserUtil.getFrameworks(freelancer.getFrameworks());
-                List<String> languages = UserUtil.getLanguages(freelancer.getLanguages());
+            List<String> frameworks = UserUtil.getFrameworks(freelancer.getFrameworks());
+            List<String> languages = UserUtil.getLanguages(freelancer.getLanguages());
 
-                FreelancerResponseDto freelancerResponseDto =   FreelancerResponseDto.builder()
-                        .id(freelancer.getId())
-                        .roles(freelancer.getRoles())
-                        .name(freelancer.getName())
-                        .phone(freelancer.getPhone())
-                        .email(freelancer.getEmail())
-                        .secondPassword(freelancer.getSecondPassword())
-                        .accountKey(freelancer.getAccountKey())
-                        .mainAccount(freelancer.getMainAccount())
-                        .totalScore(freelancer.getTotalScore())
-                        .framework(frameworks)
-                        .language(languages)
-                        .careerYear(freelancer.getCareerYear())
-                        .portfolioURL(freelancer.getPortfolioUrl())
-                        .selfIntroduction(freelancer.getSelfIntroduction())
-                        .classification(freelancer.getClassification())
-                        .githubId(freelancer.getGithubId())
-                        .address(freelancer.getAddress())
-                        .build();
-                return freelancerResponseDto;
+            FreelancerResponseDto freelancerResponseDto =   FreelancerResponseDto.builder()
+                    .id(freelancer.getId())
+                    .roles(freelancer.getRoles())
+                    .name(freelancer.getName())
+                    .phone(freelancer.getPhone())
+                    .email(freelancer.getEmail())
+                    .secondPassword(freelancer.getSecondPassword())
+                    .accountKey(freelancer.getAccountKey())
+                    .mainAccount(freelancer.getMainAccount())
+                    .totalScore(freelancer.getTotalScore())
+                    .framework(frameworks)
+                    .language(languages)
+                    .careerYear(freelancer.getCareerYear())
+                    .portfolioURL(freelancer.getPortfolioUrl())
+                    .selfIntroduction(freelancer.getSelfIntroduction())
+                    .classification(freelancer.getClassification())
+                    .githubId(freelancer.getGithubId())
+                    .address(freelancer.getAddress())
+                    .build();
+            return freelancerResponseDto;
 
 
-            }else{
+        }else{
 
-                Client client = clientRepository.findById(user.getId())
-                        .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+            Client client = clientRepository.findById(user.getId())
+                    .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-                ClientResponseDto clientResponseDto  = ClientResponseDto.builder()
-                        .id(client.getId())
-                        .roles(client.getRoles())
-                        .name(client.getName())
-                        .phone(client.getPhone())
-                        .email(client.getEmail())
-                        .secondPassword(client.getSecondPassword())
-                        .accountKey(client.getAccountKey())
-                        .businessRegistrationNumber(client.getBusinessRegistrationNumber())
-                        .businessName(client.getBusinessName())
-                        .reportedCount(client.getReportedCount())
-                        .totalScore(client.getTotalScore())
-                        .build();
+            ClientResponseDto clientResponseDto  = ClientResponseDto.builder()
+                    .id(client.getId())
+                    .roles(client.getRoles())
+                    .name(client.getName())
+                    .phone(client.getPhone())
+                    .mainAccount(client.getMainAccount())
+                    .email(client.getEmail())
+                    .userAddress(client.getUserAddress())
+                    .secondPassword(client.getSecondPassword())
+                    .accountKey(client.getAccountKey())
+                    .businessRegistrationNumber(client.getBusinessRegistrationNumber())
+                    .businessName(client.getBusinessName())
+                    .reportedCount(client.getReportedCount())
+                    .totalScore(client.getTotalScore())
+                    .build();
 
-                return clientResponseDto;
+            return clientResponseDto;
 
-            }
+        }
 
     }
 

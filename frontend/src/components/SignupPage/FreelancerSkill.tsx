@@ -20,7 +20,7 @@ const SkillInsert = () => {
     state.setSelfIntroduction(information.selfIntroduction);
 
     registerFreelancerInfo();
-    navigate('/mypage');
+    navigate(`/mypage/${sessionStorage.getItem('userId')}`);
   };
 
   return (
@@ -79,15 +79,6 @@ const SkillInsert = () => {
               type="text"
               {...register("careerYear", { required: "경력을 입력해주세요." })}
             />
-
-            {/* <span className="mt-5">포트폴리오 링크</span>
-            <input
-              type="text"
-              className="px-2 mt-2 border border-subGreen2 w-72 h-10 rounded-xl"
-              {...register("portfolioURL", {
-                required: "포트폴리오 URL을 입력해주세요.",
-              })}
-            /> */}
 
             <span className="mt-5">한 줄 자기소개</span>
             <input

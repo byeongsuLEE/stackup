@@ -67,13 +67,14 @@ const FinalForm = () => {
     };
 
     try {
-      const response = await axios.post(`${svURL}/evaluation/project-user`, evaluationData, {
+      const response = await axios.post(`${svURL}/user/evaluation/project-user`, evaluationData, {
         headers: {
           ContentType: "application/json",
           Authorization: `Bearer ${sessionStorage.getItem('token')}`,
         },
       });
       console.log(response.data);
+      
       alert("평가가 성공적으로 완료되었습니다.");
       if (sessionStorage.getItem('userType') === 'client') {
         navigate(`/transfer/${projectId}`, {state:{userId, boardId, stepResponse, freelancerProjectId}});

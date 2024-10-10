@@ -4,7 +4,7 @@ import { projectData } from "./Project.type";
 
 // const BASE_URL: string = "http://localhost:8080/api/project"
 const svURL = import.meta.env.VITE_SERVER_URL;
-const BASE_URL = `${svURL}/user/project`
+const BASE_URL = `${svURL}/project`
 
 //== 이전 프로젝트 등록 ==//
 export const previousProject = async (data: projectData): Promise<void> => {

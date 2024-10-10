@@ -3,7 +3,6 @@ import { useUserStore } from "../store/UserStore";
 import { freelanceStore } from "../store/FreelanceStore";
 import { clientLoginInfo, clientSignupInfo, freelanceSignupInfo } from "./User.type";
 
-// const BASE_URL: string = "http://localhost:8080/api/user";
 const svURL = import.meta.env.VITE_SERVER_URL;
 const BASE_URL = `${svURL}/user`
 const { setToken, setUserType, setFreelancerId, setClientId } = useUserStore.getState();
@@ -11,9 +10,7 @@ const { setToken, setUserType, setFreelancerId, setClientId } = useUserStore.get
 
 //== 프리랜서 깃허브 소셜 로그인 ==//
 export const freelanceLogin = async (): Promise<void> => {
-  console.log('깃허브로그인',BASE_URL)
-  window.location.href =
-    `${BASE_URL}/oauth2/authorization/github`;
+  window.location.href = `${BASE_URL}/oauth2/authorization/github`;
 };
 
 //== 토큰 정보 ==//

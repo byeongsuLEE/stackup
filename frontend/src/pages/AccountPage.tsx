@@ -9,7 +9,9 @@ const Account = () => {
   const [ mainAccount, setMainAccount ] = useState<string>(""); 
 
   useEffect(() => {
+    
     const update = async () => {
+      
       await accountUpdate();
 
       const data = await getAccount();
@@ -25,7 +27,6 @@ const Account = () => {
         setMainAccount(main);
       }    
     }
-    
     update();
   }, [])
 

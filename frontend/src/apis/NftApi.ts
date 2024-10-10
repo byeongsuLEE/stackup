@@ -51,6 +51,8 @@ export const uploadMetadataToPinata = async (imageCID: string, pdfCID: string, d
       data: metadata,
     });
 
+    console.log(response)
+    
     const jsonHash = response.data.IpfsHash;
     return jsonHash; // 성공 시 해시값 반환
   } catch (error) {

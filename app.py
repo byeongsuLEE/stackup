@@ -25,6 +25,11 @@ def get_boards_from_spring():
 def hello():
     return "Hello, Flask!"
 
+@app.route('/flask/hi')
+def hi():
+    print("flask 연결 테스트")
+    return "hi page"
+
 @app.route('/flask/similar-boards', methods=['POST'])
 def find_similar_boards():
     data = request.json

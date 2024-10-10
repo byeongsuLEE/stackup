@@ -151,15 +151,14 @@ def retrain_model():
 
 # 추가적인 조건을 사용한 이상 탐지 함수
 def detect_anomalies_with_additional_conditions(data, reconstruction_errors, threshold):
-    anomalies = np.zeros(len(data), dtype=bool)  # 모든 데이터를 정상으로 초기화
+    anomalies = [False]  # 데이터가 단일 개체이므로 초기 값 설정
 
-    for i, project in enumerate(data):
-        price_period = project['deposit'] / project['period']
-        # price_period 조건에 따라 이상 거래 결정
-        if price_period <= 5 or price_period >= 100:
-            anomalies[i] = True  # price_period 조건에 해당되면 이상 거래로 간주
-        else:
-            anomalies[i] = False  # 그렇지 않은 경우 정상 거래로 간주
+    # price_period 조건에 따라 이상 거래 결정
+    price_period = data['deposit'] / data['period']
+    if price_period <= 5 or price_period >= 100:
+        anomalies[0] = True  # price_period 조건에 해당되면 이상 거래로 간주
+    else:
+        anomalies[0] = False  # 그렇지 않은 경우 정상 거래로 간주
 
     return anomalies
 

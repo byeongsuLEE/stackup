@@ -3,18 +3,16 @@ import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
 import { Box, Tab } from "@mui/material";
 import React from "react";
-import RegisteredCareer from "../components/CareerPage/RegisteredCareer";
 import NFTDisplay from "../components/NFTPage/NFTDisplay";
+import RegisteredCareerList from "../components/CareerPage/RegisteredCareerList";
 
 const Career = () => {
   const [value, setValue] = React.useState('1');
 
-
-
-
   const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
   };
+  
   return (
     <div className='mt-10'>
 
@@ -34,7 +32,7 @@ const Career = () => {
             </TabPanel>
             <TabPanel value="2">
               <div className='mt-5'>
-                <RegisteredCareer />
+                <RegisteredCareerList />
               </div>
             </TabPanel>
           </div>

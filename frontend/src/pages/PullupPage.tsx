@@ -11,9 +11,7 @@ interface PaymentProps {
 }
 
 const Payment: React.FC<PaymentProps> = ({ boardId }) => {
-  // const {boardId} = useParams<{boardId : string}>
   useEffect(() => {
-    // iamport.payment.js를 불러옴
     const script = document.createElement('script');
     script.src = `https://cdn.iamport.kr/js/iamport.payment-1.2.0.js`;
     script.async = true;

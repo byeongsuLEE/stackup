@@ -45,6 +45,7 @@ const ProjectDetail = () => {
     | "DEVELOPMENT"
     | "PLANNING"
     | "TESTING";
+
   const responseMapping: Record<Status, string> = {
     DEPLOYMENT: "배포",
     DESIGN: "퍼블리셔 및 디자인",
@@ -111,14 +112,17 @@ const ProjectDetail = () => {
 
   const startDateObject = new Date(project.startDate);
   if (!isValid(startDateObject)) {
-    return <div>유효하지 않은 시작 날짜입니다.</div>;
+    return
   }
+
   const startDate = format(startDateObject, "yyyy-MM-dd");
   const periodAsNumber = parseInt(project.period.replace(/[^0-9]/g, ""), 10);
   const endDateObject = addDays(startDateObject, periodAsNumber);
+
   if (!isValid(endDateObject)) {
-    return <div>유효하지 않은 종료 날짜입니다.</div>;
+    return
   }
+  
   const endDate = format(endDateObject, "yyyy-MM-dd");
   const remainDay = differenceInDays(new Date(endDate), new Date());
   const period = `${startDate} ~ ${endDate}`;
@@ -139,8 +143,7 @@ const ProjectDetail = () => {
   const handleStep = async () => {
     try {
       if (stepResponse) {
-        const result = await projectStep(numericProjectId, stepResponse, true);
-        console.log(result);
+        await projectStep(numericProjectId, stepResponse, true);
         handleConfirmStep();
 
         if (stepResponse === "DEVELOPMENT") {
@@ -148,9 +151,11 @@ const ProjectDetail = () => {
         } else if (stepResponse === "DEPLOYMENT") {
           handleNavigateToEvaluate();
         }
+
       } else {
         console.warn("stepResponse 값이 없습니다.");
       }
+
     } catch (error) {
       console.error("프로젝트 단계 변경 중 오류가 발생했습니다:", error);
     }
@@ -162,6 +167,7 @@ const ProjectDetail = () => {
       if (response.status === 200) {
         alert("신고가 완료되었습니다.");
       }
+      
     } catch (error) {
       console.error("신고 실패:", error);
       alert("신고에 실패했습니다. 다시 시도해주세요.");

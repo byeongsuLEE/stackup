@@ -10,10 +10,12 @@ const SelectedCandidate = ({ name,  portfolioUrl, totalScore, freelancerProjectI
     navigate(`/work/detail/contract/${boardId}/${projectId}/${freelancerProjectId}`)
   }
 
+  const score =  Number(totalScore.toFixed(1));
+
   return (
     <tr>
       <td className="text-center">{name}</td>
-      <td className="text-center">{totalScore}</td>
+      <td className="text-center">{score}</td>
       <td className="text-center">
         <a href={portfolioUrl}>{portfolioUrl}</a>
       </td >

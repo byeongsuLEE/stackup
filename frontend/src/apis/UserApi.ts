@@ -243,3 +243,18 @@ export const getClientFreelancerProfile = async (freelancerId:string): Promise<s
     return "실패";
   }
 };
+
+// 아이디 중복 확인
+export const checkId = async (email: string): Promise<boolean> => {
+  try {
+    const response = await axios({
+      method: 'get',
+      url: `${BASE_URL}/check/${email}`,
+    })
+
+    return response.data.data;
+  } catch (error) {
+    console.error('Error checking id:', error);
+    throw error;
+  }
+}

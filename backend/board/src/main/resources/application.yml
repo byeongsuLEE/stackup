@@ -1,0 +1,127 @@
+server:
+  servlet:
+    context-path: /api
+  port: 8081
+
+spring:
+  datasource:
+    url: ${DB_URL} # 데이터베이스 URL (환경 변수 사용)
+    username: ${DB_USERNAME} # 데이터베이스 사용자 이름 (환경 변수 사용)
+    password: ${DB_PASSWORD} # 데이터베이스 비밀번호 (환경 변수 사용)
+    driver-class-name: com.mysql.cj.jdbc.Driver # 데이터베이스 드라이버 클래스 이름 설정
+
+    jpa:
+      open-in-view: false
+
+#    hikari:
+#      minimum-idle: 10  # 최소 유휴 커넥션을 10으로 설정
+#      maximum-pool-size: 50  # 최대 커넥션 풀 크기
+
+    #    show-sql: true # JPA SQL 출력 설정
+    database-platform: org.hibernate.dialect.MySQL8Dialect # JPA 데이터베이스 플랫폼 설정
+    hibernate:
+      ddl-auto: update # Hibernate DDL 자동 설정
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.MySQL8Dialect # Hibernate 방언 설정
+
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 20MB
+  main:
+    allow-bean-definition-overriding: true
+
+  data:
+    redis:
+      host: ${REDIS_IP}
+      port: 6379
+      password: ${REDIS_PASSWORD}
+    elasticsearch:
+      repositories:
+        enabled: true
+  elasticsearch:
+    uris: ${ELASTIC_URL}
+    connection-timeout: 3000
+    socket-timeout: 3000
+  #    password:
+
+
+
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-secret: ${GITHUB_SECRET}
+            client-id: ${GITHUB_ID}
+            scope: read:user, user:email
+            redirect-uri: https://stackup.live/api/user/login/oauth2/code/github
+        provider:
+          github:
+            authorization-uri: https://github.com/login/oauth/authorize
+            token-uri: https://github.com/login/oauth/access_token
+            user-info-uri: https://api.github.com/user
+  kafka:
+    bootstrap-servers: 34.64.190.133:9092
+    consumer:
+      group-id: analysis2
+      auto-offset-reset: earliest
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+
+
+jwt:
+  access_expiration_time: 360000000 # 1시간 액세스 토큰 만료 시간 설정
+  refresh_expiration_time: 604800016 # 1주일 리프레시 토큰 만료 시간 설정
+  secret: ${SECRET} # JWT 시크릿 키 설정 (환경 변수 사용)
+
+logging:
+  level:
+    #    root: info # 루트 로깅 레벨 설정
+    #    com.ssafy: debug # com.wava 패키지 로깅 레벨 설정
+    org:
+      springframework:
+        data:
+          elasticsearch:
+            core: DEBUG
+    elasticsearch:
+      client: TRACE
+    apache:
+      http: TRACE
+cloud:
+  aws:
+    s3:
+      bucket: ${S3_BUCKET} # S3 버킷 이름 설정 (환경 변수 사용)
+    credentials:
+      access-key: ${AWS_ACCESS_KEY_ID} # AWS 액세스 키 (환경 변수 사용)
+      secret-key: ${AWS_SECRET_ACCESS_KEY} # AWS 시크릿 키 (환경 변수 사용)
+    region:
+      static: ap-northeast-2 # AWS 리전 설정 (환경 변수 사용)
+    stack:
+      auto: false # cloud formation 기능을 사용하지 않기 위함
+
+redirect:
+  url:
+    callback: "https://stackup.live/callback"
+    main: "https://stackup.live"
+
+publicDataPortal:
+  api:
+    url: ${PUBLIC_DATA_PORTAL_API_URL}
+    key: ${PUBLIC_DATA_PORTAL_API_KEY}
+
+
+
+portone:
+  api-key: 2266227468060441
+  api-secret: QuEDNv6I2IkSg2hqbpqAr31vy0fQK2DoqFYbMtE0GnG5eEdB9MSR6gHqkdhVx8xXoe8JqXSFN5pFR3Uv
+
+
+
+
+default:
+  image: https://raw.githubusercontent.com/tailwindlabs/heroicons/56c073c2c9a66d2e51adb93d8e87e2e941d5b6db/src/20/solid/user-circle.svg

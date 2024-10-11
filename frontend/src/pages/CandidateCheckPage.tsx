@@ -2,7 +2,6 @@ import CandidateList from "../components/CandidateCheckPage/CandidateList";
 
 const CandidateCheck = () => {
 
-
   return (
     <div className="m-10">
       <span className="font-bold text-subGreen1 text-lg">지원자 관리</span>

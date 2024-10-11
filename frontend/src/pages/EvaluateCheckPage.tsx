@@ -1,10 +1,10 @@
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { projectApplicantProps } from "../apis/Board.type";
+import { projectFreelancer } from "../apis/BoardApi";
+import { projectStep } from "../apis/ProjectApi";
 import Freelancer from "../components/EvaluateCheckPage/Freelancer";
 import DoneButton from "../components/common/DoneButton";
-import { projectStep } from "../apis/ProjectApi";
-import { useEffect, useState } from "react";
-import { projectFreelancer } from "../apis/BoardApi";
-import { projectApplicantProps } from "../apis/Board.type";
 
 const EvaluateCheck = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -16,10 +16,10 @@ const EvaluateCheck = () => {
 
   const setStep = async () => {
     try {
-      if(NumericProjectId) {
+      if (NumericProjectId) {
         await projectStep(NumericProjectId, stepResponse, true);
       }
-      navigate(`/project/detail/${projectId}`, { state: { userId, stepResponse, boardId }});
+      navigate(`/project/detail/${projectId}`, { state: { userId, stepResponse, boardId } });
     } catch (error) {
       console.error("Error updating project step:", error);
     }
@@ -29,6 +29,9 @@ const EvaluateCheck = () => {
     const fetchProjectFreelancer = async () => {
       try {
         const response = await projectFreelancer(boardId);
+        // 비밀번호 유무 확인
+        // checkPassword();
+        // 비밀번호 없으면 비밀번호 설정 페이지로 이동
         setEvalList(response);
 
       } catch (error) {
@@ -59,11 +62,11 @@ const EvaluateCheck = () => {
         </thead>
         <tbody>
           {evalList?.map((freelancer: projectApplicantProps, index: number) => (
-            <Freelancer 
-            boardId={boardId}
-            key={index}
-            stepResponse={stepResponse}
-            freelancer={freelancer}
+            <Freelancer
+              boardId={boardId}
+              key={index}
+              stepResponse={stepResponse}
+              freelancer={freelancer}
             />
           ))}
         </tbody>

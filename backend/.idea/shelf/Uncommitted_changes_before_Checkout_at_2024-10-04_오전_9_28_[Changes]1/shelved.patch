@@ -1,0 +1,3464 @@
+Index: board/src/main/java/com/ssafy/stackup/domain/chat/dto/response/ChatResponseDto.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/chat/dto/response/ChatResponseDto.java b/board/src/main/java/com/ssafy/stackup/domain/chat/dto/response/ChatResponseDto.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/chat/dto/response/ChatResponseDto.java	
++++ /dev/null	
+@@ -1,17 +0,0 @@
+-package com.ssafy.stackup.domain.chat.dto.response;
+-
+-import com.fasterxml.jackson.annotation.JsonFormat;
+-import lombok.Builder;
+-import lombok.Getter;
+-
+-import java.time.LocalDateTime;
+-
+-@Builder
+-@Getter
+-public class ChatResponseDto {
+-    private Long userId;
+-    private String name;
+-    private String message;
+-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM.dd HH:mm", timezone = "Asia/Seoul")
+-    private LocalDateTime registTime;
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/user/service/UserService.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/user/service/UserService.java b/board/src/main/java/com/ssafy/stackup/domain/user/service/UserService.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/user/service/UserService.java	
++++ /dev/null	
+@@ -1,34 +0,0 @@
+-package com.ssafy.stackup.domain.user.service;
+-
+-
+-import com.ssafy.stackup.domain.user.dto.request.ClientLoginRequestDto;
+-import com.ssafy.stackup.domain.user.dto.request.ClientSignUpRequestDto;
+-import com.ssafy.stackup.domain.user.dto.request.FreelancerInfoRequestDto;
+-import com.ssafy.stackup.domain.user.dto.response.*;
+-import com.ssafy.stackup.domain.user.entity.User;
+-import jakarta.servlet.http.HttpServletRequest;
+-import jakarta.servlet.http.HttpServletResponse;
+-import jakarta.validation.Valid;
+-
+-public interface UserService {
+-
+-    FreelancerRegisterResponseDto registerInfo(FreelancerInfoRequestDto freelancerInfoRequestDto, User user);
+-
+-    ClientResponseDto signUp(@Valid final ClientSignUpRequestDto requestDto);
+-
+-    LoginResponseDto login(@Valid final ClientLoginRequestDto loginRequestDto, HttpServletResponse response);
+-
+-    String logout(final HttpServletRequest request);
+-
+-    void reissue(final HttpServletRequest request, final HttpServletResponse response);
+-
+-    Boolean emailCheck(String email);
+-
+-    void report(Long userId);
+-
+-    Double grade(User user);
+-
+-    UserInfoResponseDto getInfo(User user);
+-
+-    FreelancerLoginResponseDto token(Long user);
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/chat/dto/reqeust/ChatRoomStartRequestDto.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/chat/dto/reqeust/ChatRoomStartRequestDto.java b/board/src/main/java/com/ssafy/stackup/domain/chat/dto/reqeust/ChatRoomStartRequestDto.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/chat/dto/reqeust/ChatRoomStartRequestDto.java	
++++ /dev/null	
+@@ -1,12 +0,0 @@
+-package com.ssafy.stackup.domain.chat.dto.reqeust;
+-
+-
+-import lombok.Builder;
+-import lombok.Getter;
+-
+-@Builder
+-@Getter
+-public class ChatRoomStartRequestDto {
+-    private Long clientId;
+-    private Long freelancerId;
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/payment/service/PaymentService.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/payment/service/PaymentService.java b/board/src/main/java/com/ssafy/stackup/domain/payment/service/PaymentService.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/payment/service/PaymentService.java	
++++ /dev/null	
+@@ -1,40 +0,0 @@
+-//package com.ssafy.stackup.domain.payment.service;
+-//
+-//import com.ssafy.stackup.domain.board.repository.BoardRepository;
+-//import jakarta.annotation.PostConstruct;
+-//import lombok.RequiredArgsConstructor;
+-//import lombok.Value;
+-//import org.springframework.stereotype.Service;
+-//
+-//@Service
+-//@RequiredArgsConstructor
+-//public class PaymentService {
+-//
+-//    private final BoardRepository boardRepository;
+-//    private final IamportClient iamportClient;
+-//
+-//    @Value("${portone.api-key}")
+-//    private String apiKey;
+-//
+-//    @Value("${portone.api-secret}")
+-//    private String apiSecret;
+-//
+-//    @PostConstruct
+-//    public void init() {
+-//        iamportClient = new IamportClient(apiKey, apiSecret);
+-//    }
+-//
+-//    public IamportResponse<Payment> requestVirtualPayment(String impUid) throws IamportResponseException, IOException {
+-//        return iamportClient.paymentByImpUid(impUid);
+-//    }
+-//
+-//    public void handlePaymentSuccess(String impUid, Long boardId) throws IamportResponseException, IOException {
+-//        IamportResponse<Payment> paymentResponse = requestVirtualPayment(impUid);
+-//
+-//        if (paymentResponse.getResponse().getStatus().equals("paid")) {
+-//            Board board = boardRepository.findById(boardId).orElseThrow(() -> new EntityNotFoundException("Board not found"));
+-//            board.setIsCharged(true);
+-//            boardRepository.save(board);
+-//        }
+-//    }
+-//}
+Index: account/src/main/java/com/ssafy/stackup/domain/user/service/UserServiceImpl.java
+===================================================================
+diff --git a/account/src/main/java/com/ssafy/stackup/domain/user/service/UserServiceImpl.java b/account/src/main/java/com/ssafy/stackup/domain/user/service/UserServiceImpl.java
+deleted file mode 100644
+--- a/account/src/main/java/com/ssafy/stackup/domain/user/service/UserServiceImpl.java	
++++ /dev/null	
+@@ -1,415 +0,0 @@
+-package com.ssafy.stackup.domain.user.service;
+-
+-
+-import com.fasterxml.jackson.databind.JsonNode;
+-import com.fasterxml.jackson.databind.ObjectMapper;
+-import com.ssafy.stackup.common.exception.CustomException;
+-import com.ssafy.stackup.common.exception.ResourceNotFoundException;
+-import com.ssafy.stackup.common.jwt.TokenProvider;
+-import com.ssafy.stackup.common.response.ErrorCode;
+-import com.ssafy.stackup.common.util.RedisUtil;
+-import com.ssafy.stackup.common.util.UserUtil;
+-import com.ssafy.stackup.domain.framework.entity.Framework;
+-import com.ssafy.stackup.domain.framework.repository.FrameworkRepository;
+-import com.ssafy.stackup.domain.language.entity.Language;
+-import com.ssafy.stackup.domain.language.repository.LanguageRepository;
+-import com.ssafy.stackup.domain.user.dto.request.ClientLoginRequestDto;
+-import com.ssafy.stackup.domain.user.dto.request.ClientSignUpRequestDto;
+-import com.ssafy.stackup.domain.user.dto.request.FreelancerInfoRequestDto;
+-import com.ssafy.stackup.domain.user.dto.response.*;
+-import com.ssafy.stackup.domain.user.entity.*;
+-import com.ssafy.stackup.domain.user.repository.ClientRepository;
+-import com.ssafy.stackup.domain.user.repository.FreelancerRepository;
+-import com.ssafy.stackup.domain.user.repository.UserRepository;
+-import jakarta.servlet.http.HttpServletRequest;
+-import jakarta.servlet.http.HttpServletResponse;
+-import lombok.RequiredArgsConstructor;
+-import lombok.extern.slf4j.Slf4j;
+-import org.springframework.beans.factory.annotation.Value;
+-import org.springframework.http.*;
+-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+-import org.springframework.security.core.Authentication;
+-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+-import org.springframework.stereotype.Service;
+-import org.springframework.transaction.annotation.Transactional;
+-import org.springframework.web.client.RestTemplate;
+-
+-import java.util.*;
+-
+-@Service
+-@RequiredArgsConstructor
+-@Slf4j
+-public class UserServiceImpl implements UserService {
+-    @Value("${default.image}")
+-    private String defaultImage;
+-
+-
+-
+-    @Value("${publicDataPortal.api.url}")
+-    private String publicDataPortalApiUrl;
+-
+-    @Value("${publicDataPortal.api.key}")
+-    private String publicDataPortalApiKey;
+-
+-
+-    private final RestTemplate restTemplate;
+-    private final ObjectMapper objectMapper;
+-
+-    private final UserRepository userRepository;
+-    private final ClientRepository clientRepository;
+-    private final FrameworkRepository frameworkRepository;
+-    private final LanguageRepository languageRepository;
+-    private final FreelancerRepository freelancerRepository;
+-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+-    private final AuthenticationManagerBuilder managerBuilder;
+-    private final TokenProvider tokenProvider;
+-    private final RedisUtil redisUtil;
+-
+-
+-    @Override
+-    @Transactional
+-    public FreelancerRegisterResponseDto registerInfo(FreelancerInfoRequestDto freelancerInfoRequestDto, User user) {
+-
+-        Freelancer freelancer = freelancerRepository.findById(user.getId()).orElseThrow(
+-                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+-        );
+-
+-        //언어와 프레임워크 만들기
+-        Set<FreelancerFramework> freelancerFrameworks = new HashSet<>();
+-        Set<FreelancerLanguage> freelancerLanguages = new HashSet<>();
+-
+-        for (String frameworkName : freelancerInfoRequestDto.getFramework()) {
+-            Framework framework = frameworkRepository.findByName(frameworkName)
+-                    .orElseThrow(()->{ return new ResourceNotFoundException("해당 프레임워크 이름이 지정되지 않았습니다.");});
+-
+-            FreelancerFramework freelancerFramework = FreelancerFramework.builder()
+-                    .freelancer(freelancer)
+-                    .framework(framework)
+-                    .build();
+-            freelancerFrameworks.add(freelancerFramework);
+-
+-        }
+-
+-        for (String languageName : freelancerInfoRequestDto.getLanguage()) {
+-            Language language = languageRepository.findByName(languageName)
+-                    .orElseThrow(()->{ throw new ResourceNotFoundException("해당 언어 이름이 지정되지 않았습니다.");});
+-            FreelancerLanguage freelancerLanguage = FreelancerLanguage.builder()
+-                    .freelancer(freelancer)
+-                    .language(language)
+-                    .build();
+-            freelancerLanguages.add(freelancerLanguage);
+-        }
+-
+-        freelancer.updateName(freelancerInfoRequestDto.getName());
+-        freelancer.updateAddress(freelancerInfoRequestDto.getAddress());
+-        freelancer.updateEmail(freelancerInfoRequestDto.getEmail());
+-        freelancer.updateClassification(freelancerInfoRequestDto.getClassification());
+-        freelancer.updateCareerYear(freelancerInfoRequestDto.getCareerYear());
+-        freelancer.updatePhone(freelancerInfoRequestDto.getPhone());
+-        freelancer.updatePortfolioUrl(freelancerInfoRequestDto.getPortfolioUrl());
+-        freelancer.updateSelfIntroduction(freelancerInfoRequestDto.getSelfIntroduction());
+-        freelancer.updateFreelancerFrameworks(freelancerFrameworks);
+-        freelancer.updateFreelancerLanguages(freelancerLanguages);
+-
+-        freelancerRepository.save(freelancer);
+-
+-        FreelancerRegisterResponseDto freelancerRegisterResponseDto = FreelancerRegisterResponseDto.builder()
+-                .name(freelancer.getName())
+-                .email(freelancer.getEmail())
+-                .phone(freelancer.getPhone())
+-                .classification(freelancer.getClassification())
+-                .framework(freelancerInfoRequestDto.getFramework())
+-                .language(freelancerInfoRequestDto.getLanguage())
+-                .careerYear(freelancer.getCareerYear())
+-                .portfolioURL(freelancer.getPortfolioUrl())
+-                .selfIntroduction(freelancer.getSelfIntroduction())
+-                .build();
+-
+-        return freelancerRegisterResponseDto;
+-    }
+-
+-    @Override
+-    @Transactional
+-    public ClientResponseDto signUp(ClientSignUpRequestDto requestDto) {
+-        emailCheck(requestDto.getEmail());
+-        String encodedPassword = bCryptPasswordEncoder.encode(requestDto.getPassword());
+-        Client client = Client.builder()
+-                .name(requestDto.getName())
+-                .email(requestDto.getEmail())
+-                .password(encodedPassword)
+-                .roles(List.of("ROLE_CLIENT"))
+-                .phone(requestDto.getPhone())
+-                .businessName(requestDto.getBusinessName())
+-                .businessRegistrationNumber(requestDto.getBusinessRegistrationNumber())
+-                .totalScore(0.0)
+-                .reportedCount(0)
+-                .evaluatedCount(0)
+-                .build();
+-
+-
+-        Client savedClient = clientRepository.save(client);
+-
+-        ClientResponseDto responseDto = ClientResponseDto.builder()
+-                .id(savedClient.getId())
+-                .email(savedClient.getEmail())
+-                .name(savedClient.getName())
+-                .businessRegistrationNumber(savedClient.getBusinessRegistrationNumber())
+-                .businessName(savedClient.getBusinessName())
+-                .phone(savedClient.getPhone())
+-                .build();
+-
+-        return responseDto;
+-    }
+-
+-
+-    /**
+-     * 클라이언트 로그인 인증 후 토큰 발행
+-     * @ 작성자   : 이병수
+-     * @ 작성일   : 2024-09-23
+-     * @ 설명     :
+-     * @param requestDto
+-     * @param response
+-     * @return
+-     */
+-    @Override
+-    @Transactional
+-    public LoginResponseDto login(ClientLoginRequestDto requestDto, HttpServletResponse response) {
+-        String userType = "client";
+-        Client user = clientRepository.findByEmail(requestDto.getEmail()).orElseThrow(
+-                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+-        );
+-
+-        UsernamePasswordAuthenticationToken authenticationToken = new
+-                UsernamePasswordAuthenticationToken(String.valueOf(user.getId()), requestDto.getPassword());
+-
+-        Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
+-
+-        TokenDto tokenDto = tokenProvider.generateToken(authentication,userType);
+-        tokenToHeader(tokenDto, response);
+-
+-        redisUtil.setData(String.valueOf(user.getId()), tokenDto.refreshToken(), tokenDto.refreshTokenExpiresIn());
+-        LoginResponseDto responseDto = LoginResponseDto.builder()
+-                .id(user.getId())
+-                .userType(userType)
+-                .build();
+-
+-        return responseDto;
+-    }
+-
+-
+-    @Override
+-    @Transactional(readOnly = true)
+-    public String logout(final HttpServletRequest request) {
+-        String token = tokenProvider.resolveToken(request); // 헤더에서 AccessToken 가져오기
+-        Authentication authentication = tokenProvider.getAuthentication(token); // 토큰 인증 후 페이로드에서 유저 정보 추출
+-        redisUtil.deleteData(authentication.getName()); // 해당 유저의 key 삭제
+-        Long accessExpiration = tokenProvider.getAccessExpiration(token);// AccessToken의 남은 시간 가져오기
+-        redisUtil.setData(token,"logout",accessExpiration); // 로그아웃을 하더라도 AccessToken의 시간이 남아있으면 인증이 가능하여 블랙리스트로 추가
+-        return "로그아웃 성공";
+-    }
+-
+-    @Override
+-    @Transactional(readOnly = true)
+-    public void reissue(final HttpServletRequest request, final HttpServletResponse response) {
+-        String accessToken = tokenProvider.resolveToken(request);
+-        tokenProvider.validateToken(accessToken);
+-        Authentication authentication = tokenProvider.getAuthentication(accessToken);
+-        String refreshToken = redisUtil.getData(authentication.getName());
+-
+-        if (refreshToken == null)
+-            throw new CustomException(ErrorCode.UNKNOWN_TOKEN);
+-        if (!Objects.equals(refreshToken, request.getHeader("refreshToken")))
+-            throw new CustomException(ErrorCode.WRONG_TYPE_TOKEN);
+-        String userType = tokenProvider.getUserType(accessToken);
+-        TokenDto tokenDto = tokenProvider.generateToken(authentication, userType);
+-        tokenToHeader(tokenDto, response);
+-
+-        redisUtil.setData(authentication.getName(), tokenDto.refreshToken(), tokenDto.refreshTokenExpiresIn());
+-
+-
+-    }
+-
+-
+-
+-    @Override
+-    public Boolean emailCheck(String email) {
+-        Optional<Client> client = clientRepository.findByEmail(email);
+-        if(client.isPresent()) {
+-            throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
+-        }
+-        return true;
+-    }
+-
+-
+-    /**
+-     * 해당 유저 신고 수 증가
+-     * @param userId 신고받은 유저 고유번호
+-     */
+-    public void report(Long userId) {
+-        User user = userRepository.findById(userId)
+-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+-        user.updateReportedCount(user.getReportedCount()+1);
+-        userRepository.save(user);
+-    }
+-
+-    @Override
+-    public Double grade(User user) {
+-        User users = userRepository.findById(user.getId())
+-                .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+-
+-        return users.getTotalScore();
+-    }
+-
+-
+-    /**
+-     * 내 상세 정보 조회
+-     * @param user
+-     * @return
+-     */
+-    @Override
+-    public UserInfoResponseDto getInfo(User user) {
+-
+-        if(user.getRoles().contains("ROLE_FREELANCER")) {
+-            Freelancer freelancer = freelancerRepository.findById(user.getId()).orElseThrow(
+-                    () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+-            );
+-
+-
+-            List<String> frameworks = UserUtil.getFrameworks(freelancer.getFrameworks());
+-            List<String> languages = UserUtil.getLanguages(freelancer.getLanguages());
+-
+-            FreelancerResponseDto freelancerResponseDto =   FreelancerResponseDto.builder()
+-                    .id(freelancer.getId())
+-                    .roles(freelancer.getRoles())
+-                    .name(freelancer.getName())
+-                    .phone(freelancer.getPhone())
+-                    .email(freelancer.getEmail())
+-                    .secondPassword(freelancer.getSecondPassword())
+-                    .accountKey(freelancer.getAccountKey())
+-                    .totalScore(freelancer.getTotalScore())
+-                    .framework(frameworks)
+-                    .language(languages)
+-                    .careerYear(freelancer.getCareerYear())
+-                    .portfolioURL(freelancer.getPortfolioUrl())
+-                    .selfIntroduction(freelancer.getSelfIntroduction())
+-                    .classification(freelancer.getClassification())
+-                    .githubId(freelancer.getGithubId())
+-                    .address(freelancer.getAddress())
+-                    .build();
+-            return freelancerResponseDto;
+-
+-
+-        }else{
+-
+-            Client client = clientRepository.findById(user.getId())
+-                    .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+-
+-            ClientResponseDto clientResponseDto  = ClientResponseDto.builder()
+-                    .id(client.getId())
+-                    .roles(client.getRoles())
+-                    .name(client.getName())
+-                    .phone(client.getPhone())
+-                    .email(client.getEmail())
+-                    .secondPassword(client.getSecondPassword())
+-                    .accountKey(client.getAccountKey())
+-                    .businessRegistrationNumber(client.getBusinessRegistrationNumber())
+-                    .businessName(client.getBusinessName())
+-                    .reportedCount(client.getReportedCount())
+-                    .totalScore(client.getTotalScore())
+-                    .build();
+-
+-            return clientResponseDto;
+-
+-        }
+-
+-    }
+-
+-    /**
+-     * @ 작성자   : 이병수
+-     * @ 작성일   : 2024-09-19
+-     * @ 설명     : 소셜 로그인 성공 후 데이터 전송
+-     * @param userId 유저 아이디
+-     * @return
+-     */
+-    @Override
+-    public FreelancerLoginResponseDto token(Long userId) {
+-
+-        User user = userRepository.findById(userId)
+-                .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+-
+-
+-        Authentication authentication = tokenProvider.getAuthentication(redisUtil.getData(String.valueOf(userId)));
+-        TokenDto tokenDto = tokenProvider.generateToken(authentication, "freelancer");
+-
+-        FreelancerLoginResponseDto freelancerLoginResponseDto =  FreelancerLoginResponseDto.builder()
+-                .accessToken(tokenDto.accessToken())
+-                .refreshToken(tokenDto.refreshToken())
+-                .userId(userId)
+-                .userType("freelancer")
+-                .build();
+-
+-        return freelancerLoginResponseDto;
+-    }
+-
+-    /**
+-     * @param tokenDto 로그인 시 발급한 토큰 데이터
+-     * @param response 토큰을 헤더에 추가하기 위한 servlet
+-     * @return
+-     * @ 설명     : 헤더에  Access,Refresh토큰 추가
+-     */
+-    private void tokenToHeader(TokenDto tokenDto, HttpServletResponse response) {
+-        response.addHeader("Authorization", tokenDto.accessToken());
+-        response.addHeader("refreshToken", tokenDto.refreshToken());
+-    }
+-
+-    public String getUserAddress(Long userId) {
+-        User user = userRepository.findById(userId)
+-                .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+-        String address = user.getUserAddress();
+-        return address;
+-    }
+-
+-
+-
+-    public boolean checkBusinessNum(String businessNum) {
+-
+-        String requestBody = "{ \"b_no\": [\"" + businessNum + "\"] }";
+-
+-        // 헤더 설정
+-        HttpHeaders headers = new HttpHeaders();
+-        headers.setContentType(MediaType.APPLICATION_JSON);
+-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+-
+-        HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
+-
+-        try {
+-            // API 요청 보내기
+-            String requestUrl = publicDataPortalApiUrl + "?serviceKey=" + publicDataPortalApiKey;
+-            ResponseEntity<String> response = restTemplate.exchange(requestUrl, HttpMethod.POST, entity, String.class);
+-
+-            if (response.getStatusCode().is2xxSuccessful()) {
+-                // JSON 파싱
+-                JsonNode root = objectMapper.readTree(response.getBody());
+-
+-                // "data" 필드에서 사업자 상태 확인
+-                JsonNode dataNode = root.path("data").get(0);
+-                String statusMessage = dataNode.path("tax_type").asText();
+-
+-                // "국세청에 등록되지 않은 사업자등록번호입니다." 라는 메시지가 있다면 false 반환
+-                if (statusMessage.contains("국세청에 등록되지 않은 사업자등록번호")) {
+-                    return false;
+-                }
+-
+-                // 유효한 사업자등록번호인 경우 true 반환
+-                return true;
+-            }
+-        } catch (Exception e) {
+-            e.printStackTrace();
+-        }
+-
+-        // 기본적으로 false 반환
+-        return false;
+-    }
+-
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/user/controller/UserController.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/user/controller/UserController.java b/board/src/main/java/com/ssafy/stackup/domain/user/controller/UserController.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/user/controller/UserController.java	
++++ /dev/null	
+@@ -1,127 +0,0 @@
+-package com.ssafy.stackup.domain.user.controller;
+-
+-import com.ssafy.stackup.common.jwt.TokenProvider;
+-import com.ssafy.stackup.common.response.ApiResponse;
+-import com.ssafy.stackup.common.util.RedisUtil;
+-import com.ssafy.stackup.domain.user.dto.request.ClientLoginRequestDto;
+-import com.ssafy.stackup.domain.user.dto.request.ClientSignUpRequestDto;
+-import com.ssafy.stackup.domain.user.dto.request.FreelancerInfoRequestDto;
+-import com.ssafy.stackup.domain.user.dto.response.*;
+-import com.ssafy.stackup.domain.user.entity.AuthUser;
+-import com.ssafy.stackup.domain.user.entity.User;
+-import com.ssafy.stackup.domain.user.repository.UserRepository;
+-import com.ssafy.stackup.domain.user.service.UserServiceImpl;
+-import jakarta.servlet.http.HttpServletRequest;
+-import jakarta.servlet.http.HttpServletResponse;
+-import jakarta.validation.Valid;
+-import lombok.RequiredArgsConstructor;
+-import org.springframework.http.HttpStatus;
+-import org.springframework.http.ResponseEntity;
+-import org.springframework.web.bind.annotation.*;
+-
+-@RestController
+-@RequestMapping("/user")
+-@RequiredArgsConstructor
+-public class UserController {
+-
+-    private final UserServiceImpl userService;
+-    private final UserRepository userRepository;
+-    private final RedisUtil redisUtil;
+-    private final TokenProvider tokenProvider;
+-
+-
+-    @PostMapping("/client/signup")
+-    ResponseEntity<ApiResponse<ClientResponseDto>> signup(@RequestBody ClientSignUpRequestDto clientSignUpRequestDto){
+-        ClientResponseDto clientResponseDto = userService.signUp(clientSignUpRequestDto);
+-
+-        return ResponseEntity.status(HttpStatus.CREATED)
+-                .body(ApiResponse.success(clientResponseDto));
+-    }
+-
+-    @PostMapping("/info")
+-    ResponseEntity<ApiResponse<FreelancerRegisterResponseDto>> registerInfo(@RequestBody FreelancerInfoRequestDto freelancerInfoRequestDto, @AuthUser User user) {
+-        FreelancerRegisterResponseDto freelancerRegisterResponseDto = userService.registerInfo(freelancerInfoRequestDto, user);
+-        //추천 프로젝트 업데이트 함수 실행 추가해야합니다
+-
+-        return ResponseEntity.status(HttpStatus.OK)
+-                .body(ApiResponse.success(freelancerRegisterResponseDto));
+-    }
+-
+-    @GetMapping("/info")
+-    ResponseEntity<ApiResponse<?>> getInfo(@AuthUser User user) {
+-        UserInfoResponseDto userInfoResponseDto=   userService.getInfo(user);
+-
+-        return ResponseEntity.status(HttpStatus.OK)
+-                .body(ApiResponse.success(userInfoResponseDto));
+-    }
+-
+-
+-    @GetMapping("/check/{email}")
+-    public ResponseEntity<ApiResponse<String>> checkEmail(@PathVariable String email){
+-        userService.emailCheck(email);
+-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("사용가능한 이메일 입니다"));
+-    }
+-
+-
+-    @PostMapping("/reissue")
+-    public ResponseEntity<ApiResponse<String>> reissue(HttpServletRequest request, HttpServletResponse response) {
+-         userService.reissue(request,response);
+-         return ResponseEntity.status(HttpStatus.OK)
+-                 .body(ApiResponse.success("토큰 재발급 성공"));
+-    }
+-
+-    @PostMapping("client/login")
+-    public ResponseEntity<ApiResponse<LoginResponseDto>> login(@Valid @RequestBody ClientLoginRequestDto clientLoginRequstDto, HttpServletResponse response) {
+-
+-        LoginResponseDto clientLoginResponseDto = userService.login(clientLoginRequstDto, response);
+-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(clientLoginResponseDto));
+-
+-    }
+-
+-    @PatchMapping("/report/{userId}")
+-    public ResponseEntity<ApiResponse<String>> report(@PathVariable Long userId){
+-
+-        userService.report(userId);
+-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("신고 완료 되었습니다"));
+-    }
+-
+-    @GetMapping("/grade")
+-    public ResponseEntity<ApiResponse<Double>> grade (@AuthUser User user){
+-        Double gradeScore = userService.grade(user);
+-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(gradeScore));
+-    }
+-
+-
+-    @PostMapping("/logout")
+-    public ResponseEntity<ApiResponse<String>> logout(HttpServletRequest request) {
+-        userService.logout(request);
+-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success("로그아웃"));
+-
+-    }
+-
+-    @GetMapping("/token")
+-    public ResponseEntity<ApiResponse<FreelancerLoginResponseDto>> successLogin(@RequestParam("userId") Long userId){
+-        FreelancerLoginResponseDto freelancerLoginDto= userService.token(userId);
+-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(freelancerLoginDto, "로그인에 성공하셨습니다"));
+-    }
+-
+-    @GetMapping("/check/businessNum/{businessNum}")
+-    public ResponseEntity<ApiResponse<Boolean>> checkBusinessNum(@PathVariable String businessNum){
+-         boolean isValidBusinessNum =  userService.checkBusinessNum(businessNum);
+-         if(isValidBusinessNum){
+-             return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(isValidBusinessNum));
+-         }
+-         else {
+-             return ResponseEntity.badRequest().body(ApiResponse.error(HttpStatus.BAD_REQUEST,isValidBusinessNum,"등록되지않은 사업자번호입니다."));
+-         }
+-
+-    }
+-
+-
+-
+-
+-
+-
+-
+-
+-}
+\ No newline at end of file
+Index: board/src/main/java/com/ssafy/stackup/domain/account/dto/TransferRequest.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/account/dto/TransferRequest.java b/board/src/main/java/com/ssafy/stackup/domain/account/dto/TransferRequest.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/account/dto/TransferRequest.java	
++++ /dev/null	
+@@ -1,9 +0,0 @@
+-package com.ssafy.stackup.domain.account.dto;
+-
+-import lombok.Data;
+-
+-@Data
+-public class TransferRequest {
+-    private String depositAccount;
+-    private String transactionBalance;
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/account/util/SecondUtil.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/account/util/SecondUtil.java b/board/src/main/java/com/ssafy/stackup/domain/account/util/SecondUtil.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/account/util/SecondUtil.java	
++++ /dev/null	
+@@ -1,16 +0,0 @@
+-package com.ssafy.stackup.domain.account.util;
+-
+-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+-
+-public class SecondUtil {
+-
+-    private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+-
+-    public static String encrypt(String password) {
+-        return encoder.encode(password);
+-    }
+-
+-    public static boolean matches(String rawPassword, String encodedPassword) {
+-        return encoder.matches(rawPassword,encodedPassword);
+-    }
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/account/service/WonAuthService.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/account/service/WonAuthService.java b/board/src/main/java/com/ssafy/stackup/domain/account/service/WonAuthService.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/account/service/WonAuthService.java	
++++ /dev/null	
+@@ -1,171 +0,0 @@
+-package com.ssafy.stackup.domain.account.service;
+-
+-import com.ssafy.stackup.domain.account.dto.EncryptionUtil;
+-import com.ssafy.stackup.domain.account.entity.Account;
+-import com.ssafy.stackup.domain.account.repository.AccountRepository;
+-import com.ssafy.stackup.domain.user.entity.User;
+-import com.ssafy.stackup.domain.user.repository.UserRepository;
+-import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.http.*;
+-import org.springframework.stereotype.Service;
+-import org.springframework.web.client.RestTemplate;
+-
+-import java.security.SecureRandom;
+-import java.time.LocalDate;
+-import java.time.LocalTime;
+-import java.time.format.DateTimeFormatter;
+-import java.util.Collections;
+-import java.util.HashMap;
+-import java.util.List;
+-import java.util.Map;
+-
+-@Service
+-public class WonAuthService {
+-
+-    @Autowired
+-    private AccountRepository accountRepository;
+-
+-    private final RestTemplate restTemplate = new RestTemplate();
+-
+-    // 난수 생성기 설정
+-    private static final SecureRandom random = new SecureRandom();
+-
+-    @Autowired
+-    private UserRepository userRepository;
+-
+-    @Autowired
+-    private AccountService accountService;
+-
+-    public void fetchWonAuth (String accountNo, Long userId) {
+-        String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/accountAuth/openAccountAuth";
+-
+-        User user = userRepository.findById(userId).orElse(null);
+-
+-        String accountKey = user.getAccountKey();
+-        String email = user.getEmail();
+-
+-        if (accountKey == null) {
+-            System.out.println("accountKey 없음");
+-            // account_key가 없으면 새로운 key를 발급받아 저장
+-            accountKey = accountService.searchAccountKey(email);
+-            user.setAccountKey(accountKey);
+-            userRepository.save(user);
+-        }
+-
+-        // 현재 날짜와 시간 가져오기
+-        String transmissionDate = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
+-        String transmissionTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HHmmss"));
+-
+-        // 난수 생성
+-        String institutionTransactionUniqueNo = generateRandomNumberString(20);
+-
+-        // 요청 헤더 생성
+-        HttpHeaders headers = new HttpHeaders();
+-        headers.setContentType(MediaType.APPLICATION_JSON);
+-        headers.set("apiName", "openAccountAuth");
+-        headers.set("transmissionDate", transmissionDate);
+-        headers.set("transmissionTime", transmissionTime);
+-        headers.set("institutionCode", "00100");
+-        headers.set("fintechAppNo", "001");
+-        headers.set("apiServiceCode", "openAccountAuth");
+-        headers.set("institutionTransactionUniqueNo", institutionTransactionUniqueNo);
+-        headers.set("apiKey", "ef9d38e608d64bc1817e0ab47aa757ba");
+-        headers.set("userKey", "85ea7b07-cc04-42f2-93d8-287aa13b9a7f");
+-
+-        // JSON 본문 생성
+-        Map<String, Object> requestBody = new HashMap<>();
+-
+-        requestBody.put("Header", Map.of(
+-                "apiName", "openAccountAuth",
+-                "transmissionDate", transmissionDate,
+-                "transmissionTime", transmissionTime,
+-                "institutionCode", "00100",
+-                "fintechAppNo", "001",
+-                "apiServiceCode", "openAccountAuth",
+-                "institutionTransactionUniqueNo", institutionTransactionUniqueNo,
+-                "apiKey", "ef9d38e608d64bc1817e0ab47aa757ba",
+-                "userKey", "85ea7b07-cc04-42f2-93d8-287aa13b9a7f"
+-        ));
+-
+-        requestBody.put("accountNo", accountNo); // 실제 계좌번호를 사용
+-        requestBody.put("authText", "STACKUP");
+-
+-        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
+-
+-        // POST 요청 보내기
+-        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Map.class);
+-
+-    }
+-
+-    public void fetchWonCheck(String accountNo, String authCode, Long userId) {
+-        String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/accountAuth/checkAuthCode";
+-
+-        User user = userRepository.findById(userId).orElse(null);
+-
+-        String accountKey = user.getAccountKey();
+-        String email = user.getEmail();
+-
+-        if (accountKey == null) {
+-            System.out.println("accountKey 없음");
+-            // account_key가 없으면 새로운 key를 발급받아 저장
+-            accountKey = accountService.searchAccountKey(email);
+-            user.setAccountKey(accountKey);
+-            userRepository.save(user);
+-        }
+-
+-        String transmissionDate = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
+-        String transmissionTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HHmmss"));
+-
+-        String institutionTransactionUniqueNo = generateRandomNumberString(20);
+-
+-        HttpHeaders headers = new HttpHeaders();
+-        headers.setContentType(MediaType.APPLICATION_JSON);
+-        headers.set("apiName", "checkAuthCode");
+-        headers.set("transmissionDate", transmissionDate);
+-        headers.set("transmissionTime", transmissionTime);
+-        headers.set("institutionCode", "00100");
+-        headers.set("fintechAppNo", "001");
+-        headers.set("apiServiceCode", "checkAuthCode");
+-        headers.set("institutionTransactionUniqueNo", institutionTransactionUniqueNo);
+-        headers.set("apiKey", "ef9d38e608d64bc1817e0ab47aa757ba");
+-        headers.set("userKey", "85ea7b07-cc04-42f2-93d8-287aa13b9a7f");
+-
+-        // JSON 본문 생성
+-        Map<String, Object> requestBody = new HashMap<>();
+-        requestBody.put("Header", Map.of(
+-                "apiName", "checkAuthCode",
+-                "transmissionDate", transmissionDate,
+-                "transmissionTime", transmissionTime,
+-                "institutionCode", "00100",
+-                "fintechAppNo", "001",
+-                "apiServiceCode", "checkAuthCode",
+-                "institutionTransactionUniqueNo", institutionTransactionUniqueNo,
+-                "apiKey", "ef9d38e608d64bc1817e0ab47aa757ba",
+-                "userKey", "85ea7b07-cc04-42f2-93d8-287aa13b9a7f"
+-        ));
+-        requestBody.put("accountNo", accountNo);
+-        requestBody.put("authText", "STACKUP");
+-        requestBody.put("authCode", authCode);
+-
+-        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
+-
+-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+-
+-    }
+-
+-
+-    private String generateRandomNumberString(int length) {
+-        // 생성할 난수 문자열의 길이 설정
+-        if (length <= 0) {
+-            throw new IllegalArgumentException("Length must be greater than 0");
+-        }
+-
+-        // 난수 문자열 생성
+-        StringBuilder sb = new StringBuilder(length);
+-        for (int i = 0; i < length; i++) {
+-            sb.append(random.nextInt(10)); // 0~9 사이의 숫자를 추가
+-        }
+-
+-        return sb.toString();
+-    }
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/project/dto/response/ProjectInfoResponseDto.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/project/dto/response/ProjectInfoResponseDto.java b/board/src/main/java/com/ssafy/stackup/domain/project/dto/response/ProjectInfoResponseDto.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/project/dto/response/ProjectInfoResponseDto.java	
++++ /dev/null	
+@@ -1,42 +0,0 @@
+-package com.ssafy.stackup.domain.project.dto.response;
+-
+-import com.ssafy.stackup.domain.board.entity.Level;
+-
+-import com.ssafy.stackup.domain.project.entity.ProjectStatus;
+-import com.ssafy.stackup.domain.project.entity.ProjectStep;
+-import lombok.*;
+-
+-import java.util.Date;
+-import java.util.List;
+-
+-/**
+- * 작성자   : user
+- * 작성날짜 : 2024-09-21
+- * 설명    :
+- */
+-@Builder
+-@Getter
+-public class ProjectInfoResponseDto {
+-    private Long projectId;
+-    private ProjectStatus status;
+-    private ProjectStep step;
+-    private String title;
+-    private Date startDate;
+-    private String period;
+-    private String classification;  //대분류
+-    private Long deposit;
+-    private List<String> frameworks;
+-    private List<String> languages;
+-
+-    private Long recruits;  //모집인원
+-
+-    private Boolean isCharged;
+-    private Long applicants;
+-    private Boolean worktype;
+-    private Date deadline;
+-    private Date upload;
+-    private Level level;
+-    private boolean clientStepConfirmed;
+-    private boolean freelancerStepConfirmed;
+-
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/account/entity/Account.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/account/entity/Account.java b/board/src/main/java/com/ssafy/stackup/domain/account/entity/Account.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/account/entity/Account.java	
++++ /dev/null	
+@@ -1,26 +0,0 @@
+-package com.ssafy.stackup.domain.account.entity;
+-
+-import com.ssafy.stackup.domain.user.entity.User;
+-import jakarta.persistence.*;
+-import lombok.Data;
+-
+-@Data
+-@Entity
+-public class Account {
+-
+-    @Id
+-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+-    private Long accountId;
+-
+-    private String bankName;
+-    private String accountName;
+-    private String bankCode;
+-    private String createdDate;
+-    private String expiryDate;
+-    private String accountNum;
+-    private Long balance;
+-
+-    @ManyToOne(fetch = FetchType.LAZY)
+-    @JoinColumn(name = "user_id") // 외래 키 컬럼명
+-    private User user; // 계좌의 주인
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/project/dto/request/SignRequest.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/project/dto/request/SignRequest.java b/board/src/main/java/com/ssafy/stackup/domain/project/dto/request/SignRequest.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/project/dto/request/SignRequest.java	
++++ /dev/null	
+@@ -1,14 +0,0 @@
+-package com.ssafy.stackup.domain.project.dto.request;
+-
+-import lombok.AllArgsConstructor;
+-import lombok.Data;
+-import lombok.NoArgsConstructor;
+-
+-@Data
+-@NoArgsConstructor
+-@AllArgsConstructor
+-public class SignRequest {
+-
+-    private String message;
+-    private String signature;
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/account/dto/SecondPasswordRequest.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/account/dto/SecondPasswordRequest.java b/board/src/main/java/com/ssafy/stackup/domain/account/dto/SecondPasswordRequest.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/account/dto/SecondPasswordRequest.java	
++++ /dev/null	
+@@ -1,8 +0,0 @@
+-package com.ssafy.stackup.domain.account.dto;
+-
+-import lombok.Data;
+-
+-@Data
+-public class SecondPasswordRequest {
+-    String secondPassword;
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/account/service/TransferService.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/account/service/TransferService.java b/board/src/main/java/com/ssafy/stackup/domain/account/service/TransferService.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/account/service/TransferService.java	
++++ /dev/null	
+@@ -1,99 +0,0 @@
+-package com.ssafy.stackup.domain.account.service;
+-
+-import com.ssafy.stackup.domain.account.repository.AccountRepository;
+-import com.ssafy.stackup.domain.user.entity.User;
+-import com.ssafy.stackup.domain.user.repository.UserRepository;
+-import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.http.*;
+-import org.springframework.stereotype.Service;
+-import org.springframework.web.client.RestTemplate;
+-
+-import java.security.SecureRandom;
+-import java.time.LocalDate;
+-import java.time.LocalTime;
+-import java.time.format.DateTimeFormatter;
+-import java.util.HashMap;
+-import java.util.Map;
+-
+-@Service
+-public class TransferService {
+-
+-    @Autowired
+-    private AccountRepository accountRepository;
+-
+-    private final RestTemplate restTemplate = new RestTemplate();
+-
+-    // 난수 생성기 설정
+-    private static final SecureRandom random = new SecureRandom();
+-    @Autowired
+-    private UserRepository userRepository;
+-
+-    @Autowired
+-    private AccountService accountService;
+-
+-    public Map<String, Object> fetchTransfer(String depositAccount, String withdrawAccount, String transactionBalance, Long userId) {
+-        String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit/updateDemandDepositAccountTransfer";
+-
+-        User user = userRepository.findById(userId).orElse(null);
+-
+-        String accountKey = user.getAccountKey();
+-        String email = user.getEmail();
+-
+-        if (accountKey == null) {
+-            System.out.println("accountKey 없음");
+-            // account_key가 없으면 새로운 key를 발급받아 저장
+-            accountKey = accountService.searchAccountKey(email);
+-            user.setAccountKey(accountKey);
+-            userRepository.save(user);
+-        }
+-
+-        // 현재 날짜와 시간 가져오기
+-        String transmissionDate = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
+-        String transmissionTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HHmmss"));
+-
+-        // 난수 생성
+-        String institutionTransactionUniqueNo = accountService.generateRandomNumberString(20);
+-
+-        // 요청 헤더 생성
+-        HttpHeaders headers = new HttpHeaders();
+-        headers.setContentType(MediaType.APPLICATION_JSON);
+-        headers.set("apiName", "updateDemandDepositAccountTransfer");
+-        headers.set("transmissionDate", transmissionDate);
+-        headers.set("transmissionTime", transmissionTime);
+-        headers.set("institutionCode", "00100");
+-        headers.set("fintechAppNo", "001");
+-        headers.set("apiServiceCode", "updateDemandDepositAccountTransfer");
+-        headers.set("institutionTransactionUniqueNo", institutionTransactionUniqueNo);
+-        headers.set("apiKey", "ef9d38e608d64bc1817e0ab47aa757ba");
+-        headers.set("userKey", accountKey);
+-
+-        // JSON 본문 생성
+-        Map<String, Object> requestBody = new HashMap<>();
+-        requestBody.put("Header", Map.of(
+-                "apiName", "updateDemandDepositAccountTransfer",
+-                "transmissionDate", transmissionDate,
+-                "transmissionTime", transmissionTime,
+-                "institutionCode", "00100",
+-                "fintechAppNo", "001",
+-                "apiServiceCode", "updateDemandDepositAccountTransfer",
+-                "institutionTransactionUniqueNo", institutionTransactionUniqueNo,
+-                "apiKey", "ef9d38e608d64bc1817e0ab47aa757ba",
+-                "userKey", accountKey
+-        ));
+-        requestBody.put("depositAccountNo", depositAccount); // 입급할 계좌번호
+-        requestBody.put("depositTransactionSummary", "(수시입출금) : 입금(이체)");
+-        requestBody.put("transactionBalance",transactionBalance);
+-        requestBody.put("withdrawalAccountNo", withdrawAccount);
+-        requestBody.put("withdrawalTransactionSummary","(수시입출금) : 출금(이체)");
+-        System.out.println(requestBody);
+-
+-        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
+-
+-        // POST 요청 보내기
+-        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Map.class);
+-
+-        Map<String, Object> responseBody = response.getBody();
+-
+-        return requestBody;
+-    }
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/user/service/UserServiceImpl.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/user/service/UserServiceImpl.java b/board/src/main/java/com/ssafy/stackup/domain/user/service/UserServiceImpl.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/user/service/UserServiceImpl.java	
++++ /dev/null	
+@@ -1,415 +0,0 @@
+-package com.ssafy.stackup.domain.user.service;
+-
+-
+-import com.fasterxml.jackson.databind.JsonNode;
+-import com.fasterxml.jackson.databind.ObjectMapper;
+-import com.ssafy.stackup.common.exception.CustomException;
+-import com.ssafy.stackup.common.exception.ResourceNotFoundException;
+-import com.ssafy.stackup.common.jwt.TokenProvider;
+-import com.ssafy.stackup.common.response.ErrorCode;
+-import com.ssafy.stackup.common.util.RedisUtil;
+-import com.ssafy.stackup.common.util.UserUtil;
+-import com.ssafy.stackup.domain.framework.entity.Framework;
+-import com.ssafy.stackup.domain.framework.repository.FrameworkRepository;
+-import com.ssafy.stackup.domain.language.entity.Language;
+-import com.ssafy.stackup.domain.language.repository.LanguageRepository;
+-import com.ssafy.stackup.domain.user.dto.request.ClientLoginRequestDto;
+-import com.ssafy.stackup.domain.user.dto.request.ClientSignUpRequestDto;
+-import com.ssafy.stackup.domain.user.dto.request.FreelancerInfoRequestDto;
+-import com.ssafy.stackup.domain.user.dto.response.*;
+-import com.ssafy.stackup.domain.user.entity.*;
+-import com.ssafy.stackup.domain.user.repository.ClientRepository;
+-import com.ssafy.stackup.domain.user.repository.FreelancerRepository;
+-import com.ssafy.stackup.domain.user.repository.UserRepository;
+-import jakarta.servlet.http.HttpServletRequest;
+-import jakarta.servlet.http.HttpServletResponse;
+-import lombok.RequiredArgsConstructor;
+-import lombok.extern.slf4j.Slf4j;
+-import org.springframework.beans.factory.annotation.Value;
+-import org.springframework.http.*;
+-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+-import org.springframework.security.core.Authentication;
+-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+-import org.springframework.stereotype.Service;
+-import org.springframework.transaction.annotation.Transactional;
+-import org.springframework.web.client.RestTemplate;
+-
+-import java.util.*;
+-
+-@Service
+-@RequiredArgsConstructor
+-@Slf4j
+-public class UserServiceImpl implements UserService {
+-    @Value("${default.image}")
+-    private String defaultImage;
+-
+-
+-
+-    @Value("${publicDataPortal.api.url}")
+-    private String publicDataPortalApiUrl;
+-
+-    @Value("${publicDataPortal.api.key}")
+-    private String publicDataPortalApiKey;
+-
+-
+-    private final RestTemplate restTemplate;
+-    private final ObjectMapper objectMapper;
+-
+-    private final UserRepository userRepository;
+-    private final ClientRepository clientRepository;
+-    private final FrameworkRepository frameworkRepository;
+-    private final LanguageRepository languageRepository;
+-    private final FreelancerRepository freelancerRepository;
+-    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+-    private final AuthenticationManagerBuilder managerBuilder;
+-    private final TokenProvider tokenProvider;
+-    private final RedisUtil redisUtil;
+-
+-
+-    @Override
+-    @Transactional
+-    public FreelancerRegisterResponseDto registerInfo(FreelancerInfoRequestDto freelancerInfoRequestDto, User user) {
+-
+-        Freelancer freelancer = freelancerRepository.findById(user.getId()).orElseThrow(
+-                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+-        );
+-
+-        //언어와 프레임워크 만들기
+-        Set<FreelancerFramework> freelancerFrameworks = new HashSet<>();
+-        Set<FreelancerLanguage> freelancerLanguages = new HashSet<>();
+-
+-        for (String frameworkName : freelancerInfoRequestDto.getFramework()) {
+-            Framework framework = frameworkRepository.findByName(frameworkName)
+-                    .orElseThrow(()->{ return new ResourceNotFoundException("해당 프레임워크 이름이 지정되지 않았습니다.");});
+-
+-            FreelancerFramework freelancerFramework = FreelancerFramework.builder()
+-                    .freelancer(freelancer)
+-                    .framework(framework)
+-                    .build();
+-            freelancerFrameworks.add(freelancerFramework);
+-
+-        }
+-
+-        for (String languageName : freelancerInfoRequestDto.getLanguage()) {
+-            Language language = languageRepository.findByName(languageName)
+-                    .orElseThrow(()->{ throw new ResourceNotFoundException("해당 언어 이름이 지정되지 않았습니다.");});
+-            FreelancerLanguage freelancerLanguage = FreelancerLanguage.builder()
+-                    .freelancer(freelancer)
+-                    .language(language)
+-                    .build();
+-            freelancerLanguages.add(freelancerLanguage);
+-        }
+-
+-        freelancer.updateName(freelancerInfoRequestDto.getName());
+-        freelancer.updateAddress(freelancerInfoRequestDto.getAddress());
+-        freelancer.updateEmail(freelancerInfoRequestDto.getEmail());
+-        freelancer.updateClassification(freelancerInfoRequestDto.getClassification());
+-        freelancer.updateCareerYear(freelancerInfoRequestDto.getCareerYear());
+-        freelancer.updatePhone(freelancerInfoRequestDto.getPhone());
+-        freelancer.updatePortfolioUrl(freelancerInfoRequestDto.getPortfolioUrl());
+-        freelancer.updateSelfIntroduction(freelancerInfoRequestDto.getSelfIntroduction());
+-        freelancer.updateFreelancerFrameworks(freelancerFrameworks);
+-        freelancer.updateFreelancerLanguages(freelancerLanguages);
+-
+-        freelancerRepository.save(freelancer);
+-
+-        FreelancerRegisterResponseDto freelancerRegisterResponseDto = FreelancerRegisterResponseDto.builder()
+-                .name(freelancer.getName())
+-                .email(freelancer.getEmail())
+-                .phone(freelancer.getPhone())
+-                .classification(freelancer.getClassification())
+-                .framework(freelancerInfoRequestDto.getFramework())
+-                .language(freelancerInfoRequestDto.getLanguage())
+-                .careerYear(freelancer.getCareerYear())
+-                .portfolioURL(freelancer.getPortfolioUrl())
+-                .selfIntroduction(freelancer.getSelfIntroduction())
+-                .build();
+-
+-        return freelancerRegisterResponseDto;
+-    }
+-
+-    @Override
+-    @Transactional
+-    public ClientResponseDto signUp(ClientSignUpRequestDto requestDto) {
+-        emailCheck(requestDto.getEmail());
+-        String encodedPassword = bCryptPasswordEncoder.encode(requestDto.getPassword());
+-        Client client = Client.builder()
+-                .name(requestDto.getName())
+-                .email(requestDto.getEmail())
+-                .password(encodedPassword)
+-                .roles(List.of("ROLE_CLIENT"))
+-                .phone(requestDto.getPhone())
+-                .businessName(requestDto.getBusinessName())
+-                .businessRegistrationNumber(requestDto.getBusinessRegistrationNumber())
+-                .totalScore(0.0)
+-                .reportedCount(0)
+-                .evaluatedCount(0)
+-                .build();
+-
+-
+-        Client savedClient = clientRepository.save(client);
+-
+-        ClientResponseDto responseDto = ClientResponseDto.builder()
+-                .id(savedClient.getId())
+-                .email(savedClient.getEmail())
+-                .name(savedClient.getName())
+-                .businessRegistrationNumber(savedClient.getBusinessRegistrationNumber())
+-                .businessName(savedClient.getBusinessName())
+-                .phone(savedClient.getPhone())
+-                .build();
+-
+-        return responseDto;
+-    }
+-
+-
+-    /**
+-     * 클라이언트 로그인 인증 후 토큰 발행
+-     * @ 작성자   : 이병수
+-     * @ 작성일   : 2024-09-23
+-     * @ 설명     :
+-     * @param requestDto
+-     * @param response
+-     * @return
+-     */
+-    @Override
+-    @Transactional
+-    public LoginResponseDto login(ClientLoginRequestDto requestDto, HttpServletResponse response) {
+-        String userType = "client";
+-        Client user = clientRepository.findByEmail(requestDto.getEmail()).orElseThrow(
+-                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+-        );
+-
+-        UsernamePasswordAuthenticationToken authenticationToken = new
+-                UsernamePasswordAuthenticationToken(String.valueOf(user.getId()), requestDto.getPassword());
+-
+-        Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
+-
+-        TokenDto tokenDto = tokenProvider.generateToken(authentication,userType);
+-        tokenToHeader(tokenDto, response);
+-
+-        redisUtil.setData(String.valueOf(user.getId()), tokenDto.refreshToken(), tokenDto.refreshTokenExpiresIn());
+-        LoginResponseDto responseDto = LoginResponseDto.builder()
+-                .id(user.getId())
+-                .userType(userType)
+-                .build();
+-
+-        return responseDto;
+-    }
+-
+-
+-    @Override
+-    @Transactional(readOnly = true)
+-    public String logout(final HttpServletRequest request) {
+-        String token = tokenProvider.resolveToken(request); // 헤더에서 AccessToken 가져오기
+-        Authentication authentication = tokenProvider.getAuthentication(token); // 토큰 인증 후 페이로드에서 유저 정보 추출
+-        redisUtil.deleteData(authentication.getName()); // 해당 유저의 key 삭제
+-        Long accessExpiration = tokenProvider.getAccessExpiration(token);// AccessToken의 남은 시간 가져오기
+-        redisUtil.setData(token,"logout",accessExpiration); // 로그아웃을 하더라도 AccessToken의 시간이 남아있으면 인증이 가능하여 블랙리스트로 추가
+-        return "로그아웃 성공";
+-    }
+-
+-    @Override
+-    @Transactional(readOnly = true)
+-    public void reissue(final HttpServletRequest request, final HttpServletResponse response) {
+-        String accessToken = tokenProvider.resolveToken(request);
+-        tokenProvider.validateToken(accessToken);
+-        Authentication authentication = tokenProvider.getAuthentication(accessToken);
+-        String refreshToken = redisUtil.getData(authentication.getName());
+-
+-        if (refreshToken == null)
+-            throw new CustomException(ErrorCode.UNKNOWN_TOKEN);
+-        if (!Objects.equals(refreshToken, request.getHeader("refreshToken")))
+-            throw new CustomException(ErrorCode.WRONG_TYPE_TOKEN);
+-        String userType = tokenProvider.getUserType(accessToken);
+-        TokenDto tokenDto = tokenProvider.generateToken(authentication, userType);
+-        tokenToHeader(tokenDto, response);
+-
+-        redisUtil.setData(authentication.getName(), tokenDto.refreshToken(), tokenDto.refreshTokenExpiresIn());
+-
+-
+-    }
+-
+-
+-
+-    @Override
+-    public Boolean emailCheck(String email) {
+-        Optional<Client> client = clientRepository.findByEmail(email);
+-        if(client.isPresent()) {
+-            throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
+-        }
+-        return true;
+-    }
+-
+-
+-    /**
+-     * 해당 유저 신고 수 증가
+-     * @param userId 신고받은 유저 고유번호
+-     */
+-    public void report(Long userId) {
+-        User user = userRepository.findById(userId)
+-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+-        user.updateReportedCount(user.getReportedCount()+1);
+-        userRepository.save(user);
+-    }
+-
+-    @Override
+-    public Double grade(User user) {
+-        User users = userRepository.findById(user.getId())
+-                .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+-
+-        return users.getTotalScore();
+-    }
+-
+-
+-    /**
+-     * 내 상세 정보 조회
+-     * @param user
+-     * @return
+-     */
+-    @Override
+-    public UserInfoResponseDto getInfo(User user) {
+-
+-        if(user.getRoles().contains("ROLE_FREELANCER")) {
+-            Freelancer freelancer = freelancerRepository.findById(user.getId()).orElseThrow(
+-                    () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+-            );
+-
+-
+-            List<String> frameworks = UserUtil.getFrameworks(freelancer.getFrameworks());
+-            List<String> languages = UserUtil.getLanguages(freelancer.getLanguages());
+-
+-            FreelancerResponseDto freelancerResponseDto =   FreelancerResponseDto.builder()
+-                    .id(freelancer.getId())
+-                    .roles(freelancer.getRoles())
+-                    .name(freelancer.getName())
+-                    .phone(freelancer.getPhone())
+-                    .email(freelancer.getEmail())
+-                    .secondPassword(freelancer.getSecondPassword())
+-                    .accountKey(freelancer.getAccountKey())
+-                    .totalScore(freelancer.getTotalScore())
+-                    .framework(frameworks)
+-                    .language(languages)
+-                    .careerYear(freelancer.getCareerYear())
+-                    .portfolioURL(freelancer.getPortfolioUrl())
+-                    .selfIntroduction(freelancer.getSelfIntroduction())
+-                    .classification(freelancer.getClassification())
+-                    .githubId(freelancer.getGithubId())
+-                    .address(freelancer.getAddress())
+-                    .build();
+-            return freelancerResponseDto;
+-
+-
+-        }else{
+-
+-            Client client = clientRepository.findById(user.getId())
+-                    .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+-
+-            ClientResponseDto clientResponseDto  = ClientResponseDto.builder()
+-                    .id(client.getId())
+-                    .roles(client.getRoles())
+-                    .name(client.getName())
+-                    .phone(client.getPhone())
+-                    .email(client.getEmail())
+-                    .secondPassword(client.getSecondPassword())
+-                    .accountKey(client.getAccountKey())
+-                    .businessRegistrationNumber(client.getBusinessRegistrationNumber())
+-                    .businessName(client.getBusinessName())
+-                    .reportedCount(client.getReportedCount())
+-                    .totalScore(client.getTotalScore())
+-                    .build();
+-
+-            return clientResponseDto;
+-
+-        }
+-
+-    }
+-
+-    /**
+-     * @ 작성자   : 이병수
+-     * @ 작성일   : 2024-09-19
+-     * @ 설명     : 소셜 로그인 성공 후 데이터 전송
+-     * @param userId 유저 아이디
+-     * @return
+-     */
+-    @Override
+-    public FreelancerLoginResponseDto token(Long userId) {
+-
+-        User user = userRepository.findById(userId)
+-                .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+-
+-
+-        Authentication authentication = tokenProvider.getAuthentication(redisUtil.getData(String.valueOf(userId)));
+-        TokenDto tokenDto = tokenProvider.generateToken(authentication, "freelancer");
+-
+-        FreelancerLoginResponseDto freelancerLoginResponseDto =  FreelancerLoginResponseDto.builder()
+-                .accessToken(tokenDto.accessToken())
+-                .refreshToken(tokenDto.refreshToken())
+-                .userId(userId)
+-                .userType("freelancer")
+-                .build();
+-
+-        return freelancerLoginResponseDto;
+-    }
+-
+-    /**
+-     * @param tokenDto 로그인 시 발급한 토큰 데이터
+-     * @param response 토큰을 헤더에 추가하기 위한 servlet
+-     * @return
+-     * @ 설명     : 헤더에  Access,Refresh토큰 추가
+-     */
+-    private void tokenToHeader(TokenDto tokenDto, HttpServletResponse response) {
+-        response.addHeader("Authorization", tokenDto.accessToken());
+-        response.addHeader("refreshToken", tokenDto.refreshToken());
+-    }
+-
+-    public String getUserAddress(Long userId) {
+-        User user = userRepository.findById(userId)
+-                .orElseThrow(()-> new CustomException(ErrorCode.USER_NOT_FOUND));
+-        String address = user.getUserAddress();
+-        return address;
+-    }
+-
+-
+-
+-    public boolean checkBusinessNum(String businessNum) {
+-
+-        String requestBody = "{ \"b_no\": [\"" + businessNum + "\"] }";
+-
+-        // 헤더 설정
+-        HttpHeaders headers = new HttpHeaders();
+-        headers.setContentType(MediaType.APPLICATION_JSON);
+-        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+-
+-        HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
+-
+-        try {
+-            // API 요청 보내기
+-            String requestUrl = publicDataPortalApiUrl + "?serviceKey=" + publicDataPortalApiKey;
+-            ResponseEntity<String> response = restTemplate.exchange(requestUrl, HttpMethod.POST, entity, String.class);
+-
+-            if (response.getStatusCode().is2xxSuccessful()) {
+-                // JSON 파싱
+-                JsonNode root = objectMapper.readTree(response.getBody());
+-
+-                // "data" 필드에서 사업자 상태 확인
+-                JsonNode dataNode = root.path("data").get(0);
+-                String statusMessage = dataNode.path("tax_type").asText();
+-
+-                // "국세청에 등록되지 않은 사업자등록번호입니다." 라는 메시지가 있다면 false 반환
+-                if (statusMessage.contains("국세청에 등록되지 않은 사업자등록번호")) {
+-                    return false;
+-                }
+-
+-                // 유효한 사업자등록번호인 경우 true 반환
+-                return true;
+-            }
+-        } catch (Exception e) {
+-            e.printStackTrace();
+-        }
+-
+-        // 기본적으로 false 반환
+-        return false;
+-    }
+-
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/account/dto/TransactionResponse.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/account/dto/TransactionResponse.java b/board/src/main/java/com/ssafy/stackup/domain/account/dto/TransactionResponse.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/account/dto/TransactionResponse.java	
++++ /dev/null	
+@@ -1,14 +0,0 @@
+-package com.ssafy.stackup.domain.account.dto;
+-
+-public class TransactionResponse {
+-    private String transactionUniqueNo;
+-    private String transactionDate;
+-    private String transactionTime;
+-    private String transactionType;
+-    private String transactionTypeName;
+-    private String transactionAccountNo;
+-    private String transactionBalance;
+-    private String transactionAfterBalance;
+-    private String transactionSummary;
+-    private String transactionMemo;
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/project/dto/response/ProjectStepCheckResponseDto.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/project/dto/response/ProjectStepCheckResponseDto.java b/board/src/main/java/com/ssafy/stackup/domain/project/dto/response/ProjectStepCheckResponseDto.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/project/dto/response/ProjectStepCheckResponseDto.java	
++++ /dev/null	
+@@ -1,19 +0,0 @@
+-package com.ssafy.stackup.domain.project.dto.response;
+-
+-import com.ssafy.stackup.domain.project.entity.ProjectStep;
+-import lombok.Builder;
+-import lombok.Getter;
+-
+-/**
+- * 작성자   : user
+- * 작성날짜 : 2024-09-25
+- * 설명    :
+- */
+-
+-@Builder
+-@Getter
+-public class ProjectStepCheckResponseDto {
+-
+-    ProjectStep currentStep;
+-    boolean isChangeProjectStep;
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/chat/service/ChatServiceImpl.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/chat/service/ChatServiceImpl.java b/board/src/main/java/com/ssafy/stackup/domain/chat/service/ChatServiceImpl.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/chat/service/ChatServiceImpl.java	
++++ /dev/null	
+@@ -1,182 +0,0 @@
+-package com.ssafy.stackup.domain.chat.service;
+-
+-
+-import com.ssafy.stackup.common.exception.CustomException;
+-import com.ssafy.stackup.common.jwt.TokenProvider;
+-import com.ssafy.stackup.common.response.ErrorCode;
+-import com.ssafy.stackup.domain.chat.dto.reqeust.ChatDto;
+-import com.ssafy.stackup.domain.chat.dto.reqeust.ChatRoomStartRequestDto;
+-import com.ssafy.stackup.domain.chat.dto.response.ChatResponseDto;
+-import com.ssafy.stackup.domain.chat.dto.response.ChatRoomInfoResponseDto;
+-import com.ssafy.stackup.domain.chat.entity.Chat;
+-import com.ssafy.stackup.domain.chat.entity.ChatRoom;
+-import com.ssafy.stackup.domain.chat.repository.ChatRepository;
+-import com.ssafy.stackup.domain.chat.repository.ChatRoomRepository;
+-import com.ssafy.stackup.domain.user.entity.User;
+-import com.ssafy.stackup.domain.user.repository.UserRepository;
+-import lombok.RequiredArgsConstructor;
+-import lombok.extern.slf4j.Slf4j;
+-import org.springframework.security.core.Authentication;
+-import org.springframework.stereotype.Service;
+-import org.springframework.transaction.annotation.Transactional;
+-
+-import java.util.ArrayList;
+-import java.util.List;
+-import java.util.Optional;
+-import java.util.stream.Collectors;
+-
+-@Service
+-@RequiredArgsConstructor
+-@Slf4j
+-public class ChatServiceImpl implements ChatService {
+-    private final ChatRepository chatRepository;
+-    private final UserRepository userRepository;
+-    private final TokenProvider tokenProvider;
+-    private final ChatRoomRepository chatRoomRepository;
+-
+-    /**
+-     * @param chatDto 채팅 데이터
+-     * @param token   헤더에 들어있는 액세스 토큰 (유저 정보)
+-     * @return
+-     * @ 작성자   : 이병수
+-     * @ 작성일   : 2024-09-15
+-     * @ 설명     : 전송한 채팅 저장
+-     * @status 성공 : 201 , 실패 : 401, 404
+-     */
+-    @Override
+-    @Transactional
+-    public ChatDto saveChat(final ChatDto chatDto, final String token) {
+-        Authentication authentication = tokenProvider.getAuthentication(token);
+-        User userOpt = userRepository.findById(Long.parseLong(authentication.getName())).orElseThrow(
+-                () -> new CustomException(ErrorCode.USER_NOT_FOUND)
+-        );
+-        ChatRoom chatRoom = channelValidate(chatDto.getChatroomId());
+-
+-        Chat chat = Chat.builder()
+-                .user(userOpt)
+-                .chatRoom(chatRoom)
+-                .message(chatDto.getMessage())
+-                .build();
+-
+-        chatRepository.save(chat);
+-
+-        return chatDto;
+-    }
+-
+-    /**
+-     * @param chatroomId 채널 식별 아이디
+-     * @return 채팅 로그 리스트
+-     * @ 작성자   : 이병수
+-     * @ 작성일   : 2024-09-15
+-     * @ 설명     : 채팅방에 해당되는 이전 채팅 로그 가져오기
+-     * @status 성공 : 200, 실패 : 404
+-     */
+-    @Override
+-    @Transactional(readOnly = true)
+-    public List<ChatResponseDto> chatLogs(final Long chatroomId) {
+-        ChatRoom chatRoom = channelValidate(chatroomId);
+-        List<Chat> chatLogs = chatRepository.findByChatRoomId(chatRoom.getId());
+-
+-        List<ChatResponseDto> chatResponseDtoList = chatLogs.stream()
+-                .map(chatLog -> ChatResponseDto.builder()
+-                        .userId(chatLog.getUser().getId())
+-                        .name(chatLog.getUser().getName())
+-                        .message(chatLog.getMessage())
+-                        .registTime(chatLog.getRegistTime())
+-                        .build())
+-                .collect(Collectors.toList());
+-
+-        return chatResponseDtoList;
+-    }
+-
+-    @Override
+-    public ChatRoomInfoResponseDto startChatRoom(ChatRoomStartRequestDto chatRoomStartRequestDto) {
+-
+-            Long clientId = chatRoomStartRequestDto.getClientId();
+-            Long freelancerId = chatRoomStartRequestDto.getFreelancerId();
+-
+-            ChatRoom chatRoom = null;
+-            Optional<ChatRoom> optionalChatRoom = chatRoomRepository.findByClientIdAndFreelancerId(clientId, freelancerId);
+-            if (optionalChatRoom.isPresent()) {
+-                chatRoom = optionalChatRoom.get();
+-
+-                ChatRoomInfoResponseDto response = ChatRoomInfoResponseDto.builder()
+-                        .chatRoomId(chatRoom.getId())
+-                        .clientId(clientId)
+-                        .freelancerId(freelancerId)
+-                        .chats(chatRoom.getChats())
+-                        .previewChat("")
+-                        .build();
+-            }
+-
+-            User client = userRepository.findById(clientId).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
+-            User freelancer = userRepository.findById(freelancerId).orElseThrow(()->new CustomException(ErrorCode.USER_NOT_FOUND));
+-
+-            chatRoom= chatRoom.builder()
+-                    .chats(new ArrayList<>())
+-                    .client(client)
+-                    .freelancer(freelancer)
+-                    .build();
+-
+-            chatRoom = chatRoomRepository.save(chatRoom);
+-
+-
+-            return ChatRoomInfoResponseDto.builder()
+-                    .chatRoomId(chatRoom.getId())
+-                    .clientId(clientId)
+-                    .freelancerId(freelancerId)
+-                    .chats(chatRoom.getChats())
+-                    .previewChat("")
+-                    .build();
+-        }
+-
+-
+-    /**
+-     * 해당 유저의 모든 채팅방 가져오기
+-     * @ 작성자   : 이병수
+-     * @ 작성일   : 2024-09-25
+-     * @ 설명     :모든 채팅방 가져오기
+-     * @param userId
+-     * @return\
+-     */
+-    @Override
+-    public List<ChatRoomInfoResponseDto> getChatRooms(Long userId) {
+-
+-        List<ChatRoomInfoResponseDto> chatRoomListResponse = new ArrayList<>();
+-        List<ChatRoom> chatRoomList = chatRoomRepository.findAllByFreelancerIdOrClientId(userId, userId).orElse(null);
+-
+-
+-        for(ChatRoom chatRoom : chatRoomList) {
+-            ChatRoomInfoResponseDto chatRoomInfoResponseDto = ChatRoomInfoResponseDto.builder()
+-                    .chatRoomId(chatRoom.getId())
+-                    .chats(chatRoom.getChats())
+-                    .clientId(chatRoom.getClient().getId())
+-                    .freelancerId(chatRoom.getFreelancer().getId())
+-                    .build();
+-            chatRoomInfoResponseDto.setPreviewChat();
+-            chatRoomListResponse.add(chatRoomInfoResponseDto);
+-        }
+-
+-
+-
+-
+-        return chatRoomListResponse;
+-    }
+-
+-
+-    /**
+-     * @param channelId 채널 식별 아이디
+-     * @return 채팅 로그 리스트
+-     * @ 작성자   : 이병수
+-     * @ 작성일   : 2024-09-15
+-     * @ 설명     : 데이터베이스에 존재하는 채널인지 검증
+-     * @status 실패 : 404
+-     */
+-    private ChatRoom channelValidate(Long channelId) {
+-        ChatRoom chatRoom = chatRoomRepository.findById(channelId).orElseGet(null);
+-        if (chatRoom == null) {
+-            throw new CustomException(ErrorCode.CHANNEL_NOT_FOUND);
+-        }
+-        return chatRoom;
+-    }
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/account/repository/AccountRepository.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/account/repository/AccountRepository.java b/board/src/main/java/com/ssafy/stackup/domain/account/repository/AccountRepository.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/account/repository/AccountRepository.java	
++++ /dev/null	
+@@ -1,18 +0,0 @@
+-package com.ssafy.stackup.domain.account.repository;
+-
+-import com.ssafy.stackup.domain.account.entity.Account;
+-import org.springframework.data.jpa.repository.JpaRepository;
+-import org.springframework.data.jpa.repository.Query;
+-import org.springframework.data.repository.query.Param;
+-
+-import java.util.List;
+-import java.util.Map;
+-
+-public interface AccountRepository extends JpaRepository<Account, Long> {
+-    @Query("SELECT a.createdDate AS startDate, a.expiryDate AS endDate, a.accountNum AS accountNo FROM Account a WHERE a.accountId = :accountId")
+-    Map<String, String> findDatesByAccountId(@Param("accountId") Long accountId);
+-
+-    Account findByAccountNum(String accountNum);
+-
+-    List<Account> findByUserId(Long userId);
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/chat/dto/response/ChatRoomInfoResponseDto.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/chat/dto/response/ChatRoomInfoResponseDto.java b/board/src/main/java/com/ssafy/stackup/domain/chat/dto/response/ChatRoomInfoResponseDto.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/chat/dto/response/ChatRoomInfoResponseDto.java	
++++ /dev/null	
+@@ -1,39 +0,0 @@
+-package com.ssafy.stackup.domain.chat.dto.response;
+-
+-import com.ssafy.stackup.domain.chat.entity.Chat;
+-import com.ssafy.stackup.domain.user.entity.User;
+-import jakarta.persistence.CascadeType;
+-import jakarta.persistence.JoinColumn;
+-import jakarta.persistence.ManyToOne;
+-import jakarta.persistence.OneToMany;
+-import lombok.AllArgsConstructor;
+-import lombok.Builder;
+-import lombok.Getter;
+-import lombok.NoArgsConstructor;
+-
+-import java.util.ArrayList;
+-import java.util.List;
+-
+-/**
+- * 작성자   : user
+- * 작성날짜 : 2024-09-25
+- * 설명    :
+- */
+-@Builder
+-@AllArgsConstructor
+-@NoArgsConstructor
+-@Getter
+-public class ChatRoomInfoResponseDto {
+-    private Long chatRoomId;
+-    private Long clientId;
+-    private Long freelancerId;
+-    private List<Chat> chats ;
+-    private String previewChat;
+-
+-    public String setPreviewChat() {
+-       return this.previewChat = (this.chats != null && !this.chats.isEmpty())? chats.get(chats.size()-1).getMessage():" 채팅이 없습니다" ;
+-    }
+-
+-
+-
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/account/controller/AccountController.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/account/controller/AccountController.java b/board/src/main/java/com/ssafy/stackup/domain/account/controller/AccountController.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/account/controller/AccountController.java	
++++ /dev/null	
+@@ -1,165 +0,0 @@
+-package com.ssafy.stackup.domain.account.controller;
+-
+-import com.ssafy.stackup.domain.account.dto.*;
+-import com.ssafy.stackup.domain.account.entity.Account;
+-import com.ssafy.stackup.domain.account.service.AccountService;
+-import com.ssafy.stackup.domain.account.service.TransactionsService;
+-import com.ssafy.stackup.domain.account.service.TransferService;
+-import com.ssafy.stackup.domain.account.service.WonAuthService;
+-import com.ssafy.stackup.domain.user.entity.AuthUser;
+-import com.ssafy.stackup.domain.user.entity.User;
+-import com.ssafy.stackup.domain.user.service.UserService;
+-import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.http.ResponseEntity;
+-import org.springframework.web.bind.annotation.*;
+-
+-import java.util.HashSet;
+-import java.util.List;
+-import java.util.Set;
+-import java.util.stream.Collectors;
+-
+-@RestController
+-@RequestMapping("/account")
+-public class AccountController {
+-
+-    @Autowired
+-    private AccountService accountService;
+-    @Autowired
+-    private TransactionsService transactionsService;
+-    @Autowired
+-    private WonAuthService wonAuthService;
+-    @Autowired
+-    private TransferService transferService;
+-
+-    @GetMapping
+-    public List<AccountResponse> findALL(@AuthUser User user) {
+-        Long userId = user.getId();
+-        List<Account> accounts = accountService.getAccountsByUserId(userId);
+-//        return accounts.stream()
+-//                .map(this::ConvertResponse)
+-//                .toList();
+-        // 중복을 제거할 Set 생성
+-        Set<String> seenAccountNums = new HashSet<>();
+-
+-        // 중복을 제거한 리스트 생성
+-        List<AccountResponse> uniqueAccountResponses = accounts.stream()
+-                .filter(account -> seenAccountNums.add(account.getAccountNum())) // 중복된 accountNum은 Set에 추가되지 않음
+-                .map(this::ConvertResponse)
+-                .collect(Collectors.toList());
+-
+-        return uniqueAccountResponses;
+-    }
+-
+-    private AccountResponse ConvertResponse(Account account){
+-        AccountResponse accountResponse = new AccountResponse();
+-        accountResponse.setAccountId(account.getAccountId());
+-        accountResponse.setAccountName(account.getAccountName());
+-        accountResponse.setBankCode(account.getBankCode());
+-        accountResponse.setCreatedDate(account.getCreatedDate());
+-        accountResponse.setExpiryDate(account.getExpiryDate());
+-
+-        // 암호화된 계좌번호 복호화
+-        try {
+-            String decryptedAccountNum = EncryptionUtil.decrypt(account.getAccountNum());
+-            accountResponse.setAccountNum(decryptedAccountNum);
+-        } catch (Exception e) {
+-            e.printStackTrace();
+-            accountResponse.setAccountNum("Unknown");
+-        }
+-
+-        accountResponse.setBalnace(account.getBalance());
+-        return accountResponse;
+-    }
+-
+-    //개발용 은행키 발급
+-    @PostMapping("/key")
+-    public void generateKey(@AuthUser User user){
+-        String email = user.getEmail();
+-        accountService.generateAccountKey(email);
+-    }
+-
+-    @GetMapping("/update")
+-    public void updateAccount(@AuthUser User user){
+-        Long userId = user.getId();
+-        System.out.println(userId);
+-        accountService.fetchAndStoreAccountData(userId);
+-    }
+-
+-    @GetMapping("/{accountId}")
+-    public AccountResponse getAccount(@PathVariable Long accountId) throws Exception {
+-        Account account = accountService.getAccount(accountId);
+-        String accountNo = EncryptionUtil.decrypt(account.getAccountNum());
+-        return ConvertResponse(account);
+-    }
+-
+-    @GetMapping("/decrypt/{accountId}")
+-    public String getDecryptedAccountNum(@PathVariable Long accountId) {
+-        return accountService.decryptAccountNum(accountId);
+-    }
+-
+-    @GetMapping("/transactions/{accountId}")
+-    public List<?> getTransaction(@PathVariable Long accountId, @AuthUser User user) throws Exception {
+-        Long userId = user.getId();
+-        Account account = accountService.getAccount(accountId);
+-        String accountNo = EncryptionUtil.decrypt(account.getAccountNum());
+-        return transactionsService.fetchTransactions(accountId, accountNo, userId);
+-    }
+-
+-    @PostMapping("/{accountId}/transfer")
+-    public void accountTransfer(@RequestBody TransferRequest request, @PathVariable Long accountId,@AuthUser User user) throws Exception {
+-        Long userId = user.getId();
+-        Account account = accountService.getAccount(accountId);
+-        String accountNo = EncryptionUtil.decrypt(account.getAccountNum());
+-        System.out.println(accountNo);
+-        System.out.println(request.getDepositAccount());
+-        System.out.println(request.getTransactionBalance());
+-        transferService.fetchTransfer(request.getDepositAccount(), accountNo, request.getTransactionBalance(), userId);
+-    }
+-
+-    @PostMapping("/auth/{accountId}")
+-    public void wonAuth(@PathVariable Long accountId, @AuthUser User user) throws Exception {
+-        Long userId = user.getId();
+-        Account account = accountService.getAccount(accountId);
+-        String accountNo = EncryptionUtil.decrypt(account.getAccountNum());
+-        wonAuthService.fetchWonAuth(accountNo, userId);
+-    }
+-
+-    @PostMapping("/{accountId}/checkCode")
+-    public void wonCheck(@RequestBody CheckCodeRequest request, @PathVariable Long accountId, @AuthUser User user) throws Exception {
+-        Long userId = user.getId();
+-        Account account = accountService.getAccount(accountId);
+-        String accountNo = EncryptionUtil.decrypt(account.getAccountNum());
+-        wonAuthService.fetchWonCheck(accountNo, request.getCode(), userId);
+-    }
+-
+-    @PostMapping("/password")
+-    public ResponseEntity<String> setSecondPassword(@RequestBody SecondPasswordRequest request, @AuthUser User user){
+-        Long userId = user.getId();
+-        String secondPassword = request.getSecondPassword();
+-
+-        if (secondPassword == null || secondPassword.trim().isEmpty()) {
+-            return ResponseEntity.badRequest().body("비밀번호가 필요합니다.");
+-        }
+-
+-        // 비밀번호를 암호화하고 저장
+-        accountService.setSecondPassword(userId, secondPassword);
+-
+-        return ResponseEntity.ok("2차 비밀번호가 성공적으로 저장되었습니다.");
+-    }
+-
+-    @GetMapping("/password")
+-    public ResponseEntity<String> checkSecondPassword(@RequestBody SecondPasswordRequest request,@AuthUser User user){
+-        Long userId = user.getId();
+-        String secondPassword = request.getSecondPassword();
+-        if (secondPassword == null || secondPassword.trim().isEmpty()) {
+-            return ResponseEntity.badRequest().body("비밀번호가 필요합니다.");
+-        }
+-
+-        boolean isPasswordCorrect = accountService.checkSecondPassword(userId, secondPassword);
+-        if (isPasswordCorrect) {
+-            return ResponseEntity.ok("비밀번호가 일치합니다.");
+-        } else {
+-            return ResponseEntity.status(401).body("비밀번호가 일치하지 않습니다.");
+-        }
+-    }
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/user/controller/FreelancerController.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/user/controller/FreelancerController.java b/board/src/main/java/com/ssafy/stackup/domain/user/controller/FreelancerController.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/user/controller/FreelancerController.java	
++++ /dev/null	
+@@ -1,9 +0,0 @@
+-package com.ssafy.stackup.domain.user.controller;
+-
+-
+-import org.springframework.web.bind.annotation.RestController;
+-
+-@RestController
+-public class FreelancerController {
+-
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/project/dto/response/ProjectSignResponseDto.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/project/dto/response/ProjectSignResponseDto.java b/board/src/main/java/com/ssafy/stackup/domain/project/dto/response/ProjectSignResponseDto.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/project/dto/response/ProjectSignResponseDto.java	
++++ /dev/null	
+@@ -1,16 +0,0 @@
+-package com.ssafy.stackup.domain.project.dto.response;
+-
+-
+-import lombok.AllArgsConstructor;
+-import lombok.Builder;
+-import lombok.Getter;
+-import lombok.NoArgsConstructor;
+-
+-@Builder
+-@Getter
+-@AllArgsConstructor
+-@NoArgsConstructor
+-public class ProjectSignResponseDto {
+-    boolean isAllSigned;
+-
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/account/dto/CheckCodeRequest.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/account/dto/CheckCodeRequest.java b/board/src/main/java/com/ssafy/stackup/domain/account/dto/CheckCodeRequest.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/account/dto/CheckCodeRequest.java	
++++ /dev/null	
+@@ -1,8 +0,0 @@
+-package com.ssafy.stackup.domain.account.dto;
+-
+-import lombok.Data;
+-
+-@Data
+-public class CheckCodeRequest {
+-    private String code;
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/chat/controller/ChatController.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/chat/controller/ChatController.java b/board/src/main/java/com/ssafy/stackup/domain/chat/controller/ChatController.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/chat/controller/ChatController.java	
++++ /dev/null	
+@@ -1,64 +0,0 @@
+-package com.ssafy.stackup.domain.chat.controller;
+-
+-
+-import com.ssafy.stackup.common.response.ApiResponse;
+-import com.ssafy.stackup.domain.chat.dto.reqeust.ChatRoomStartRequestDto;
+-import com.ssafy.stackup.domain.chat.dto.response.ChatRoomInfoResponseDto;
+-import com.ssafy.stackup.domain.chat.dto.reqeust.ChatDto;
+-import com.ssafy.stackup.domain.chat.dto.response.ChatResponseDto;
+-import com.ssafy.stackup.domain.chat.service.ChatService;
+-import lombok.RequiredArgsConstructor;
+-import lombok.extern.slf4j.Slf4j;
+-import org.springframework.http.HttpStatus;
+-import org.springframework.http.ResponseEntity;
+-import org.springframework.messaging.handler.annotation.Header;
+-import org.springframework.messaging.handler.annotation.MessageMapping;
+-import org.springframework.messaging.handler.annotation.Payload;
+-import org.springframework.messaging.simp.SimpMessagingTemplate;
+-import org.springframework.web.bind.annotation.*;
+-
+-import java.util.List;
+-
+-@RestController
+-@RequiredArgsConstructor
+-@Slf4j
+-public class ChatController {
+-    private final SimpMessagingTemplate template;
+-    private final ChatService chatService;
+-
+-    @MessageMapping("/message")
+-    public ResponseEntity<ApiResponse<ChatDto>> sendChat(@Payload ChatDto chatDto, @Header(name = "Authorization") String token) {
+-        template.convertAndSend("/sub/chatroom/" + chatDto.getChatroomId(), chatDto);
+-        return ResponseEntity.status(HttpStatus.CREATED)
+-                .body(ApiResponse.success(chatService.saveChat(chatDto,token.substring(7))));
+-    }
+-
+-    @GetMapping("/chat/logs/{chatroomId}")
+-    public ResponseEntity<ApiResponse<List<ChatResponseDto>>> getChatLogs(@PathVariable(name = "chatroomId") Long chatroomId) {
+-        return ResponseEntity.status(HttpStatus.OK)
+-                .body(ApiResponse.success(chatService.chatLogs(chatroomId)));
+-    }
+-
+-    // 채팅시작하기 채팅방이 없으면 만들기
+-    @PostMapping("/chatroom/start")
+-    public ResponseEntity<ApiResponse<ChatRoomInfoResponseDto>> startChatRoom(@RequestBody ChatRoomStartRequestDto chatRoomStartRequestDto ) {
+-        ChatRoomInfoResponseDto chatRoomInfoResponseDto =  chatService.startChatRoom(chatRoomStartRequestDto);
+-        return ResponseEntity.status(HttpStatus.OK)
+-                .body(ApiResponse.success(chatRoomInfoResponseDto));
+-    }
+-
+-    /**
+-     * 내가 참여하는 모든채팅방 가져오기
+-     * @ 작성자   : 이병수
+-     * @ 작성일   : 2024-09-25
+-     * @ 설명     :
+-
+-     * @param userId
+-     * @return
+-     */
+-    @GetMapping("/chatroom/{userId}")
+-    public ResponseEntity<ApiResponse<List<ChatRoomInfoResponseDto>>> getChatRooms(@PathVariable Long userId) {
+-            List<ChatRoomInfoResponseDto> chatRoomInfoResponseDtos=  chatService.getChatRooms(userId);
+-            return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(chatRoomInfoResponseDtos));
+-    }
+-}
+\ No newline at end of file
+Index: board/src/main/java/com/ssafy/stackup/domain/project/service/SignatureService.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/project/service/SignatureService.java b/board/src/main/java/com/ssafy/stackup/domain/project/service/SignatureService.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/project/service/SignatureService.java	
++++ /dev/null	
+@@ -1,61 +0,0 @@
+-package com.ssafy.stackup.domain.project.service;
+-
+-import com.ssafy.stackup.domain.user.entity.User;
+-import com.ssafy.stackup.domain.user.repository.UserRepository;
+-import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.stereotype.Service;
+-
+-import java.security.KeyFactory;
+-import java.security.NoSuchAlgorithmException;
+-import java.security.PublicKey;
+-import java.security.Signature;
+-import java.security.spec.InvalidKeySpecException;
+-import java.security.spec.X509EncodedKeySpec;
+-import java.util.Base64;
+-
+-@Service
+-public class SignatureService {
+-    @Autowired
+-    private UserRepository userRepository;
+-
+-    public boolean verifySignature(String message, String signature, String userAddress){
+-        try {
+-            // 사용자 주소로부터 공개키를 생성
+-            PublicKey publicKey = getPublicKeyFromAddress(userAddress);
+-
+-            // Signature 객체 생성
+-            Signature signer = Signature.getInstance("SHA256withECDSA");
+-            signer.initVerify(publicKey);
+-            signer.update(message.getBytes());
+-
+-            // 서명 검증
+-            return signer.verify(hexStringToByteArray(signature));
+-        } catch (Exception e) {
+-            throw new RuntimeException("Error verifying signature: " + e.getMessage());
+-        }
+-    }
+-
+-    private PublicKey getPublicKeyFromAddress(String userAddress) throws NoSuchAlgorithmException, InvalidKeySpecException {
+-        // 사용자 주소를 기반으로 공개키를 가져오는 로직
+-        User user = userRepository.findByUserAddress(userAddress);
+-        if (user != null && user.getPublicKey() != null) {
+-            // Base64로 인코딩된 공개키를 디코딩하여 PublicKey 객체 생성
+-            byte[] keyBytes = Base64.getDecoder().decode(user.getPublicKey());
+-            X509EncodedKeySpec spec = new X509EncodedKeySpec(keyBytes);
+-            KeyFactory keyFactory = KeyFactory.getInstance("ECDSA");
+-            return keyFactory.generatePublic(spec);
+-        }
+-        return null; // 사용자 없거나 공개키가 없으면 null 반환
+-    }
+-
+-
+-    private byte[] hexStringToByteArray(String s) {
+-        int len = s.length();
+-        byte[] data = new byte[len / 2];
+-        for (int i = 0; i < len; i += 2) {
+-            data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+-                    + Character.digit(s.charAt(i + 1), 16));
+-        }
+-        return data;
+-    }
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/account/dto/EncryptionUtil.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/account/dto/EncryptionUtil.java b/board/src/main/java/com/ssafy/stackup/domain/account/dto/EncryptionUtil.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/account/dto/EncryptionUtil.java	
++++ /dev/null	
+@@ -1,92 +0,0 @@
+-package com.ssafy.stackup.domain.account.dto;
+-
+-import org.springframework.beans.factory.annotation.Value;
+-
+-import javax.crypto.Cipher;
+-import javax.crypto.KeyGenerator;
+-import javax.crypto.SecretKey;
+-import javax.crypto.spec.SecretKeySpec;
+-import java.util.Base64;
+-
+-public class EncryptionUtil {
+-    private static String ALGORITHM = "AES";
+-    private static String TRANSFORMATION = "AES";
+-    private static String SECRET_KEY = "e0wzZrZ6U6aB0e3Ol46ejg==";
+-
+-//    static {
+-//        try{
+-//            SecretKey secretKey = new SecretKeySpec(SECRET_KEY.getBytes(), ALGORITHM);
+-//        }
+-//    }
+-
+-//    @Value("${app.secret.key}")
+-//    private static SecretKeySpec secretKey;
+-
+-//    @Value("${app.secret.key}")
+-//    private void setSecretKey() {
+-//        String key = "e0wzZrZ6U6aB0e3Ol46ejg==";
+-//        if (key == null || key.length() == 0) {
+-//            throw new IllegalArgumentException("Invalid or missing app.secret.key in application.properties");
+-//        }
+-//        byte[] decodedKey = Base64.getDecoder().decode(key);
+-//        secretKey = new SecretKeySpec(decodedKey, ALGORITHM);
+-//    }
+-
+-//    static {
+-//        try {
+-//            // 환경 변수에서 비밀 키를 읽어옴
+-//            String key = "e0wzZrZ6U6aB0e3Ol46ejg==";
+-//            if (key == null) {
+-//                throw new IllegalArgumentException("Invalid or missing SECRET_KEY environment variable");
+-//            }
+-//                    byte[] decodedKey = Base64.getDecoder().decode(key);
+-//        secretKey = new SecretKeySpec(decodedKey, ALGORITHM);
+-////            secretKey = new SecretKeySpec(key.getBytes(), TRANSFORMATION);
+-//        } catch (Exception e) {
+-//            throw new RuntimeException("Failed to initialize encryption utility", e);
+-//        }
+-//    }
+-
+-//    @Value("${app.secret.key}")
+-//    private void setSecretKey(String key) {
+-//        if (key == null || key.length() != 16) {
+-//            throw new IllegalArgumentException("Invalid or missing app.secret.key in application.properties");
+-//        }
+-//        secretKey = new SecretKeySpec(key.getBytes(), TRANSFORMATION);
+-//    }
+-
+-//    static {
+-//        try {
+-//            System.out.println("SecretKey" + secretKey);
+-////            KeyGenerator keyGen = KeyGenerator.getInstance(ALGORITHM);
+-////            keyGen.init(128);
+-////            SecretKey secretKey = keyGen.generateKey();
+-////            byte[] secretKeyBytes = secretKey.getEncoded();
+-////
+-////            // To use this key later, you might want to store it somewhere.
+-////            // Here we'll just print the key to the console.
+-////            System.out.println("Secret Key: " + Base64.getEncoder().encodeToString(secretKeyBytes));
+-////            EncryptionUtil.secretKey = new SecretKeySpec(secretKey.getEncoded(), ALGORITHM);
+-//        } catch (Exception e) {
+-//            throw new RuntimeException("암호화 키 생성 실패",e);
+-//        }
+-//    }
+-
+-    public static String encrypt(String data) throws Exception {
+-        SecretKey secretKey = new SecretKeySpec(SECRET_KEY.getBytes(), ALGORITHM);
+-        Cipher cipher = Cipher.getInstance(TRANSFORMATION);
+-        cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+-        System.out.println(secretKey);
+-        byte[] encrypted = cipher.doFinal(data.getBytes());
+-        return Base64.getEncoder().encodeToString(encrypted);
+-    }
+-
+-    public static String decrypt(String encryptedData) throws Exception {
+-        SecretKey secretKey = new SecretKeySpec(SECRET_KEY.getBytes(), ALGORITHM);
+-        Cipher cipher = Cipher.getInstance(TRANSFORMATION);
+-        cipher.init(Cipher.DECRYPT_MODE, secretKey);
+-        byte[] decoded = Base64.getDecoder().decode(encryptedData);
+-        byte[] decrypted = cipher.doFinal(decoded);
+-        return new String(decrypted);
+-    }
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/chat/dto/reqeust/ChatDto.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/chat/dto/reqeust/ChatDto.java b/board/src/main/java/com/ssafy/stackup/domain/chat/dto/reqeust/ChatDto.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/chat/dto/reqeust/ChatDto.java	
++++ /dev/null	
+@@ -1,13 +0,0 @@
+-package com.ssafy.stackup.domain.chat.dto.reqeust;
+-
+-import lombok.Getter;
+-import lombok.NoArgsConstructor;
+-
+-@Getter
+-@NoArgsConstructor
+-public class ChatDto {
+-    private Long chatroomId;
+-    private String name;
+-    private String registTime;
+-    private String message;
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/project/service/ProjectService.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/project/service/ProjectService.java b/board/src/main/java/com/ssafy/stackup/domain/project/service/ProjectService.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/project/service/ProjectService.java	
++++ /dev/null	
+@@ -1,27 +0,0 @@
+-package com.ssafy.stackup.domain.project.service;
+-
+-import com.ssafy.stackup.common.response.ApiResponse;
+-import com.ssafy.stackup.domain.project.dto.request.SignRequest;
+-import com.ssafy.stackup.domain.project.dto.response.ProjectInfoResponseDto;
+-import com.ssafy.stackup.domain.project.dto.request.ProjectStartRequestDto;
+-import com.ssafy.stackup.domain.project.dto.response.ProjectStepCheckResponseDto;
+-import com.ssafy.stackup.domain.project.entity.ProjectStep;
+-import com.ssafy.stackup.domain.user.entity.User;
+-import org.springframework.http.ResponseEntity;
+-import org.springframework.web.multipart.MultipartFile;
+-
+-import java.util.List;
+-
+-public interface ProjectService {
+-    void registerPreviousProject(MultipartFile certificateFile, String title, Long period);
+-
+-    List<ProjectInfoResponseDto> getAllProjects(User user);
+-
+-    ProjectInfoResponseDto startProject(User user, ProjectStartRequestDto freelancerIdList);
+-
+-    ProjectInfoResponseDto getProjectInfo(Long projectId);
+-
+-    ResponseEntity<ApiResponse<Boolean>> verifySignature(Long projectId, SignRequest signRequest, User user);
+-
+-    ProjectStepCheckResponseDto projectStepCheck(Long projectId, User user);
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/project/service/ProjectServiceImpl.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/project/service/ProjectServiceImpl.java b/board/src/main/java/com/ssafy/stackup/domain/project/service/ProjectServiceImpl.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/project/service/ProjectServiceImpl.java	
++++ /dev/null	
+@@ -1,335 +0,0 @@
+-package com.ssafy.stackup.domain.project.service;
+-
+-
+-import com.ssafy.stackup.common.exception.CustomException;
+-import com.ssafy.stackup.common.response.ApiResponse;
+-import com.ssafy.stackup.common.response.ErrorCode;
+-import com.ssafy.stackup.common.s3.service.S3ImageUpLoadService;
+-import com.ssafy.stackup.common.util.UserUtil;
+-import com.ssafy.stackup.domain.board.entity.Board;
+-import com.ssafy.stackup.domain.board.entity.BoardApplicant;
+-import com.ssafy.stackup.domain.board.entity.BoardFramework;
+-import com.ssafy.stackup.domain.board.entity.BoardLanguage;
+-import com.ssafy.stackup.domain.board.repository.BoardApplicantRepository;
+-import com.ssafy.stackup.domain.board.repository.BoardRepository;
+-import com.ssafy.stackup.domain.project.dto.request.SignRequest;
+-import com.ssafy.stackup.domain.project.dto.response.ProjectInfoResponseDto;
+-import com.ssafy.stackup.domain.project.dto.request.ProjectStartRequestDto;
+-import com.ssafy.stackup.domain.project.dto.response.ProjectStepCheckResponseDto;
+-import com.ssafy.stackup.domain.project.entity.Project;
+-import com.ssafy.stackup.domain.project.entity.ProjectStatus;
+-import com.ssafy.stackup.domain.project.entity.ProjectStep;
+-import com.ssafy.stackup.domain.project.repository.ProjectRepository;
+-import com.ssafy.stackup.domain.user.entity.Freelancer;
+-import com.ssafy.stackup.domain.user.entity.User;
+-import com.ssafy.stackup.domain.user.entity.FreelancerProject;
+-import com.ssafy.stackup.domain.user.repository.FreelancerProjectRepository;
+-import com.ssafy.stackup.domain.user.repository.FreelancerRepository;
+-import com.ssafy.stackup.domain.user.service.UserServiceImpl;
+-import lombok.RequiredArgsConstructor;
+-import lombok.extern.slf4j.Slf4j;
+-import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.http.HttpStatus;
+-import org.springframework.http.ResponseEntity;
+-import org.springframework.stereotype.Service;
+-import org.springframework.web.multipart.MultipartFile;
+-
+-import java.io.IOException;
+-import java.util.ArrayList;
+-import java.util.List;
+-import java.util.Set;
+-
+-
+-@Service
+-@RequiredArgsConstructor
+-@Slf4j
+-public class ProjectServiceImpl implements ProjectService {
+-
+-    private final ProjectRepository projectRepository;
+-    private final S3ImageUpLoadService s3ImageUpLoadService;
+-    private final FreelancerRepository freelancerRepository;
+-
+-    private final FreelancerProjectRepository freelancerProjectRepository;
+-    private final SignatureService signatureService;
+-    private final UserServiceImpl userService;
+-
+-    private final BoardRepository boardRepository;
+-    private final BoardApplicantRepository boardApplicantRepository;
+-
+-    @Override
+-    public void registerPreviousProject(MultipartFile certificateFile, String title, Long period) {
+-
+-
+-        try {
+-            String certificateUrl = s3ImageUpLoadService.uploadImage(certificateFile);
+-            Project project = Project.builder()
+-                    .title(title)
+-                    .period(title)
+-                    .certificateUrl(certificateUrl)
+-                    .build();
+-
+-            projectRepository.save(project);
+-
+-        }
+-        catch (IOException e) {
+-            throw new CustomException(ErrorCode.IOEXCEPTION);
+-        }
+-
+-    }
+-
+-    /**
+-     *
+-     * @ 작성자   : 이병수
+-     * @ 작성일   : 2024-09-22
+-     * @ 설명     :프로젝트 모집글에서 진행하기 누를 시 프로젝트 등록하기
+-     * @return
+-     */
+-    @Override
+-    public ProjectInfoResponseDto startProject(User user, ProjectStartRequestDto request) {
+-
+-        Board board = boardRepository.findById(request.getBoardId())
+-                .orElseThrow(()-> new CustomException(ErrorCode.BOARD_NOT_FOUND));
+-
+-        //프로젝트 등록
+-        Project project = Project.builder()
+-                .client(board.getClient())
+-                .step(ProjectStep.PLANNING)
+-                .board(board)
+-                .title(board.getTitle())
+-                .period(board.getPeriod())
+-                .status(ProjectStatus.PENDING)
+-                .build();
+-
+-        project= projectRepository.save(project);
+-
+-
+-        // 지원자의 상태를 합격으로 변경
+-        for (Long freelancerId : request.getFreelancerIdList()) {
+-            BoardApplicant applicant = boardApplicantRepository.findByFreelancer_IdAndBoard_BoardId(freelancerId, request.getBoardId());
+-            applicant.updateIsPassed();
+-            boardApplicantRepository.save(applicant);
+-
+-            FreelancerProject freelancerProject = FreelancerProject.builder()
+-                    .freelancerSigned(false)
+-                    .project(project)
+-                    .freelancer(applicant.getFreelancer())
+-                    .build();
+-
+-
+-            freelancerProjectRepository.save(freelancerProject);
+-        }
+-
+-        ProjectInfoResponseDto response = ProjectInfoResponseDto.builder()
+-                .projectId(project.getId())
+-                .title(board.getTitle())
+-                .period(board.getPeriod())
+-                .classification(board.getClassification())
+-                .status(project.getStatus())
+-                .build();
+-
+-
+-        return response;
+-    }
+-
+-    @Override
+-    public ProjectInfoResponseDto getProjectInfo(Long projectId) {
+-        Project project = projectRepository.findById(projectId)
+-                .orElseThrow(()-> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
+-
+-        Board board = project.getBoard();
+-        List<BoardFramework> boardFrameworks = board.getBoardFrameworks();
+-        List<BoardLanguage> boardLanguages = board.getBoardLanguages();
+-
+-        List<String> boardFrameworkList = UserUtil.getBoardFrameworks(boardFrameworks);
+-        List<String> boardLanguageList = UserUtil.getBoardLanguages(boardLanguages);
+-
+-
+-        ProjectInfoResponseDto projectInfoResponseDto = ProjectInfoResponseDto.builder()
+-                .projectId(project.getId())
+-                .title(project.getTitle())
+-                .status(project.getStatus())
+-                .step(project.getStep())
+-                .classification(board.getClassification())
+-                .languages(boardLanguageList)
+-                .frameworks(boardFrameworkList)
+-                .level(board.getLevel())
+-                .period(board.getPeriod())
+-                .deadline(board.getDeadline())
+-                .deposit(board.getDeposit())
+-                .recruits(board.getRecruits())
+-                .startDate(board.getStartDate())
+-                .isCharged(board.getIsCharged())
+-                .worktype(board.getWorktype())
+-                .applicants(board.getApplicants())
+-                .upload(board.getUpload())
+-                .freelancerStepConfirmed(project.isFreelancerStepConfirmed())
+-                .clientStepConfirmed(project.isClientStepConfirmed())
+-                .build();
+-
+-        return projectInfoResponseDto;
+-    }
+-
+-
+-
+-    @Override
+-    public ResponseEntity<ApiResponse<Boolean>> verifySignature(Long projectId, SignRequest signRequest, User user) {
+-        Project project = projectRepository.findById(projectId).orElse(null);
+-        Long userId = user.getId();
+-        try{
+-            String loggedInUserAddress = userService.getUserAddress(userId);
+-
+-            // 요청에서 서명한 지갑 주소와 로그인한 사용자의 지갑 주소 비교
+-            if (!user.getUserAddress().equalsIgnoreCase(loggedInUserAddress)) {
+-                return ResponseEntity.badRequest().body(ApiResponse.error(HttpStatus.BAD_REQUEST,false,"지갑 주소가 일치하지 않습니다."));
+-            }
+-            // 서명 검증
+-            boolean isValid = signatureService.verifySignature(
+-                    signRequest.getMessage(),
+-                    signRequest.getSignature(),
+-                    user.getUserAddress()
+-            );
+-            if (isValid) {
+-                // 프로젝트 ID를 가져와서 해당 프로젝트의 서명 상태를 업데이트
+-                boolean isAllSigned = updateProjectSignatureStatus(projectId, user);
+-
+-                //모두 서명이 완료 되었으면 true 보내주기
+-                if(isAllSigned) return ResponseEntity.ok(ApiResponse.success(true,"서명이 유효하고 모든 서명이 완료 되었습니다."));
+-                return ResponseEntity.ok(ApiResponse.success(false,"서명이 유효합니다."));
+-            } else {
+-                return ResponseEntity.badRequest().body(ApiResponse.error(HttpStatus.BAD_REQUEST,false,"유효하지 않은 서명입니다."));
+-            }
+-        } catch (Exception e) {
+-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+-                    .body(ApiResponse.error(HttpStatus.INTERNAL_SERVER_ERROR,"Error verifying signature: " + e.getMessage()));
+-
+-        }
+-    }
+-
+-    /**
+-     * 프로젝트 단계 확인
+-     * @ 작성자   : 이병수
+-     * @ 작성일   : 2024-09-24
+-     * @ 설명  :
+-     * 1. 프리랜서와 클라이언트가 프로젝트의 진행 사항을 확인
+-     * 2. 유저가 클라이언트 일 경우 프로젝트의 단계 다음으로 변경
+-     * 3. 프로젝트의 상태에 따라 상호평가를 진행
+-     * @param projectId
+-     * @param user
+-     */
+-    @Override
+-    public ProjectStepCheckResponseDto projectStepCheck(Long projectId, User user) {
+-
+-        Project project = projectRepository.findById(projectId)
+-                .orElseThrow(()-> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
+-
+-        boolean isUserAllStepChecked = isUserAllStepChecked(projectId,user,project);
+-        return changeProjectStep(project.getStep(), isUserAllStepChecked, project);
+-    }
+-
+-
+-    /**
+-     *
+-     * @ 작성자   : 이병수
+-     * @ 작성일   : 2024-09-24
+-     * @ 설명     : 서명 여부 업데이트 및 프로젝트 상태 변경
+-
+-     * @param projectId
+-     * @param user
+-     * @return true : 모두 서명완료 , false 모두 서명 x
+-     */
+-    private boolean updateProjectSignatureStatus(Long projectId, User user) {
+-        // 프로젝트 리포지토리 가져오기 (주입 필요)
+-        FreelancerProject project = freelancerProjectRepository.findById(projectId)
+-                .orElseThrow(() -> new RuntimeException("프로젝트를 찾을 수 없습니다."));
+-        if(user.getRoles().contains("ROLE_FREELANCER")) {
+-            project.setFreelancerSigned(true);
+-
+-        }else{
+-            project.setClientSigned(true);
+-        }
+-
+-
+-        // 변경 사항 저장
+-        freelancerProjectRepository.save(project);
+-
+-        // 모든 프로젝트_프리랜서 각각 두명의 모두 서명이 완료되면 project pending -> progress로 변경
+-        List<FreelancerProject> allFreelancerProjects = freelancerProjectRepository.findAllByProjectId(projectId);
+-
+-        boolean isAllSigned = true;
+-        for( FreelancerProject freelancerProject : allFreelancerProjects) {
+-            if(!(freelancerProject.isFreelancerSigned() && freelancerProject.isClientSigned())) {
+-                isAllSigned = false;
+-                break;
+-            }
+-
+-        }
+-
+-        //모두 전자서명이 완료될 경우에 프로젝트 상태 업데이트
+-        if(isAllSigned){
+-            Project currentProject = projectRepository.findById(projectId)
+-                    .orElseThrow(() -> new CustomException(ErrorCode.PROJECT_NOT_FOUND));
+-
+-            currentProject.updateStatus(ProjectStatus.PROGRESS); // 상태 변경
+-            return true;
+-        }
+-        return false;
+-    }
+-
+-    /**
+-     *
+-     * @ 작성자   : 이병수
+-     * @ 작성일   : 2024-09-21
+-     * @ 설명     : 나의 페이지에서 사용할 프로젝트들 가져오기
+-     * @param user
+-     * @return
+-     */
+-    @Override
+-    public List<ProjectInfoResponseDto> getAllProjects(User user) {
+-
+-        Freelancer freelancer = freelancerRepository.findById(user.getId())
+-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+-
+-        Set<FreelancerProject> freelancerProjects = freelancer.getFreelancerProjects();
+-        List<Project> projects = UserUtil.getProjects(freelancerProjects);
+-
+-        List<ProjectInfoResponseDto> projectInfoResponseDtos = new ArrayList<>();
+-
+-        for(Project project : projects) {
+-            ProjectInfoResponseDto projectInfoResponseDto= ProjectInfoResponseDto.builder()
+-                    .projectId(project.getId())
+-                    .status(project.getStatus())
+-                    .title(project.getTitle())
+-                    .startDate(project.getBoard().getStartDate())
+-                    .period(project.getBoard().getPeriod())
+-                    .classification(project.getBoard().getClassification())
+-                    .build();
+-
+-            projectInfoResponseDtos.add(projectInfoResponseDto);
+-            //sdfdsfsdfsfdsfdsdsasdadsadsaddsafdsa
+-        }
+-        return projectInfoResponseDtos;
+-    }
+-
+-    private ProjectStepCheckResponseDto changeProjectStep(ProjectStep currentStep, boolean isUserAllStepChecked, Project project) {
+-        if(isUserAllStepChecked){
+-            currentStep = project.nextProjectStep();
+-            project.resetUserStepConfirmed();
+-        }
+-        projectRepository.save(project);
+-
+-        return ProjectStepCheckResponseDto.builder()
+-                .isChangeProjectStep(isUserAllStepChecked)
+-                .currentStep(currentStep)
+-                .build();
+-    }
+-
+-
+-    private boolean isUserAllStepChecked(Long projectId, User user, Project project) {
+-        if(user.isClient()){
+-            project.updateIsClientStepConfirmed();
+-        }else{
+-            project.updateIsFreelancerConfirmed();
+-        }
+-        return project.checkUsersConfirm();
+-    }
+-}
+Index: account/src/main/java/com/ssafy/stackup/domain/user/service/UserService.java
+===================================================================
+diff --git a/account/src/main/java/com/ssafy/stackup/domain/user/service/UserService.java b/account/src/main/java/com/ssafy/stackup/domain/user/service/UserService.java
+deleted file mode 100644
+--- a/account/src/main/java/com/ssafy/stackup/domain/user/service/UserService.java	
++++ /dev/null	
+@@ -1,34 +0,0 @@
+-package com.ssafy.stackup.domain.user.service;
+-
+-
+-import com.ssafy.stackup.domain.user.dto.request.ClientLoginRequestDto;
+-import com.ssafy.stackup.domain.user.dto.request.ClientSignUpRequestDto;
+-import com.ssafy.stackup.domain.user.dto.request.FreelancerInfoRequestDto;
+-import com.ssafy.stackup.domain.user.dto.response.*;
+-import com.ssafy.stackup.domain.user.entity.User;
+-import jakarta.servlet.http.HttpServletRequest;
+-import jakarta.servlet.http.HttpServletResponse;
+-import jakarta.validation.Valid;
+-
+-public interface UserService {
+-
+-    FreelancerRegisterResponseDto registerInfo(FreelancerInfoRequestDto freelancerInfoRequestDto, User user);
+-
+-    ClientResponseDto signUp(@Valid final ClientSignUpRequestDto requestDto);
+-
+-    LoginResponseDto login(@Valid final ClientLoginRequestDto loginRequestDto, HttpServletResponse response);
+-
+-    String logout(final HttpServletRequest request);
+-
+-    void reissue(final HttpServletRequest request, final HttpServletResponse response);
+-
+-    Boolean emailCheck(String email);
+-
+-    void report(Long userId);
+-
+-    Double grade(User user);
+-
+-    UserInfoResponseDto getInfo(User user);
+-
+-    FreelancerLoginResponseDto token(Long user);
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/payment/controller/PaymentController.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/payment/controller/PaymentController.java b/board/src/main/java/com/ssafy/stackup/domain/payment/controller/PaymentController.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/payment/controller/PaymentController.java	
++++ /dev/null	
+@@ -1,28 +0,0 @@
+-//package com.ssafy.stackup.domain.payment.controller;
+-//
+-//import com.ssafy.stackup.domain.payment.service.PaymentService;
+-//import lombok.RequiredArgsConstructor;
+-//import org.springframework.http.HttpStatus;
+-//import org.springframework.http.ResponseEntity;
+-//import org.springframework.web.bind.annotation.PostMapping;
+-//import org.springframework.web.bind.annotation.RequestMapping;
+-//import org.springframework.web.bind.annotation.RequestParam;
+-//import org.springframework.web.bind.annotation.RestController;
+-//
+-//@RestController
+-//@RequestMapping("/payments")
+-//@RequiredArgsConstructor
+-//public class PaymentController {
+-//
+-//    private final PaymentService paymentService;
+-//
+-//    @PostMapping("/complete")
+-//    public ResponseEntity<String> completePayment(@RequestParam String impUid, @RequestParam Long boardId) {
+-//        try {
+-//            paymentService.handlePaymentSuccess(impUid, boardId);
+-//            return ResponseEntity.ok("Payment success and Board is updated");
+-//        } catch (Exception e) {
+-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Payment failed");
+-//        }
+-//    }
+-//}
+Index: board/src/main/java/com/ssafy/stackup/domain/account/dto/AccountResponse.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/account/dto/AccountResponse.java b/board/src/main/java/com/ssafy/stackup/domain/account/dto/AccountResponse.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/account/dto/AccountResponse.java	
++++ /dev/null	
+@@ -1,14 +0,0 @@
+-package com.ssafy.stackup.domain.account.dto;
+-
+-import lombok.Data;
+-
+-@Data
+-public class AccountResponse {
+-    private Long accountId;
+-    private String accountName;
+-    private String bankCode;
+-    private String accountNum;
+-    private String createdDate;
+-    private String expiryDate;
+-    private Long balnace;
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/account/service/AccountService.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/account/service/AccountService.java b/board/src/main/java/com/ssafy/stackup/domain/account/service/AccountService.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/account/service/AccountService.java	
++++ /dev/null	
+@@ -1,271 +0,0 @@
+-package com.ssafy.stackup.domain.account.service;
+-
+-import com.ssafy.stackup.domain.account.dto.EncryptionUtil;
+-import com.ssafy.stackup.domain.account.entity.Account;
+-import com.ssafy.stackup.domain.account.repository.AccountRepository;
+-import com.ssafy.stackup.domain.account.util.SecondUtil;
+-import com.ssafy.stackup.domain.user.entity.User;
+-import com.ssafy.stackup.domain.user.repository.UserRepository;
+-import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.http.*;
+-import org.springframework.stereotype.Service;
+-import org.springframework.web.client.RestTemplate;
+-
+-import java.security.SecureRandom;
+-import java.time.LocalDate;
+-import java.time.LocalTime;
+-import java.time.format.DateTimeFormatter;
+-import java.util.Collections;
+-import java.util.HashMap;
+-import java.util.List;
+-import java.util.Map;
+-
+-@Service
+-public class AccountService {
+-
+-    @Autowired
+-    private AccountRepository accountRepository;
+-
+-    private final RestTemplate restTemplate = new RestTemplate();
+-
+-    // 난수 생성기 설정
+-    private static final SecureRandom random = new SecureRandom();
+-    @Autowired
+-    private UserRepository userRepository;
+-
+-    public void fetchAndStoreAccountData(Long userId) {
+-        String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit/inquireDemandDepositAccountList";
+-
+-        User user = userRepository.findById(userId).orElse(null);
+-
+-        String accountKey = user.getAccountKey();
+-        String email = user.getEmail();
+-        System.out.println("//////////////////////email :" +email);
+-
+-        if (accountKey == null) {
+-            System.out.println("accountKey 없음");
+-            // account_key가 없으면 새로운 key를 발급받아 저장
+-            accountKey = searchAccountKey(email);
+-            user.setAccountKey(accountKey);
+-            userRepository.save(user);
+-        }
+-
+-        // 현재 날짜와 시간 가져오기
+-        String transmissionDate = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
+-        String transmissionTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HHmmss"));
+-
+-        // 난수 생성
+-        String institutionTransactionUniqueNo = generateRandomNumberString(20);
+-
+-        // 요청 헤더 생성
+-        HttpHeaders headers = new HttpHeaders();
+-        headers.setContentType(MediaType.APPLICATION_JSON);
+-        headers.set("apiName", "inquireDemandDepositAccountList");
+-        headers.set("transmissionDate", transmissionDate);
+-        headers.set("transmissionTime", transmissionTime);
+-        headers.set("institutionCode", "00100");
+-        headers.set("fintechAppNo", "001");
+-        headers.set("apiServiceCode", "inquireDemandDepositAccountList");
+-        headers.set("institutionTransactionUniqueNo", institutionTransactionUniqueNo);
+-        headers.set("apiKey", "ef9d38e608d64bc1817e0ab47aa757ba");
+-        headers.set("userKey", accountKey);
+-
+-        // JSON 본문 생성
+-        Map<String, Object> requestBody = new HashMap<>();
+-        requestBody.put("Header", Map.of(
+-                "apiName", "inquireDemandDepositAccountList",
+-                "transmissionDate", transmissionDate,
+-                "transmissionTime", transmissionTime,
+-                "institutionCode", "00100",
+-                "fintechAppNo", "001",
+-                "apiServiceCode", "inquireDemandDepositAccountList",
+-                "institutionTransactionUniqueNo", institutionTransactionUniqueNo,
+-                "apiKey", "ef9d38e608d64bc1817e0ab47aa757ba",
+-                "userKey", accountKey
+-        ));
+-        requestBody.put("REC", Collections.emptyList()); // 필요한 경우 적절한 REC 필드 값을 추가
+-
+-        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
+-
+-        // POST 요청 보내기
+-        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Map.class);
+-
+-        // 응답 데이터에서 REC 부분 추출
+-        List<Map<String, String>> recList = (List<Map<String, String>>) response.getBody().get("REC");
+-
+-        for (Map<String, String> rec : recList) {
+-            try {
+-                String encryptedAccountNum = EncryptionUtil.encrypt(rec.get("accountNo"));
+-                if (encryptedAccountNum == null) {
+-                    continue; // 암호화 실패 시 현재 계좌는 무시
+-                }
+-
+-                Account existingAccount = accountRepository.findByAccountNum(encryptedAccountNum);
+-                if (existingAccount != null) {
+-                    // 중복 계좌가 있을 경우 정보 업데이트
+-                    existingAccount.setBankName(rec.get("bankName"));
+-                    existingAccount.setAccountName(rec.get("accountName"));
+-                    existingAccount.setBankCode(rec.get("bankCode"));
+-                    existingAccount.setCreatedDate(rec.get("accountCreatedDate"));
+-                    existingAccount.setExpiryDate(rec.get("accountExpiryDate"));
+-
+-                    // accountBalance를 String에서 long으로 변환하여 저장
+-                    try {
+-                        long balance = Long.parseLong(rec.get("accountBalance"));
+-                        existingAccount.setBalance(balance);
+-                    } catch (NumberFormatException e) {
+-                        e.printStackTrace();
+-                        // 로그를 남기거나 적절한 예외 처리를 할 수 있습니다.
+-                        existingAccount.setBalance(0L); // 변환 실패 시 기본값 설정
+-                    }
+-
+-                    existingAccount.setUser(user);
+-                    accountRepository.save(existingAccount);
+-                } else {
+-                    // 중복 계좌가 없을 경우 새 계좌 저장
+-                    Account newAccount = new Account();
+-                    newAccount.setBankName(rec.get("bankName"));
+-                    newAccount.setAccountName(rec.get("accountName"));
+-                    newAccount.setBankCode(rec.get("bankCode"));
+-                    newAccount.setCreatedDate(rec.get("accountCreatedDate"));
+-                    newAccount.setExpiryDate(rec.get("accountExpiryDate"));
+-                    newAccount.setAccountNum(encryptedAccountNum);
+-
+-                    // accountBalance를 String에서 long으로 변환하여 저장
+-                    try {
+-                        long balance = Long.parseLong(rec.get("accountBalance"));
+-                        newAccount.setBalance(balance);
+-                    } catch (NumberFormatException e) {
+-                        e.printStackTrace();
+-                        // 로그를 남기거나 적절한 예외 처리를 할 수 있습니다.
+-                        newAccount.setBalance(0L); // 변환 실패 시 기본값 설정
+-                    }
+-
+-                    newAccount.setUser(user);
+-                    accountRepository.save(newAccount);
+-                }
+-            } catch (Exception e) {
+-                e.printStackTrace();
+-                // 계좌 정보를 저장하는 도중 발생한 예외 처리
+-            }
+-
+-        }
+-    }
+-
+-    public String searchAccountKey(String email) {
+-        String url = "https://finopenapi.ssafy.io/ssafy/api/v1/member/search";
+-        // 요청 헤더 설정
+-        HttpHeaders headers = new HttpHeaders();
+-        headers.setContentType(MediaType.APPLICATION_JSON);
+-
+-        // JSON 본문 생성
+-        Map<String, String> requestBody = new HashMap<>();
+-
+-        requestBody.put("apiKey", "ef9d38e608d64bc1817e0ab47aa757ba");
+-        requestBody.put("userId", email);
+-
+-        // 요청 엔터티 생성 (헤더 + 바디)
+-        HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
+-
+-        // POST 요청 보내기 (응답을 Map으로 받음)
+-        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Map.class);
+-
+-        // 응답 바디에서 userKey 추출
+-        Map<String, Object> responseMap = response.getBody();
+-        if (responseMap != null && responseMap.containsKey("userKey")) {
+-            return responseMap.get("userKey").toString(); // userKey만 반환
+-        }
+-
+-        return null; // userKey가 없을 경우
+-    }
+-
+-    public String generateAccountKey(String email) {
+-        String url = "https://finopenapi.ssafy.io/ssafy/api/v1/member/";
+-        // 요청 헤더 설정
+-        HttpHeaders headers = new HttpHeaders();
+-        headers.setContentType(MediaType.APPLICATION_JSON);
+-
+-        // JSON 본문 생성
+-        Map<String, String> requestBody = new HashMap<>();
+-
+-        requestBody.put("apiKey", "ef9d38e608d64bc1817e0ab47aa757ba");
+-        requestBody.put("userId", email);
+-
+-        // 요청 엔터티 생성 (헤더 + 바디)
+-        HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
+-
+-        // POST 요청 보내기 (응답을 Map으로 받음)
+-        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Map.class);
+-
+-        // 응답 바디에서 userKey 추출
+-        Map<String, Object> responseMap = response.getBody();
+-        if (responseMap != null && responseMap.containsKey("userKey")) {
+-            return responseMap.get("userKey").toString(); // userKey만 반환
+-        }
+-
+-        return null; // userKey가 없을 경우
+-    }
+-
+-    public List<Account> getAccountsByUserId(Long userId) {
+-        User user = userRepository.findById(userId).orElse(null);
+-        if (user == null) {
+-            return null;
+-        }
+-        return accountRepository.findByUserId(userId);
+-    }
+-
+-
+-    public Account getAccount(Long id) {
+-        return accountRepository.findById(id).orElse(null);
+-    }
+-
+-    public String decryptAccountNum(Long id) {
+-        Account account = getAccount(id);
+-        if (account != null) {
+-            try {
+-                return EncryptionUtil.decrypt(new String(account.getAccountNum()));
+-            } catch (Exception e) {
+-                e.printStackTrace();
+-                return null;
+-            }
+-        }
+-        return null;
+-    }
+-
+-    public String generateRandomNumberString(int length) {
+-        // 생성할 난수 문자열의 길이 설정
+-        if (length <= 0) {
+-            throw new IllegalArgumentException("Length must be greater than 0");
+-        }
+-
+-        // 난수 문자열 생성
+-        StringBuilder sb = new StringBuilder(length);
+-        for (int i = 0; i < length; i++) {
+-            sb.append(random.nextInt(10)); // 0~9 사이의 숫자를 추가
+-        }
+-
+-        return sb.toString();
+-    }
+-
+-    // 2차 비밀번호 저장
+-    public void setSecondPassword(Long userId, String secondPassword) {
+-        User user = userRepository.findById(userId).orElse(null);
+-        if (user != null) {
+-            String encryptedPassword = SecondUtil.encrypt(secondPassword);
+-            user.setSecondPassword(encryptedPassword);
+-            userRepository.save(user);
+-        } else {
+-            System.out.println("사용자를 찾을 수 없습니다.");
+-        }
+-    }
+-
+-    // 2차 비밀번호 확인
+-    public boolean checkSecondPassword(Long userId, String rawPassword) {
+-        User user = userRepository.findById(userId).orElse(null);
+-        if (user != null) {
+-            String encodedPassword = user.getSecondPassword();
+-            return SecondUtil.matches(rawPassword, encodedPassword);
+-        }
+-        return false; // 사용자를 찾을 수 없거나 비밀번호 불일치 시 false 반환
+-    }
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/chat/service/ChatService.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/chat/service/ChatService.java b/board/src/main/java/com/ssafy/stackup/domain/chat/service/ChatService.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/chat/service/ChatService.java	
++++ /dev/null	
+@@ -1,18 +0,0 @@
+-package com.ssafy.stackup.domain.chat.service;
+-
+-
+-import com.ssafy.stackup.domain.chat.dto.reqeust.ChatDto;
+-import com.ssafy.stackup.domain.chat.dto.reqeust.ChatRoomStartRequestDto;
+-import com.ssafy.stackup.domain.chat.dto.response.ChatResponseDto;
+-import com.ssafy.stackup.domain.chat.dto.response.ChatRoomInfoResponseDto;
+-
+-import java.util.List;
+-
+-public interface ChatService {
+-    ChatDto saveChat(final ChatDto chatDto, final String token);
+-    List<ChatResponseDto> chatLogs(final Long ChannelId);
+-
+-    ChatRoomInfoResponseDto startChatRoom(ChatRoomStartRequestDto chatRoomStartRequestDto);
+-
+-    List<ChatRoomInfoResponseDto> getChatRooms(Long userId);
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/account/service/TransactionsService.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/account/service/TransactionsService.java b/board/src/main/java/com/ssafy/stackup/domain/account/service/TransactionsService.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/account/service/TransactionsService.java	
++++ /dev/null	
+@@ -1,149 +0,0 @@
+-package com.ssafy.stackup.domain.account.service;
+-
+-import com.ssafy.stackup.domain.account.dto.EncryptionUtil;
+-import com.ssafy.stackup.domain.account.entity.Account;
+-import com.ssafy.stackup.domain.account.repository.AccountRepository;
+-import com.ssafy.stackup.domain.user.entity.User;
+-import com.ssafy.stackup.domain.user.repository.UserRepository;
+-import org.springframework.beans.factory.annotation.Autowired;
+-import org.springframework.http.*;
+-import org.springframework.stereotype.Service;
+-import org.springframework.web.client.RestTemplate;
+-
+-import java.security.SecureRandom;
+-import java.time.LocalDate;
+-import java.time.LocalTime;
+-import java.time.format.DateTimeFormatter;
+-import java.util.Collections;
+-import java.util.HashMap;
+-import java.util.List;
+-import java.util.Map;
+-
+-@Service
+-public class TransactionsService {
+-    @Autowired
+-    private AccountRepository accountRepository;
+-
+-    private final RestTemplate restTemplate = new RestTemplate();
+-
+-    // 난수 생성기 설정
+-    private static final SecureRandom random = new SecureRandom();
+-
+-    @Autowired
+-    private UserRepository userRepository;
+-
+-    @Autowired
+-    private AccountService accountService;
+-
+-    public List<Map<String, String>> fetchTransactions (Long accountId, String accountNo, Long userId) {
+-        String url = "https://finopenapi.ssafy.io/ssafy/api/v1/edu/demandDeposit/inquireTransactionHistoryList";
+-
+-        User user = userRepository.findById(userId).orElse(null);
+-
+-        String accountKey = user.getAccountKey();
+-        String email = user.getEmail();
+-
+-        if (accountKey == null) {
+-            System.out.println("accountKey 없음");
+-            // account_key가 없으면 새로운 key를 발급받아 저장
+-            accountKey = accountService.searchAccountKey(email);
+-            user.setAccountKey(accountKey);
+-            userRepository.save(user);
+-        }
+-
+-        // 현재 날짜와 시간 가져오기
+-        String transmissionDate = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE);
+-        String transmissionTime = LocalTime.now().format(DateTimeFormatter.ofPattern("HHmmss"));
+-
+-        // 난수 생성
+-        String institutionTransactionUniqueNo = generateRandomNumberString(20);
+-
+-        Map<String, String> dates = accountRepository.findDatesByAccountId(accountId);
+-        String startDate = dates.get("startDate");
+-        String endDate = dates.get("endDate");
+-//        String accountNo = dates.get("accountNo");
+-
+-//        System.out.println(startDate);
+-
+-        // 요청 헤더 생성
+-        HttpHeaders headers = new HttpHeaders();
+-        headers.setContentType(MediaType.APPLICATION_JSON);
+-        headers.set("apiName", "inquireTransactionHistoryList");
+-        headers.set("transmissionDate", transmissionDate);
+-        headers.set("transmissionTime", transmissionTime);
+-        headers.set("institutionCode", "00100");
+-        headers.set("fintechAppNo", "001");
+-        headers.set("apiServiceCode", "inquireTransactionHistoryList");
+-        headers.set("institutionTransactionUniqueNo", institutionTransactionUniqueNo);
+-        headers.set("apiKey", "ef9d38e608d64bc1817e0ab47aa757ba");
+-        headers.set("userKey", accountKey);
+-
+-        // JSON 본문 생성
+-        Map<String, Object> requestBody = new HashMap<>();
+-        requestBody.put("Header", Map.of(
+-                "apiName", "inquireTransactionHistoryList",
+-                "transmissionDate", transmissionDate,
+-                "transmissionTime", transmissionTime,
+-                "institutionCode", "00100",
+-                "fintechAppNo", "001",
+-                "apiServiceCode", "inquireTransactionHistoryList",
+-                "institutionTransactionUniqueNo", institutionTransactionUniqueNo,
+-                "apiKey", "ef9d38e608d64bc1817e0ab47aa757ba",
+-                "userKey", accountKey
+-        ));
+-        requestBody.put("accountNo", accountNo); // 실제 계좌번호를 사용
+-        requestBody.put("startDate", startDate);
+-        requestBody.put("endDate", endDate);
+-        requestBody.put("transactionType", "A"); // 필요에 따라 설정
+-        requestBody.put("orderByType", "DESC"); // 필요에 따라 설정
+-//        requestBody.put("REC", Collections.emptyList()); // 필요한 경우 적절한 REC 필드 값을 추가
+-
+-        HttpEntity<Map<String, Object>> requestEntity = new HttpEntity<>(requestBody, headers);
+-
+-        // POST 요청 보내기
+-        ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Map.class);
+-
+-        // 응답 데이터에서 REC 부분 추출
+-        Map<String, Object> responseBody = response.getBody();
+-        if (responseBody == null) {
+-            throw new RuntimeException("Response body is null");
+-        }
+-
+-        Object recObject = responseBody.get("REC");
+-        if (!(recObject instanceof Map)) {
+-            throw new RuntimeException("Expected REC to be a Map, but found: " + recObject.getClass().getSimpleName());
+-        }
+-
+-        Map<String, Object> recMap = (Map<String, Object>) recObject;
+-        Object listObject = recMap.get("list");
+-        if (!(listObject instanceof List)) {
+-            throw new RuntimeException("Expected REC list to be a List, but found: " + listObject.getClass().getSimpleName());
+-        }
+-
+-        // List<Map<String, String>>로 캐스팅
+-        List<Map<String, String>> recList = (List<Map<String, String>>) listObject;
+-
+-        return recList;
+-
+-        // 응답 데이터에서 REC 부분 추출
+-//        List<Map<String, String>> recList = (List<Map<String, String>>) response.getBody().get("REC");
+-//
+-//        return recList;
+-    }
+-
+-
+-    private String generateRandomNumberString(int length) {
+-        // 생성할 난수 문자열의 길이 설정
+-        if (length <= 0) {
+-            throw new IllegalArgumentException("Length must be greater than 0");
+-        }
+-
+-        // 난수 문자열 생성
+-        StringBuilder sb = new StringBuilder(length);
+-        for (int i = 0; i < length; i++) {
+-            sb.append(random.nextInt(10)); // 0~9 사이의 숫자를 추가
+-        }
+-
+-        return sb.toString();
+-    }
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/project/controller/ProjectController.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/project/controller/ProjectController.java b/board/src/main/java/com/ssafy/stackup/domain/project/controller/ProjectController.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/project/controller/ProjectController.java	
++++ /dev/null	
+@@ -1,96 +0,0 @@
+-package com.ssafy.stackup.domain.project.controller;
+-
+-import com.ssafy.stackup.common.response.ApiResponse;
+-import com.ssafy.stackup.domain.project.dto.response.ProjectInfoResponseDto;
+-import com.ssafy.stackup.domain.project.dto.request.ProjectStartRequestDto;
+-import com.ssafy.stackup.domain.project.dto.request.SignRequest;
+-import com.ssafy.stackup.domain.project.dto.response.ProjectStepCheckResponseDto;
+-import com.ssafy.stackup.domain.project.repository.ProjectRepository;
+-import com.ssafy.stackup.domain.project.service.ProjectService;
+-import com.ssafy.stackup.domain.project.service.SignatureService;
+-import com.ssafy.stackup.domain.user.entity.*;
+-import com.ssafy.stackup.domain.user.service.UserServiceImpl;
+-import lombok.RequiredArgsConstructor;
+-import org.springframework.http.HttpStatus;
+-import org.springframework.http.ResponseEntity;
+-import org.springframework.web.bind.annotation.*;
+-import org.springframework.web.multipart.MultipartFile;
+-
+-import java.util.List;
+-
+-@RestController
+-@RequestMapping("/project")
+-@RequiredArgsConstructor
+-public class ProjectController {
+-
+-    private final ProjectService projectService;
+-    private final SignatureService signatureService;
+-    private final UserServiceImpl userService;
+-    private final ProjectRepository projectRepository;
+-    //등록
+-    @PostMapping("/previous-project")
+-    public ResponseEntity<ApiResponse<String>> registerPreviousProject(            @RequestParam(value = "certificateFile") MultipartFile certificateFile,
+-                                                                                   @RequestParam(value = "title") String title,
+-                                                                                   @RequestParam(value = "period") Long period) {
+-
+-        projectService.registerPreviousProject(certificateFile,title,period);
+-        return  ResponseEntity.status(HttpStatus.OK)
+-                .body(ApiResponse.success("프로젝트 등록 성공"));
+-    }
+-
+-
+-    @GetMapping("/info")
+-    public ResponseEntity<ApiResponse<List<ProjectInfoResponseDto>>> getAllProjects(@AuthUser User user) {
+-        List<ProjectInfoResponseDto> projects  = projectService.getAllProjects(user);
+-
+-        return ResponseEntity.status(HttpStatus.OK)
+-                .body(ApiResponse.success(projects));
+-    }
+-
+-    /**
+-     * 프로젝트 등록
+-     * @ 작성자   : 이병수
+-     * @ 작성일   : 2024-09-22
+-     * @ 설명     : 프로젝트 시작하기 누르면 등록
+-     * @return
+-
+-     */
+-    @PostMapping("/start")
+-    public ResponseEntity<ApiResponse<ProjectInfoResponseDto>> startProject(@AuthUser User user,@RequestBody ProjectStartRequestDto projectStartRequestDto){
+-        ProjectInfoResponseDto project  = projectService.startProject(user, projectStartRequestDto);
+-
+-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(project));
+-    }
+-
+-
+-    /**
+-     * 계약서 전자 서명하기
+-     * @ 작성자   : 이병수
+-     * @ 작성일   : 2024-09-24
+-     * @ 설명     : 계약서 전자 서명하기
+-     * @param projectId
+-     * @param signRequest
+-     * @param user
+-     * @return
+-     */
+-    @PostMapping("/{projectId}/contract/sign")
+-    public ResponseEntity<ApiResponse<Boolean>> verifySignature(@PathVariable Long projectId, @RequestBody SignRequest signRequest, @AuthUser User user){
+-
+-        return projectService.verifySignature(projectId,signRequest,user);
+-    }
+-
+-
+-    @PatchMapping("/{projectId}/step/check")
+-    public ResponseEntity<ApiResponse<ProjectStepCheckResponseDto>> projectStepCheck(@PathVariable Long projectId ,@AuthUser User user){
+-        ProjectStepCheckResponseDto projectStepCheckResponseDto = projectService.projectStepCheck(projectId, user);
+-        String message = "프로젝트 확인이 완료 되었습니다.";
+-        if(projectStepCheckResponseDto.isChangeProjectStep()){
+-            message = "프로젝트 확인 완료 및 프로젝트 단계가 변경되었습니다.";
+-        }
+-        return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(projectStepCheckResponseDto,message));
+-    }
+-
+-
+-
+-
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/project/dto/request/ProjectStartRequestDto.java
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/project/dto/request/ProjectStartRequestDto.java b/board/src/main/java/com/ssafy/stackup/domain/project/dto/request/ProjectStartRequestDto.java
+deleted file mode 100644
+--- a/board/src/main/java/com/ssafy/stackup/domain/project/dto/request/ProjectStartRequestDto.java	
++++ /dev/null	
+@@ -1,17 +0,0 @@
+-package com.ssafy.stackup.domain.project.dto.request;
+-
+-import lombok.Getter;
+-
+-import java.util.List;
+-
+-/**
+- * 작성자   : user
+- * 작성날짜 : 2024-09-22
+- * 설명    :
+- */
+-@Getter
+-
+-public class ProjectStartRequestDto {
+-    private List<Long> freelancerIdList;
+-    private Long boardId;
+-}
+Index: board/src/main/java/com/ssafy/stackup/domain/recommend/entity/Apply.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/recommend/entity/Apply.java b/board/src/main/java/com/ssafy/stackup/domain/recommend/entity/Apply.java
+new file mode 100644
+--- /dev/null	
++++ b/board/src/main/java/com/ssafy/stackup/domain/recommend/entity/Apply.java	
+@@ -0,0 +1,24 @@
++package com.ssafy.stackup.domain.recommend.entity;
++
++import jakarta.persistence.Column;
++import lombok.AllArgsConstructor;
++import lombok.Getter;
++import lombok.NoArgsConstructor;
++import lombok.Setter;
++import org.springframework.data.elasticsearch.annotations.Document;
++import org.springframework.data.elasticsearch.annotations.Field;
++import org.springframework.data.elasticsearch.annotations.FieldType;
++
++@Getter
++@Setter
++@NoArgsConstructor
++@AllArgsConstructor
++@Document(indexName = "apply")
++public class Apply {
++
++    @jakarta.persistence.Id
++    @Field(type = FieldType.Keyword)
++    @org.springframework.data.annotation.Id
++    @Column(name="apply_id")
++    private String applyId;
++}
+Index: board/src/main/java/com/ssafy/stackup/domain/board/dto/BoardSummaryDTO.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/board/src/main/java/com/ssafy/stackup/domain/board/dto/BoardSummaryDTO.java b/board/src/main/java/com/ssafy/stackup/domain/board/dto/BoardSummaryDTO.java
+new file mode 100644
+--- /dev/null	
++++ b/board/src/main/java/com/ssafy/stackup/domain/board/dto/BoardSummaryDTO.java	
+@@ -0,0 +1,18 @@
++package com.ssafy.stackup.domain.board.dto;
++
++import com.ssafy.stackup.domain.board.entity.Level;
++import lombok.AllArgsConstructor;
++import lombok.Getter;
++import lombok.NoArgsConstructor;
++import lombok.Setter;
++
++@Getter
++@Setter
++@NoArgsConstructor
++@AllArgsConstructor
++public class BoardSummaryDTO {
++    private Long boardId;
++    private String period;
++    private Long deposit;
++    private Level level;
++}

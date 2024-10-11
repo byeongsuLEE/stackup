@@ -21,22 +21,6 @@ const Major: React.FC<MajorProps> = ({ major: MajorIcon, category, title, name, 
     setClassification: state.setClassification
   }));
 
-  // const choiceClassification = (value: string) => {
-  //   setClassification(value)
-  // };
-
-  // const choiceLevel = (value : string) => {
-  //   setLevel(value)
-  // }
-
-  // const categoryChoice = (category: string, value: string | undefined) => {
-  //   if (value !== undefined && category === "classification") {
-  //     choiceClassification(value)
-  //   } else if (value !== undefined && category === "level") {
-  //     choiceLevel(value)
-  //   }
-  // }
-
   const isChecked = checked !== undefined? checked : (
     (category === "classification" && classification === value) ||
     (category === "level" && level === value)

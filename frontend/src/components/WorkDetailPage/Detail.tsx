@@ -27,7 +27,7 @@ const Detail = ({ project, clientId }: DetailProps) => {
 
   const boardId = project.boardId;
   const navigate = useNavigate();
-  const totalScore =  Math.round(Number(project.client.totalScore) * 10) / 10;
+  const totalScore = Math.round(Number(project.client.totalScore) * 10) / 10;
 
   // 프로젝트 삭제
   const deleteProject = async () => {
@@ -66,7 +66,7 @@ const Detail = ({ project, clientId }: DetailProps) => {
     try {
       await projectApply(boardId);
       alert("지원이 완료되었습니다.");
-      location.reload(); 
+      location.reload();
     } catch (error) {
       console.error("Error applying project:", error);
     }
@@ -85,19 +85,25 @@ const Detail = ({ project, clientId }: DetailProps) => {
 
   // boardId를 이용해 anomaly 확인
   useEffect(() => {
-    const checkAnomaly = async () => {
-      try {
-        const response = await axios.get(`${svURL}/api/detect/illegal/${project.boardId}`);
-        console.log(response)
-        setIsAnomaly(response.data.is_anomaly[0]);
-      } catch (error) {
-        console.error("Error fetching anomaly data:", error);
-      } finally {
-        setLoading(false); // 로딩 완료
-      }
-    };
+    if (project.level !== null && project.boardId !== undefined && project.boardId !== null) {
+      const checkAnomaly = async () => {
+        console.log(project.boardId)
+        try {
+          const response = await axios.get(`${svURL}/board/detect/illegal/${project.boardId}`);
+          // console.log('이상거래 response : ',response)
+          // console.log('이상거래 response.data : ',response.data)
+          const anomaly = response.data.is_anomaly[0] == "false" ? true : false;
+          setIsAnomaly(anomaly);
+        } catch (_error) {
+          setIsAnomaly(undefined)
+          // console.error("Error fetching anomaly data:", error);
+        } finally {
+          setLoading(false); // 로딩 완료
+        }
+      };
+      checkAnomaly();
+    }
 
-    checkAnomaly();
   }, [project]);
 
   if (!isLoaded || loading) {
@@ -106,11 +112,10 @@ const Detail = ({ project, clientId }: DetailProps) => {
   }
 
   const sessionFreelancerId = window.sessionStorage.getItem("freelancerId");
-
   const hasApplied = project.applicantList.some(
     (applicant) => applicant.id.toString() === sessionFreelancerId
   );
-  
+
   return (
     <>
       <div className="bg-bgGreen border border-mainGreen h-auto rounded-lg p-10 w-[1000px]] my-20 mx-10">
@@ -120,7 +125,7 @@ const Detail = ({ project, clientId }: DetailProps) => {
         </div>
         <div className="flex justify-end">
           {window.sessionStorage.getItem("userType") === "freelancer" ? (
-              <>
+            <>
               {!hasApplied ? (
                 <div onClick={projectApplyHandler}>
                   <DoneButton width={100} height={25} title="지원하기" />
@@ -135,11 +140,11 @@ const Detail = ({ project, clientId }: DetailProps) => {
             <div className="flex">
               {project.startProject ? (
                 <>
-                <Payment boardId={boardId} />
-                <button onClick={deleteProject} className="bg-subGreen2 text-bgGreen font-bold text-sm px-3 rounded-lg ml-2">
-                  삭제하기
-                </button>
-              </>
+                  <Payment boardId={boardId} />
+                  <button onClick={deleteProject} className="bg-subGreen2 text-bgGreen font-bold text-sm px-3 rounded-lg ml-2">
+                    삭제하기
+                  </button>
+                </>
               ) : (
                 <>
                   <div onClick={toCandidate}>
@@ -151,7 +156,7 @@ const Detail = ({ project, clientId }: DetailProps) => {
                   </button>
                 </>
               )}
-              
+
             </div>
           )}
 

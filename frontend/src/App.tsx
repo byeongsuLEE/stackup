@@ -8,7 +8,6 @@ import AccountDetail from "./pages/AccountDetailPage";
 import Account from "./pages/AccountPage";
 import Callback from "./pages/Callback";
 import CandidateCheck from "./pages/CandidateCheckPage";
-import CareerDetail from "./pages/CareerDetailPage";
 import Career from "./pages/CareerPage";
 import CareerRegister from "./pages/CareerRegisterPage";
 import ClientSignup from "./pages/ClientSignupPage";
@@ -45,7 +44,6 @@ function App() {
             <main className="flex-grow mt-28 mx-20">
               <Navbar />
               <Routes>
-                <Route path="/test" element={<NFTLoading />} />
                 <Route path="/" element={<Home />} />
                 <Route path="/signature/detail/:projectId/:freelancerProjectId" element={<SignatureDetail />} />
                 <Route path="/login" element={<Login />} />
@@ -59,7 +57,6 @@ function App() {
                 <Route path="/project" element={<Project />} />
                 <Route path="/project/detail/:projectId" element={<ProjectDetail />} />
                 <Route path="/career" element={<Career />} />
-                <Route path="/career/detail" element={<CareerDetail />} />
                 <Route path="/career/register" element={<CareerRegister />} />
                 <Route path="/account" element={<Account />} />
                 <Route path="/account/detail/:accountId" element={<AccountDetail />} />
@@ -82,7 +79,9 @@ function App() {
             </main>
             <Footer />
             <div className="fixed right-7 bottom-3">
+              {sessionStorage.getItem("token")&&
               <SimplePopup />
+              }
             </div>
 
           </div>

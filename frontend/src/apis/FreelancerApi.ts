@@ -1,7 +1,9 @@
 import axios from "axios";
 
-const svURL = import.meta.env.VITE_SERVER_URL;
-const BASE_URL = `${svURL}/board`
+// const svURL = import.meta.env.VITE_SERVER_URL;
+// const BASE_URL = `${svURL}/board`
+const BASE_URL = "http://localhost:8081/api/board";
+
 
 //== 프로젝트 지원 ==//
 export const projectApply = async (boardId: string): Promise<void> => {

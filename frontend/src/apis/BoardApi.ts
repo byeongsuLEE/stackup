@@ -2,8 +2,9 @@ import axios from "axios";
 import { projectFilterStore } from "../store/ProjectStore";
 import { createProjectProp, project, projectApplicantProps, recommend } from "./Board.type";
 
-const svURL = import.meta.env.VITE_SERVER_URL;
-const BASE_URL = `${svURL}/board`
+// const svURL = import.meta.env.VITE_SERVER_URL;
+// const BASE_URL = `${svURL}/board`
+const BASE_URL = "http://localhost:8081/api/board";
 
 //== 프로젝트 목록 조회 ==//
 export const allProject = async (

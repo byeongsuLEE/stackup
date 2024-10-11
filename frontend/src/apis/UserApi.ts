@@ -3,8 +3,9 @@ import { useUserStore } from "../store/UserStore";
 import { freelanceStore } from "../store/FreelanceStore";
 import { clientLoginInfo, clientSignupInfo, freelanceSignupInfo } from "./User.type";
 
-const svURL = import.meta.env.VITE_SERVER_URL;
-const BASE_URL = `${svURL}/user`
+// const svURL = import.meta.env.VITE_SERVER_URL;
+// const BASE_URL = `${svURL}/user`
+const BASE_URL = "http://localhost:8080/api/user";
 const { setToken, setUserType, setFreelancerId, setClientId } = useUserStore.getState();
 
 

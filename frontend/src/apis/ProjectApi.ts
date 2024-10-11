@@ -2,8 +2,10 @@ import axios from "axios";
 import { project } from "./Board.type";
 import { projectData } from "./Project.type";
 
-const svURL = import.meta.env.VITE_SERVER_URL;
-const BASE_URL = `${svURL}/user/project`
+// const svURL = import.meta.env.VITE_SERVER_URL;
+// const BASE_URL = `${svURL}/user/project`
+const BASE_URL = "http://localhost:8080/api/user/project";
+
 
 //== 이전 프로젝트 등록 ==//
 export const previousProject = async (data: projectData): Promise<void> => {

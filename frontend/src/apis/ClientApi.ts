@@ -2,8 +2,9 @@ import axios from "axios";
 import { project } from "./Board.type";
 import { candidate } from "./Freelancer.type";
 
-const svURL = import.meta.env.VITE_SERVER_URL;
-const BASE_URL = `${svURL}/board`
+// const svURL = import.meta.env.VITE_SERVER_URL;
+// const BASE_URL = `${svURL}/board`
+const BASE_URL = "http://localhost:8081/api/board";
 
 //== 선택된 지원자 리스트 ==//
 export const selectedCandidate = async (boardId?: string): Promise<candidate[]> => {

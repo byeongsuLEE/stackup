@@ -11,7 +11,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver # 데이터베이스 드라이버 클래스 이름 설정
 
     jpa:
-#      open-in-view: false
+      open-in-view: false
 
 #    hikari:
 #      minimum-idle: 10  # 최소 유휴 커넥션을 10으로 설정

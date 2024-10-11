@@ -9,6 +9,7 @@ const ClientInfo = () => {
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<clientSignupInfo> = (data) => {
+    
     clientSignup(data);
     navigate("/");
   };

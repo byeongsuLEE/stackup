@@ -75,15 +75,12 @@ const getNFTs = async (
     for (let i = 0; i < numBalance; i++) {
       try {
         const tokenId = await contract.methods.tokenOfOwnerByIndex(account, i).call();
-        // console.log(`Token ID at index ${i}:`, tokenId); // 로그 추가
 
         if (!tokenId) {
-          // console.error(`Token ID를 가져오지 못했습니다. Index: ${i}`);
           continue;
         }
 
         const tokenURI: string = await contract.methods.tokenURI(tokenId).call();
-        // console.log(`Token URI for Token ID ${tokenId}:`, tokenURI); // 로그 추가
 
         // tokenURI에서 메타데이터의 이미지와 문서 URL을 가져옴
         const { image, document } = await fetchMetadata(tokenURI);
@@ -170,9 +167,6 @@ const NFTDisplay = () => {
     // 컴포넌트 언마운트 시 인터벌 정리
     return () => clearInterval(interval);
   }, [NFT_CONTRACT_ADDRESS, NFT_ABI, navigate]);
-
-
-
 
   if (loading) {
     return <div>로딩 중...</div>;

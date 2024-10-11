@@ -35,14 +35,6 @@ const Skill = ({ category, title, name, value, checked, onChange }: SkillProps) 
     }
   };
 
-  // const categoryChoice = (category: string, value: string | undefined) => {
-  //   if (value !== undefined && category === "languages") {
-  //     choiceLanguage(value)
-  //   } else if (value !== undefined && category === "frameworks") {
-  //     choiceFramework(value)
-  //   }
-  // }
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (value) { // value가 undefined가 아닐 때만 처리
       if (category === "languages") {

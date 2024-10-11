@@ -47,6 +47,8 @@ export interface project {
     step: string;
     clientContractSigned: boolean;
     startProject: boolean;
+    previousProjectEndDate: string;
+    previousProjectStartDate: string;
 }
 
 const clientBasic = {
@@ -93,7 +95,9 @@ export const projectBasic = {
     freelancerStepConfirmed: false,
     step:'' ,
     clientContractSigned: false,
-    startProject: false
+    startProject: false,
+    previousProjectEndDate: "",
+    previousProjectStartDate: ""
 }
 
 //== 프로젝트 filter ==//

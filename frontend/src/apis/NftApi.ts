@@ -16,6 +16,7 @@ export const pinata = async (formData: FormData): Promise<string> => {
     });
 
     return response.data.IpfsHash; // 성공 시 IPFS 해시 반환
+    
   } catch (error) {
     console.error('업로드 중 오류가 발생했습니다:', error);
     return ''; // 오류 발생 시 빈 문자열 반환
@@ -29,12 +30,12 @@ export const uploadMetadataToPinata = async (imageCID: string, pdfCID: string, d
 
   const metadata = {
     name: data.projectName,
-    description: `${start}일 부터 ${end}일 까지 ${data.period}동안 진행한 프로젝트`,
-    image: `https://gateway.pinata.cloud/ipfs/${imageCID}`, // 이미지 CID
+    description: `${start}일 부터 ${end}일 까지 ${data.period}일 동안 진행한 프로젝트`,
+    image: `https://ipfs.io/ipfs/${imageCID}`,
     attributes: [
       {
         trait_type: "Document",
-        value: `https://gateway.pinata.cloud/ipfs/${pdfCID}`, // PDF CID
+        value: `https://ipfs.io/ipfs/${pdfCID}`,
       }
     ]
   };
@@ -50,6 +51,8 @@ export const uploadMetadataToPinata = async (imageCID: string, pdfCID: string, d
       data: metadata,
     });
 
+    console.log(response)
+    
     const jsonHash = response.data.IpfsHash;
     return jsonHash; // 성공 시 해시값 반환
   } catch (error) {

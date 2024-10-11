@@ -1,6 +1,7 @@
 import axios from "axios"
-import { accountInfo, transactionInfo } from "./Account.type"
 import { passwordStore } from "../store/AccountStore"
+import { accountInfo, transactionInfo } from "./Account.type"
+// import { callNft } from "../hooks/MintNft";
 
 const BASE_URL = import.meta.env.VITE_SERVER_URL;
 
@@ -26,11 +27,12 @@ export const getAccount = async (): Promise<accountInfo[]> => {
   })
 
   const accountList = response.data
+  console.log(response.data)
 
   accountList.forEach((account: accountInfo) => {
     const balance = account.balnace
 
-    if (balance != undefined){
+    if (balance != undefined) {
       account.balnace = balance.toLocaleString();
     }
   })
@@ -50,36 +52,34 @@ export const accountDetail = async (accountId?: string): Promise<accountInfo> =>
 
   const account = response.data;
   if (account.balnace != undefined) {
-    account.balnace = account.balnace.toLocaleString(); 
+    account.balnace = account.balnace.toLocaleString();
   }
 
   return account;
 }
 
 //== 대표 계좌 설정 ==//
-export const mainAccout = async (accountId? : string): Promise<string> => {
-  const response = await axios({
+export const mainAccout = async (accountId? : string): Promise<void> => {
+  await axios({
     method: 'post',
     url: `${BASE_URL}/account/main/${accountId}`,
     headers: {
       Authorization: `Bearer ${sessionStorage.getItem('token')}`
     }
   })
-
-  return response.data
 }
 
 //== 대표 계좌 조회 ==//
 export const getMainAccount = async (): Promise<string> => {
-    const response = await axios({
-      method: 'get',
-      url: `${BASE_URL}/account/main`,
-      headers: {
-        Authorization: `Bearer ${sessionStorage.getItem('token')}`
-      }
-    })
+  const response = await axios({
+    method: 'get',
+    url: `${BASE_URL}/account/main`,
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem('token')}`
+    }
+  })
 
-    return response.data;
+  return response.data;
 }
 
 //== 계좌 거래내역 조회 ==//
@@ -88,7 +88,7 @@ export const accountTransaction = async (accountId?: string): Promise<transactio
     method: 'get',
     url: `${BASE_URL}/account/transactions/${accountId}`,
     headers: {
-        Authorization: `Bearer ${sessionStorage.getItem('token')}`
+      Authorization: `Bearer ${sessionStorage.getItem('token')}`
     }
   })
 
@@ -100,7 +100,7 @@ export const accountTransaction = async (accountId?: string): Promise<transactio
     transaction.transactionDate = `${transaction.transactionDate.slice(0, 4)}.${transaction.transactionDate.slice(4, 6)}.${transaction.transactionDate.slice(6, 8)}`;
     transaction.transactionTime = `${transaction.transactionTime.slice(0, 2)}:${transaction.transactionTime.slice(2, 4)}:${transaction.transactionTime.slice(4, 6)}`;
   })
-  
+
   return transactionList;
 }
 
@@ -115,8 +115,8 @@ export const setPassword = async (): Promise<void> => {
       headers: {
         Authorization: `Bearer ${sessionStorage.getItem('token')}`
       },
-      data : {
-        'secondPassword' : password
+      data: {
+        'secondPassword': password
       }
     })
 
@@ -130,7 +130,7 @@ export const setPassword = async (): Promise<void> => {
 export const checkPassword = async (): Promise<void> => {
   const { setCheckoutPassword } = passwordStore.getState();
 
-  await axios ({
+  await axios({
     method: 'get',
     url: `${BASE_URL}/account/password/check`,
     headers: {
@@ -141,24 +141,33 @@ export const checkPassword = async (): Promise<void> => {
 }
 
 //== 간편 비밀번호 확인 ==//
-export const confirmPassword = async (password: string) : Promise<void> => {
-  const response = await axios({
-    method: 'get',
-    url: `${BASE_URL}/account/password`,
+export const confirmPassword = async (password: string): Promise<any> => {
+  try {
+    const response = await axios({
+      method: 'post', 
+      url: `${BASE_URL}/account/check/password`,
       headers: {
-        Authorization: `Bearer ${sessionStorage.getItem('token')}`
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`,
       },
-      data : {
-        'secondPassword' : password
+      data: {
+        secondPassword: password
       }
-  })
-  console.log(response.data)
+    });
+    return response.data;
+  } catch (error: any) {
+    if (error.response) {
+      alert('비밀번호가 일치하지 않습니다.')
+      console.error('서버 응답 데이터:', error.response.data);  // 응답 데이터를 확인하세요
+      // console.error('서버 응답 상태:', error.response.status);
+    } else {
+      console.error('요청 실패:', error.message);
+    }
+  }
 }
-
 //== 1원 송금 요청 ==//
 export const authRequest = async (accountId: string): Promise<void> => {
   try {
-    const response = await axios ({
+    const response = await axios({
       method: 'post',
       url: `${BASE_URL}/account/auth/${accountId}`,
       headers: {
@@ -187,15 +196,15 @@ export const authRequest = async (accountId: string): Promise<void> => {
 //== 1원 송금 검증 ==//
 export const authCheck = async (accountId: string): Promise<void> => {
   try {
-    const response = await axios ({
-      method:'post',
+    const response = await axios({
+      method: 'post',
       url: `${BASE_URL}/account/${accountId}/checkCode`,
       headers: {
-          Authorization: `Bearer ${sessionStorage.getItem('token')}`
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`
       },
       data: {
-          "account" : "수정: 계좌번호",
-          "authCode" : "수정 : 인증코드"
+        "account": "수정: 계좌번호",
+        "authCode": "수정 : 인증코드"
       }
     })
 
@@ -214,16 +223,27 @@ export const authCheck = async (accountId: string): Promise<void> => {
 
 //== 계좌 이체 ==//
 export const transfer = async (freelancerId: number, balance: string): Promise<void> => {
-  await axios ({
-    method: 'post',
-    url: `${BASE_URL}/account/transfer`,
-    headers: {
-      Authorization: `Bearer ${sessionStorage.getItem('token')}`
-    },
-    data: {
-      'freelancerId': freelancerId,
-      'transactionBalance': balance
+  try {
+    await axios({
+      method: 'post',
+      url: `${BASE_URL}/account/transfer`,
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem('token')}`
+      },
+      data: {
+        'freelancerId': freelancerId,
+        'transactionBalance': balance
+      }
+    });
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      // Axios 에러 처리
+      console.error('Error response:', error.response);
+      console.error('Error message:', error.message);
+    } else {
+      // 다른 에러 처리
+      console.error('Unexpected error:', error);
     }
-  })
-
+  }
 }
+

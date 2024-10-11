@@ -18,20 +18,20 @@ const InfoBox: React.FC<InfoBoxProps> = ({title, category, content, info:InfoIco
 
   return (
     <div className="bg-white flex items-center justify-between p-5 border mx-2 border-mainGreen rounded-xl w-[300px] h-[100px]">
-      {/* <div className="flex h-fit items-center"> */}
+
       <div className="flex items-center">
       <InfoIcon w={20} h={20} />
       <span className="ml-3">{title}</span>
       </div>
       <div className="flex items-center">
         <span>{content}</span>
-        {category === "deposit" && isAnomaly !== null && (
+        {category === "deposit" && isAnomaly !== undefined && (
           <span className={`ml-2 ${isAnomaly ? "text-red-500" : "text-green-500"}`}>
             {isAnomaly ? "⚠️" : "✅"}
           </span>
         )}
       </div>
-      {/* </div> */}
+
     </div>
   )
 }

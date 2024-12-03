@@ -115,11 +115,11 @@
 - CertBot: 0.40.0
 
 
-#ERD
+## ERD ☀
 ![stackuperd](https://github.com/user-attachments/assets/496de2e2-8f3f-4ce4-90f6-cf015d676382)
 
 
-#아키텍쳐
+## 아키텍쳐 🏎
 ![stackup아키텍쳐](https://github.com/user-attachments/assets/4f24aadc-6e6b-4a21-8646-e57be5eb2364)
 
 

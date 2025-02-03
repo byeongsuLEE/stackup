@@ -114,8 +114,8 @@ publicDataPortal:
 
 
 portone:
-  api-key: ***REMOVED***
-  api-secret: ***REMOVED***
+  api-key:
+  api-secret:
 
 
 USER_SERVICE_URL: https://stackup.live/api/user/
